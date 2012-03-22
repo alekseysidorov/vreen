@@ -6,7 +6,13 @@
 
 namespace vk {
 
-class DirectConnection : public QNetworkAccessManager, public Connection
+struct AccessToken {
+    QByteArray token;
+    int expireTime;
+    int uid;
+};
+
+class DirectConnection : public Connection
 {
     Q_OBJECT
 public:
@@ -16,9 +22,6 @@ public:
     virtual void disconnectFromHost();
     virtual Reply *request(const QString &method, const QVariantMap &args);
     virtual Client::State connectionState() const;
-signals:
-    void connectionStateChanged(vk::Client::State connectionState);
-    void error(vk::Client::Error error);
 protected:
     void setConnectionState(Client::State connectionState);
     void getToken(const QString &login, const QString &password);
@@ -26,6 +29,7 @@ protected slots:
     void getTokenFinished();
 private:
     Client::State m_connectionState;
+    AccessToken m_token;
 };
 
 } // namespace vk

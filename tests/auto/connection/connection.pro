@@ -17,3 +17,11 @@ TEMPLATE = app
 
 SOURCES += tst_connectiontest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../../api/release/ -lvk
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../../api/debug/ -lvk
+else:symbian: LIBS += -lvk
+else:unix: LIBS += -L$$OUT_PWD/../../../api/ -lvk
+
+INCLUDEPATH += $$PWD/../../../api
+DEPENDPATH += $$PWD/../../../api

@@ -7,6 +7,7 @@
 
 namespace vk {
 
+class Connection;
 class ClientPrivate;
 class VK_SHARED_EXPORT Client : public QObject
 {
@@ -35,8 +36,31 @@ public:
     virtual ~Client();
     QString password() const;
     void setPassword(const QString &password);
+    QString login() const;
+    void setlogin(const QString &login);
+    State connectionState() const;
+    bool isOnline() const;
+
+    Connection *connection() const;
+    void setConnection(Connection *connection);
+public slots:
+    void connectToHost();
+    void disconnectFromHost();
+signals:
+    void loginChanged(const QString &login);
+    void passwordChanged(const QString &password);
+    void connectionStateChanged(vk::Client::State state);
+    void error(vk::Client::Error error);
+    void onlineStateChanged(bool state);
 protected:
     QScopedPointer<ClientPrivate> d_ptr;
+
+    Connection *connection();
+
+private:
+
+    Q_PRIVATE_SLOT(d_func(), void _q_connection_state_changed(vk::Client::State))
+    Q_PRIVATE_SLOT(d_func(), void _q_error_received(vk::Client::Error))
 };
 
 

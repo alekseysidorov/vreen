@@ -2,12 +2,13 @@
 #define VK_REPLY_H
 
 #include <QObject>
+#include "vk_global.h"
 
 class QNetworkReply;
 namespace vk {
 
 class ReplyPrivate;
-class Reply : public QObject
+class VK_SHARED_EXPORT Reply : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(Reply)

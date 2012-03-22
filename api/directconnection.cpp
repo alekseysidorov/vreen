@@ -36,13 +36,16 @@ static const ServerUrls serverUrls = {
 };
 
 DirectConnection::DirectConnection(QObject *parent) :
-    QNetworkAccessManager(parent)
+    Connection(parent)
 {
 }
 
 void DirectConnection::connectToHost(const QString &login, const QString &password)
 {
     setConnectionState(Client::StateConnecting);
+
+    //TODO add token check
+    getToken(login, password);
 }
 
 void DirectConnection::disconnectFromHost()
@@ -87,12 +90,23 @@ void DirectConnection::getTokenFinished()
     auto reply = static_cast<QNetworkReply*>(sender());
     reply->deleteLater();
 
-    if (reply->error() != QNetworkReply::NoError) {
+    switch (reply->error()) {
+    case QNetworkReply::NoError: {
+        QVariantMap response = JSON::parse(reply->readAll()).toMap();
+        if (!response.value("access_token").isNull()) {
+            m_token.token = response.value("access_token").toByteArray();
+            m_token.expireTime = response.value("expires_in").toInt();
+            m_token.uid = response.value("user_id").toInt();
+            setConnectionState(Client::StateOnline);
+            return;
+        }
+        break;
+    }
+    case QNetworkReply::AuthenticationRequiredError: //TODO
+    default:
         disconnectFromHost();
         emit error(Client::ServerIsUnavailableError);
-    } else {
-        QVariantMap response = JSON::parse(reply->readAll()).toMap();
-        qDebug() << response;
+        break;
     }
 }
 

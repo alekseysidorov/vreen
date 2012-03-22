@@ -3,6 +3,8 @@
 
 namespace vk {
 
+namespace JSON {
+
 /*!
  * \brief Parse JSON data to QVariant
  * \param String with JSON data
@@ -22,11 +24,13 @@ QVariant parse(const QByteArray &data)
  * \param indent Identation of new lines
  * \return JSON string with data
 */
-QByteArray generate(const QVariant &data, int indent = 0)
+QByteArray generate(const QVariant &data, int indent)
 {
     QByteArray res;
     K8JSON::generate(res, data, indent);
     return res;
 }
+
+} //namespace JSON
 
 } // namespace vk
