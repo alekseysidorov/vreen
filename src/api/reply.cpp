@@ -16,7 +16,7 @@ Reply::~Reply()
 
 QNetworkReply *Reply::reply() const
 {
-    return d_func()->networkReply;
+    return d_func()->networkReply.data();
 }
 
 QVariant Reply::response() const
@@ -31,14 +31,12 @@ QVariant Reply::error() const
 
 void Reply::setReply(QNetworkReply *reply)
 {
-    Q_D(Reply);
-    if (d->networkReply)
-        d->networkReply->deleteLater();
-    d->networkReply = reply;
+    Q_D(Reply);    
+    d->networkReply.reset(reply);
     setParent(reply);
 
     connect(reply, SIGNAL(finished()), SLOT(_q_reply_finished()));
-    connect(reply, SIGNAL(finished()), SLOT(_q_network_reply_destroyed(QObject*)));
+    connect(reply, SIGNAL(destroyed(QObject*)), SLOT(_q_network_reply_destroyed(QObject*)));
 }
 
 } // namespace vk

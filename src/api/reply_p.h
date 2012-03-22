@@ -2,6 +2,7 @@
 #define REPLY_P_H
 #include "reply.h"
 #include "json.h"
+#include "reply.h"
 #include "QNetworkReply"
 
 namespace vk {
@@ -13,7 +14,7 @@ public:
     ReplyPrivate(Reply *q) : q_ptr(q), networkReply(0) {}
     Reply *q_ptr;
 
-    QNetworkReply *networkReply;
+    QScopedPointer<QNetworkReply> networkReply;
     QVariant response;
     QVariant error;
 
@@ -27,17 +28,25 @@ public:
         response = map.value("response");
         if (!response.isNull()) {
             emit q->resultReady(response);
+            return;
         } else {
             error = map.value("error");
             int errorCode = error.toMap().value("error_code").toInt();
-            if (errorCode)
+            if (errorCode) {
                 emit q->error(errorCode);
+                return;
+            }
         }
+        if (!map.isEmpty()) {
+            response = map;
+            emit q->resultReady(response);
+        }
+
     }
 
     void _q_network_reply_destroyed(QObject*)
     {
-        networkReply = 0;
+        networkReply.reset();
     }
 };
 

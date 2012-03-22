@@ -59,9 +59,9 @@ void DirectConnection::disconnectFromHost()
     setConnectionState(Client::StateOffline);
 }
 
-Reply *DirectConnection::request(const QString &method, const QVariantMap &args)
+QNetworkReply *DirectConnection::request(const QString &method, const QVariantMap &args)
 {
-    return new Reply(get(method, args));
+    return get(method, args);
 }
 
 Client::State DirectConnection::connectionState() const

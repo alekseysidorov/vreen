@@ -1,3 +1,3 @@
-[submodule "3rdparty/k8json"]
-	path = 3rdparty/k8json
+[submodule "src/3rdparty/k8json"]
+	path = src/3rdparty/k8json
 	url = git://gitorious.org/+qutim-developers/k8jsonqt/qutim-developers-k8json.git

@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
 
-SUBDIRS = api \
-    tests/auto/connection
+SUBDIRS = src \
+    tests
 

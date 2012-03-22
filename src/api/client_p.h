@@ -2,6 +2,7 @@
 #define CLIENT_P_H
 
 #include "client.h"
+#include "reply.h"
 #include <QWeakPointer>
 #include "directconnection_p.h"
 

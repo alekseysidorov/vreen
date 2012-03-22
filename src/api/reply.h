@@ -18,7 +18,6 @@ public:
         CaptchaNeeded = 14
     };
 
-    explicit Reply(QNetworkReply *reply = 0);
     virtual ~Reply();
     QNetworkReply *reply() const;
     QVariant response() const;
@@ -27,8 +26,12 @@ signals:
     void resultReady(const QVariant &variables);
     void error(int code);
 protected:
+    explicit Reply(QNetworkReply *reply = 0);
     void setReply(QNetworkReply *reply);
+
     QScopedPointer<ReplyPrivate> d_ptr;
+
+    friend class Client;
 
     Q_PRIVATE_SLOT(d_func(), void _q_reply_finished())
     Q_PRIVATE_SLOT(d_func(), void _q_network_reply_destroyed(QObject*))

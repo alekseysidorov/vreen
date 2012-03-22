@@ -16,7 +16,7 @@ public:
 
     virtual void connectToHost(const QString &login, const QString &password) = 0;
     virtual void disconnectFromHost() = 0;
-    virtual Reply *request(const QString &method, const QVariantMap &args) = 0;
+    virtual QNetworkReply *request(const QString &method, const QVariantMap &args = QVariantMap()) = 0;
     virtual Client::State connectionState() const = 0;
 
 signals:

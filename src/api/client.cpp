@@ -1,6 +1,5 @@
 #include "client_p.h"
 
-
 namespace vk {
 
 Client::Client(QObject *parent) :
@@ -38,7 +37,7 @@ QString Client::login() const
     return d_func()->login;
 }
 
-void Client::setlogin(const QString &login)
+void Client::setLogin(const QString &login)
 {
     d_func()->login = login;
     emit loginChanged(login);
@@ -82,6 +81,18 @@ void Client::setConnection(Connection *connection)
             this, SLOT(_q_connection_state_changed(vk::Client::State)));
     connect(connection, SIGNAL(error(vk::Client::Error)),
             this, SIGNAL(error(vk::Client::Error))); //TODO error handler
+}
+
+Reply *Client::request(const QUrl &url)
+{
+    QNetworkRequest request(url);
+    auto networkReply = connection()->get(request);
+    return new Reply(networkReply);
+}
+
+Reply *Client::request(const QString &method, const QVariantMap &args)
+{
+    return new Reply(connection()->request(method, args));
 }
 
 void Client::connectToHost()
