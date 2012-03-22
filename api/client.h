@@ -42,6 +42,7 @@ public:
     bool isOnline() const;
 
     Connection *connection() const;
+    Connection *connection();
     void setConnection(Connection *connection);
 public slots:
     void connectToHost();
@@ -54,8 +55,6 @@ signals:
     void onlineStateChanged(bool state);
 protected:
     QScopedPointer<ClientPrivate> d_ptr;
-
-    Connection *connection();
 
 private:
 

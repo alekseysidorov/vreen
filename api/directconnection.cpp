@@ -1,9 +1,15 @@
 #include "directconnection_p.h"
 #include "json.h"
+#include "reply.h"
+
 #include <QUrl>
 #include <QNetworkReply>
+#include <QCryptographicHash>
+#include <QStringList>
+#include <QStringBuilder>
 
 #include <QDebug>
+
 
 namespace vk {
 
@@ -55,11 +61,28 @@ void DirectConnection::disconnectFromHost()
 
 Reply *DirectConnection::request(const QString &method, const QVariantMap &args)
 {
+    return new Reply(get(method, args));
 }
 
 Client::State DirectConnection::connectionState() const
 {
     return m_connectionState;
+}
+
+QNetworkReply *DirectConnection::get(const QString &method, const QVariantMap &args)
+{
+    QUrl url = serverUrls.apiServer;
+    url.setPath(url.path() % QLatin1Literal("/") % method);
+    auto it = args.constBegin();
+    for (; it != args.constEnd(); it++)
+        url.addQueryItem(it.key(), it.value().toString());
+    url.addEncodedQueryItem("access_token", m_token.accessToken);
+
+    QNetworkRequest request(url);
+    QNetworkReply *reply = QNetworkAccessManager::get(request);
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(onReplyError(QNetworkReply::NetworkError)));
+    connect(reply, SIGNAL(finished()), this, SLOT(onReplyFinished()));
+    return reply;
 }
 
 void DirectConnection::setConnectionState(Client::State state)
@@ -94,7 +117,7 @@ void DirectConnection::getTokenFinished()
     case QNetworkReply::NoError: {
         QVariantMap response = JSON::parse(reply->readAll()).toMap();
         if (!response.value("access_token").isNull()) {
-            m_token.token = response.value("access_token").toByteArray();
+            m_token.accessToken = response.value("access_token").toByteArray();
             m_token.expireTime = response.value("expires_in").toInt();
             m_token.uid = response.value("user_id").toInt();
             setConnectionState(Client::StateOnline);
@@ -108,6 +131,16 @@ void DirectConnection::getTokenFinished()
         emit error(Client::ServerIsUnavailableError);
         break;
     }
+}
+
+void DirectConnection::onReplyFinished()
+{
+    //TODO
+}
+
+void DirectConnection::onReplyError(QNetworkReply::NetworkError error)
+{
+    //TODO
 }
 
 } // namespace vk
