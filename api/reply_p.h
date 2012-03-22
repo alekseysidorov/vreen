@@ -15,6 +15,7 @@ public:
 
     QNetworkReply *networkReply;
     QVariant response;
+    QVariant error;
 
     void _q_reply_finished()
     {
@@ -24,12 +25,19 @@ public:
         //TODO error and captcha handler
 
         response = map.value("response");
-        emit q->resultReady(response);
+        if (!response.isNull()) {
+            emit q->resultReady(response);
+        } else {
+            error = map.value("error");
+            int errorCode = error.toMap().value("error_code").toInt();
+            if (errorCode)
+                emit q->error(errorCode);
+        }
     }
 
     void _q_network_reply_destroyed(QObject*)
     {
-
+        networkReply = 0;
     }
 };
 

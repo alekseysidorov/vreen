@@ -24,15 +24,21 @@ QVariant Reply::response() const
     return d_func()->response;
 }
 
+QVariant Reply::error() const
+{
+    return d_func()->error;
+}
+
 void Reply::setReply(QNetworkReply *reply)
 {
     Q_D(Reply);
     if (d->networkReply)
-        d->networkReply->disconnect(this); //TODO may be need a deleteLater?
+        d->networkReply->deleteLater();
     d->networkReply = reply;
     setParent(reply);
 
     connect(reply, SIGNAL(finished()), SLOT(_q_reply_finished()));
+    connect(reply, SIGNAL(finished()), SLOT(_q_network_reply_destroyed(QObject*)));
 }
 
 } // namespace vk

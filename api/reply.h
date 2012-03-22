@@ -22,13 +22,16 @@ public:
     virtual ~Reply();
     QNetworkReply *reply() const;
     QVariant response() const;
+    QVariant error() const;
 signals:
     void resultReady(const QVariant &variables);
+    void error(int code);
 protected:
     void setReply(QNetworkReply *reply);
     QScopedPointer<ReplyPrivate> d_ptr;
 
     Q_PRIVATE_SLOT(d_func(), void _q_reply_finished())
+    Q_PRIVATE_SLOT(d_func(), void _q_network_reply_destroyed(QObject*))
 };
 
 } // namespace vk
