@@ -12,6 +12,9 @@ Reply::Reply(QNetworkReply *reply) :
 
 Reply::~Reply()
 {
+    //FIXME maybee it's never been used
+    if (auto networkReply = d_func()->networkReply.data())
+        networkReply->deleteLater();
 }
 
 QNetworkReply *Reply::reply() const

@@ -2,6 +2,7 @@
 #define VK_CLIENT_H
 
 #include "vk_global.h"
+#include "reply.h"
 #include <QScopedPointer>
 #include <QObject>
 #include <QVariantMap>

@@ -34,6 +34,7 @@ private slots:
 
         QEventLoop loop;
         connect(&client, SIGNAL(onlineStateChanged(bool)), &loop, SLOT(quit()));
+        connect(&client, SIGNAL(error(vk::Client::Error)), &loop, SLOT(quit()));
         client.connectToHost();
         loop.exec();
 
@@ -59,6 +60,7 @@ private slots:
 
         QEventLoop loop;
         connect(&client, SIGNAL(onlineStateChanged(bool)), &loop, SLOT(quit()));
+        connect(&client, SIGNAL(error(vk::Client::Error)), &loop, SLOT(quit()));
         client.connectToHost();
         loop.exec();
 
@@ -84,6 +86,7 @@ private slots:
 
         QEventLoop loop;
         connect(&client, SIGNAL(onlineStateChanged(bool)), &loop, SLOT(quit()));
+        connect(&client, SIGNAL(error(vk::Client::Error)), &loop, SLOT(quit()));
         client.connectToHost();
         loop.exec();
 
