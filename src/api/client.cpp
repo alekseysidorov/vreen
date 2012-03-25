@@ -102,6 +102,13 @@ void Client::connectToHost()
     connection()->connectToHost(d->login, d->password);
 }
 
+void Client::connectToHost(const QString &login, const QString &password)
+{
+    setLogin(login);
+    setPassword(password);
+    connectToHost();
+}
+
 void Client::disconnectFromHost()
 {
     connection()->disconnectFromHost();

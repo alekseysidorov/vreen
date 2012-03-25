@@ -57,6 +57,7 @@ public:
     Q_INVOKABLE Reply *request(const QString &method, const QVariantMap &args = QVariantMap());
 public slots:
     void connectToHost();
+    void connectToHost(const QString &login, const QString &password);
     void disconnectFromHost();
 signals:
     void loginChanged(const QString &login);
