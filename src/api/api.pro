@@ -18,7 +18,8 @@ SOURCES += client.cpp \
     reply.cpp \
     json.cpp \
     directconnection.cpp \
-    longpoll.cpp
+    longpoll.cpp \
+    message.cpp
 
 HEADERS += client.h \
     vk_global.h \
@@ -29,7 +30,8 @@ HEADERS += client.h \
     json.h \
     directconnection_p.h \
     longpoll.h \
-    longpoll_p.h
+    longpoll_p.h \
+    message.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

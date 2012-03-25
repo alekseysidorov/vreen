@@ -20,27 +20,31 @@ class LongPollPrivate
     Q_DECLARE_PUBLIC(LongPoll)
 public:
     LongPollPrivate(LongPoll *q) : q_ptr(q), client(0),
-        mode(LongPoll::ReceiveAttachments), pollInterval(1000) {}
+        mode(LongPoll::ReceiveAttachments), pollInterval(1000), waitInterval(25) {}
     LongPoll *q_ptr;
     Client *client;
 
     LongPoll::Mode mode;
     int pollInterval;
+    int waitInterval;
     QUrl dataUrl;
 
-    void _q_request_server_finished(const QVariant &raw)
+    void _q_request_server_finished(const QVariant &response)
     {
         Q_Q(LongPoll);
         auto reply = static_cast<Reply*>(q->sender());
 
-        QVariantMap data = raw.toMap();
+        QVariantMap data = response.toMap();
         if (data.isEmpty()) {
             QTimer::singleShot(pollInterval, q, SLOT(requestServer()));
             return;
         }
 
-        QString url("http://%1?act=a_check&key=%2&wait=25");
-        dataUrl = url.arg(data.value("server").toString(), data.value("key").toString());
+        QString url("http://%1?act=a_check&key=%2&wait=%3&mode=%4");
+        dataUrl = url.arg(data.value("server").toString(),
+                          data.value("key").toString(),
+                          QString::number(waitInterval),
+                          QString::number(mode));
 
         if (client->isOnline())
             q->requestData(data.value("ts").toByteArray());
@@ -51,9 +55,12 @@ public:
     {
         Q_Q(LongPoll);
         auto reply = static_cast<QNetworkReply*>(q->sender());
+        auto data = response.toMap();
+
+        if (client->isOnline())
+            q->requestData(data.value("ts").toByteArray());
 
         reply->deleteLater();
-        qDebug() << Q_FUNC_INFO << response;
     }
 };
 

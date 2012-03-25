@@ -2,25 +2,26 @@
 #define VK_LONGPOLL_H
 
 #include <QObject>
+#include "vk_global.h"
 
 namespace vk {
 
 class Client;
 class LongPollPrivate;
-class LongPoll : public QObject
+class VK_SHARED_EXPORT LongPoll : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(LongPoll)
 public:
 
     enum ServerAnswer {
-        AnswerMessageDeleted      = 0,
-        AnswerMessageFlagsReplaced= 1,
-        AnswerMessageFlagsSet     = 2,
-        AnswerMessageFlagsReseted = 3,
-        AnswerMessageAdded		= 4,
-        AnswerUserOnline          = 8,
-        AnswerUserOffline         = 9
+        MessageDeleted      = 0,
+        MessageFlagsReplaced= 1,
+        MessageFlagsSet     = 2,
+        MessageFlagsReseted = 3,
+        MessageAdded		= 4,
+        UserOnline          = 8,
+        UserOffline         = 9
     };
 
     enum MessageFlag {
@@ -58,6 +59,9 @@ protected slots:
     void requestData(const QByteArray &timeStamp);
 protected:
     QScopedPointer<LongPollPrivate> d_ptr;
+
+    Q_PRIVATE_SLOT(d_func(), void _q_request_server_finished(const QVariant &))
+    Q_PRIVATE_SLOT(d_func(), void _q_on_data_received(const QVariant &))
 };
 
 } // namespace vk

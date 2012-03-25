@@ -9,6 +9,8 @@ LongPoll::LongPoll(Client *client) :
 {
     Q_D(LongPoll);
     d->client = client;
+    setRunning(client->isOnline());
+
     connect(client, SIGNAL(onlineStateChanged(bool)), SLOT(setRunning(bool)));
 }
 
@@ -50,3 +52,5 @@ void LongPoll::requestData(const QByteArray &timeStamp)
 }
 
 } // namespace vk
+
+#include "moc_longpoll.cpp"

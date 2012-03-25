@@ -1,2 +1,3 @@
 TEMPLATE = subdirs
-SUBDIRS = auto/connection
+SUBDIRS = auto \
+	manual

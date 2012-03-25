@@ -32,11 +32,12 @@ QVariant Reply::error() const
 void Reply::setReply(QNetworkReply *reply)
 {
     Q_D(Reply);    
-    d->networkReply.reset(reply);
+    if (!d->networkReply.isNull())
+        d->networkReply.data()->deleteLater();
+    d->networkReply = reply;
     setParent(reply);
 
     connect(reply, SIGNAL(finished()), SLOT(_q_reply_finished()));
-    connect(reply, SIGNAL(destroyed(QObject*)), SLOT(_q_network_reply_destroyed(QObject*)));
 }
 
 } // namespace vk

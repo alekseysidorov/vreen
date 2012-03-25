@@ -4,6 +4,7 @@
 #include "json.h"
 #include "reply.h"
 #include "QNetworkReply"
+#include <QWeakPointer>
 
 namespace vk {
 
@@ -11,10 +12,10 @@ class ReplyPrivate
 {
     Q_DECLARE_PUBLIC(Reply)
 public:
-    ReplyPrivate(Reply *q) : q_ptr(q), networkReply(0) {}
+    ReplyPrivate(Reply *q) : q_ptr(q) {}
     Reply *q_ptr;
 
-    QScopedPointer<QNetworkReply> networkReply;
+    QWeakPointer<QNetworkReply> networkReply;
     QVariant response;
     QVariant error;
 
@@ -42,11 +43,6 @@ public:
             emit q->resultReady(response);
         }
 
-    }
-
-    void _q_network_reply_destroyed(QObject*)
-    {
-        networkReply.reset();
     }
 };
 
