@@ -2,12 +2,13 @@
 #define NEWSMODEL_H
 
 #include <QAbstractListModel>
+#include "vk_global.h"
 
 namespace vk {
 
 class Client;
 class NewsModelPrivate;
-class NewsModel : public QAbstractListModel
+class VK_SHARED_EXPORT NewsModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(NewsModel)

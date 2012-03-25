@@ -38,7 +38,10 @@ int NewsModel::count() const
 void NewsModel::update()
 {
     Q_D(NewsModel);
-    QVariantMap filter; //TODO implement filters!
+    QVariantMap filter;
+    if (d->newsList.count())
+        filter.insert("start_time", d->newsList.first().time);
+
     auto reply = d->client->request("newsfeed.get", filter);
     //TODO i want Qt5 for lambdas(((
     connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_update_ready(QVariant)));
@@ -56,7 +59,7 @@ QVariant NewsModel::data(const QModelIndex &index, int role) const
     case SourceRole:
         return news.source;
     case IsGroupRole:
-        return news.isGroup;
+        return news.isGroup();
     default:
         break;
     }
@@ -76,11 +79,15 @@ void NewsModelPrivate::_q_update_ready(const QVariant &response)
     auto map = response.toMap();
     auto items = map.value("items").toList();
     q->beginInsertRows(QModelIndex(), 0, items.count());
-    for (auto item : items) {
+    for (auto item : items) {        
         auto data = item.toMap();
+        //TODO find dublicate sourceId's
+
         NewsItem newsItem;
         newsItem.type = strToEnum<NewsModel::ItemType>(data.value("type").toString(), types);
         newsItem.data = data;
+        newsItem.sourceId = data.value("source_id").toInt();
+        newsItem.time = data.value("date").toInt();
         newsList.prepend(newsItem);
     }
     q->endInsertRows();

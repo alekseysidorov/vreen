@@ -43,6 +43,8 @@ void NewsModelTest::testUpdate()
 
     vk::NewsModel model(&client);
     connect(&model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), &loop, SLOT(quit()));
+    model.update();
+    loop.exec();
 
     QVERIFY(model.count() > 0);
 }

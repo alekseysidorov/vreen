@@ -17,8 +17,10 @@ struct NewsItem
     NewsModel::ItemType type;
     QVariant data;
     QVariant source;
-    bool isGroup;
-    //time_t time;
+    int sourceId;
+
+    bool isGroup() const { return sourceId < 0; }
+    int time;
 };
 typedef QList<NewsItem> NewsList;
 
