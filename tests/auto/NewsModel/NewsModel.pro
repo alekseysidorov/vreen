@@ -18,6 +18,7 @@ TEMPLATE = app
 SOURCES += tst_newsmodeltest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
+
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../../src/api/release/ -lvk
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../../src/api/debug/ -lvk
 else:symbian: LIBS += -lvk
