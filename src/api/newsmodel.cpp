@@ -87,7 +87,7 @@ void NewsModelPrivate::_q_update_ready(const QVariant &response)
     auto map = response.toMap();
     auto items = map.value("items").toList();
     q->beginInsertRows(QModelIndex(), 0, items.count());
-    for (auto item : items) {        
+    foreach (auto item, items) {
         auto data = item.toMap();
         //TODO find dublicate sourceId's
 

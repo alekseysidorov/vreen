@@ -19,7 +19,9 @@ SOURCES += client.cpp \
     json.cpp \
     directconnection.cpp \
     longpoll.cpp \
-    newsmodel.cpp
+    newsmodel.cpp \
+    newsfeed.cpp \
+    buddy.cpp
 
 HEADERS += client.h \
     vk_global.h \
@@ -32,7 +34,10 @@ HEADERS += client.h \
     longpoll.h \
     longpoll_p.h \
     newsmodel.h \
-    newsmodel_p.h
+    newsmodel_p.h \
+    newsfeed.h \
+    buddy.h \
+    buddy_p.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN
