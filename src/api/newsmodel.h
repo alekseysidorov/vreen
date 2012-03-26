@@ -13,6 +13,7 @@ class NewsModel : public QAbstractListModel
     Q_DECLARE_PRIVATE(NewsModel)
 
     Q_ENUMS(ItemType)
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
     enum ItemType
     {
@@ -33,12 +34,14 @@ public:
 
     NewsModel(Client *client);
     virtual ~NewsModel();
-    int count() const;
-public slots:
-    void update();
-
+    int count() const;    
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex &parent) const;
+public slots:
+    void update();
+    void clear();
+signals:
+    void countChanged(int);
 protected:
     QScopedPointer<NewsModelPrivate> d_ptr;
 

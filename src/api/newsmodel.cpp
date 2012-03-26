@@ -44,6 +44,14 @@ void NewsModel::update()
     connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_update_ready(QVariant)));
 }
 
+void NewsModel::clear()
+{
+    beginRemoveRows(QModelIndex(), 0, count());
+    d_func()->newsList.clear();
+    endRemoveRows();
+    emit countChanged(0);
+}
+
 QVariant NewsModel::data(const QModelIndex &index, int role) const
 {
     Q_D(const NewsModel);
@@ -81,9 +89,10 @@ void NewsModelPrivate::_q_update_ready(const QVariant &response)
         NewsItem newsItem;
         newsItem.type = strToEnum<NewsModel::ItemType>(data.value("type").toString(), types);
         newsItem.data = data;
-        newsList.prepend(newsItem);
+        newsList.append(newsItem);
     }
     q->endInsertRows();
+    emit q->countChanged(newsList.count());
 
     reply->deleteLater();
 }
