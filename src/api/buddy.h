@@ -1,13 +1,13 @@
 #ifndef VK_USER_H
 #define VK_USER_H
 
-#include <QObject>
+#include "vk_global.h"
 
 namespace vk {
 
 class Client;
 class ContactPrivate;
-class Contact : public QObject
+class VK_SHARED_EXPORT Contact : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(Contact)
@@ -28,8 +28,11 @@ public:
     Client *client() const;
     Q_INVOKABLE QString photoSource(PhotoSize size = PhotoSizeMedium);
     void setPhotoSource(const QString &source, PhotoSize size = PhotoSizeMedium);
+public slots:
+    virtual update(const QStringList &fields = QStringList()) = 0;
 signals:
     void nameChanged(const QString &name);
+    void updateFinished(bool success);
 protected:
     QScopedPointer<ContactPrivate> d_ptr;
 };
@@ -56,6 +59,7 @@ public:
     QString lastName() const;
     void setLastName(const QString &lastName);
     virtual QString name() const;
+    virtual update(const QStringList &fields = QStringList());
 signals:
     void firstNameChanged(const QString &name);
     void lastNameChanged(const QString &name);
@@ -70,7 +74,29 @@ public:
     Group(int id, Client *client);
     virtual QString name() const;
     void setName(const QString &name);
+    virtual update(const QStringList &fields = QStringList());
 };
+
+//contact's casts
+template <typename T>
+Q_INLINE_TEMPLATE T contact_cast(Contact *contact)
+{
+    return qobject_cast<T>(contact);
+}
+
+//fast specialization
+template <>
+Q_INLINE_TEMPLATE Buddy* contact_cast(Contact *contact)
+{
+    return contact->id() > 0 ? static_cast<Buddy*>(contact)
+                             : 0;
+}
+template <>
+Q_INLINE_TEMPLATE Group* contact_cast(Contact *contact)
+{
+    return contact->id() < 0 ? static_cast<Group*>(contact)
+                             : 0;
+}
 
 } // namespace vk
 

@@ -75,6 +75,11 @@ QString Buddy::name() const
     return d->firstName + ' ' + d->lastName;
 }
 
+Buddy::update(const QStringList &fields)
+{
+    //TODO
+}
+
 Group::Group(int id, Client *client) :
     Contact(new ContactPrivate(this, id, client))
 {
@@ -89,6 +94,12 @@ void Group::setName(const QString &name)
 {
     d_func()->name = name;
     emit nameChanged(name);
+}
+
+Group::update(const QStringList &fields)
+{
+    Q_UNUSED(fields);
+    emit updateFinished();
 }
 
 } // namespace vk
