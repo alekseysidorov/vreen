@@ -13,6 +13,11 @@ public:
     RosterPrivate(Roster *q, Client *client) : q_ptr(q), client(client) {}
     Roster *q_ptr;
     Client *client;
+
+    void getTags();
+    void getOnline();
+    void _q_tags_received(const QVariant &response);
+    void _q_friends_received(const QVariant &response);
 };
 
 } //namespace vk

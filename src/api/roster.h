@@ -3,9 +3,11 @@
 
 #include "vk_global.h"
 #include <QVariant>
+#include <QStringList>
 
 namespace vk {
 
+class Client;
 class Contact;
 class RosterPrivate;
 class VK_SHARED_EXPORT Roster : public QObject

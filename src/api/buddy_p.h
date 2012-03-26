@@ -22,9 +22,10 @@ class BuddyPrivate : public ContactPrivate
 {
     Q_DECLARE_PUBLIC(Buddy)
 public:
-    BuddyPrivate(Contact *q, int id, Client *client) : ContactPrivate(q, id, client) {}
+    BuddyPrivate(Contact *q, int id, Client *client) : ContactPrivate(q, id, client), isOnline(false) {}
     QString firstName;
     QString lastName;
+    bool isOnline;
 };
 
 class GroupPrivate : public ContactPrivate

@@ -2,6 +2,7 @@
 #define VK_USER_H
 
 #include "vk_global.h"
+#include <QStringList>
 
 namespace vk {
 
@@ -29,10 +30,10 @@ public:
     Q_INVOKABLE QString photoSource(PhotoSize size = PhotoSizeMedium);
     void setPhotoSource(const QString &source, PhotoSize size = PhotoSizeMedium);
 public slots:
-    virtual update(const QStringList &fields = QStringList()) = 0;
+    virtual void update(const QStringList &fields = QStringList()) = 0;
 signals:
     void nameChanged(const QString &name);
-    void updateFinished(bool success);
+    void updateFinished(bool success = true);
 protected:
     QScopedPointer<ContactPrivate> d_ptr;
 };
@@ -58,11 +59,14 @@ public:
     void setFirstName(const QString &firstName);
     QString lastName() const;
     void setLastName(const QString &lastName);
+    bool isOnline() const;
+    void setOnline(bool set);
     virtual QString name() const;
-    virtual update(const QStringList &fields = QStringList());
+    virtual void update(const QStringList &fields = QStringList());
 signals:
     void firstNameChanged(const QString &name);
     void lastNameChanged(const QString &name);
+    void onlineChanged(bool isOnline);
 };
 
 class GroupPrivate;
@@ -74,7 +78,7 @@ public:
     Group(int id, Client *client);
     virtual QString name() const;
     void setName(const QString &name);
-    virtual update(const QStringList &fields = QStringList());
+    virtual void update(const QStringList &fields = QStringList());
 };
 
 //contact's casts

@@ -69,13 +69,24 @@ void Buddy::setLastName(const QString &lastName)
     emit nameChanged(name());
 }
 
+bool Buddy::isOnline() const
+{
+    return d_func()->isOnline;
+}
+
+void Buddy::setOnline(bool set)
+{
+    d_func()->isOnline = set;
+    emit onlineChanged(set);
+}
+
 QString Buddy::name() const
 {
     Q_D(const Buddy);
     return d->firstName + ' ' + d->lastName;
 }
 
-Buddy::update(const QStringList &fields)
+void Buddy::update(const QStringList &fields)
 {
     //TODO
 }
@@ -96,7 +107,7 @@ void Group::setName(const QString &name)
     emit nameChanged(name);
 }
 
-Group::update(const QStringList &fields)
+void Group::update(const QStringList &fields)
 {
     Q_UNUSED(fields);
     emit updateFinished();
