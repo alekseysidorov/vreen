@@ -27,8 +27,8 @@ public:
     virtual QString name() const = 0;
     int id() const;
     Client *client() const;
-    Q_INVOKABLE QString photoSource(PhotoSize size = PhotoSizeMedium);
-    void setPhotoSource(const QString &source, PhotoSize size = PhotoSizeMedium);
+    Q_INVOKABLE QString photoSource(PhotoSize size = PhotoSizeSmall);
+    void setPhotoSource(const QString &source, PhotoSize size = PhotoSizeSmall);
 public slots:
     virtual void update(const QStringList &fields = QStringList()) = 0;
 signals:
