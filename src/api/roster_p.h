@@ -2,8 +2,11 @@
 #define ROSTER_P_H
 #include "roster.h"
 #include "client_p.h"
+#include "buddy_p.h"
 
 namespace vk {
+
+typedef QHash<int, Contact*> ContactHash;
 
 class Roster;
 class RosterPrivate
@@ -13,6 +16,7 @@ public:
     RosterPrivate(Roster *q, Client *client) : q_ptr(q), client(client) {}
     Roster *q_ptr;
     Client *client;
+    ContactHash contactHash;
 
     void getTags();
     void getOnline();

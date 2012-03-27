@@ -17,10 +17,18 @@ class VK_SHARED_EXPORT Roster : public QObject
 public:
     Roster(Client *client);
     virtual ~Roster();
+    Contact *contact(int id);
     Contact *contact(int id) const;
     Contact *contact(const QVariantMap &data);
 public slots:
-    void sync(const QStringList &filter = QStringList());
+    void sync(const QStringList &fields = QStringList()
+            << QLatin1String("first_name")
+            << QLatin1String("last_name")
+            << QLatin1String("online")
+            << QLatin1String("photo")
+            << QLatin1String("lists")
+            << QLatin1String("activity")
+            );
 signals:
     void contactAdded(Contact *contact);
     void contactRemoved(Contact *contact);
