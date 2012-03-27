@@ -22,9 +22,36 @@ Contact *Roster::contact(const QVariantMap &data)
 {
 }
 
+QStringList Roster::tags() const
+{
+    return d_func()->tags;
+}
+
+void Roster::setTags(const QStringList &tags)
+{
+    d_func()->tags = tags;
+    emit tagsChanged(tags);
+}
+
 void Roster::sync(const QStringList &filter)
 {
     Q_D(Roster);
+}
+
+void RosterPrivate::getTags()
+{
+}
+
+void RosterPrivate::getOnline()
+{
+}
+
+void RosterPrivate::_q_tags_received(const QVariant &response)
+{
+}
+
+void RosterPrivate::_q_friends_received(const QVariant &response)
+{
 }
 
 } // namespace vk

@@ -19,11 +19,14 @@ public:
     virtual ~Roster();
     Contact *contact(int id) const;
     Contact *contact(const QVariantMap &data);
+    QStringList tags() const;
+    void setTags(const QStringList &list);
 public slots:
     void sync(const QStringList &filter = QStringList());
 signals:
     void contactAdded(Contact *contact);
     void contactRemoved(Contact *contact);
+    void tagsChanged(const QStringList &);
 protected:
     QScopedPointer<RosterPrivate> d_ptr;
 
