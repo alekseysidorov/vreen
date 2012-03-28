@@ -26,6 +26,7 @@ public:
     QString firstName;
     QString lastName;
     bool isOnline;
+	Buddy::TagIdList tagIdList;
 };
 
 class GroupPrivate : public ContactPrivate

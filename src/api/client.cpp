@@ -80,7 +80,20 @@ void Client::setConnection(Connection *connection)
     connect(connection, SIGNAL(connectionStateChanged(vk::Client::State)),
             this, SLOT(_q_connection_state_changed(vk::Client::State)));
     connect(connection, SIGNAL(error(vk::Client::Error)),
-            this, SIGNAL(error(vk::Client::Error))); //TODO error handler
+			this, SIGNAL(error(vk::Client::Error))); //TODO error handler
+}
+
+Roster *Client::roster() const
+{
+	return d_func()->roster.data();
+}
+
+Roster *Client::roster()
+{
+	Q_D(Client);
+	if (d->roster.isNull())
+		d->roster = new Roster(this);
+	return d->roster.data();
 }
 
 Reply *Client::request(const QUrl &url)

@@ -13,6 +13,7 @@ namespace vk {
 class Connection;
 class ClientPrivate;
 class Reply;
+class Roster;
 class VK_SHARED_EXPORT Client : public QObject
 {
     Q_OBJECT
@@ -53,6 +54,8 @@ public:
     Connection *connection() const;
     Connection *connection();
     void setConnection(Connection *connection);
+	Roster *roster() const;
+	Roster *roster();
 
     Q_INVOKABLE Reply *request(const QUrl &);
     Q_INVOKABLE Reply *request(const QString &method, const QVariantMap &args = QVariantMap());

@@ -64,6 +64,9 @@ unix:!symbian {
 unix {
     QMAKE_CXXFLAGS += -std=c++0x
 }
+
+CONFIG += static
+
 #linux-g++ {
 #    QMAKE_CXXFLAGS += -std=c++0x
 #}

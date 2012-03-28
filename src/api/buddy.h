@@ -12,6 +12,8 @@ class VK_SHARED_EXPORT Contact : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(Contact)
+
+	Q_PROPERTY(QString name READ name NOTIFY nameChanged)
 public:
 
     enum PhotoSize {
@@ -25,7 +27,7 @@ public:
     virtual ~Contact();
 
     virtual QString name() const = 0;
-    int id() const;
+	Q_INVOKABLE int id() const;
     Client *client() const;
     Q_INVOKABLE QString photoSource(PhotoSize size = PhotoSizeSmall);
     void setPhotoSource(const QString &source, PhotoSize size = PhotoSizeSmall);
@@ -43,6 +45,12 @@ class Buddy : public Contact
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(Buddy)
+
+	Q_PROPERTY(QString fistName READ firstName NOTIFY firstNameChanged)
+	Q_PROPERTY(QString lastName READ lastName NOTIFY lastNameChanged)
+	Q_PROPERTY(bool isOnline READ isOnline NOTIFY onlineChanged)
+	Q_PROPERTY(QStringList tags READ tags NOTIFY tagsChanged)
+
 public:
     enum NameCase {
         NomCase,
@@ -52,6 +60,7 @@ public:
         InsCase,
         AblCase
     };
+	typedef QList<int> TagIdList;
 
     Buddy(int id, Client *client);
     //TODO name case support maybe needed
@@ -62,11 +71,16 @@ public:
     bool isOnline() const;
     void setOnline(bool set);
     virtual QString name() const;
+	void setTagIdList(const TagIdList &list);
+	TagIdList tagIdList() const;
+	QStringList tags() const;
+
     virtual void update(const QStringList &fields = QStringList());
 signals:
     void firstNameChanged(const QString &name);
     void lastNameChanged(const QString &name);
     void onlineChanged(bool isOnline);
+	void tagsChanged(const QStringList &tags);
 };
 
 class GroupPrivate;

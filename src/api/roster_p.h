@@ -21,6 +21,7 @@ public:
 
     void getTags();
     void getOnline();
+	void getFriends(const QVariantMap &args = QVariantMap());
 
     void _q_tags_received(const QVariant &response);
     void _q_friends_received(const QVariant &response);

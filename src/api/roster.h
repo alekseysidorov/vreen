@@ -42,7 +42,8 @@ protected:
     //friend class Buddy;
     //friend class Group;
 
-    //Q_PRIVATE_SLOT(d_func(), void _q_)
+	Q_PRIVATE_SLOT(d_func(), void _q_tags_received(const QVariant &response))
+	Q_PRIVATE_SLOT(d_func(), void _q_friends_received(const QVariant &response))
 };
 
 } // namespace vk

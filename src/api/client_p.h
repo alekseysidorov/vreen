@@ -5,6 +5,7 @@
 #include "reply.h"
 #include <QWeakPointer>
 #include "directconnection_p.h"
+#include "roster.h"
 
 namespace vk {
 
@@ -17,6 +18,7 @@ public:
     QString login;
     QString password;
     QWeakPointer<Connection> connection;
+	QWeakPointer<Roster> roster;
 
     void _q_connection_state_changed(vk::Client::State state)
     {

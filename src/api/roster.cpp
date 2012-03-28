@@ -2,9 +2,8 @@
 
 namespace vk {
 
-static auto lambda = [&](const QVariant &){};
-
-static QHash<QString, decltype(lambda)> LambdaHash;
+//static auto lambda = [&](const QVariant &){};
+//static QHash<QString, decltype(lambda)> LambdaHash;
 
 Roster::Roster(Client *client) :
     QObject(client),
@@ -67,22 +66,56 @@ void Roster::setTags(const QStringList &tags)
 
 void Roster::sync(const QStringList &fields)
 {
+	Q_D(Roster);
+	//TODO rewrite with method chains with lambdas in Qt5
+	QVariantMap args;
+	args.insert("fields", fields.join(","));
+
+	d->getTags();
+	d->getFriends(args);
 }
 
 void RosterPrivate::getTags()
 {
+	Q_Q(Roster);
+	auto reply = client->request("friends.getLists");
+	reply->connect(reply, SIGNAL(resultReady(const QVariant&)),
+				   q, SLOT(_q_tags_received(const QVariant&)));
 }
 
 void RosterPrivate::getOnline()
 {
 }
 
+void RosterPrivate::getFriends(const QVariantMap &args)
+{
+	Q_Q(Roster);
+	auto reply = client->request("friends.get", args);
+	reply->connect(reply, SIGNAL(resultReady(const QVariant&)),
+				   q, SLOT(_q_friends_received(const QVariant&)));
+}
+
 void RosterPrivate::_q_tags_received(const QVariant &response)
 {
+	Q_Q(Roster);
+	auto reply = sender_cast<Reply*>(q->sender());
+
+	auto list = response.toList();
+	QStringList tags;
+	foreach (auto item, list) {
+		tags.append(item.toMap().value("name").toString());
+	}
+	q->setTags(tags);
+
+	reply->deleteLater();
 }
 
 void RosterPrivate::_q_friends_received(const QVariant &response)
 {
+	Q_Q(Roster);
+	auto reply = sender_cast<Reply*>(q->sender());
+
+	reply->deleteLater();
 }
 
 } // namespace vk
