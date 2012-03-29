@@ -3,6 +3,7 @@
 
 #include "vk_global.h"
 #include <QStringList>
+#include <QVariant>
 
 namespace vk {
 
@@ -33,7 +34,7 @@ public:
     virtual QString name() const = 0;
 	Q_INVOKABLE int id() const;
     Client *client() const;
-    Q_INVOKABLE QString photoSource(PhotoSize size = PhotoSizeSmall);
+    Q_INVOKABLE QString photoSource(PhotoSize size = PhotoSizeSmall) const;
     void setPhotoSource(const QString &source, PhotoSize size = PhotoSizeSmall);
 public slots:
     virtual void update(const QStringList &fields = QStringList()) = 0;
@@ -54,12 +55,14 @@ class Buddy : public Contact
     Q_PROPERTY(QString lastName READ lastName NOTIFY lastNameChanged)
     Q_PROPERTY(bool isOnline READ isOnline NOTIFY onlineChanged)
 	Q_PROPERTY(QStringList tags READ tags NOTIFY tagsChanged)
+    Q_PROPERTY(QString activity READ activity NOTIFY activityChanged)
 
     //private properties
     Q_PROPERTY(QString _q_first_name READ firstName WRITE setFirstName DESIGNABLE false)
     Q_PROPERTY(QString _q_last_name READ lastName WRITE setLastName DESIGNABLE false)
     Q_PROPERTY(bool _q_online READ isOnline WRITE setOnline DESIGNABLE false)
     Q_PRIVATE_PROPERTY(d_func(), QVariantList _q_lists READ lists WRITE setLists DESIGNABLE false)
+    Q_PRIVATE_PROPERTY(d_func(), QString _q_activity READ getActivity WRITE setActivity DESIGNABLE false)
 public:
     enum NameCase {
         NomCase,
@@ -80,6 +83,7 @@ public:
     void setOnline(bool set);
     virtual QString name() const;
 	QStringList tags() const;
+    QString activity() const;
 
     virtual void update(const QStringList &fields = QStringList());
 signals:
@@ -87,6 +91,7 @@ signals:
     void lastNameChanged(const QString &name);
     void onlineChanged(bool isOnline);
 	void tagsChanged(const QStringList &tags);
+    void activityChanged(const QString &activity);
 };
 
 class GroupPrivate;
@@ -123,5 +128,7 @@ Q_INLINE_TEMPLATE Group* contact_cast(Contact *contact)
 }
 
 } // namespace vk
+
+Q_DECLARE_METATYPE(vk::Contact*)
 
 #endif // VK_USER_H

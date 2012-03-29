@@ -13,7 +13,10 @@ class ContactPrivate
     Q_DECLARE_PUBLIC(Contact)
 public:
     ContactPrivate(Contact *q, int id, Client *client) : q_ptr(q),
-        client(client), id(id), sources(Contact::PhotoSizeLargeRec) {}
+        client(client), id(id), sources(Contact::PhotoSizeLargeRec)
+    {
+
+    }
     Contact *q_ptr;
     Client *client;
     int id;
@@ -35,6 +38,7 @@ public:
     QString lastName;
     bool isOnline;
     QVariantList tagIdList;
+    QString activity;
 
     QVariantList lists() const { return QVariantList(); }
     void setLists(const QVariantList &list)
@@ -44,6 +48,12 @@ public:
         foreach (auto value, list)
             tagIdList.append(value);
         emit q->tagsChanged(q->tags());
+    }
+    QString getActivity() const { return activity; }
+    void setActivity(const QString &now)
+    {
+        activity = now;
+        emit q_func()->activityChanged(now);
     }
 };
 

@@ -91,8 +91,10 @@ Roster *Client::roster() const
 Roster *Client::roster()
 {
 	Q_D(Client);
-	if (d->roster.isNull())
+    if (d->roster.isNull()) {
 		d->roster = new Roster(this);
+        emit rosterChanged(d->roster.data());
+    }
 	return d->roster.data();
 }
 

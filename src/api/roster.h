@@ -41,8 +41,8 @@ public slots:
             << QLatin1String("activity")
             );
 signals:
-    void contactAdded(Contact *contact);
-    void contactRemoved(Contact *contact);
+    void contactAdded(vk::Contact *contact);
+    void contactRemoved(vk::Contact *contact);
     void tagsChanged(const QStringList &);
     void syncFinished(bool success);
 protected:

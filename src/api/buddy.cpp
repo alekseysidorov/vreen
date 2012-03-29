@@ -29,9 +29,10 @@ Client *Contact::client() const
     return d_func()->client;
 }
 
-QString Contact::photoSource(Contact::PhotoSize size)
+QString Contact::photoSource(Contact::PhotoSize size) const
 {
-    return d_func()->sources[size];
+    Q_D(const Contact);
+    return d->sources.value(size);
 }
 
 void Contact::setPhotoSource(const QString &source, Contact::PhotoSize size)
@@ -95,7 +96,12 @@ QStringList Buddy::tags() const
         int id = data.toInt();
         tags.append(d->client->roster()->tags().value(id, tr("Unknown tag id %1").arg(id)));
 	}
-	return tags;
+    return tags;
+}
+
+QString Buddy::activity() const
+{
+    return d_func()->activity;
 }
 
 void Buddy::update(const QStringList &fields)

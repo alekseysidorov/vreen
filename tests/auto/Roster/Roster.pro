@@ -27,7 +27,3 @@ INCLUDEPATH += $$PWD/../../../src/api \
     $$PWD/../../
 
 DEPENDPATH += $$PWD/../../../src/api
-
-win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../../src/api/release/vk.lib
-else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../../src/api/debug/vk.lib
-else:unix:!symbian: PRE_TARGETDEPS += $$OUT_PWD/../../../src/api/libvk.a

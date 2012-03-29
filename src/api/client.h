@@ -19,10 +19,11 @@ class VK_SHARED_EXPORT Client : public QObject
     Q_OBJECT
     Q_DECLARE_PRIVATE(Client)
 
-    Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
-    Q_PROPERTY(QString login READ login WRITE setLogin NOTIFY loginChanged)
-    Q_PROPERTY(bool isOnline READ isOnline NOTIFY onlineStateChanged)
-    Q_PROPERTY(State connectionState READ connectionState NOTIFY connectionStateChanged)
+    Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged DESIGNABLE true)
+    Q_PROPERTY(QString login READ login WRITE setLogin NOTIFY loginChanged DESIGNABLE true)
+    Q_PROPERTY(bool isOnline READ isOnline NOTIFY onlineStateChanged DESIGNABLE true)
+    Q_PROPERTY(State connectionState READ connectionState NOTIFY connectionStateChanged DESIGNABLE true)
+    Q_PROPERTY(vk::Roster* roster READ roster NOTIFY rosterChanged DESIGNABLE true)
 
     Q_ENUMS(State)
     Q_ENUMS(Error)
@@ -69,6 +70,7 @@ signals:
     void connectionStateChanged(vk::Client::State state);
     void error(vk::Client::Error error);
     void onlineStateChanged(bool state);
+    void rosterChanged(vk::Roster*);
 protected:
     QScopedPointer<ClientPrivate> d_ptr;
 
@@ -78,6 +80,8 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_error_received(vk::Client::Error))
 };
 
-
 } // namespace vk
+
+Q_DECLARE_METATYPE(vk::Roster*)
+
 #endif // VK_CLIENT_H
