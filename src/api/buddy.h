@@ -14,12 +14,16 @@ class VK_SHARED_EXPORT Contact : public QObject
     Q_DECLARE_PRIVATE(Contact)
 
 	Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+
+    Q_PRIVATE_PROPERTY(Contact::d_func(), QString _q_photo READ smallSource WRITE setSmallSource DESIGNABLE false)
 public:
 
     enum PhotoSize {
         PhotoSizeSmall,
         PhotoSizeMedium,
-        PhotoSizeLarge
+        PhotoSizeLarge,
+        PhotoSizeMediumRec,
+        PhotoSizeLargeRec
     };
 
     Contact(int id, Client *client);
@@ -46,11 +50,15 @@ class Buddy : public Contact
     Q_OBJECT
     Q_DECLARE_PRIVATE(Buddy)
 
-	Q_PROPERTY(QString fistName READ firstName NOTIFY firstNameChanged)
-	Q_PROPERTY(QString lastName READ lastName NOTIFY lastNameChanged)
-	Q_PROPERTY(bool isOnline READ isOnline NOTIFY onlineChanged)
+    Q_PROPERTY(QString fistName READ firstName NOTIFY firstNameChanged)
+    Q_PROPERTY(QString lastName READ lastName NOTIFY lastNameChanged)
+    Q_PROPERTY(bool isOnline READ isOnline NOTIFY onlineChanged)
 	Q_PROPERTY(QStringList tags READ tags NOTIFY tagsChanged)
 
+    //private properties
+    Q_PROPERTY(QString _q_first_name READ firstName WRITE setFirstName DESIGNABLE false)
+    Q_PROPERTY(QString _q_last_name READ lastName WRITE setLastName DESIGNABLE false)
+    Q_PROPERTY(bool _q_online READ isOnline WRITE setOnline DESIGNABLE false)
 public:
     enum NameCase {
         NomCase,

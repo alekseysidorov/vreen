@@ -80,7 +80,7 @@ void Client::setConnection(Connection *connection)
     connect(connection, SIGNAL(connectionStateChanged(vk::Client::State)),
             this, SLOT(_q_connection_state_changed(vk::Client::State)));
     connect(connection, SIGNAL(error(vk::Client::Error)),
-			this, SIGNAL(error(vk::Client::Error))); //TODO error handler
+            this, SIGNAL(error(vk::Client::Error))); //TODO error handler
 }
 
 Roster *Client::roster() const

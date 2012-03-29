@@ -5,10 +5,7 @@
 #include <connection.h>
 #include <reply.h>
 
-static QString getVariable(const char *name)
-{
-    return qgetenv(name);
-}
+#include "common/utils.h"
 
 class ConnectionTest: public QObject
 {
@@ -16,27 +13,12 @@ class ConnectionTest: public QObject
 private slots:
     void testDirectConnection_data()
     {
-        QTest::addColumn<QString>("login");
-        QTest::addColumn<QString>("password");
-
-        QTest::newRow("From enviroment variables VK_LOGIN and VK_PASSWORD")
-                << getVariable("VK_LOGIN")
-                << getVariable("VK_PASSWORD");
-
+        VK_ADD_LOGIN_VARS();
     }
 
     void testDirectConnection()
     {
-        QFETCH(QString, login);
-        QFETCH(QString, password);
-
-        vk::Client client(login, password);
-
-        QEventLoop loop;
-        connect(&client, SIGNAL(onlineStateChanged(bool)), &loop, SLOT(quit()));
-        connect(&client, SIGNAL(error(vk::Client::Error)), &loop, SLOT(quit()));
-        client.connectToHost();
-        loop.exec();
+        VK_CREATE_CLIENT();
 
         QCOMPARE(client.isOnline(), true);
     }
@@ -53,42 +35,19 @@ private slots:
 
     void testDirectConnectionWrongData()
     {
-        QFETCH(QString, login);
-        QFETCH(QString, password);
-
-        vk::Client client(login, password);
-
-        QEventLoop loop;
-        connect(&client, SIGNAL(onlineStateChanged(bool)), &loop, SLOT(quit()));
-        connect(&client, SIGNAL(error(vk::Client::Error)), &loop, SLOT(quit()));
-        client.connectToHost();
-        loop.exec();
+        VK_CREATE_CLIENT();
 
         QCOMPARE(client.isOnline(), false);
     }
 
     void testRequest_data()
     {
-        QTest::addColumn<QString>("login");
-        QTest::addColumn<QString>("password");
-
-        QTest::newRow("From enviroment variables VK_LOGIN and VK_PASSWORD")
-                << getVariable("VK_LOGIN")
-                << getVariable("VK_PASSWORD");
+        VK_ADD_LOGIN_VARS();
     }
 
     void testRequest()
     {
-        QFETCH(QString, login);
-        QFETCH(QString, password);
-
-        vk::Client client(login, password);
-
-        QEventLoop loop;
-        connect(&client, SIGNAL(onlineStateChanged(bool)), &loop, SLOT(quit()));
-        connect(&client, SIGNAL(error(vk::Client::Error)), &loop, SLOT(quit()));
-        client.connectToHost();
-        loop.exec();
+        VK_CREATE_CLIENT();
 
         if (!client.isOnline())
             QFAIL("Client is offline!");

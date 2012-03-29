@@ -1,4 +1,6 @@
 TEMPLATE = subdirs
+
 SUBDIRS = connection \
     LongPoll \
-    NewsModel
+    NewsModel \
+    Roster

@@ -7,19 +7,28 @@
 
 namespace vk {
 
-class Client;
 class Contact;
+class Client;
+class Buddy;
+class Group;
+
+typedef QList<Contact*> ContactList;
+typedef QList<Buddy*> BuddyList;
+typedef QList<Group*> GroupList;
+
 class RosterPrivate;
 class VK_SHARED_EXPORT Roster : public QObject
 {
     Q_OBJECT
-    Q_DECLARE_PRIVATE(Roster)
+    Q_DECLARE_PRIVATE(Roster) 
 public:
     Roster(Client *client);
     virtual ~Roster();
     Contact *contact(int id);
     Contact *contact(int id) const;
     Contact *contact(const QVariantMap &data);
+    ContactList contacts() const;
+
     QStringList tags() const;
     void setTags(const QStringList &list);
 public slots:
@@ -35,6 +44,7 @@ signals:
     void contactAdded(Contact *contact);
     void contactRemoved(Contact *contact);
     void tagsChanged(const QStringList &);
+    void syncFinished(bool success);
 protected:
     QScopedPointer<RosterPrivate> d_ptr;
 

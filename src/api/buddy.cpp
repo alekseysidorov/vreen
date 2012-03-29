@@ -2,8 +2,6 @@
 
 namespace vk {
 
-
-
 Contact::Contact(int id, Client *client) :
     QObject(client),
     d_ptr(new ContactPrivate(this, id, client))
@@ -135,7 +133,9 @@ void Group::setName(const QString &name)
 void Group::update(const QStringList &fields)
 {
     Q_UNUSED(fields);
-	emit updateFinished();
+    emit updateFinished();
 }
 
 } // namespace vk
+
+#include "moc_buddy.cpp"
