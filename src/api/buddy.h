@@ -59,6 +59,7 @@ class Buddy : public Contact
     Q_PROPERTY(QString _q_first_name READ firstName WRITE setFirstName DESIGNABLE false)
     Q_PROPERTY(QString _q_last_name READ lastName WRITE setLastName DESIGNABLE false)
     Q_PROPERTY(bool _q_online READ isOnline WRITE setOnline DESIGNABLE false)
+    Q_PRIVATE_PROPERTY(d_func(), QVariantList _q_lists READ lists WRITE setLists DESIGNABLE false)
 public:
     enum NameCase {
         NomCase,
@@ -68,7 +69,6 @@ public:
         InsCase,
         AblCase
     };
-	typedef QList<int> TagIdList;
 
     Buddy(int id, Client *client);
     //TODO name case support maybe needed
@@ -79,8 +79,6 @@ public:
     bool isOnline() const;
     void setOnline(bool set);
     virtual QString name() const;
-	void setTagIdList(const TagIdList &list);
-	TagIdList tagIdList() const;
 	QStringList tags() const;
 
     virtual void update(const QStringList &fields = QStringList());

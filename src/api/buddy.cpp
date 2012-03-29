@@ -1,4 +1,5 @@
 #include "buddy_p.h"
+#include "roster.h"
 
 namespace vk {
 
@@ -86,25 +87,13 @@ QString Buddy::name() const
 	return d->firstName + ' ' + d->lastName;
 }
 
-void Buddy::setTagIdList(const Buddy::TagIdList &list)
-{
-	d_func()->tagIdList = list;
-
-	//TODO check tags
-	emit tagsChanged(tags());
-}
-
-Buddy::TagIdList Buddy::tagIdList() const
-{
-	return d_func()->tagIdList;
-}
-
 QStringList Buddy::tags() const
 {
 	Q_D(const Buddy);
 	QStringList tags;
-	foreach (int id, d->tagIdList) {
-		//TODO
+    foreach (auto data, d->tagIdList) {
+        int id = data.toInt();
+        tags.append(d->client->roster()->tags().value(id, tr("Unknown tag id %1").arg(id)));
 	}
 	return tags;
 }

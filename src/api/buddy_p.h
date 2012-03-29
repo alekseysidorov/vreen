@@ -34,7 +34,17 @@ public:
     QString firstName;
     QString lastName;
     bool isOnline;
-	Buddy::TagIdList tagIdList;
+    QVariantList tagIdList;
+
+    QVariantList lists() const { return QVariantList(); }
+    void setLists(const QVariantList &list)
+    {
+        Q_Q(Buddy);
+        tagIdList.clear();
+        foreach (auto value, list)
+            tagIdList.append(value);
+        emit q->tagsChanged(q->tags());
+    }
 };
 
 class GroupPrivate : public ContactPrivate
