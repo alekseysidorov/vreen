@@ -10,10 +10,12 @@
 class QUrl;
 namespace vk {
 
+class Message;
 class Connection;
 class ClientPrivate;
 class Reply;
 class Roster;
+class Contact;
 class VK_SHARED_EXPORT Client : public QObject
 {
     Q_OBJECT
@@ -60,6 +62,10 @@ public:
 
     Q_INVOKABLE Reply *request(const QUrl &);
     Q_INVOKABLE Reply *request(const QString &method, const QVariantMap &args = QVariantMap());
+    Reply *sendMessage(const Message &message);
+    Reply *getLastDialogs(int count = 16, int previewLength = -1); //TODO move method
+
+    Q_INVOKABLE Contact *me() const;
 public slots:
     void connectToHost();
     void connectToHost(const QString &login, const QString &password);
@@ -78,10 +84,12 @@ private:
 
     Q_PRIVATE_SLOT(d_func(), void _q_connection_state_changed(vk::Client::State))
     Q_PRIVATE_SLOT(d_func(), void _q_error_received(vk::Client::Error))
+    Q_PRIVATE_SLOT(d_func(), void _q_reply_finished(const QVariant &))
 };
 
 } // namespace vk
 
 Q_DECLARE_METATYPE(vk::Roster*)
+Q_DECLARE_METATYPE(vk::Client*)
 
 #endif // VK_CLIENT_H

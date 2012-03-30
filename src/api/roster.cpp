@@ -4,28 +4,6 @@
 
 namespace vk {
 
-//typedef QHash<QString, QByteArray> PropertyHash;
-//PropertyHash init_property_hash()
-//{
-//    PropertyHash hash;
-//    hash.insert("first_name", "firstName");
-//    hash.insert("last_name", "lastName");
-//    hash.insert("name", "name");
-//    return hash;
-//}
-//Q_GLOBAL_STATIC_WITH_INITIALIZER(PropertyHash, propertyHash, *x = init_property_hash())
-
-//static const char *photo_size[] = {
-//    "photo",
-//    "photo_medium",
-//    "photo_big",
-//    "photo_medium_rec",
-//    "photo_big_rec"
-//};
-
-//static auto lambda = [&](const QVariant &){};
-//static QHash<QString, decltype(lambda)> LambdaHash;
-
 Roster::Roster(Client *client) :
     QObject(client),
     d_ptr(new RosterPrivate(this, client))
@@ -36,6 +14,11 @@ Roster::Roster(Client *client) :
 Roster::~Roster()
 {
 
+}
+
+Contact *Roster::owner() const
+{
+    return d_func()->me;
 }
 
 Contact *Roster::contact(int id)

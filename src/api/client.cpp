@@ -1,4 +1,6 @@
 #include "client_p.h"
+#include "message.h"
+#include "buddy.h"
 
 namespace vk {
 
@@ -105,12 +107,46 @@ Reply *Client::request(const QUrl &url)
 {
     QNetworkRequest request(url);
     auto networkReply = connection()->get(request);
-    return new Reply(networkReply);
+    auto reply = new Reply(networkReply);
+    connect(reply, SIGNAL(resultReady(const QVariant &)), SLOT(_q_reply_finished(const QVariant &)));
+    return reply;
 }
 
 Reply *Client::request(const QString &method, const QVariantMap &args)
 {
-    return new Reply(connection()->request(method, args));
+    auto reply = new Reply(connection()->request(method, args));
+    connect(reply, SIGNAL(resultReady(const QVariant &)), SLOT(_q_reply_finished(const QVariant &)));
+    return reply;
+}
+
+Contact *Client::me() const
+{
+    if (auto r = roster())
+        return r->owner();
+    return 0;
+}
+
+Reply *Client::sendMessage(const Message &message)
+{
+    //TODO add delayed send
+    if (!isOnline())
+        return 0;
+
+    QVariantMap args;
+    //TODO add chat messages support and contact check
+    args.insert("uid", message.contact()->id());
+    args.insert("message", message.body());
+    args.insert("title", message.title());
+    return request("messages.send", args);
+}
+
+Reply *Client::getLastDialogs(int count, int previewLength)
+{
+    QVariantMap args;
+    args.insert("count", count);
+    if (previewLength != -1)
+        args.insert("preview_length", previewLength);
+    return request("getDialogs", args);
 }
 
 void Client::connectToHost()

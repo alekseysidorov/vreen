@@ -24,6 +24,7 @@ class VK_SHARED_EXPORT Roster : public QObject
 public:
     Roster(Client *client);
     virtual ~Roster();
+    Contact *owner() const;
     Contact *contact(int id);
     Contact *contact(int id) const;
     Contact *contact(const QVariantMap &data);

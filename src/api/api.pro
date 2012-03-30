@@ -21,7 +21,9 @@ SOURCES += client.cpp \
     longpoll.cpp \
     newsfeed.cpp \
     buddy.cpp \
-    roster.cpp
+    roster.cpp \
+    message.cpp \
+    messagemodel.cpp
 
 HEADERS += client.h \
     vk_global.h \
@@ -37,7 +39,9 @@ HEADERS += client.h \
     buddy.h \
     buddy_p.h \
     roster.h \
-    roster_p.h
+    roster_p.h \
+    message.h \
+    messagemodel.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

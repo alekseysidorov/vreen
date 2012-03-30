@@ -6,6 +6,8 @@
 #include <QWeakPointer>
 #include "directconnection_p.h"
 #include "roster.h"
+#include "reply.h"
+#include "message.h"
 
 namespace vk {
 
@@ -31,6 +33,12 @@ public:
     void _q_error_received(vk::Client::Error)
     {
 
+    }
+
+    void _q_reply_finished(const QVariant &)
+    {
+        auto reply = sender_cast<Reply*>(q_func()->sender());
+        reply->deleteLater();
     }
 };
 

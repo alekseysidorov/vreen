@@ -13,10 +13,14 @@ class RosterPrivate
 {
     Q_DECLARE_PUBLIC(Roster)
 public:
-    RosterPrivate(Roster *q, Client *client) : q_ptr(q), client(client) {}
+    RosterPrivate(Roster *q, Client *client) :
+        q_ptr(q), client(client),
+        me(new Buddy(0, client))
+    {}
     Roster *q_ptr;
     Client *client;
     ContactHash contactHash;
+    Contact *me;
     QStringList tags;
 
     void getTags();
