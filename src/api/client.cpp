@@ -53,7 +53,10 @@ Client::State Client::connectionState() const
 
 bool Client::isOnline() const
 {
-    return connection()->connectionState() == Client::StateOnline;
+    if (auto c = connection())
+        return c->connectionState() == Client::StateOnline;
+    else
+        return Client::StateInvalid;
 }
 
 Connection *Client::connection() const
@@ -85,17 +88,17 @@ void Client::setConnection(Connection *connection)
 
 Roster *Client::roster() const
 {
-	return d_func()->roster.data();
+    return d_func()->roster.data();
 }
 
 Roster *Client::roster()
 {
-	Q_D(Client);
+    Q_D(Client);
     if (d->roster.isNull()) {
-		d->roster = new Roster(this);
+        d->roster = new Roster(this);
         emit rosterChanged(d->roster.data());
     }
-	return d->roster.data();
+    return d->roster.data();
 }
 
 Reply *Client::request(const QUrl &url)

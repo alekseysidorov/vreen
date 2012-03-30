@@ -17,14 +17,16 @@ class VK_SHARED_EXPORT Contact : public QObject
 	Q_PROPERTY(QString name READ name NOTIFY nameChanged)
 
     Q_PRIVATE_PROPERTY(Contact::d_func(), QString _q_photo READ smallSource WRITE setSmallSource DESIGNABLE false)
+    Q_PRIVATE_PROPERTY(Contact::d_func(), QString _q_photo_big READ bigSource WRITE setBigSource DESIGNABLE false)
+    Q_PRIVATE_PROPERTY(Contact::d_func(), QString _q_photo_big_rec READ bigSourceRec WRITE setBigSourceRec DESIGNABLE false)
 public:
 
     enum PhotoSize {
         PhotoSizeSmall,
         PhotoSizeMedium,
-        PhotoSizeLarge,
+        PhotoSizeBig,
         PhotoSizeMediumRec,
-        PhotoSizeLargeRec
+        PhotoSizeBigRec
     };
 
     Contact(int id, Client *client);

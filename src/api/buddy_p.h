@@ -13,7 +13,7 @@ class ContactPrivate
     Q_DECLARE_PUBLIC(Contact)
 public:
     ContactPrivate(Contact *q, int id, Client *client) : q_ptr(q),
-        client(client), id(id), sources(Contact::PhotoSizeLargeRec)
+        client(client), id(id), sources(Contact::PhotoSizeBigRec)
     {
 
     }
@@ -26,6 +26,16 @@ public:
     void setSmallSource(const QString &source)
     {
         q_func()->setPhotoSource(source, Contact::PhotoSizeSmall);
+    }
+    QString bigSource() const { return sources[Contact::PhotoSizeBig]; }
+    void setBigSource(const QString &source)
+    {
+        q_func()->setPhotoSource(source, Contact::PhotoSizeBig);
+    }
+    QString bigSourceRec() const { return sources[Contact::PhotoSizeBigRec]; }
+    void setBigSourceRec(const QString &source)
+    {
+        q_func()->setPhotoSource(source, Contact::PhotoSizeBigRec);
     }
 };
 

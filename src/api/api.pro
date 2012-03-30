@@ -19,7 +19,6 @@ SOURCES += client.cpp \
     json.cpp \
     directconnection.cpp \
     longpoll.cpp \
-    newsmodel.cpp \
     newsfeed.cpp \
     buddy.cpp \
     roster.cpp
@@ -34,8 +33,6 @@ HEADERS += client.h \
     directconnection_p.h \
     longpoll.h \
     longpoll_p.h \
-    newsmodel.h \
-    newsmodel_p.h \
     newsfeed.h \
     buddy.h \
     buddy_p.h \

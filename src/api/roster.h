@@ -37,6 +37,8 @@ public slots:
             << QLatin1String("last_name")
             << QLatin1String("online")
             << QLatin1String("photo")
+            << QLatin1String("photo_big")
+            << QLatin1String("photo_big_rec")
             << QLatin1String("lists")
             << QLatin1String("activity")
             );
