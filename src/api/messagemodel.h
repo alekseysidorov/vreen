@@ -7,7 +7,7 @@
 namespace vk {
 
 class MessageListModelPrivate;
-class MessageListModel : public QAbstractListModel
+class VK_SHARED_EXPORT MessageListModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(MessageListModel)
@@ -17,7 +17,8 @@ public:
         BodyRole,
         ContactRole,
         ReadStateRole,
-        DirectionRole
+        DirectionRole,
+        DateRole
     };
 
     MessageListModel(QObject *parent = 0);

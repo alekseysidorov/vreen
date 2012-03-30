@@ -38,6 +38,7 @@ QString Contact::photoSource(Contact::PhotoSize size) const
 void Contact::setPhotoSource(const QString &source, Contact::PhotoSize size)
 {
     d_func()->sources[size] = source;
+    emit photoSourceChanged(source, size);
 }
 
 Buddy::Buddy(int id, Client *client) :

@@ -8,6 +8,7 @@
 #include "roster.h"
 #include "reply.h"
 #include "message.h"
+#include <QDebug>
 
 namespace vk {
 
@@ -30,9 +31,11 @@ public:
         emit q->connectionStateChanged(state);
     }
 
-    void _q_error_received(vk::Client::Error)
+    void _q_error_received(vk::Client::Error error)
     {
-
+        auto reply = sender_cast<Reply*>(q_func()->sender());
+        qDebug() << "Error received :" << error;
+        reply->deleteLater();
     }
 
     void _q_reply_finished(const QVariant &)

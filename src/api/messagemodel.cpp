@@ -1,5 +1,6 @@
 #include "messagemodel.h"
 #include "buddy.h"
+#include <QDateTime>
 
 namespace vk {
 
@@ -24,6 +25,7 @@ MessageListModel::MessageListModel(QObject *parent) :
     roles[ContactRole] = "contact";
     roles[ReadStateRole] = "readState";
     roles[DirectionRole] = "direction";
+    roles[DateRole] = "date";
     setRoleNames(roles);
 }
 
@@ -54,6 +56,8 @@ QVariant MessageListModel::data(const QModelIndex &index, int role) const
         return message.readState();
     case DirectionRole:
         return message.direction();
+    case DateRole:
+        return message.date();
     default:
         break;
     }
@@ -95,7 +99,7 @@ void MessageListModel::clear()
 {
     Q_D(MessageListModel);
     beginRemoveRows(QModelIndex(), 0, d->messageList.count());
-    setMessages(MessageList());
+    d->messageList.clear();
     endRemoveRows();
 }
 

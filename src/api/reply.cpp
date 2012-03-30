@@ -1,5 +1,6 @@
 #include "reply_p.h"
 #include <QNetworkReply>
+#include <QDebug>
 
 namespace vk {
 
@@ -41,6 +42,7 @@ void Reply::setReply(QNetworkReply *reply)
     setParent(reply);
 
     connect(reply, SIGNAL(finished()), SLOT(_q_reply_finished()));
+    //qDebug() << "--Request: " << reply->url();
 }
 
 } // namespace vk

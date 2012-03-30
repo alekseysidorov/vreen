@@ -146,7 +146,7 @@ Reply *Client::getLastDialogs(int count, int previewLength)
     args.insert("count", count);
     if (previewLength != -1)
         args.insert("preview_length", previewLength);
-    return request("getDialogs", args);
+    return request("messages.getDialogs", args);
 }
 
 void Client::connectToHost()

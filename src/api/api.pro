@@ -66,7 +66,9 @@ unix {
     QMAKE_CXXFLAGS += -std=c++0x
 }
 
-CONFIG += static
+!isEmpty(MEEGO_VERSION_MAJOR) {
+    CONFIG += static
+}
 
 #linux-g++ {
 #    QMAKE_CXXFLAGS += -std=c++0x

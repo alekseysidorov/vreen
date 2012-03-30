@@ -15,6 +15,7 @@ class VK_SHARED_EXPORT Contact : public QObject
     Q_DECLARE_PRIVATE(Contact)
 
 	Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+    Q_PRIVATE_PROPERTY(Contact::d_func(), QString photoSource READ defaultSource NOTIFY photoSourceChanged)
 
     Q_PRIVATE_PROPERTY(Contact::d_func(), QString _q_photo READ smallSource WRITE setSmallSource DESIGNABLE false)
     Q_PRIVATE_PROPERTY(Contact::d_func(), QString _q_photo_big READ bigSource WRITE setBigSource DESIGNABLE false)
@@ -43,6 +44,7 @@ public slots:
 signals:
     void nameChanged(const QString &name);
     void updateFinished(bool success = true);
+    void photoSourceChanged(const QString &source, PhotoSize);
 protected:
     QScopedPointer<ContactPrivate> d_ptr;
 };
