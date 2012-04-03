@@ -29,39 +29,8 @@ public:
     int waitInterval;
     QUrl dataUrl;
 
-    void _q_request_server_finished(const QVariant &response)
-    {
-        Q_Q(LongPoll);
-        auto reply = static_cast<Reply*>(q->sender());
-
-        QVariantMap data = response.toMap();
-        if (data.isEmpty()) {
-            QTimer::singleShot(pollInterval, q, SLOT(requestServer()));
-            return;
-        }
-
-        QString url("http://%1?act=a_check&key=%2&wait=%3&mode=%4");
-        dataUrl = url.arg(data.value("server").toString(),
-                          data.value("key").toString(),
-                          QString::number(waitInterval),
-                          QString::number(mode));
-
-        if (client->isOnline())
-            q->requestData(data.value("ts").toByteArray());
-        reply->deleteLater();
-    }
-
-    void _q_on_data_received(const QVariant &response)
-    {
-        Q_Q(LongPoll);
-        auto reply = static_cast<QNetworkReply*>(q->sender());
-        auto data = response.toMap();
-
-        if (client->isOnline())
-            q->requestData(data.value("ts").toByteArray());
-
-        reply->deleteLater();
-    }
+	void _q_request_server_finished(const QVariant &response);
+	void _q_on_data_received(const QVariant &response);
 };
 
 

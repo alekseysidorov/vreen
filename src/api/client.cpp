@@ -103,6 +103,22 @@ Roster *Client::roster()
     return d->roster.data();
 }
 
+LongPoll *Client::longPoll() const
+{
+        return d_func()->longPoll.data();
+}
+
+LongPoll *Client::longPoll()
+{
+    Q_D(Client);
+    if (d->longPoll.isNull()) {
+        d->longPoll = new LongPoll(this);
+        connect(this, SIGNAL(onlineStateChanged(bool)),
+                d->longPoll.data(), SLOT(setRunning(bool)));
+    }
+    return d->longPoll.data();
+}
+
 Reply *Client::request(const QUrl &url)
 {
     QNetworkRequest request(url);
@@ -134,7 +150,7 @@ Reply *Client::sendMessage(const Message &message)
 
     QVariantMap args;
     //TODO add chat messages support and contact check
-    args.insert("uid", message.contact()->id());
+    args.insert("uid", message.from()->id());
     args.insert("message", message.body());
     args.insert("title", message.title());
     return request("messages.send", args);

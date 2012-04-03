@@ -60,6 +60,7 @@ class Buddy : public Contact
     Q_PROPERTY(bool isOnline READ isOnline NOTIFY onlineChanged)
 	Q_PROPERTY(QStringList tags READ tags NOTIFY tagsChanged)
     Q_PROPERTY(QString activity READ activity NOTIFY activityChanged)
+    Q_PROPERTY(Status status READ status NOTIFY statusChanged)
 
     //private properties
     Q_PROPERTY(QString _q_first_name READ firstName WRITE setFirstName DESIGNABLE false)
@@ -77,6 +78,12 @@ public:
         AblCase
     };
 
+	enum Status {
+		Offline,
+		Online,
+		Away
+	};
+
     Buddy(int id, Client *client);
     //TODO name case support maybe needed
     QString firstName() const;
@@ -88,6 +95,8 @@ public:
     virtual QString name() const;
 	QStringList tags() const;
     QString activity() const;
+    Status status() const;
+    void setStatus(Status status);
 
     virtual void update(const QStringList &fields = QStringList());
 signals:
@@ -96,6 +105,7 @@ signals:
     void onlineChanged(bool isOnline);
 	void tagsChanged(const QStringList &tags);
     void activityChanged(const QString &activity);
+    void statusChanged(Status);
 };
 
 class GroupPrivate;
@@ -109,6 +119,9 @@ public:
     void setName(const QString &name);
     virtual void update(const QStringList &fields = QStringList());
 };
+
+//TODO group chats
+class GroupChat;
 
 //contact's casts
 template <typename T>

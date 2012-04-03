@@ -22,7 +22,7 @@ MessageListModel::MessageListModel(QObject *parent) :
     auto roles = roleNames();
     roles[TitleRole] = "title";
     roles[BodyRole] = "body";
-    roles[ContactRole] = "contact";
+    roles[FromRole] = "from";
     roles[ReadStateRole] = "readState";
     roles[DirectionRole] = "direction";
     roles[DateRole] = "date";
@@ -39,6 +39,21 @@ int MessageListModel::count() const
     return d_func()->messageList.count();
 }
 
+Message MessageListModel::at(int index) const
+{
+    return d_func()->messageList.at(index);
+}
+
+int MessageListModel::findMessage(int id)
+{
+    Q_D(MessageListModel);
+    for (int index = 0; index != d->messageList.count(); index++)
+        if (d->messageList.at(index).id() == id)
+            return index;
+    return -1;
+}
+
+
 QVariant MessageListModel::data(const QModelIndex &index, int role) const
 {
     Q_D(const MessageListModel);
@@ -50,8 +65,8 @@ QVariant MessageListModel::data(const QModelIndex &index, int role) const
         break;
     case BodyRole:
         return message.body();
-    case ContactRole:
-        return qVariantFromValue(message.contact());
+    case FromRole:
+        return qVariantFromValue(message.from());
     case ReadStateRole:
         return message.readState();
     case DirectionRole:
@@ -72,6 +87,9 @@ int MessageListModel::rowCount(const QModelIndex &parent) const
 void MessageListModel::addMessage(const Message &message)
 {
     Q_D(MessageListModel);
+    if (findMessage(message.id()) != -1) //TODO maybe need replace?
+        return;
+
     beginInsertRows(QModelIndex(), d->messageList.count(), d->messageList.count());
     d->messageList.append(message);
     endInsertRows();
@@ -88,6 +106,17 @@ void MessageListModel::removeMessage(const Message &message)
     endRemoveRows();
 }
 
+void MessageListModel::removeMessage(int id)
+{
+    Q_D(MessageListModel);
+    int index = findMessage(id);
+    if (index != -1) {
+        beginRemoveRows(QModelIndex(), index, index);
+        d->messageList.removeAt(index);
+        endRemoveRows();
+    }
+}
+
 void MessageListModel::setMessages(const MessageList &messages)
 {
     clear();
@@ -101,6 +130,21 @@ void MessageListModel::clear()
     beginRemoveRows(QModelIndex(), 0, d->messageList.count());
     d->messageList.clear();
     endRemoveRows();
+}
+
+void MessageListModel::replaceMessage(int i, const Message &message)
+{
+    auto index = createIndex(i, 0);
+    d_func()->messageList[i] = message;
+    emit dataChanged(index, index);
+}
+
+void MessageListModel::insertMessage(int index, const Message &message)
+{
+    Q_D(MessageListModel);
+    beginInsertRows(QModelIndex(), index, index);
+    d->messageList.insert(index, message);
+    endInsertRows();
 }
 
 } //namespace vk

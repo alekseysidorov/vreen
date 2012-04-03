@@ -74,19 +74,26 @@ void Buddy::setLastName(const QString &lastName)
 
 bool Buddy::isOnline() const
 {
-    return d_func()->isOnline;
+    return d_func()->status != Offline;
 }
 
 void Buddy::setOnline(bool set)
 {
-    d_func()->isOnline = set;
+    Q_D(Buddy);
+    d->status = static_cast<decltype(d->status)>(set);
     emit onlineChanged(set);
 }
 
 QString Buddy::name() const
 {
     Q_D(const Buddy);
-	return d->firstName + ' ' + d->lastName;
+    if (d->firstName.isEmpty() && d->lastName.isEmpty())
+        return tr("id%1").arg(id());
+    else if (d->lastName.isEmpty())
+        return d->firstName;
+    else
+        return d->firstName + ' ' + d->lastName;
+
 }
 
 QStringList Buddy::tags() const
@@ -103,6 +110,17 @@ QStringList Buddy::tags() const
 QString Buddy::activity() const
 {
     return d_func()->activity;
+}
+
+Buddy::Status Buddy::status() const
+{
+    return d_func()->status;
+}
+
+void Buddy::setStatus(Buddy::Status status)
+{
+    d_func()->status = status;
+    emit statusChanged(status);
 }
 
 void Buddy::update(const QStringList &fields)

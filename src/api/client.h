@@ -15,6 +15,7 @@ class Connection;
 class ClientPrivate;
 class Reply;
 class Roster;
+class LongPoll;
 class Contact;
 class VK_SHARED_EXPORT Client : public QObject
 {
@@ -57,8 +58,10 @@ public:
     Connection *connection() const;
     Connection *connection();
     void setConnection(Connection *connection);
-	Roster *roster() const;
-	Roster *roster();
+    Roster *roster() const;
+    Roster *roster();
+	LongPoll *longPoll() const;
+	LongPoll *longPoll();
 
     Q_INVOKABLE Reply *request(const QUrl &);
     Q_INVOKABLE Reply *request(const QString &method, const QVariantMap &args = QVariantMap());

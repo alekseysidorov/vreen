@@ -1,14 +1,26 @@
 #include "roster_p.h"
+#include "longpoll.h"
 
 #include <QDebug>
 
 namespace vk {
 
+/*!
+ * \brief The Roster class
+ * Api reference: \link http://vk.com/developers.php?oid=-1&p=friends.get
+ */
+
+/*!
+ * \brief Roster::Roster
+ * \param client
+ */
 Roster::Roster(Client *client) :
     QObject(client),
     d_ptr(new RosterPrivate(this, client))
 {
-
+    Q_D(Roster);
+    connect(d->client->longPoll(), SIGNAL(contactStatusChanged(int, vk::Buddy::Status)),
+            this, SLOT(_q_status_changed(int, vk::Buddy::Status)));
 }
 
 Roster::~Roster()
@@ -142,6 +154,13 @@ void RosterPrivate::_q_friends_received(const QVariant &response)
         q->contact(data.toMap());
     reply->deleteLater();
     emit q->syncFinished(true);
+}
+
+void RosterPrivate::_q_status_changed(int userId, Buddy::Status status)
+{
+    auto buddy = contact_cast<Buddy*>(contactHash.value(userId));
+    if (buddy)
+        buddy->setStatus(status);
 }
 
 } // namespace vk

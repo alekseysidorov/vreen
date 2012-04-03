@@ -15,7 +15,7 @@ public:
     enum Roles {
         TitleRole = Qt::UserRole + 1,
         BodyRole,
-        ContactRole,
+        FromRole,
         ReadStateRole,
         DirectionRole,
         DateRole
@@ -23,14 +23,20 @@ public:
 
     MessageListModel(QObject *parent = 0);
     virtual ~MessageListModel();
-    int count() const;
+	int count() const;
+	Message at(int index) const;
+    int findMessage(int id);
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex &parent) const;
 public slots:
     void addMessage(const vk::Message &message);
     void removeMessage(const vk::Message &message);
+    void removeMessage(int id);
     void setMessages(const vk::MessageList &messages);
     void clear();
+protected:
+	void replaceMessage(int index, const::vk::Message &message);
+    void insertMessage(int index, const::vk::Message &message);
 private:
     QScopedPointer<MessageListModelPrivate> d_ptr;
 };

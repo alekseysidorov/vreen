@@ -19,14 +19,14 @@ class VK_SHARED_EXPORT Message
     Q_ENUMS(Direction)
 public:
     enum ReadState {
-        MessageRead,
-        MessageUnread,
-        MessageUnknown = -1
+		Read,
+		Unread,
+		Unknown = -1
     };
     enum Direction {
-        MessageIn,
-        MessageOut,
-        MessageFwd = -1
+		In,
+		Out,
+		Forward = -1
     };
 
     Message(Client *client = 0);
@@ -36,13 +36,14 @@ public:
     bool operator ==(const Message &other);
     virtual ~Message();
 
-    int id() const;
     Client *client() const;
 
+	int id() const;
+	void setId(int id);
     QDateTime date() const;
     void setDate(const QDateTime &date);
-    Contact *contact() const;
-    void setContact(Contact *contact);
+    Contact *from() const;
+    void setFrom(Contact *from);
     QString title() const;
     void setTitle(const QString &title);
     QString body() const;
@@ -55,9 +56,12 @@ protected:
     QSharedDataPointer<MessageData> d;
 };
 
+typedef QList<int> IdList;
+
 } // namespace vk
 
 Q_DECLARE_METATYPE(vk::Message)
 Q_DECLARE_METATYPE(vk::MessageList)
+Q_DECLARE_METATYPE(vk::IdList)
 
 #endif // VK_MESSAGE_H

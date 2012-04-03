@@ -8,6 +8,7 @@
 #include "roster.h"
 #include "reply.h"
 #include "message.h"
+#include "longpoll.h"
 #include <QDebug>
 
 namespace vk {
@@ -22,6 +23,7 @@ public:
     QString password;
     QWeakPointer<Connection> connection;
 	QWeakPointer<Roster> roster;
+	QWeakPointer<LongPoll> longPoll;
 
     void _q_connection_state_changed(vk::Client::State state)
     {

@@ -54,10 +54,10 @@ class BuddyPrivate : public ContactPrivate
 {
     Q_DECLARE_PUBLIC(Buddy)
 public:
-    BuddyPrivate(Contact *q, int id, Client *client) : ContactPrivate(q, id, client), isOnline(false) {}
+    BuddyPrivate(Contact *q, int id, Client *client) : ContactPrivate(q, id, client) {}
     QString firstName;
     QString lastName;
-    bool isOnline;
+    Buddy::Status status;
     QVariantList tagIdList;
     QString activity;
 

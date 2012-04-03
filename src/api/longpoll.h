@@ -2,10 +2,11 @@
 #define VK_LONGPOLL_H
 
 #include <QObject>
-#include "vk_global.h"
+#include "buddy.h"
 
 namespace vk {
 
+class Message;
 class Client;
 class LongPollPrivate;
 class VK_SHARED_EXPORT LongPoll : public QObject
@@ -52,6 +53,11 @@ public:
     virtual ~LongPoll();
     void setMode(Mode mode);
     Mode mode() const;
+signals:
+	void messageAdded(const vk::Message &msg);
+	void messageDeleted(int id);
+	void contactStatusChanged(int userId, vk::Buddy::Status status);
+	void contactTyping(int userId);
 public slots:
     void setRunning(bool set);
 protected slots:

@@ -13,8 +13,8 @@ public:
         client(client),
         id(0),
         contact(client->me()),
-        readState(Message::MessageUnknown),
-        direction(Message::MessageFwd),
+        readState(Message::Unknown),
+        direction(Message::Forward),
         chatId(0),
         userCount(0),
         latitude(-1),
@@ -67,7 +67,10 @@ public:
     void fill(const QVariantMap &data)
     {
         id = data.value("mid").toInt();
-        contact = client->roster()->contact(data.value("uid").toInt());
+        int fromId = data.value("uid").toInt();
+        if (!fromId)
+            fromId = data.value("from_id").toInt();
+        contact = client->roster()->contact(fromId);
         date = QDateTime::fromTime_t(data.value("date").toInt());
         readState = flag_helper<Message::ReadState>(data.value("read_state"));
         direction = flag_helper<Message::Direction>(data.value("out"));
@@ -78,6 +81,11 @@ public:
         //TODO groupchats
     }
 };
+
+
+/*!
+ * \brief The Message class
+ * Api reference: \link http://vk.com/developers.php?oid=-1&p=Формат_описания_личных_сообщений */
 
 Message::Message(Client *client) :
     d(new MessageData(client))
@@ -111,7 +119,12 @@ Message::~Message()
 
 int Message::id() const
 {
-    return d->id;
+	return d->id;
+}
+
+void Message::setId(int id)
+{
+	d->id = id;
 }
 
 Client *Message::client() const
@@ -129,12 +142,12 @@ void Message::setDate(const QDateTime &date)
     d->date = date;
 }
 
-Contact *Message::contact() const
+Contact *Message::from() const
 {
     return d->contact.data();
 }
 
-void Message::setContact(Contact *contact)
+void Message::setFrom(Contact *contact)
 {
     d->contact = contact;
 }

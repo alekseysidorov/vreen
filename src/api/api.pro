@@ -23,7 +23,8 @@ SOURCES += client.cpp \
     buddy.cpp \
     roster.cpp \
     message.cpp \
-    messagemodel.cpp
+    messagemodel.cpp \
+    chatsession.cpp
 
 HEADERS += client.h \
     vk_global.h \
@@ -41,7 +42,9 @@ HEADERS += client.h \
     roster.h \
     roster_p.h \
     message.h \
-    messagemodel.h
+    messagemodel.h \
+    chatsession.h \
+    chatsession_p.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN
