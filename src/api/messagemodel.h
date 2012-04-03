@@ -11,7 +11,10 @@ class VK_SHARED_EXPORT MessageListModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(MessageListModel)
+    Q_PROPERTY(Qt::SortOrder sortOrder READ sortOrder WRITE setSortOrder NOTIFY sortOrderChanged)
 public:
+    typedef bool (*MessageLessThan)(const Message &a, const Message &b);
+
     enum Roles {
         TitleRole = Qt::UserRole + 1,
         BodyRole,
@@ -28,6 +31,10 @@ public:
     int findMessage(int id);
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex &parent) const;
+    void setSortOrder(Qt::SortOrder order);
+    Qt::SortOrder sortOrder() const;
+signals:
+    void sortOrderChanged(Qt::SortOrder order);
 public slots:
     void addMessage(const vk::Message &message);
     void removeMessage(const vk::Message &message);
@@ -37,6 +44,7 @@ public slots:
 protected:
 	void replaceMessage(int index, const::vk::Message &message);
     void insertMessage(int index, const::vk::Message &message);
+    virtual void sort(int column, Qt::SortOrder order);
 private:
     QScopedPointer<MessageListModelPrivate> d_ptr;
 };

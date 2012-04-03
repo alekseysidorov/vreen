@@ -4,16 +4,26 @@
 
 namespace vk {
 
+static bool lessThanId(const Message &a, const Message &b)
+{
+    return a.id() < b.id();
+}
+
 class MessageListModel;
 class MessageListModelPrivate
 {
     Q_DECLARE_PUBLIC(MessageListModel)
 public:
-    MessageListModelPrivate(MessageListModel *q) : q_ptr(q) {}
+    MessageListModelPrivate(MessageListModel *q) : q_ptr(q),
+        lessThan(&lessThanId), sortOrder(Qt::DescendingOrder) {}
     MessageListModel *q_ptr;
 
     MessageList messageList;
+    Qt::SortOrder sortOrder;
+
+    MessageListModel::MessageLessThan lessThan;
 };
+
 
 MessageListModel::MessageListModel(QObject *parent) :
     QAbstractListModel(parent),
@@ -84,15 +94,40 @@ int MessageListModel::rowCount(const QModelIndex &parent) const
     return count();
 }
 
+void MessageListModel::setSortOrder(Qt::SortOrder order)
+{
+    Q_D(MessageListModel);
+    if (d->sortOrder != order) {
+        sort(0, order);
+        d->sortOrder = order;
+        emit sortOrderChanged(order);
+    }
+}
+
+Qt::SortOrder MessageListModel::sortOrder() const
+{
+    return d_func()->sortOrder;
+}
+
 void MessageListModel::addMessage(const Message &message)
 {
     Q_D(MessageListModel);
     if (findMessage(message.id()) != -1) //TODO maybe need replace?
         return;
 
-    beginInsertRows(QModelIndex(), d->messageList.count(), d->messageList.count());
-    d->messageList.append(message);
-    endInsertRows();
+    auto it = d->sortOrder == Qt::AscendingOrder ? qLowerBound(d->messageList.begin(),
+                                                               d->messageList.end(),
+                                                               message,
+                                                               d->lessThan)
+                                                 : qLowerBound(d->messageList.end(),
+                                                               d->messageList.begin(),
+                                                               message,
+                                                               d->lessThan);
+    int index = it - d->messageList.begin();
+    insertMessage(index, message);
+    //beginInsertRows(QModelIndex(), d->messageList.count(), d->messageList.count());
+    //d->messageList.append(message);
+    //endInsertRows();
 }
 
 void MessageListModel::removeMessage(const Message &message)
@@ -145,6 +180,17 @@ void MessageListModel::insertMessage(int index, const Message &message)
     beginInsertRows(QModelIndex(), index, index);
     d->messageList.insert(index, message);
     endInsertRows();
+}
+
+void MessageListModel::sort(int column, Qt::SortOrder order)
+{
+    Q_D(MessageListModel);
+    Q_UNUSED(column);
+    if (order == Qt::AscendingOrder)
+        qStableSort(d->messageList.begin(), d->messageList.end(), d->lessThan);
+    else
+        qStableSort(d->messageList.end(), d->messageList.begin(), d->lessThan);
+    emit dataChanged(createIndex(0, 0), createIndex(d->messageList.count(), 0));
 }
 
 } //namespace vk
