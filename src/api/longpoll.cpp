@@ -106,17 +106,31 @@ void LongPollPrivate::_q_on_data_received(const QVariant &response)
         case LongPoll::MessageAdded: {
             LongPoll::MessageFlags flags(update.value(2).toInt());
             Message message(client);
-            message.setDirection(flags & LongPoll::FlagMessageOutbox ? Message::Out
-                                                                     : Message::In);
-            message.setReadState(flags & LongPoll::FlagMessageUnread ? Message::Unread
-                                                                     : Message::Read);
             int id = update.value(3).toInt();
             message.setId(update.value(1).toInt());
-            message.setTitle(update.value(5).toString());
+            auto contact = client->roster()->contact(id);
+            if (flags & LongPoll::FlagMessageOutbox) {
+                message.setDirection(Message::Out);
+                message.setTo(contact);
+                message.setFrom(client->me());
+            } else {
+                message.setDirection(Message::In);
+                message.setFrom(contact);
+                message.setTo(client->me());
+            }
+            message.setReadState(flags & LongPoll::FlagMessageUnread ? Message::Unread
+                                                                     : Message::Read);
+            message.setSubject(update.value(5).toString());
             message.setBody(update.value(6).toString());
-            message.setFrom(client->roster()->contact(id));
             message.setDate(QDateTime::currentDateTime());
             emit q->messageAdded(message);
+            break;
+        }
+        case LongPoll::MessageFlagsReplaced: {
+            int id = update.value(1).toInt();
+            int flags = update.value(2).toInt();
+            int userId = update.value(3).toInt();
+            emit q->messageFlagsReplaced(id, flags, userId);
             break;
         }
         case LongPoll::UserOnline:

@@ -18,7 +18,7 @@ public:
     virtual void disconnectFromHost() = 0;
     virtual QNetworkReply *request(const QString &method, const QVariantMap &args = QVariantMap()) = 0;
     virtual Client::State connectionState() const = 0;
-
+    virtual int uid() const = 0;
 signals:
     void connectionStateChanged(vk::Client::State connectionState);
     void error(vk::Client::Error error);

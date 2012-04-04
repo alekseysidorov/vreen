@@ -9,6 +9,7 @@
 #include "reply.h"
 #include "message.h"
 #include "longpoll.h"
+#include "utils.h"
 #include <QDebug>
 
 namespace vk {
@@ -25,14 +26,7 @@ public:
 	QWeakPointer<Roster> roster;
 	QWeakPointer<LongPoll> longPoll;
 
-    void _q_connection_state_changed(vk::Client::State state)
-    {
-        Q_Q(Client);
-        if (state != Client::StateConnecting)
-            emit q->onlineStateChanged(state == Client::StateOnline);
-        emit q->connectionStateChanged(state);
-    }
-
+    void _q_connection_state_changed(vk::Client::State state);
     void _q_error_received(vk::Client::Error error)
     {
         auto reply = sender_cast<Reply*>(q_func()->sender());

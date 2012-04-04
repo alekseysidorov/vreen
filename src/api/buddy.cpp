@@ -1,4 +1,5 @@
 #include "buddy_p.h"
+#include "message.h"
 #include "roster.h"
 
 namespace vk {
@@ -123,9 +124,26 @@ void Buddy::setStatus(Buddy::Status status)
     emit statusChanged(status);
 }
 
+/*!
+ * \brief Buddy::update
+ * \param fields - some fields need to update.
+ * api reference \link http://vk.com/developers.php?oid=-1&p=users.get
+ */
 void Buddy::update(const QStringList &fields)
 {
-    //TODO
+    IdList ids;
+    ids.append(id());
+    d_func()->client->roster()->update(ids, fields);
+}
+
+void Buddy::sendMessage(const QString &body, const QString &subject)
+{
+    Q_D(Buddy);
+    Message message(d->client);
+    message.setBody(body);
+    message.setSubject(subject);
+    message.setTo(this);
+    d->client->sendMessage(message);
 }
 
 Group::Group(int id, Client *client) :
@@ -142,12 +160,6 @@ void Group::setName(const QString &name)
 {
     d_func()->name = name;
     emit nameChanged(name);
-}
-
-void Group::update(const QStringList &fields)
-{
-    Q_UNUSED(fields);
-    emit updateFinished();
 }
 
 } // namespace vk

@@ -23,6 +23,7 @@ public:
     virtual void disconnectFromHost();
     virtual QNetworkReply *request(const QString &method, const QVariantMap &args);
     virtual Client::State connectionState() const;
+    virtual int uid() const;
 
     using Connection::get;
     QNetworkReply *get(const QString &method, const QVariantMap &args = QVariantMap());

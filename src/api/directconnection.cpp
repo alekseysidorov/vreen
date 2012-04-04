@@ -69,6 +69,11 @@ Client::State DirectConnection::connectionState() const
     return m_connectionState;
 }
 
+int DirectConnection::uid() const
+{
+    return m_token.uid;
+}
+
 QNetworkReply *DirectConnection::get(const QString &method, const QVariantMap &args)
 {
     QUrl url = serverUrls.apiServer;

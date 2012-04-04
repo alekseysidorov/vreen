@@ -13,8 +13,6 @@ public:
 
     Contact *contact;
 
-    QString split(IdList ids);
-
     void _q_history_received(const QVariant &);
     void _q_message_read_state_updated(const QVariant &);
 };

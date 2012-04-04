@@ -1,6 +1,7 @@
 #include "messagemodel.h"
 #include "buddy.h"
 #include <QDateTime>
+#include "longpoll.h"
 
 namespace vk {
 
@@ -19,9 +20,8 @@ public:
     MessageListModel *q_ptr;
 
     MessageList messageList;
-    Qt::SortOrder sortOrder;
-
     MessageListModel::MessageLessThan lessThan;
+    Qt::SortOrder sortOrder;
 };
 
 
@@ -30,9 +30,10 @@ MessageListModel::MessageListModel(QObject *parent) :
     d_ptr(new MessageListModelPrivate(this))
 {
     auto roles = roleNames();
-    roles[TitleRole] = "title";
+    roles[SubjectRole] = "subject";
     roles[BodyRole] = "body";
     roles[FromRole] = "from";
+    roles[ToRole] = "to";
     roles[ReadStateRole] = "readState";
     roles[DirectionRole] = "direction";
     roles[DateRole] = "date";
@@ -70,13 +71,15 @@ QVariant MessageListModel::data(const QModelIndex &index, int role) const
     int row = index.row();
     auto message = d->messageList.at(row);
     switch (role) {
-    case TitleRole:
-        return message.title();
+    case SubjectRole:
+        return message.subject();
         break;
     case BodyRole:
         return message.body();
     case FromRole:
         return qVariantFromValue(message.from());
+    case ToRole:
+        return qVariantFromValue(message.to());
     case ReadStateRole:
         return message.readState();
     case DirectionRole:
@@ -91,6 +94,7 @@ QVariant MessageListModel::data(const QModelIndex &index, int role) const
 
 int MessageListModel::rowCount(const QModelIndex &parent) const
 {
+    Q_ASSERT(parent == QModelIndex());
     return count();
 }
 
@@ -112,8 +116,11 @@ Qt::SortOrder MessageListModel::sortOrder() const
 void MessageListModel::addMessage(const Message &message)
 {
     Q_D(MessageListModel);
-    if (findMessage(message.id()) != -1) //TODO maybe need replace?
+    int index = findMessage(message.id());
+    if (index != -1) {
+        replaceMessage(index, message);
         return;
+    }
 
     auto it = d->sortOrder == Qt::AscendingOrder ? qLowerBound(d->messageList.begin(),
                                                                d->messageList.end(),
@@ -123,11 +130,8 @@ void MessageListModel::addMessage(const Message &message)
                                                                d->messageList.begin(),
                                                                message,
                                                                d->lessThan);
-    int index = it - d->messageList.begin();
+    index = it - d->messageList.begin();
     insertMessage(index, message);
-    //beginInsertRows(QModelIndex(), d->messageList.count(), d->messageList.count());
-    //d->messageList.append(message);
-    //endInsertRows();
 }
 
 void MessageListModel::removeMessage(const Message &message)
@@ -191,6 +195,19 @@ void MessageListModel::sort(int column, Qt::SortOrder order)
     else
         qStableSort(d->messageList.end(), d->messageList.begin(), d->lessThan);
     emit dataChanged(createIndex(0, 0), createIndex(d->messageList.count(), 0));
+}
+
+void MessageListModel::replaceMessageFlags(int id, int flags, int userId)
+{
+    Q_UNUSED(userId);
+    int index = findMessage(id);
+    if (index == -1)
+        return;
+
+    auto message = at(index);
+    message.setReadState(flags & LongPoll::FlagMessageUnread ? Message::Unread
+                                                             : Message::Read);
+    replaceMessage(index, message);
 }
 
 } //namespace vk

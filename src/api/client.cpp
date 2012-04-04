@@ -98,7 +98,6 @@ Roster *Client::roster()
     Q_D(Client);
     if (d->roster.isNull()) {
         d->roster = new Roster(this);
-        emit rosterChanged(d->roster.data());
     }
     return d->roster.data();
 }
@@ -148,11 +147,14 @@ Reply *Client::sendMessage(const Message &message)
     if (!isOnline())
         return 0;
 
+    //checks
+    Q_ASSERT(message.to());
+
     QVariantMap args;
     //TODO add chat messages support and contact check
-    args.insert("uid", message.from()->id());
+    args.insert("uid", message.to()->id());
     args.insert("message", message.body());
-    args.insert("title", message.title());
+    args.insert("title", message.subject());
     return request("messages.send", args);
 }
 
@@ -182,6 +184,24 @@ void Client::connectToHost(const QString &login, const QString &password)
 void Client::disconnectFromHost()
 {
     connection()->disconnectFromHost();
+}
+
+void ClientPrivate::_q_connection_state_changed(Client::State state)
+{
+    Q_Q(Client);
+    switch (state) {
+    case Client::StateOffline:
+        emit q->onlineStateChanged(false);
+        break;
+    case Client::StateOnline:
+        emit q->onlineStateChanged(true);
+        if (!roster.isNull())
+            roster.data()->setUid(connection.data()->uid());
+        break;
+    default:
+        break;
+    }
+    emit q->connectionStateChanged(state);
 }
 
 } // namespace vk

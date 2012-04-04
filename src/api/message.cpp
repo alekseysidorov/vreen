@@ -12,7 +12,8 @@ public:
     MessageData(Client *client) :
         client(client),
         id(0),
-        contact(client->me()),
+        from(client->me()),
+        to(client->me()),
         readState(Message::Unknown),
         direction(Message::Forward),
         chatId(0),
@@ -24,10 +25,11 @@ public:
         QSharedData(o),
         client(o.client),
         id(o.id),
-        contact(o.contact),
+        from(o.from),
+        to(o.to),
         date(o.date),
         readState(o.readState),
-        title(o.title),
+        subject(o.subject),
         body(o.body),
         forwardMsgIds(o.forwardMsgIds),
         chatId(o.chatId),
@@ -41,11 +43,12 @@ public:
 
     Client *client;
     int id;
-    QWeakPointer<Contact> contact;
+    QWeakPointer<Contact> from;
+    QWeakPointer<Contact> to;
     QDateTime date;
     Message::ReadState readState;
     Message::Direction direction;
-    QString title;
+    QString subject;
     QString body;
     QList<int> forwardMsgIds;
     int chatId;
@@ -67,14 +70,33 @@ public:
     void fill(const QVariantMap &data)
     {
         id = data.value("mid").toInt();
-        int fromId = data.value("uid").toInt();
-        if (!fromId)
-            fromId = data.value("from_id").toInt();
-        contact = client->roster()->contact(fromId);
+
+        int clientId = data.value("from_id").toInt();
+        if (clientId) {
+            auto contact = client->roster()->contact(clientId);
+            if (contact == client->me()) {
+                to.clear();
+                direction = Message::Out;
+            } else {
+                direction = Message::In;
+                from = contact;
+            }
+        } else {
+            direction = flag_helper<Message::Direction>(data.value("out"));
+            clientId = data.value("uid").toInt();
+            auto contact = client->roster()->contact(clientId);
+            if (direction == Message::In) {
+                from = contact;
+                to = client->me();
+            } else {
+                to = contact;
+                from = client->me();
+            }
+        }
+
         date = QDateTime::fromTime_t(data.value("date").toInt());
         readState = flag_helper<Message::ReadState>(data.value("read_state"));
-        direction = flag_helper<Message::Direction>(data.value("out"));
-        title = data.value("title").toString();
+        subject = data.value("title").toString();
         body = data.value("body").toString();
         //TODO forward messages
         //TODO attachments
@@ -119,12 +141,12 @@ Message::~Message()
 
 int Message::id() const
 {
-	return d->id;
+    return d->id;
 }
 
 void Message::setId(int id)
 {
-	d->id = id;
+    d->id = id;
 }
 
 Client *Message::client() const
@@ -144,22 +166,32 @@ void Message::setDate(const QDateTime &date)
 
 Contact *Message::from() const
 {
-    return d->contact.data();
+    return d->from.data();
 }
 
 void Message::setFrom(Contact *contact)
 {
-    d->contact = contact;
+    d->from = contact;
 }
 
-QString Message::title() const
+Contact *Message::to() const
 {
-    return d->title;
+    return d->to.data();
 }
 
-void Message::setTitle(const QString &title)
+void Message::setTo(Contact *to)
 {
-    d->title = title;
+    d->to = to;
+}
+
+QString Message::subject() const
+{
+    return d->subject;
+}
+
+void Message::setSubject(const QString &title)
+{
+    d->subject = title;
 }
 
 QString Message::body() const

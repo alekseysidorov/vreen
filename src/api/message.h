@@ -44,8 +44,10 @@ public:
     void setDate(const QDateTime &date);
     Contact *from() const;
     void setFrom(Contact *from);
-    QString title() const;
-    void setTitle(const QString &title);
+    Contact *to() const;
+    void setTo(Contact *to);
+    QString subject() const;
+    void setSubject(const QString &subject);
     QString body() const;
     void setBody(const QString &body);
     ReadState readState() const;

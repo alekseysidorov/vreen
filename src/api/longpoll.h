@@ -56,6 +56,7 @@ public:
 signals:
 	void messageAdded(const vk::Message &msg);
 	void messageDeleted(int id);
+    void messageFlagsReplaced(int id, int flags, int userId = 0);
 	void contactStatusChanged(int userId, vk::Buddy::Status status);
 	void contactTyping(int userId);
 public slots:

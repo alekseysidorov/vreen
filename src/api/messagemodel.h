@@ -16,9 +16,10 @@ public:
     typedef bool (*MessageLessThan)(const Message &a, const Message &b);
 
     enum Roles {
-        TitleRole = Qt::UserRole + 1,
+        SubjectRole = Qt::UserRole + 1,
         BodyRole,
         FromRole,
+        ToRole,
         ReadStateRole,
         DirectionRole,
         DateRole
@@ -45,6 +46,8 @@ protected:
 	void replaceMessage(int index, const::vk::Message &message);
     void insertMessage(int index, const::vk::Message &message);
     virtual void sort(int column, Qt::SortOrder order);
+protected slots:
+    void replaceMessageFlags(int id, int flags, int userId = 0);
 private:
     QScopedPointer<MessageListModelPrivate> d_ptr;
 };

@@ -7,6 +7,32 @@
 
 namespace vk {
 
+#define VK_COMMON_FIELDS QLatin1String("first_name") \
+    << QLatin1String("last_name") \
+    << QLatin1String("online") \
+    << QLatin1String("photo") \
+    << QLatin1String("photo_big") \
+    << QLatin1String("photo_big_rec") \
+    << QLatin1String("lists") \
+    << QLatin1String("activity")
+
+#define VK_EXTENDED_FIELDS QLatin1String("sex") \
+    << QLatin1String("bdate") \
+    << QLatin1String("city") \
+    << QLatin1String("country") \
+    << QLatin1String("education") \
+    << QLatin1String("can_post") \
+    << QLatin1String("contacts") \
+    << QLatin1String("can_see_all_posts") \
+    << QLatin1String("can_write_private_message") \
+    << QLatin1String("last_seen") \
+    << QLatin1String("relation") \
+    << QLatin1String("nickname") \
+    << QLatin1String("wall_comments") \
+
+#define VK_ALL_FIELDS VK_COMMON_FIELDS \
+    << VK_EXTENDED_FIELDS
+
 class Client;
 class ContactPrivate;
 class VK_SHARED_EXPORT Contact : public QObject
@@ -14,7 +40,8 @@ class VK_SHARED_EXPORT Contact : public QObject
     Q_OBJECT
     Q_DECLARE_PRIVATE(Contact)
 
-	Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+    Q_PROPERTY(int id READ id CONSTANT)
+    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PRIVATE_PROPERTY(Contact::d_func(), QString photoSource READ defaultSource NOTIFY photoSourceChanged)
 
     Q_PRIVATE_PROPERTY(Contact::d_func(), QString _q_photo READ smallSource WRITE setSmallSource DESIGNABLE false)
@@ -35,15 +62,12 @@ public:
     virtual ~Contact();
 
     virtual QString name() const = 0;
-	Q_INVOKABLE int id() const;
+    int id() const;
     Client *client() const;
     Q_INVOKABLE QString photoSource(PhotoSize size = PhotoSizeSmall) const;
     void setPhotoSource(const QString &source, PhotoSize size = PhotoSizeSmall);
-public slots:
-    virtual void update(const QStringList &fields = QStringList()) = 0;
 signals:
     void nameChanged(const QString &name);
-    void updateFinished(bool success = true);
     void photoSourceChanged(const QString &source, PhotoSize);
 protected:
     QScopedPointer<ContactPrivate> d_ptr;
@@ -58,7 +82,7 @@ class Buddy : public Contact
     Q_PROPERTY(QString fistName READ firstName NOTIFY firstNameChanged)
     Q_PROPERTY(QString lastName READ lastName NOTIFY lastNameChanged)
     Q_PROPERTY(bool isOnline READ isOnline NOTIFY onlineChanged)
-	Q_PROPERTY(QStringList tags READ tags NOTIFY tagsChanged)
+    Q_PROPERTY(QStringList tags READ tags NOTIFY tagsChanged)
     Q_PROPERTY(QString activity READ activity NOTIFY activityChanged)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
 
@@ -78,11 +102,11 @@ public:
         AblCase
     };
 
-	enum Status {
-		Offline,
-		Online,
-		Away
-	};
+    enum Status {
+        Offline,
+        Online,
+        Away
+    };
 
     Buddy(int id, Client *client);
     //TODO name case support maybe needed
@@ -93,17 +117,20 @@ public:
     bool isOnline() const;
     void setOnline(bool set);
     virtual QString name() const;
-	QStringList tags() const;
+    QStringList tags() const;
     QString activity() const;
     Status status() const;
     void setStatus(Status status);
 
-    virtual void update(const QStringList &fields = QStringList());
+public slots:
+    void update(const QStringList &fields = QStringList()
+            << VK_ALL_FIELDS);
+    void sendMessage(const QString &body, const QString &subject = QString());
 signals:
     void firstNameChanged(const QString &name);
     void lastNameChanged(const QString &name);
     void onlineChanged(bool isOnline);
-	void tagsChanged(const QStringList &tags);
+    void tagsChanged(const QStringList &tags);
     void activityChanged(const QString &activity);
     void statusChanged(Status);
 };
@@ -117,11 +144,14 @@ public:
     Group(int id, Client *client);
     virtual QString name() const;
     void setName(const QString &name);
-    virtual void update(const QStringList &fields = QStringList());
 };
 
 //TODO group chats
 class GroupChat;
+
+typedef QList<Contact*> ContactList;
+typedef QList<Buddy*> BuddyList;
+typedef QList<Group*> GroupList;
 
 //contact's casts
 template <typename T>

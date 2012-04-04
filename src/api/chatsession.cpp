@@ -2,6 +2,7 @@
 #include "buddy.h"
 #include "client.h"
 #include "longpoll.h"
+#include "utils.h"
 #include <QStringBuilder>
 
 namespace vk {
@@ -44,7 +45,7 @@ void ChatSession::markMessagesAsRead(QList<int> ids, bool set)
     QString request = set ? "messages.markAsRead"
                           : "messages.markAsNew";
     QVariantMap args;
-    args.insert("mids", d->split(ids));
+    args.insert("mids", join(ids));
     auto reply = d->contact->client()->request(request, args);
     reply->setProperty("mids", qVariantFromValue(ids));
     reply->setProperty("set", set);
@@ -73,7 +74,8 @@ void ChatSessionPrivate::_q_history_received(const QVariant &response)
     auto list = response.toList();
     Q_UNUSED(list.takeFirst());
     foreach (auto item, list) {
-        Message message(item.toMap(), contact->client());
+        QVariantMap map = item.toMap();
+        Message message(map, contact->client());
         emit q_func()->messageAdded(message);
     }
 }
@@ -88,18 +90,6 @@ void ChatSessionPrivate::_q_message_read_state_updated(const QVariant &response)
         foreach(int id, ids)
             emit q->messageReadStateChanged(id, set);
     }
-}
-
-QString ChatSessionPrivate::split(IdList ids)
-{
-    QString result;
-    if (ids.isEmpty())
-        return result;
-
-    result = QString::number(ids.takeFirst());
-    foreach (auto id, ids)
-        result += QLatin1Literal(",") % QString::number(id);
-    return result;
 }
 
 } // namespace vk

@@ -24,7 +24,8 @@ SOURCES += client.cpp \
     roster.cpp \
     message.cpp \
     messagemodel.cpp \
-    chatsession.cpp
+    chatsession.cpp \
+    utils.cpp
 
 HEADERS += client.h \
     vk_global.h \
@@ -44,7 +45,8 @@ HEADERS += client.h \
     message.h \
     messagemodel.h \
     chatsession.h \
-    chatsession_p.h
+    chatsession_p.h \
+    utils.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

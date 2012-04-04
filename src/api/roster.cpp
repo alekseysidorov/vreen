@@ -14,13 +14,15 @@ namespace vk {
  * \brief Roster::Roster
  * \param client
  */
-Roster::Roster(Client *client) :
+Roster::Roster(Client *client, int uid) :
     QObject(client),
     d_ptr(new RosterPrivate(this, client))
 {
     Q_D(Roster);
     connect(d->client->longPoll(), SIGNAL(contactStatusChanged(int, vk::Buddy::Status)),
             this, SLOT(_q_status_changed(int, vk::Buddy::Status)));
+    if (uid)
+        setUid(uid);
 }
 
 Roster::~Roster()
@@ -28,9 +30,25 @@ Roster::~Roster()
 
 }
 
+void Roster::setUid(int uid)
+{
+    Q_D(Roster);
+    if (d->owner && uid == d->owner->id())
+        return;
+    qDeleteAll(d->contactHash);
+    d->owner = new Buddy(uid, d->client);
+    d->owner->update(QStringList() << VK_ALL_FIELDS); //TODO move!
+    emit uidChanged(uid);
+}
+
+int Roster::uid() const
+{
+    return d_func()->owner->id();
+}
+
 Contact *Roster::owner() const
 {
-    return d_func()->me;
+    return d_func()->owner;
 }
 
 Contact *Roster::contact(int id)
@@ -38,9 +56,13 @@ Contact *Roster::contact(int id)
     Q_D(Roster);
     auto contact = d->contactHash.value(id);
     if (!contact) {
-        if (id > 0)
-            contact = new Buddy(id, d->client);
-        else
+        if (d->owner && d->owner->id() == id)
+            return d->owner;
+        if (id > 0) {
+            auto buddy = new Buddy(id, d->client);
+            buddy->update(QStringList() << VK_COMMON_FIELDS); //TODO move!
+            contact = buddy;
+        } else
             contact = new Group(id, d->client);
     }
     return contact;
@@ -61,7 +83,10 @@ Contact *Roster::contact(const QVariantMap &data)
     }
     auto contact = d->contactHash.value(id);
     if (!contact) {
-        if (id < 0) {
+        if (d->owner && d->owner->id() == id) {
+            d->fillContact(d->owner, data);
+            return d->owner;
+        } else if (id < 0) {
             contact = new Group(id, d->client);
         } else {
             contact = new Buddy(id, d->client);
@@ -101,6 +126,22 @@ void Roster::sync(const QStringList &fields)
     d->getFriends(args);
 }
 
+/*!
+ * \brief Roster::update
+ * \param ids
+ * \param fields from \link http://vk.com/developers.php?oid=-1&p=Описание_полей_параметра_fields
+ */
+void Roster::update(const IdList &ids, const QStringList &fields)
+{
+    Q_D(Roster);
+    QVariantMap args;
+    args.insert("uids", join(ids));
+    args.insert("fields", fields.join(","));
+    auto reply = d->client->request("users.get", args);
+    reply->connect(reply, SIGNAL(resultReady(const QVariant&)),
+                   this, SLOT(_q_friends_received(const QVariant&)));
+}
+
 void RosterPrivate::getTags()
 {
     Q_Q(Roster);
@@ -133,32 +174,26 @@ void RosterPrivate::fillContact(Contact *contact, const QVariantMap &data)
 void RosterPrivate::_q_tags_received(const QVariant &response)
 {
     Q_Q(Roster);
-    auto reply = sender_cast<Reply*>(q->sender());
-
     auto list = response.toList();
     QStringList tags;
     foreach (auto item, list) {
         tags.append(item.toMap().value("name").toString());
     }
     q->setTags(tags);
-
-    reply->deleteLater();
 }
 
 void RosterPrivate::_q_friends_received(const QVariant &response)
 {
     Q_Q(Roster);
-    auto reply = sender_cast<Reply*>(q->sender());
-
     foreach (auto data, response.toList())
         q->contact(data.toMap());
-    reply->deleteLater();
     emit q->syncFinished(true);
 }
 
 void RosterPrivate::_q_status_changed(int userId, Buddy::Status status)
 {
-    auto buddy = contact_cast<Buddy*>(contactHash.value(userId));
+    Q_Q(Roster);
+    auto buddy = contact_cast<Buddy*>(q->contact(userId));
     if (buddy)
         buddy->setStatus(status);
 }
