@@ -2,6 +2,7 @@
 #include "buddy.h"
 #include <QDateTime>
 #include "longpoll.h"
+#include <QCoreApplication>
 
 namespace vk {
 
@@ -125,7 +126,7 @@ void MessageListModel::addMessage(const Message &message)
     Q_D(MessageListModel);
     int index = findMessage(message.id());
     if (index != -1) {
-        replaceMessage(index, message);
+        //replaceMessage(index, message);
         return;
     }
 
@@ -183,6 +184,7 @@ void MessageListModel::replaceMessage(int i, const Message &message)
     auto index = createIndex(i, 0);
     d_func()->messageList[i] = message;
     emit dataChanged(index, index);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
 void MessageListModel::insertMessage(int index, const Message &message)
@@ -191,6 +193,7 @@ void MessageListModel::insertMessage(int index, const Message &message)
     beginInsertRows(QModelIndex(), index, index);
     d->messageList.insert(index, message);
     endInsertRows();
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
 void MessageListModel::sort(int column, Qt::SortOrder order)

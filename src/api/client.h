@@ -24,7 +24,7 @@ class VK_SHARED_EXPORT Client : public QObject
 
     Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged DESIGNABLE true)
     Q_PROPERTY(QString login READ login WRITE setLogin NOTIFY loginChanged DESIGNABLE true)
-    Q_PROPERTY(bool isOnline READ isOnline NOTIFY onlineStateChanged DESIGNABLE true)
+    Q_PROPERTY(bool online READ isOnline NOTIFY onlineStateChanged DESIGNABLE true)
     Q_PROPERTY(State connectionState READ connectionState NOTIFY connectionStateChanged DESIGNABLE true)
     Q_PROPERTY(vk::Roster* roster READ roster NOTIFY rosterChanged DESIGNABLE true)
     Q_PROPERTY(vk::LongPoll* longPoll READ longPoll NOTIFY longPollChanged DESIGNABLE true)

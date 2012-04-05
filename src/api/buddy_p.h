@@ -14,7 +14,7 @@ class ContactPrivate
 public:
     ContactPrivate(Contact *q, int id, Client *client) : q_ptr(q),
         client(client), id(id), sources(Contact::PhotoSizeBigRec),
-        preferedSize(Contact::PhotoSizeBigRec)
+        preferedSize(Contact::PhotoSizeMediumRec)
     {
 
     }
@@ -26,17 +26,28 @@ public:
 
     QString defaultSource() const
     {
-        for (int index = preferedSize; index != -1; index--) {
-            auto photo = sources.value(index);
-            if (!photo.isNull())
-                return photo;
-        }
-        return QString();
+        return sources[preferedSize];
+        //for (int index = preferedSize; index != -1; index--) {
+        //    auto photo = sources.value(index);
+        //    if (!photo.isNull())
+        //        return photo;
+        //}
+        //return QString();
     }
     QString smallSource() const { return sources[Contact::PhotoSizeSmall]; }
     void setSmallSource(const QString &source)
     {
         q_func()->setPhotoSource(source, Contact::PhotoSizeSmall);
+    }
+    QString mediumSource() const { return sources[Contact::PhotoSizeMedium]; }
+    void setMediumSource(const QString &source)
+    {
+        q_func()->setPhotoSource(source, Contact::PhotoSizeMedium);
+    }
+    QString mediumSourceRec() const { return sources[Contact::PhotoSizeMediumRec]; }
+    void setMediumSourceRec(const QString &source)
+    {
+        q_func()->setPhotoSource(source, Contact::PhotoSizeMediumRec);
     }
     QString bigSource() const { return sources[Contact::PhotoSizeBig]; }
     void setBigSource(const QString &source)

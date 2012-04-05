@@ -11,6 +11,8 @@ namespace vk {
     << QLatin1String("last_name") \
     << QLatin1String("online") \
     << QLatin1String("photo") \
+    << QLatin1String("photo_medium") \
+    << QLatin1String("photo_medium_rec") \
     << QLatin1String("photo_big") \
     << QLatin1String("photo_big_rec") \
     << QLatin1String("lists") \
@@ -45,6 +47,8 @@ class VK_SHARED_EXPORT Contact : public QObject
     Q_PRIVATE_PROPERTY(Contact::d_func(), QString photoSource READ defaultSource NOTIFY photoSourceChanged)
 
     Q_PRIVATE_PROPERTY(Contact::d_func(), QString _q_photo READ smallSource WRITE setSmallSource DESIGNABLE false)
+    Q_PRIVATE_PROPERTY(Contact::d_func(), QString _q_photo_medium READ mediumSource WRITE setMediumSource DESIGNABLE false)
+    Q_PRIVATE_PROPERTY(Contact::d_func(), QString _q_photo_medium_rec READ mediumSourceRec WRITE setMediumSourceRec DESIGNABLE false)
     Q_PRIVATE_PROPERTY(Contact::d_func(), QString _q_photo_big READ bigSource WRITE setBigSource DESIGNABLE false)
     Q_PRIVATE_PROPERTY(Contact::d_func(), QString _q_photo_big_rec READ bigSourceRec WRITE setBigSourceRec DESIGNABLE false)
 public:
