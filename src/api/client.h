@@ -26,7 +26,8 @@ class VK_SHARED_EXPORT Client : public QObject
     Q_PROPERTY(QString login READ login WRITE setLogin NOTIFY loginChanged DESIGNABLE true)
     Q_PROPERTY(bool isOnline READ isOnline NOTIFY onlineStateChanged DESIGNABLE true)
     Q_PROPERTY(State connectionState READ connectionState NOTIFY connectionStateChanged DESIGNABLE true)
-    Q_PROPERTY(vk::Roster* roster READ roster CONSTANT DESIGNABLE true)
+    Q_PROPERTY(vk::Roster* roster READ roster NOTIFY rosterChanged DESIGNABLE true)
+    Q_PROPERTY(vk::LongPoll* longPoll READ longPoll NOTIFY longPollChanged DESIGNABLE true)
 
     Q_ENUMS(State)
     Q_ENUMS(Error)
@@ -80,6 +81,7 @@ signals:
     void error(vk::Client::Error error);
     void onlineStateChanged(bool state);
     void rosterChanged(vk::Roster*);
+    void longPollChanged(vk::LongPoll*);
 protected:
     QScopedPointer<ClientPrivate> d_ptr;
 
@@ -94,5 +96,6 @@ private:
 
 Q_DECLARE_METATYPE(vk::Roster*)
 Q_DECLARE_METATYPE(vk::Client*)
+Q_DECLARE_METATYPE(vk::LongPoll*)
 
 #endif // VK_CLIENT_H

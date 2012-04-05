@@ -34,9 +34,10 @@ MessageListModel::MessageListModel(QObject *parent) :
     roles[BodyRole] = "body";
     roles[FromRole] = "from";
     roles[ToRole] = "to";
-    roles[ReadStateRole] = "readState";
-    roles[DirectionRole] = "direction";
+    roles[ReadStateRole] = "unread";
+    roles[DirectionRole] = "incoming";
     roles[DateRole] = "date";
+    roles[IdRole] = "id";
     setRoleNames(roles);
 }
 
@@ -69,6 +70,10 @@ QVariant MessageListModel::data(const QModelIndex &index, int role) const
 {
     Q_D(const MessageListModel);
     int row = index.row();
+    //if (row < 0 || row >= count()) {
+    //    qWarning("Incorrect row: %d", row);
+    //    return QVariant::Invalid;
+    //}
     auto message = d->messageList.at(row);
     switch (role) {
     case SubjectRole:
@@ -81,11 +86,13 @@ QVariant MessageListModel::data(const QModelIndex &index, int role) const
     case ToRole:
         return qVariantFromValue(message.to());
     case ReadStateRole:
-        return message.readState();
+        return message.isUnread();
     case DirectionRole:
-        return message.direction();
+        return message.isIncoming();
     case DateRole:
         return message.date();
+    case IdRole:
+        return message.id();
     default:
         break;
     }
@@ -197,7 +204,7 @@ void MessageListModel::sort(int column, Qt::SortOrder order)
     emit dataChanged(createIndex(0, 0), createIndex(d->messageList.count(), 0));
 }
 
-void MessageListModel::replaceMessageFlags(int id, int flags, int userId)
+void MessageListModel::replaceMessageFlags(int id, int mask, int userId)
 {
     Q_UNUSED(userId);
     int index = findMessage(id);
@@ -205,8 +212,23 @@ void MessageListModel::replaceMessageFlags(int id, int flags, int userId)
         return;
 
     auto message = at(index);
-    message.setReadState(flags & LongPoll::FlagMessageUnread ? Message::Unread
-                                                             : Message::Read);
+    Message::Flags flags = message.flags();
+    flags |= static_cast<Message::Flags>(mask);
+    message.setFlags(flags);
+    replaceMessage(index, message);
+}
+
+void MessageListModel::resetMessageFlags(int id, int mask, int userId)
+{
+    Q_UNUSED(userId);
+    int index = findMessage(id);
+    if (index == -1)
+        return;
+
+    auto message = at(index);
+    auto flags = message.flags();
+    flags &= ~mask;
+    message.setFlags(flags);
     replaceMessage(index, message);
 }
 

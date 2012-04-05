@@ -19,6 +19,8 @@ public:
     Contact *contact() const;
     void markMessagesAsRead(IdList ids, bool set = true);
     QString title() const;
+    bool isActive() const;
+    void setActive(bool set);
 public slots:
     void getHistory(int count = 16, int offset = 0);
 signals:
@@ -29,6 +31,7 @@ private:
     QScopedPointer<ChatSessionPrivate> d_ptr;
 
     Q_PRIVATE_SLOT(d_func(), void _q_history_received(const QVariant &))
+    Q_PRIVATE_SLOT(d_func(), void _q_message_added(const vk::Message &))
 };
 
 } // namespace vk

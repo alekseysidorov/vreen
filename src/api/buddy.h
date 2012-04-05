@@ -81,7 +81,7 @@ class Buddy : public Contact
 
     Q_PROPERTY(QString fistName READ firstName NOTIFY firstNameChanged)
     Q_PROPERTY(QString lastName READ lastName NOTIFY lastNameChanged)
-    Q_PROPERTY(bool isOnline READ isOnline NOTIFY onlineChanged)
+    Q_PROPERTY(bool online READ isOnline NOTIFY onlineChanged)
     Q_PROPERTY(QStringList tags READ tags NOTIFY tagsChanged)
     Q_PROPERTY(QString activity READ activity NOTIFY activityChanged)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)

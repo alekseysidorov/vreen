@@ -6,6 +6,8 @@
 
 namespace vk {
 
+//TODO remove separate direction and read state and use bool instead enums
+
 class MessageData : public QSharedData
 {
 public:
@@ -14,8 +16,6 @@ public:
         id(0),
         from(client->me()),
         to(client->me()),
-        readState(Message::Unknown),
-        direction(Message::Forward),
         chatId(0),
         userCount(0),
         latitude(-1),
@@ -28,7 +28,7 @@ public:
         from(o.from),
         to(o.to),
         date(o.date),
-        readState(o.readState),
+        flags(o.flags),
         subject(o.subject),
         body(o.body),
         forwardMsgIds(o.forwardMsgIds),
@@ -46,8 +46,7 @@ public:
     QWeakPointer<Contact> from;
     QWeakPointer<Contact> to;
     QDateTime date;
-    Message::ReadState readState;
-    Message::Direction direction;
+    Message::Flags flags;
     QString subject;
     QString body;
     QList<int> forwardMsgIds;
@@ -58,15 +57,6 @@ public:
     qreal latitude;
     qreal longitude;
 
-    template<typename T>
-    T flag_helper(const QVariant &data)
-    {
-        int flag = -1;
-        if (!data.isNull())
-            flag = data.toInt();
-        return static_cast<T>(flag);
-
-    }
     void fill(const QVariantMap &data)
     {
         id = data.value("mid").toInt();
@@ -74,18 +64,21 @@ public:
         int clientId = data.value("from_id").toInt();
         if (clientId) {
             auto contact = client->roster()->contact(clientId);
-            if (contact == client->me()) {
+            bool isIncoming = contact == client->me();
+            setFlag(Message::FlagOutbox, !isIncoming);
+            if (isIncoming) {
+                from = client->me();
                 to.clear();
-                direction = Message::Out;
+
             } else {
-                direction = Message::In;
                 from = contact;
+                to = client->me();
             }
         } else {
-            direction = flag_helper<Message::Direction>(data.value("out"));
+            setFlag(Message::FlagOutbox, data.value("out").toBool());
             clientId = data.value("uid").toInt();
             auto contact = client->roster()->contact(clientId);
-            if (direction == Message::In) {
+            if (!flags.testFlag(Message::FlagOutbox)) {
                 from = contact;
                 to = client->me();
             } else {
@@ -95,12 +88,19 @@ public:
         }
 
         date = QDateTime::fromTime_t(data.value("date").toInt());
-        readState = flag_helper<Message::ReadState>(data.value("read_state"));
+        setFlag(Message::FlagUnread, !data.value("read_state").toBool());
         subject = data.value("title").toString();
         body = data.value("body").toString();
         //TODO forward messages
         //TODO attachments
         //TODO groupchats
+    }
+    void setFlag(Message::Flag flag, bool set = true)
+    {
+        if (set)
+            flags |= flag;
+        else
+            flags &= ~flag;
     }
 };
 
@@ -204,24 +204,44 @@ void Message::setBody(const QString &body)
     d->body = body;
 }
 
-Message::ReadState Message::readState() const
+bool Message::isUnread() const
 {
-    return d->readState;
+    return testFlag(FlagUnread);
 }
 
-void Message::setReadState(Message::ReadState state)
+void Message::setUnread(bool set)
 {
-    d->readState = state;
+    setFlag(FlagUnread, set);
 }
 
-Message::Direction Message::direction() const
+bool Message::isIncoming() const
 {
-    return d->direction;
+    return !testFlag(FlagOutbox);
 }
 
-void Message::setDirection(Message::Direction direction)
+void Message::setIncoming(bool set)
 {
-    d->direction = direction;
+    setFlag(FlagOutbox, !set);
+}
+
+void Message::setFlags(Message::Flags flags)
+{
+    d->flags = flags;
+}
+
+Message::Flags Message::flags() const
+{
+    return d->flags;
+}
+
+void Message::setFlag(Flag flag, bool set)
+{
+    d->setFlag(flag, set);
+}
+
+bool Message::testFlag(Flag flag) const
+{
+    return d->flags.testFlag(flag);
 }
 
 } // namespace vk

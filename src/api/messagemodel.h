@@ -22,12 +22,13 @@ public:
         ToRole,
         ReadStateRole,
         DirectionRole,
-        DateRole
+        DateRole,
+        IdRole
     };
 
     MessageListModel(QObject *parent = 0);
     virtual ~MessageListModel();
-	int count() const;
+    int count() const;
 	Message at(int index) const;
     int findMessage(int id);
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
@@ -47,7 +48,8 @@ protected:
     void insertMessage(int index, const::vk::Message &message);
     virtual void sort(int column, Qt::SortOrder order);
 protected slots:
-    void replaceMessageFlags(int id, int flags, int userId = 0);
+    void replaceMessageFlags(int id, int mask, int userId = 0);
+    void resetMessageFlags(int id, int mask, int userId = 0);
 private:
     QScopedPointer<MessageListModelPrivate> d_ptr;
 };

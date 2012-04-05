@@ -23,7 +23,7 @@ ChatSession::ChatSession(Contact *contact) :
     Q_D(ChatSession);
     auto longPoll = d->contact->client()->longPoll();
     connect(longPoll, SIGNAL(messageAdded(vk::Message)),
-            this, SIGNAL(messageAdded(vk::Message)));
+            this, SLOT(_q_message_added(vk::Message)));
     connect(longPoll, SIGNAL(messageDeleted(int)),
             this, SIGNAL(messageDeleted(int)));
 }
@@ -55,6 +55,17 @@ void ChatSession::markMessagesAsRead(QList<int> ids, bool set)
 QString ChatSession::title() const
 {
     return contact()->name();
+}
+
+bool ChatSession::isActive() const
+{
+    return d_func()->isActive;
+}
+
+void ChatSession::setActive(bool set)
+{
+    Q_D(ChatSession);
+    d->isActive = set;
 }
 
 void ChatSession::getHistory(int count, int offset)
@@ -90,6 +101,13 @@ void ChatSessionPrivate::_q_message_read_state_updated(const QVariant &response)
         foreach(int id, ids)
             emit q->messageReadStateChanged(id, set);
     }
+}
+
+void ChatSessionPrivate::_q_message_added(const Message &message)
+{
+    auto sender = message.isIncoming() ? message.from() : message.to();
+    if (sender == contact || !sender) //HACK some workaround
+        emit q_func()->messageAdded(message);
 }
 
 } // namespace vk

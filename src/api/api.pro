@@ -61,6 +61,8 @@ symbian {
 unix:!symbian {
     maemo5 {
         target.path = /opt/usr/lib
+    } else:!isEmpty(MEEGO_VERSION_MAJOR) {
+        target.path = /opt/nonameIM/lib
     } else {
         target.path = /usr/lib
     }
@@ -71,9 +73,9 @@ unix {
     QMAKE_CXXFLAGS += -std=c++0x
 }
 
-!isEmpty(MEEGO_VERSION_MAJOR) {
-    CONFIG += static
-}
+#!isEmpty(MEEGO_VERSION_MAJOR) {
+#    CONFIG += static
+#}
 
 #linux-g++ {
 #    QMAKE_CXXFLAGS += -std=c++0x

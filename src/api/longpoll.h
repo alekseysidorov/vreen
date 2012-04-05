@@ -25,20 +25,6 @@ public:
         UserOffline         = 9
     };
 
-    enum MessageFlag {
-        FlagMessageUnread   = 1,
-        FlagMessageOutbox   = 2,
-        FlagMessageReplied  = 4,
-        FlagMessageImportant= 8,
-        FlagMessageChat     = 16,
-        FlagMessageFriends  = 32,
-        FlagMessageSpam     = 64,
-        FlagMessageDeleted  = 128,
-        FlagMessageFixed    = 256,
-        FlagMessageMedia    = 512
-    };
-    Q_DECLARE_FLAGS(MessageFlags, MessageFlag)
-
     enum OfflineFlag {
         OfflineTimeout = 1
     };
@@ -55,8 +41,9 @@ public:
     Mode mode() const;
 signals:
 	void messageAdded(const vk::Message &msg);
-	void messageDeleted(int id);
-    void messageFlagsReplaced(int id, int flags, int userId = 0);
+    void messageDeleted(int mid);
+    void messageFlagsReplaced(int mid, int mask, int userId = 0);
+    void messageFlagsReseted(int mid, int mask, int userId = 0);
 	void contactStatusChanged(int userId, vk::Buddy::Status status);
 	void contactTyping(int userId);
 public slots:

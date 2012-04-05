@@ -114,6 +114,7 @@ LongPoll *Client::longPoll()
         d->longPoll = new LongPoll(this);
         connect(this, SIGNAL(onlineStateChanged(bool)),
                 d->longPoll.data(), SLOT(setRunning(bool)));
+        emit longPollChanged(d->longPoll.data());
     }
     return d->longPoll.data();
 }

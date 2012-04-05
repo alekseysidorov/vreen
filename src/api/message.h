@@ -17,17 +17,21 @@ class VK_SHARED_EXPORT Message
     Q_GADGET
     Q_ENUMS(ReadState)
     Q_ENUMS(Direction)
+    Q_ENUMS(Flags)
 public:
-    enum ReadState {
-		Read,
-		Unread,
-		Unknown = -1
+    enum Flag {
+        FlagUnread   = 1,
+        FlagOutbox   = 2,
+        FlagReplied  = 4,
+        FlagImportant= 8,
+        FlagChat     = 16,
+        FlagFriends  = 32,
+        FlagSpam     = 64,
+        FlagDeleted  = 128,
+        FlagFixed    = 256,
+        FlagMedia    = 512
     };
-    enum Direction {
-		In,
-		Out,
-		Forward = -1
-    };
+    Q_DECLARE_FLAGS(Flags, Flag)
 
     Message(Client *client = 0);
     Message(const QVariantMap &data, Client *client);
@@ -50,10 +54,14 @@ public:
     void setSubject(const QString &subject);
     QString body() const;
     void setBody(const QString &body);
-    ReadState readState() const;
-    void setReadState(ReadState state);
-    Direction direction() const;
-    void setDirection(Direction direction);
+    bool isUnread() const;
+    void setUnread(bool set);
+    bool isIncoming() const;
+    void setIncoming(bool set);
+    void setFlags(Flags flags);
+    Flags flags() const;
+    void setFlag(Flag flag, bool set = true);
+    bool testFlag(Flag flag) const;
 protected:
     QSharedDataPointer<MessageData> d;
 };
@@ -65,5 +73,6 @@ typedef QList<int> IdList;
 Q_DECLARE_METATYPE(vk::Message)
 Q_DECLARE_METATYPE(vk::MessageList)
 Q_DECLARE_METATYPE(vk::IdList)
+Q_DECLARE_OPERATORS_FOR_FLAGS(vk::Message::Flags)
 
 #endif // VK_MESSAGE_H
