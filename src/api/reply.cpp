@@ -18,7 +18,7 @@ Reply::~Reply()
         networkReply->deleteLater();
 }
 
-QNetworkReply *Reply::reply() const
+QNetworkReply *Reply::networkReply() const
 {
     return d_func()->networkReply.data();
 }

@@ -125,6 +125,7 @@ Reply *Client::request(const QUrl &url)
     auto networkReply = connection()->get(request);
     auto reply = new Reply(networkReply);
     connect(reply, SIGNAL(resultReady(const QVariant &)), SLOT(_q_reply_finished(const QVariant &)));
+    connect(reply, SIGNAL(error(int)), SLOT(_q_error_received(int)));
     return reply;
 }
 

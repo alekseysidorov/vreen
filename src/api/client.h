@@ -90,7 +90,7 @@ protected:
 private:
 
     Q_PRIVATE_SLOT(d_func(), void _q_connection_state_changed(vk::Client::State))
-    Q_PRIVATE_SLOT(d_func(), void _q_error_received(vk::Client::Error))
+    Q_PRIVATE_SLOT(d_func(), void _q_error_received(int))
     Q_PRIVATE_SLOT(d_func(), void _q_reply_finished(const QVariant &))
 };
 

@@ -27,7 +27,7 @@ public:
 	QWeakPointer<LongPoll> longPoll;
 
     void _q_connection_state_changed(vk::Client::State state);
-    void _q_error_received(vk::Client::Error error)
+    void _q_error_received(int error)
     {
         auto reply = sender_cast<Reply*>(q_func()->sender());
         qDebug() << "Error received :" << error;

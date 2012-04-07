@@ -28,7 +28,8 @@ SOURCES += client.cpp \
     dynamicpropertydata.cpp \
     wallsession.cpp \
     wallpost.cpp \
-    contact.cpp
+    contact.cpp \
+    commentssession.cpp
 
 HEADERS += client.h \
     vk_global.h \
@@ -52,7 +53,8 @@ HEADERS += client.h \
     wallsession.h \
     wallpost.h \
     contact.h \
-    contact_p.h
+    contact_p.h \
+    commentssession.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

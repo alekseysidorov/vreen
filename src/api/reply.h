@@ -19,15 +19,15 @@ public:
     };
 
     virtual ~Reply();
-    QNetworkReply *reply() const;
+    QNetworkReply *networkReply() const;
     QVariant response() const;
     QVariant error() const;
 signals:
     void resultReady(const QVariant &variables);
     void error(int code);
 protected:
-    explicit Reply(QNetworkReply *reply = 0);
-    void setReply(QNetworkReply *reply);
+    explicit Reply(QNetworkReply *networkReply = 0);
+    void setReply(QNetworkReply *networkReply);
 
     QScopedPointer<ReplyPrivate> d_ptr;
 
