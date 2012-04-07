@@ -3,12 +3,11 @@
 #include "client.h"
 #include "roster.h"
 #include <QDateTime>
+#include "dynamicpropertydata_p.h"
 
 namespace vk {
 
-//TODO remove separate direction and read state and use bool instead enums
-
-class MessageData : public QSharedData
+class MessageData : public DynamicPropertyData
 {
 public:
     MessageData(Client *client) :
@@ -22,7 +21,7 @@ public:
         longitude(-1)
     {}
     MessageData(const MessageData &o) :
-        QSharedData(o),
+        DynamicPropertyData(o),
         client(o.client),
         id(o.id),
         from(o.from),
@@ -126,7 +125,8 @@ Message::Message(const Message &other) : d(other.d)
 
 Message &Message::operator =(const Message &other)
 {
-    d = other.d;
+    if (this != &other)
+        d.operator=(other.d);
     return *this;
 }
 

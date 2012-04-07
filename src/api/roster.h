@@ -25,6 +25,7 @@ public:
     Contact *contact(int id) const;
     Contact *contact(const QVariantMap &data);
     ContactList contacts() const;
+    static void fillContact(Contact *contact, const QVariantMap &data);
 
     QStringList tags() const;
     void setTags(const QStringList &list);
@@ -36,8 +37,8 @@ public slots:
             << VK_ALL_FIELDS
             );
 signals:
-    void contactAdded(vk::Contact *contact);
-    void contactRemoved(vk::Contact *contact);
+    void buddyAdded(vk::Contact *contact);
+    void contactRemoved(int id);
     void tagsChanged(const QStringList &);
     void syncFinished(bool success);
     void uidChanged(int uid);

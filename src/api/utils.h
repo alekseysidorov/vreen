@@ -1,6 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 #include "vk_global.h"
+#include <QStringList>
 
 namespace vk {
 
@@ -37,6 +38,18 @@ template<int N>
 Q_INLINE_TEMPLATE QLatin1String enumToStr(int i, const char *(&strings)[N])
 {
     return QLatin1String((i < 0 || i >= N) ? 0 : strings[i]);
+}
+
+template<int N>
+Q_INLINE_TEMPLATE QStringList flagsToStrList(int i, const char *(&strings)[N])
+{
+    QStringList list;
+    for (int pos = 0; pos < N; pos++) {
+        int flag = 1 << pos;
+        if ((flag) & i)
+            list.append(strings[pos]);
+    }
+    return list;
 }
 
 } //namespace vk

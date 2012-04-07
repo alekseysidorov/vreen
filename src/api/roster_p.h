@@ -26,8 +26,6 @@ public:
     void getOnline();
 	void getFriends(const QVariantMap &args = QVariantMap());
 
-    static void fillContact(Contact *contact, const QVariantMap &data);
-
     void _q_tags_received(const QVariant &response);
     void _q_friends_received(const QVariant &response);
     void _q_status_changed(int userId, vk::Buddy::Status status);

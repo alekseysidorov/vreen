@@ -54,16 +54,19 @@ Contact *Roster::owner() const
 Contact *Roster::contact(int id)
 {
     Q_D(Roster);
+    if (!id) {
+        qWarning("Contact id cannot be null!");
+        return 0;
+    }
     auto contact = d->contactHash.value(id);
     if (!contact) {
         if (d->owner && d->owner->id() == id)
             return d->owner;
-        if (id > 0) {
-            auto buddy = new Buddy(id, d->client);
-            buddy->update(QStringList() << VK_COMMON_FIELDS); //TODO move!
-            contact = buddy;
-        } else
-            contact = new Group(id, d->client);
+        auto buddy = new Buddy(id, d->client);
+        buddy->update(QStringList() << VK_COMMON_FIELDS); //TODO move!
+        d->contactHash.insert(id, buddy);
+        emit buddyAdded(buddy);
+        contact = buddy;
     }
     return contact;
 }
@@ -77,6 +80,8 @@ Contact *Roster::contact(const QVariantMap &data)
 {
     Q_D(Roster);
     int id = data.value("uid").toInt();
+    if (!id)
+        id = -data.value("gid").toInt(); //try to find group
     if (!id) {
         qWarning("Contact id cannot be null!");
         return 0;
@@ -84,7 +89,7 @@ Contact *Roster::contact(const QVariantMap &data)
     auto contact = d->contactHash.value(id);
     if (!contact) {
         if (d->owner && d->owner->id() == id) {
-            d->fillContact(d->owner, data);
+            fillContact(d->owner, data);
             return d->owner;
         } else if (id < 0) {
             contact = new Group(id, d->client);
@@ -92,10 +97,9 @@ Contact *Roster::contact(const QVariantMap &data)
             contact = new Buddy(id, d->client);
         }
         d->contactHash.insert(id, contact);
-        d->fillContact(contact, data);
-        emit contactAdded(contact);
+        emit buddyAdded(contact);
     }
-    d->fillContact(contact, data);
+    fillContact(contact, data);
     return contact;
 }
 
@@ -162,7 +166,7 @@ void RosterPrivate::getFriends(const QVariantMap &args)
                    q, SLOT(_q_friends_received(const QVariant&)));
 }
 
-void RosterPrivate::fillContact(Contact *contact, const QVariantMap &data)
+void Roster::fillContact(Contact *contact, const QVariantMap &data)
 {
     auto it = data.constBegin();
     for (; it != data.constEnd(); it++) {

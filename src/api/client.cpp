@@ -196,8 +196,10 @@ void ClientPrivate::_q_connection_state_changed(Client::State state)
         break;
     case Client::StateOnline:
         emit q->onlineStateChanged(true);
-        if (!roster.isNull())
+        if (!roster.isNull()) {
             roster.data()->setUid(connection.data()->uid());
+            emit q->meChanged(roster.data()->owner());
+        }
         break;
     default:
         break;
