@@ -1,5 +1,5 @@
 #include "message.h"
-#include "buddy.h"
+#include "contact.h"
 #include "client.h"
 #include "roster.h"
 #include <QDateTime>

@@ -1,5 +1,5 @@
 #include "wallsession.h"
-#include "buddy.h"
+#include "contact.h"
 #include "wallpost.h"
 
 namespace vk {

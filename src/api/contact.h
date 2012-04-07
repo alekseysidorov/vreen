@@ -46,6 +46,7 @@ class VK_SHARED_EXPORT Contact : public QObject
 
     Q_PROPERTY(int id READ id CONSTANT)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+    Q_PROPERTY(Type type READ type NOTIFY typeChanged)
     Q_PRIVATE_PROPERTY(Contact::d_func(), QString photoSource READ defaultSource NOTIFY photoSourceChanged)
 
     Q_PRIVATE_PROPERTY(Contact::d_func(), QString _q_photo READ smallSource WRITE setSmallSource DESIGNABLE false)
@@ -65,6 +66,8 @@ public:
 
     enum Type {
         BuddyType,
+        FriendType,
+        UserType,
         GroupType,
         ChatType
     };
@@ -80,7 +83,8 @@ public:
     virtual ~Contact();
 
     virtual QString name() const = 0;
-    virtual Type type() const = 0;
+    Type type();
+    void setType(Type type);
     int id() const;
     Client *client() const;
     Q_INVOKABLE QString photoSource(PhotoSize size = PhotoSizeSmall) const;
@@ -88,6 +92,7 @@ public:
 signals:
     void nameChanged(const QString &name);
     void photoSourceChanged(const QString &source, PhotoSize);
+    void typeChanged(vk::Contact::Type);
 protected:
     QScopedPointer<ContactPrivate> d_ptr;
 };
@@ -119,15 +124,6 @@ class Buddy : public Contact
     Q_PRIVATE_PROPERTY(d_func(), QVariantList _q_lists READ lists WRITE setLists DESIGNABLE false)
     Q_PRIVATE_PROPERTY(d_func(), QString _q_activity READ getActivity WRITE setActivity DESIGNABLE false)
 public:
-    enum NameCase {
-        NomCase,
-        GenCase,
-        DatCase,
-        AccCase,
-        InsCase,
-        AblCase
-    };
-
     //TODO name case support maybe needed
     QString firstName() const;
     void setFirstName(const QString &firstName);
@@ -156,6 +152,7 @@ protected:
     Buddy(int id, Client *client);
 
     friend class Roster;
+    friend class RosterPrivate;
 };
 
 class GroupPrivate;
@@ -164,6 +161,8 @@ class Group : public Contact
     Q_OBJECT
     Q_DECLARE_PRIVATE(Group)
     VK_CONTACT_TYPE(GroupType)
+
+    Q_PROPERTY(QString _q_name READ name WRITE setName DESIGNABLE false)
 public:
     virtual QString name() const;
     void setName(const QString &name);
@@ -184,9 +183,9 @@ typedef QList<Group*> GroupList;
 template <typename T>
 Q_INLINE_TEMPLATE T contact_cast(Contact *contact)
 {
-    T t = reinterpret_cast<T>(0);
-    if (t->staticType() == contact->type())
-        return static_cast<T>(contact);
+    //T t = reinterpret_cast<T>(0);
+    //if (t->staticType() == contact->type())
+    //    return static_cast<T>(contact);
     return qobject_cast<T>(contact);
 }
 

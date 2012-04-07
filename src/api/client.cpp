@@ -1,6 +1,6 @@
 #include "client_p.h"
 #include "message.h"
-#include "buddy.h"
+#include "contact.h"
 
 namespace vk {
 

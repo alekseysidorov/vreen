@@ -1,4 +1,4 @@
-#include "buddy_p.h"
+#include "contact_p.h"
 #include "message.h"
 #include "roster.h"
 
@@ -18,6 +18,18 @@ Contact::Contact(ContactPrivate *data) :
 
 Contact::~Contact()
 {
+}
+
+Contact::Type Contact::type()
+{
+    return d_func()->type;
+}
+
+void Contact::setType(Contact::Type type)
+{
+    Q_D(Contact);
+    d->type = type;
+    emit typeChanged(type);
 }
 
 int Contact::id() const
@@ -99,12 +111,12 @@ QString Buddy::name() const
 
 QStringList Buddy::tags() const
 {
-	Q_D(const Buddy);
-	QStringList tags;
+    Q_D(const Buddy);
+    QStringList tags;
     foreach (auto data, d->tagIdList) {
         int id = data.toInt();
         tags.append(d->client->roster()->tags().value(id, tr("Unknown tag id %1").arg(id)));
-	}
+    }
     return tags;
 }
 
@@ -147,13 +159,18 @@ void Buddy::sendMessage(const QString &body, const QString &subject)
 }
 
 Group::Group(int id, Client *client) :
-    Contact(new ContactPrivate(this, id, client))
+    Contact(new GroupPrivate(this, id, client))
 {
+    Q_D(Group);
+    d->type = GroupType;
 }
 
 QString Group::name() const
 {
-    return d_func()->name;
+    Q_D(const Group);
+    if (!d->name.isEmpty())
+        return d->name;
+    return tr("group-%1").arg(id());
 }
 
 void Group::setName(const QString &name)
@@ -164,4 +181,4 @@ void Group::setName(const QString &name)
 
 } // namespace vk
 
-#include "moc_buddy.cpp"
+#include "moc_contact.cpp"

@@ -27,14 +27,32 @@ public:
 
     void updateProfiles(const QVariantList &profiles)
     {
-        foreach (auto item, profiles)
-            client->roster()->contact(item.toMap());
+        foreach (auto item, profiles) {
+            auto map = item.toMap();
+            auto roster = client->roster();
+            int uid = map.value("uid").toInt();
+            auto contact = roster->contact(uid);
+            Roster::fillContact(contact, map);
+        }
     }
+
+    void updateGroups(const QVariantList &groups)
+    {
+        foreach (auto item, groups) {
+            auto map = item.toMap();
+            auto roster = client->roster();
+            int gid = -map.value("gid").toInt();
+            auto contact = roster->contact(gid, Contact::GroupType);
+            Roster::fillContact(contact, map);
+        }
+    }
+
     void _q_news_received(const QVariant &response)
     {
         Q_Q(NewsFeed);
         auto map = response.toMap();
         updateProfiles(map.value("profiles").toList());
+        updateGroups(map.value("groups").toList());
 
         auto items = map.value("items").toList();
         foreach (auto item, items) {
@@ -95,10 +113,10 @@ Reply *NewsFeed::getLatestNews(Filters filters, quint8 count)
     QVariantMap args;
     args.insert("count", count);
     args.insert("filters", flagsToStrList(filters, filters_str).join(","));
-//    if (offset())
-//        args.insert("offset", offset());
-//    if (from())
-//        args.insert("from", offset());
+    //    if (offset())
+    //        args.insert("offset", offset());
+    //    if (from())
+    //        args.insert("from", offset());
     auto reply = d_func()->client->request("newsfeed.get", args);
     connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_news_received(QVariant)));
     return reply;

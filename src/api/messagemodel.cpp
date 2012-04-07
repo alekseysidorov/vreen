@@ -1,5 +1,5 @@
 #include "messagemodel.h"
-#include "buddy.h"
+#include "contact.h"
 #include <QDateTime>
 #include "longpoll.h"
 #include <QCoreApplication>

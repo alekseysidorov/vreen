@@ -37,8 +37,10 @@ void Roster::setUid(int uid)
         return;
     qDeleteAll(d->contactHash);
     d->owner = new Buddy(uid, d->client);
+    d->owner->setType(Contact::UserType);
     d->owner->update(QStringList() << VK_ALL_FIELDS); //TODO move!
     emit uidChanged(uid);
+    d->addContact(d->owner);
 }
 
 int Roster::uid() const
@@ -51,7 +53,7 @@ Contact *Roster::owner() const
     return d_func()->owner;
 }
 
-Contact *Roster::contact(int id)
+Contact *Roster::contact(int id, Contact::Type type)
 {
     Q_D(Roster);
     if (!id) {
@@ -62,11 +64,15 @@ Contact *Roster::contact(int id)
     if (!contact) {
         if (d->owner && d->owner->id() == id)
             return d->owner;
-        auto buddy = new Buddy(id, d->client);
-        buddy->update(QStringList() << VK_COMMON_FIELDS); //TODO move!
-        d->contactHash.insert(id, buddy);
-        emit buddyAdded(buddy);
-        contact = buddy;
+        if (type == Contact::GroupType) {
+            auto group = new Group(id, d->client);
+            contact = group;
+        } else {
+            auto buddy = new Buddy(id, d->client);
+            buddy->setType(type);
+            contact = buddy;
+        }
+        d->addContact(contact);
     }
     return contact;
 }
@@ -74,33 +80,6 @@ Contact *Roster::contact(int id)
 Contact *Roster::contact(int id) const
 {
     return d_func()->contactHash.value(id);
-}
-
-Contact *Roster::contact(const QVariantMap &data)
-{
-    Q_D(Roster);
-    int id = data.value("uid").toInt();
-    if (!id)
-        id = -data.value("gid").toInt(); //try to find group
-    if (!id) {
-        qWarning("Contact id cannot be null!");
-        return 0;
-    }
-    auto contact = d->contactHash.value(id);
-    if (!contact) {
-        if (d->owner && d->owner->id() == id) {
-            fillContact(d->owner, data);
-            return d->owner;
-        } else if (id < 0) {
-            contact = new Group(id, d->client);
-        } else {
-            contact = new Buddy(id, d->client);
-        }
-        d->contactHash.insert(id, contact);
-        emit buddyAdded(contact);
-    }
-    fillContact(contact, data);
-    return contact;
 }
 
 ContactList Roster::contacts() const
@@ -125,6 +104,7 @@ void Roster::sync(const QStringList &fields)
     //TODO rewrite with method chains with lambdas in Qt5
     QVariantMap args;
     args.insert("fields", fields.join(","));
+    args.insert("order", "hints");
 
     d->getTags();
     d->getFriends(args);
@@ -162,8 +142,29 @@ void RosterPrivate::getFriends(const QVariantMap &args)
 {
     Q_Q(Roster);
     auto reply = client->request("friends.get", args);
+    reply->setProperty("friend", true);
     reply->connect(reply, SIGNAL(resultReady(const QVariant&)),
                    q, SLOT(_q_friends_received(const QVariant&)));
+}
+
+void RosterPrivate::addContact(Contact *contact)
+{
+    Q_Q(Roster);
+    emit q->contactAdded(contact);
+    switch (contact->type()) {
+    case Contact::FriendType:
+        emit q->friendAdded(contact);
+    case Contact::BuddyType:
+    case Contact::UserType: {
+        IdList ids;
+        ids.append(contact->id());
+        q->update(ids, QStringList() << VK_COMMON_FIELDS); //TODO move!
+        break;
+    }
+    default:
+        break;
+    }
+    contactHash.insert(contact->id(), contact);
 }
 
 void Roster::fillContact(Contact *contact, const QVariantMap &data)
@@ -189,8 +190,25 @@ void RosterPrivate::_q_tags_received(const QVariant &response)
 void RosterPrivate::_q_friends_received(const QVariant &response)
 {
     Q_Q(Roster);
-    foreach (auto data, response.toList())
-        q->contact(data.toMap());
+    bool isFriend = q->sender()->property("friend").toBool();
+    foreach (auto data, response.toList()) {
+        auto map = data.toMap();
+        int id = map.value("uid").toInt();
+        auto contact = contactHash.value(id);
+        if (!contact) {
+            auto contact = new Buddy(id, client);
+            if (isFriend)
+                contact->setType(Contact::FriendType);
+            q->fillContact(contact, map);
+            addContact(contact);
+        } else {
+            q->fillContact(contact, map);
+            if (isFriend && contact->type() != Contact::FriendType) {
+                contact->setType(Contact::FriendType);
+                emit q->friendAdded(contact);
+            }
+        }
+    }
     emit q->syncFinished(true);
 }
 

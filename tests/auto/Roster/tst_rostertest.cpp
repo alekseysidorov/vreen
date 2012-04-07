@@ -3,7 +3,7 @@
 #include <QCoreApplication>
 #include "common/utils.h"
 #include "roster.h"
-#include "buddy.h"
+#include "contact.h"
 
 #include <QMetaProperty>
 #include <QDebug>

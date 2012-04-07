@@ -20,7 +20,6 @@ SOURCES += client.cpp \
     directconnection.cpp \
     longpoll.cpp \
     newsfeed.cpp \
-    buddy.cpp \
     roster.cpp \
     message.cpp \
     messagemodel.cpp \
@@ -28,7 +27,8 @@ SOURCES += client.cpp \
     utils.cpp \
     dynamicpropertydata.cpp \
     wallsession.cpp \
-    wallpost.cpp
+    wallpost.cpp \
+    contact.cpp
 
 HEADERS += client.h \
     vk_global.h \
@@ -41,8 +41,6 @@ HEADERS += client.h \
     longpoll.h \
     longpoll_p.h \
     newsfeed.h \
-    buddy.h \
-    buddy_p.h \
     roster.h \
     roster_p.h \
     message.h \
@@ -52,7 +50,9 @@ HEADERS += client.h \
     utils.h \
     dynamicpropertydata_p.h \
     wallsession.h \
-    wallpost.h
+    wallpost.h \
+    contact.h \
+    contact_p.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

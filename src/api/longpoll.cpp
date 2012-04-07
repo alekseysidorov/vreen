@@ -2,7 +2,7 @@
 #include "connection.h"
 #include "message.h"
 #include "roster.h"
-#include "buddy.h"
+#include "contact.h"
 #include <QDateTime>
 
 namespace vk {

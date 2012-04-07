@@ -2,7 +2,7 @@
 #define VK_LONGPOLL_H
 
 #include <QObject>
-#include "buddy.h"
+#include "contact.h"
 
 namespace vk {
 

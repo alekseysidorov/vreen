@@ -2,7 +2,7 @@
 #define ROSTER_P_H
 #include "roster.h"
 #include "client_p.h"
-#include "buddy_p.h"
+#include "contact_p.h"
 
 namespace vk {
 
@@ -25,6 +25,7 @@ public:
     void getTags();
     void getOnline();
 	void getFriends(const QVariantMap &args = QVariantMap());
+    void addContact(Contact *contact);
 
     void _q_tags_received(const QVariant &response);
     void _q_friends_received(const QVariant &response);

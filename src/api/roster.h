@@ -1,7 +1,7 @@
 #ifndef VK_ROSTER_H
 #define VK_ROSTER_H
 
-#include "buddy.h"
+#include "contact.h"
 #include <QVariant>
 #include <QStringList>
 
@@ -15,15 +15,24 @@ class VK_SHARED_EXPORT Roster : public QObject
     Q_OBJECT
     Q_DECLARE_PRIVATE(Roster)
 public:
+
+    enum NameCase {
+        NomCase,
+        GenCase,
+        DatCase,
+        AccCase,
+        InsCase,
+        AblCase
+    };
+
     Roster(Client *client, int uid = 0);
     virtual ~Roster();
     void setUid(int uid);
     int uid() const;
 
     Contact *owner() const;
-    Contact *contact(int id);
+    Contact *contact(int id, Contact::Type type = Contact::BuddyType);
     Contact *contact(int id) const;
-    Contact *contact(const QVariantMap &data);
     ContactList contacts() const;
     static void fillContact(Contact *contact, const QVariantMap &data);
 
@@ -37,7 +46,8 @@ public slots:
             << VK_ALL_FIELDS
             );
 signals:
-    void buddyAdded(vk::Contact *contact);
+    void contactAdded(vk::Contact *contact);
+    void friendAdded(vk::Contact *contact);
     void contactRemoved(int id);
     void tagsChanged(const QStringList &);
     void syncFinished(bool success);

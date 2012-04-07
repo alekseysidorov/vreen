@@ -1,6 +1,6 @@
 #ifndef USER_P_H
 #define USER_P_H
-#include "buddy.h"
+#include "contact.h"
 #include "client.h"
 #include <QStringList>
 #include <QVector>
@@ -13,7 +13,8 @@ class ContactPrivate
     Q_DECLARE_PUBLIC(Contact)
 public:
     ContactPrivate(Contact *q, int id, Client *client) : q_ptr(q),
-        client(client), id(id), sources(Contact::PhotoSizeBigRec),
+        client(client), id(id), type(Contact::BuddyType),
+        sources(Contact::PhotoSizeBigRec),
         preferedSize(Contact::PhotoSizeMediumRec)
     {
 
@@ -21,18 +22,19 @@ public:
     Contact *q_ptr;
     Client *client;
     int id;
+    Contact::Type type;
     QVector<QString> sources;
     Contact::PhotoSize preferedSize;
 
     QString defaultSource() const
     {
-        return sources[preferedSize];
-        //for (int index = preferedSize; index != -1; index--) {
-        //    auto photo = sources.value(index);
-        //    if (!photo.isNull())
-        //        return photo;
-        //}
-        //return QString();
+        //return sources[preferedSize];
+        for (int index = preferedSize; index != -1; index--) {
+            auto photo = sources.value(index);
+            if (!photo.isNull())
+                return photo;
+        }
+        return QString();
     }
     QString smallSource() const { return sources[Contact::PhotoSizeSmall]; }
     void setSmallSource(const QString &source)
