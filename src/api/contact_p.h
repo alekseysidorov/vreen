@@ -36,27 +36,27 @@ public:
         }
         return QString();
     }
-    QString smallSource() const { return sources[Contact::PhotoSizeSmall]; }
+    QString smallSource() { return sources[Contact::PhotoSizeSmall]; }
     void setSmallSource(const QString &source)
     {
         q_func()->setPhotoSource(source, Contact::PhotoSizeSmall);
     }
-    QString mediumSource() const { return sources[Contact::PhotoSizeMedium]; }
+    QString mediumSource() { return sources[Contact::PhotoSizeMedium]; }
     void setMediumSource(const QString &source)
     {
         q_func()->setPhotoSource(source, Contact::PhotoSizeMedium);
     }
-    QString mediumSourceRec() const { return sources[Contact::PhotoSizeMediumRec]; }
+    QString mediumSourceRec() { return sources[Contact::PhotoSizeMediumRec]; }
     void setMediumSourceRec(const QString &source)
     {
         q_func()->setPhotoSource(source, Contact::PhotoSizeMediumRec);
     }
-    QString bigSource() const { return sources[Contact::PhotoSizeBig]; }
+    QString bigSource() { return sources[Contact::PhotoSizeBig]; }
     void setBigSource(const QString &source)
     {
         q_func()->setPhotoSource(source, Contact::PhotoSizeBig);
     }
-    QString bigSourceRec() const { return sources[Contact::PhotoSizeBigRec]; }
+    QString bigSourceRec() { return sources[Contact::PhotoSizeBigRec]; }
     void setBigSourceRec(const QString &source)
     {
         q_func()->setPhotoSource(source, Contact::PhotoSizeBigRec);
