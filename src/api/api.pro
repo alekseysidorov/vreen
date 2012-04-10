@@ -29,7 +29,9 @@ SOURCES += client.cpp \
     wallsession.cpp \
     wallpost.cpp \
     contact.cpp \
-    commentssession.cpp
+    commentssession.cpp \
+    audio.cpp \
+    audioitem.cpp
 
 HEADERS += client.h \
     vk_global.h \
@@ -54,7 +56,9 @@ HEADERS += client.h \
     wallpost.h \
     contact.h \
     contact_p.h \
-    commentssession.h
+    commentssession.h \
+    audio.h \
+    audioitem.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

@@ -71,10 +71,6 @@ QVariant MessageListModel::data(const QModelIndex &index, int role) const
 {
     Q_D(const MessageListModel);
     int row = index.row();
-    //if (row < 0 || row >= count()) {
-    //    qWarning("Incorrect row: %d", row);
-    //    return QVariant::Invalid;
-    //}
     auto message = d->messageList.at(row);
     switch (role) {
     case SubjectRole:
@@ -100,9 +96,8 @@ QVariant MessageListModel::data(const QModelIndex &index, int role) const
     return QVariant::Invalid;
 }
 
-int MessageListModel::rowCount(const QModelIndex &parent) const
+int MessageListModel::rowCount(const QModelIndex &) const
 {
-    Q_ASSERT(parent == QModelIndex());
     return count();
 }
 
@@ -167,8 +162,10 @@ void MessageListModel::removeMessage(int id)
 void MessageListModel::setMessages(const MessageList &messages)
 {
     clear();
-    foreach (auto message, messages)
+    foreach (auto message, messages) {
         addMessage(message);
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    }
 }
 
 void MessageListModel::clear()
@@ -184,7 +181,6 @@ void MessageListModel::replaceMessage(int i, const Message &message)
     auto index = createIndex(i, 0);
     d_func()->messageList[i] = message;
     emit dataChanged(index, index);
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
 void MessageListModel::insertMessage(int index, const Message &message)
@@ -193,7 +189,6 @@ void MessageListModel::insertMessage(int index, const Message &message)
     beginInsertRows(QModelIndex(), index, index);
     d->messageList.insert(index, message);
     endInsertRows();
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
 void MessageListModel::sort(int column, Qt::SortOrder order)

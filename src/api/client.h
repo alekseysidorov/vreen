@@ -65,8 +65,8 @@ public:
 	LongPoll *longPoll() const;
 	LongPoll *longPoll();
 
-    Q_INVOKABLE Reply *request(const QUrl &);
-    Q_INVOKABLE Reply *request(const QString &method, const QVariantMap &args = QVariantMap());
+    Reply *request(const QUrl &);
+    Reply *request(const QString &method, const QVariantMap &args = QVariantMap());
     Reply *sendMessage(const Message &message);
     Reply *getLastDialogs(int count = 16, int previewLength = -1); //TODO move method
 
@@ -99,5 +99,6 @@ private:
 Q_DECLARE_METATYPE(vk::Roster*)
 Q_DECLARE_METATYPE(vk::Client*)
 Q_DECLARE_METATYPE(vk::LongPoll*)
+Q_DECLARE_METATYPE(vk::Reply*)
 
 #endif // VK_CLIENT_H
