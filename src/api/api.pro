@@ -32,7 +32,9 @@ SOURCES += client.cpp \
     commentssession.cpp \
     audio.cpp \
     audioitem.cpp \
-    abstractlistmodel.cpp
+    abstractlistmodel.cpp \
+    newsitem.cpp \
+    attachment.cpp
 
 HEADERS += client.h \
     vk_global.h \
@@ -60,7 +62,9 @@ HEADERS += client.h \
     commentssession.h \
     audio.h \
     audioitem.h \
-    abstractlistmodel.h
+    abstractlistmodel.h \
+    newsitem.h \
+    attachment.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN
