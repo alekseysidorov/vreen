@@ -18,7 +18,8 @@ class VK_SHARED_EXPORT AudioProvider : public QObject
 public:
     AudioProvider(Client *client);
     virtual ~AudioProvider();
-    Reply *getContactAudio(int uid, int count = 32, int offset = 0);
+    Reply *getContactAudio(int uid, int count = 50, int offset = 0);
+    Reply *searchAudio(const QString &query, int count = 50, int offset = 0);
 signals:
     void audioItemReceived(const vk::AudioItem &items);
 protected:

@@ -1,6 +1,5 @@
 #include "reply_p.h"
 #include <QNetworkReply>
-#include <QDebug>
 
 namespace vk {
 
@@ -9,6 +8,8 @@ Reply::Reply(QNetworkReply *reply) :
     d_ptr(new ReplyPrivate(this))
 {
     setReply(reply);
+
+    qDebug() << "--Send reply:" << reply->url();
 }
 
 Reply::~Reply()

@@ -5,6 +5,7 @@
 #include "reply.h"
 #include "QNetworkReply"
 #include <QWeakPointer>
+#include <QDebug>
 
 namespace vk {
 
@@ -25,6 +26,8 @@ public:
         auto reply = static_cast<QNetworkReply*>(q->sender());
         QVariantMap map = JSON::parse(reply->readAll()).toMap();
         //TODO error and captcha handler
+
+        //qDebug() << "--Reply finished";
 
         response = map.value("response");
         if (!response.isNull()) {

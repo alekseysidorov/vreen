@@ -1,6 +1,8 @@
 #include "audio.h"
 #include <client.h>
 #include <QUrl>
+#include <QCoreApplication>
+#include <QDebug>
 
 namespace vk {
 
@@ -9,14 +11,19 @@ class AudioProviderPrivate
 {
     Q_DECLARE_PUBLIC(AudioProvider)
 public:
-    AudioProviderPrivate(AudioProvider *q, Client *client) : q_ptr(q), client(client) {}
+    AudioProviderPrivate(AudioProvider *q, Client *client) : q_ptr(q), client(client), autoComplete(true) {}
     AudioProvider *q_ptr;
     Client *client;
+    bool autoComplete;
 
     void _q_audio_received(const QVariant &response)
     {
         Q_Q(AudioProvider);
-        foreach (auto item, response.toList()) {
+        auto list = response.toList();
+        if (q->sender()->property("skipFirst").toBool())
+            list.removeFirst(); //HACK For stupid API(((
+
+        foreach (auto item, list) {
             auto map = item.toMap();
             AudioItem audio(client);
             audio.setId(map.value("aid").toInt());
@@ -28,6 +35,7 @@ public:
             audio.setLyricsId(map.value("lyrics_id").toInt());
             audio.setUrl(map.value("url").toUrl());
             emit q->audioItemReceived(audio);
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         }
     }
 };
@@ -59,6 +67,28 @@ Reply *AudioProvider::getContactAudio(int uid, int count, int offset)
     args.insert("offset", offset);
 
     auto reply = d->client->request("audio.get", args);
+    connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_audio_received(QVariant)));
+    return reply;
+}
+
+/*!
+ * \brief AudioProvider::searchAudio \link http://vk.com/developers.php?oid=-1&p=audio.search
+ * \param query
+ * \param count
+ * \param offset
+ * \return
+ */
+Reply *AudioProvider::searchAudio(const QString &query, int count, int offset)
+{
+    Q_D(AudioProvider);
+    QVariantMap args;
+    args.insert("q", query);
+    args.insert("count", count);
+    args.insert("offset", offset);
+    args.insert("auto_complete", d->autoComplete);
+
+    auto reply = d->client->request("audio.search", args);
+    reply->setProperty("skipFirst", true);
     connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_audio_received(QVariant)));
     return reply;
 }
