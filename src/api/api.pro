@@ -31,7 +31,8 @@ SOURCES += client.cpp \
     contact.cpp \
     commentssession.cpp \
     audio.cpp \
-    audioitem.cpp
+    audioitem.cpp \
+    abstractlistmodel.cpp
 
 HEADERS += client.h \
     vk_global.h \
@@ -58,7 +59,8 @@ HEADERS += client.h \
     contact_p.h \
     commentssession.h \
     audio.h \
-    audioitem.h
+    audioitem.h \
+    abstractlistmodel.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN
@@ -82,7 +84,7 @@ unix:!symbian {
 }
 
 unix {
-    QMAKE_CXXFLAGS += -std=c++0x
+    QMAKE_CXXFLAGS += -std=c++0x -fvisibility=hidden
 }
 
 #!isEmpty(MEEGO_VERSION_MAJOR) {

@@ -3,6 +3,7 @@
 
 #include <QAbstractListModel>
 #include "audioitem.h"
+#include "abstractlistmodel.h"
 
 namespace vk {
 
@@ -10,14 +11,14 @@ class Client;
 class Reply;
 
 class AudioProviderPrivate;
-class AudioProvider : public QObject
+class VK_SHARED_EXPORT AudioProvider : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(AudioProvider)
 public:
     AudioProvider(Client *client);
     virtual ~AudioProvider();
-    Reply *get(int uid, int count = 32, int offset = 0);
+    Reply *getContactAudio(int uid, int count = 32, int offset = 0);
 signals:
     void audioItemReceived(const vk::AudioItem &items);
 protected:
@@ -27,7 +28,7 @@ protected:
 };
 
 class AudioModelPrivate;
-class AudioModel : public QAbstractListModel
+class VK_SHARED_EXPORT AudioModel : public AbstractListModel
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(AudioModel)

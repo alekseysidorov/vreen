@@ -6,7 +6,7 @@
 namespace vk {
 
 class ChatSessionPrivate;
-class ChatSession : public QObject
+class VK_SHARED_EXPORT ChatSession : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(ChatSession)

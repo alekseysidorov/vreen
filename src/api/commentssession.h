@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVariantMap>
+#include "vk_global.h"
 
 namespace vk {
 
@@ -10,7 +11,7 @@ class Reply;
 class Contact;
 class CommentSessionPrivate;
 
-class CommentSession : public QObject
+class VK_SHARED_EXPORT CommentSession : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(CommentSession)

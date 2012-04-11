@@ -50,7 +50,7 @@ AudioProvider::~AudioProvider()
  * \param offset
  * \return reply
  */
-Reply *AudioProvider::get(int uid, int count, int offset)
+Reply *AudioProvider::getContactAudio(int uid, int count, int offset)
 {
     Q_D(AudioProvider);
     QVariantMap args;
@@ -74,7 +74,7 @@ public:
     Qt::SortOrder sortOrder;
 };
 
-AudioModel::AudioModel(QObject *parent) : QAbstractListModel(parent),
+AudioModel::AudioModel(QObject *parent) : AbstractListModel(parent),
     d_ptr(new AudioModelPrivate(this))
 {  
     auto roles = roleNames();
