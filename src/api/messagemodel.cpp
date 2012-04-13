@@ -2,6 +2,7 @@
 #include "contact.h"
 #include <QDateTime>
 #include "longpoll.h"
+#include "utils.h"
 #include <QCoreApplication>
 
 namespace vk {
@@ -125,15 +126,7 @@ void MessageListModel::addMessage(const Message &message)
         return;
     }
 
-    auto it = d->sortOrder == Qt::AscendingOrder ? qLowerBound(d->messageList.begin(),
-                                                               d->messageList.end(),
-                                                               message,
-                                                               d->lessThan)
-                                                 : qLowerBound(d->messageList.end(),
-                                                               d->messageList.begin(),
-                                                               message,
-                                                               d->lessThan);
-    index = it - d->messageList.begin();
+    index = bound(d->messageList, d->sortOrder, message, d->lessThan);
     insertMessage(index, message);
 }
 

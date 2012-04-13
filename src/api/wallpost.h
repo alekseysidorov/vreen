@@ -34,13 +34,6 @@ public:
 
     Contact *from();
     Contact *to();
-
-    QVariant property(const char *name, const QVariant &def = QVariant()) const;
-    template<typename T>
-    T property(const char *name, const T &def) const
-    { return qVariantValue<T>(property(name, qVariantFromValue<T>(def))); }
-    void setProperty(const char *name, const QVariant &value);
-    QList<QByteArray> dynamicPropertyNames() const;
 private:
     QSharedDataPointer<WallPostData> d;
 };

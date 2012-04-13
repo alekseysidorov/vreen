@@ -52,6 +52,14 @@ Q_INLINE_TEMPLATE QStringList flagsToStrList(int i, const char *(&strings)[N])
     return list;
 }
 
+template<typename Container, typename T, typename LessThan>
+int bound(Container container, Qt::SortOrder order, const T &value, LessThan lessThan)
+{
+    auto it = order == Qt::AscendingOrder ? qLowerBound(container.begin(), container.end(), value, lessThan)
+                                          : qLowerBound(container.end(), container.begin(), value, lessThan);
+    return it - container.begin();
+}
+
 } //namespace vk
 
 #endif // UTILS_H

@@ -6,16 +6,16 @@
 
 namespace vk {
 
-class WallPostData : public DynamicPropertyData
+class WallPostData : public QSharedData
 {
 public:
-    WallPostData(Client *client) : DynamicPropertyData(),
+    WallPostData(Client *client) : QSharedData(),
         client(client),
         id(0),
         fromId(-1),
         toId(-1)
     {}
-    WallPostData(const WallPostData &o) : DynamicPropertyData(o),
+    WallPostData(const WallPostData &o) : QSharedData(o),
         client(o.client),
         id(o.id),
         body(o.body),
@@ -29,20 +29,7 @@ public:
     QDateTime date;
     int fromId;
     int toId;
-
-    void setId(const QVariant &input) { id = input.toInt(); }
-    QVariant getId() const { return id; }
 };
-
-
-namespace CompiledProperty {
-static QList<QByteArray> names = QList<QByteArray>()
-        << "id";
-static QList<Getter> getters   = QList<Getter>()
-        << static_cast<Getter>(&WallPostData::getId);
-static QList<Setter> setters   = QList<Setter>()
-        << static_cast<Setter>(&WallPostData::setId);
-} //namespace CompiledProperty
 
 WallPost::WallPost(Client *client) :
     d(new WallPostData(client))
@@ -52,9 +39,7 @@ WallPost::WallPost(Client *client) :
 WallPost::WallPost(const QVariantMap data, Client *client) :
     d(new WallPostData(client))
 {
-    auto it = data.constBegin();
-    for (; it != data.constEnd(); it++)
-        setProperty(it.key().toLatin1(), it.value());
+    d->id = data.value("id").toInt();
     d->body = data.value("text").toString();
     d->fromId = data.value("from_id").toInt();
     d->toId = data.value("to_id").toInt();
@@ -139,16 +124,6 @@ Contact *WallPost::from()
 Contact *WallPost::to()
 {
     return d->client->roster()->contact(d->toId);
-}
-
-QVariant WallPost::property(const char *name, const QVariant &def) const
-{
-    return d->property(name, def, CompiledProperty::names, CompiledProperty::getters);
-}
-
-void WallPost::setProperty(const char *name, const QVariant &value)
-{
-    d->setProperty(name, value, CompiledProperty::names, CompiledProperty::setters);
 }
 
 } //namespace vk

@@ -1,7 +1,7 @@
 #ifndef NEWSFEED_H
 #define NEWSFEED_H
 #include <QObject>
-#include "vk_global.h"
+#include "newsitem.h"
 #include <QVariantMap>
 
 namespace vk {
@@ -40,7 +40,7 @@ public:
 public slots:
     Reply *getLatestNews(Filters filters = FilterNone, quint8 count = 50);
 signals:
-    void newsAdded(const QVariantMap &data);
+    void newsAdded(const vk::NewsItem &item);
     void offsetChanged(int arg);
 
     void fromChanged(int arg);

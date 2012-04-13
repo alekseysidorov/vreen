@@ -3,12 +3,13 @@
 
 #include <QSharedDataPointer>
 #include <QVariantMap>
+#include "vk_global.h"
 
 namespace vk {
 
 class AttachmentData;
 
-class Attachment
+class VK_SHARED_EXPORT Attachment
 {
 public:
     enum Type {
@@ -29,19 +30,24 @@ public:
     Attachment(const Attachment &);
     Attachment &operator=(const Attachment &);
     ~Attachment();
+
     void setData(const QVariantMap &data);
     QVariantMap data() const;
 
-    QVariant property(const char *name, const QVariant &def = QVariant()) const;
+    QVariant property(const QString &name, const QVariant &def = QVariant()) const;
     template<typename T>
     T property(const char *name, const T &def) const
     { return qVariantValue<T>(property(name, qVariantFromValue<T>(def))); }
-    void setProperty(const char *name, const QVariant &value);
-    QList<QByteArray> dynamicPropertyNames() const;
+    void setProperty(const QString &name, const QVariant &value);
+    QStringList dynamicPropertyNames() const;
 private:
     QSharedDataPointer<AttachmentData> d;
 };
+typedef QList<Attachment> AttachmentList;
 
 } // namespace vk
+
+Q_DECLARE_METATYPE(vk::Attachment)
+Q_DECLARE_METATYPE(vk::AttachmentList)
 
 #endif // VK_ATTACHMENT_H

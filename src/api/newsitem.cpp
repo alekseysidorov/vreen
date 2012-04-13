@@ -1,29 +1,146 @@
 #include "newsitem.h"
+#include "utils.h"
 #include <QSharedData>
+#include <QStringList>
+#include <QDateTime>
 
 namespace vk {
 
 class NewsItemData : public QSharedData {
 public:
+    NewsItemData() : QSharedData() {}
+    NewsItemData(const NewsItemData &o) : QSharedData(o),
+        data(o.data),
+        attachmentList(o.attachmentList)
+    {}
+    QVariantMap data;
+    AttachmentList attachmentList;
 };
 
-NewsItem::NewsItem() : data(new NewsItemData)
+const char *types[] = {
+    "post",
+    "photo",
+    "photo_tag",
+    "friend",
+    "note"
+};
+
+/*!
+ * \brief The NewsItem class
+ * Api reference: \link http://vk.com/developers.php?oid=-1&p=newsfeed.get
+ */
+
+/*!
+ * \brief NewsItem::NewsItem
+ */
+
+NewsItem::NewsItem() : d(new NewsItemData)
 {
 }
 
-NewsItem::NewsItem(const NewsItem &rhs) : data(rhs.data)
+NewsItem::NewsItem(const QVariantMap &data) : d(new NewsItemData)
+{
+    setData(data);
+}
+
+NewsItem::NewsItem(const NewsItem &rhs) : d(rhs.d)
 {
 }
 
 NewsItem &NewsItem::operator=(const NewsItem &rhs)
 {
     if (this != &rhs)
-        data.operator=(rhs.data);
+        d.operator=(rhs.d);
     return *this;
 }
 
 NewsItem::~NewsItem()
 {
+}
+
+void NewsItem::setData(const QVariantMap &data)
+{
+    d->data = data;
+}
+
+QVariantMap NewsItem::data() const
+{
+    return d->data;
+}
+
+AttachmentList NewsItem::attachments() const
+{
+    return d->attachmentList;
+}
+
+void NewsItem::setAttachments(const AttachmentList &attachments)
+{
+    d->attachmentList = attachments;
+}
+
+NewsItem::Type NewsItem::type() const
+{
+    return strToEnum<Type>(d->data.value("type").toString(), types);
+}
+
+void NewsItem::setType(NewsItem::Type type)
+{
+    d->data.insert("type", enumToStr(type, types));
+}
+
+int NewsItem::postId() const
+{
+    return d->data.value("post_id").toInt();
+}
+
+void NewsItem::setPostId(int postId)
+{
+    d->data.insert("post_id", postId);
+}
+
+int NewsItem::sourceId() const
+{
+    return d->data.value("source_id").toInt();
+}
+
+void NewsItem::setSourceId(int sourceId)
+{
+    d->data.insert("source_id", sourceId);
+}
+
+QString NewsItem::body() const
+{
+    return d->data.value("text").toString();
+}
+
+void NewsItem::setBody(const QString &body)
+{
+    d->data.insert("body", body);
+}
+
+QDateTime NewsItem::date() const
+{
+    return QDateTime::fromTime_t(d->data.value("date").toInt());
+}
+
+void NewsItem::setDate(const QDateTime &date)
+{
+    d->data.insert("date", date.toTime_t());
+}
+
+QVariant NewsItem::property(const QString &name, const QVariant &def) const
+{
+    return d->data.value(name, def);
+}
+
+QStringList NewsItem::dynamicPropertyNames() const
+{
+    return d->data.keys();
+}
+
+void NewsItem::setProperty(const QString &name, const QVariant &value)
+{
+    d->data.insert(name, value);
 }
 
 } // namespace vk
