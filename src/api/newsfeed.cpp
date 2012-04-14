@@ -56,7 +56,9 @@ public:
 
         auto items = map.value("items").toList();
         foreach (auto item, items) {
-            emit q->newsAdded(NewsItem(item.toMap()));
+            auto newsItem = NewsItem::fromData(item);
+            emit q->newsAdded(newsItem);
+
         }
         q->setOffset(map.value("new_offset").toInt());
         q->setFrom(map.value("new_from").toInt());

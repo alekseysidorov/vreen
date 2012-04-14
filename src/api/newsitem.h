@@ -25,7 +25,9 @@ public:
     NewsItem(const NewsItem &);
     NewsItem &operator=(const NewsItem &);
     ~NewsItem();
-    
+
+    static NewsItem fromData(const QVariant &data);
+
     void setData(const QVariantMap &data);
     QVariantMap data() const;
     AttachmentList attachments() const;

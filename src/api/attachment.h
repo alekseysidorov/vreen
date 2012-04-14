@@ -23,16 +23,21 @@ public:
         Note,
         ApplicationImage,
         Poll,
-        Page
+        Page,
+        Other = -1
     };
 
     Attachment();
+    Attachment(const QVariantMap &data);
     Attachment(const Attachment &);
     Attachment &operator=(const Attachment &);
     ~Attachment();
 
     void setData(const QVariantMap &data);
     QVariantMap data() const;
+    Type type() const;
+
+    static QList<Attachment> fromList(const QVariantList &list);
 
     QVariant property(const QString &name, const QVariant &def = QVariant()) const;
     template<typename T>
@@ -43,6 +48,7 @@ public:
 private:
     QSharedDataPointer<AttachmentData> d;
 };
+
 typedef QList<Attachment> AttachmentList;
 
 } // namespace vk
