@@ -58,8 +58,8 @@ Attachment::~Attachment()
 
 void Attachment::setData(const QVariantMap &data)
 {
-    d->type = AttachmentData::getType(data);
     d->data = data;
+    d->data.insert("type", d->type = AttachmentData::getType(data));
 }
 
 QVariantMap Attachment::data() const
@@ -72,12 +72,25 @@ Attachment::Type Attachment::type() const
     return d->type;
 }
 
-QList<Attachment> Attachment::fromList(const QVariantList &list)
+Attachment Attachment::fromData(const QVariant &data)
+{
+    return Attachment(data.toMap());
+}
+
+QList<Attachment> Attachment::fromVariantList(const QVariantList &list)
 {
     AttachmentList attachments;
     foreach (auto item, list)
-        attachments.append(Attachment(item.toMap()));
+        attachments.append(Attachment::fromData(item.toMap()));
     return attachments;
+}
+
+QVariantList Attachment::toList(const QList<Attachment> &list)
+{
+    QVariantList variantList;
+    foreach (auto item, list)
+        variantList.append(item.data());
+    return variantList;
 }
 
 QVariant Attachment::property(const QString &name, const QVariant &def) const

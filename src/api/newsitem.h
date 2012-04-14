@@ -21,7 +21,6 @@ public:
     };
 
     NewsItem();
-    NewsItem(const QVariantMap &data);
     NewsItem(const NewsItem &);
     NewsItem &operator=(const NewsItem &);
     ~NewsItem();
@@ -49,6 +48,8 @@ public:
     { return qVariantValue<T>(property(name, qVariantFromValue<T>(def))); }
     void setProperty(const QString &name, const QVariant &value);
     QStringList dynamicPropertyNames() const;
+protected:
+    NewsItem(const QVariantMap &data);
 private:
     QSharedDataPointer<NewsItemData> d;
 };

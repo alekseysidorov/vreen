@@ -28,7 +28,6 @@ public:
     };
 
     Attachment();
-    Attachment(const QVariantMap &data);
     Attachment(const Attachment &);
     Attachment &operator=(const Attachment &);
     ~Attachment();
@@ -37,7 +36,9 @@ public:
     QVariantMap data() const;
     Type type() const;
 
-    static QList<Attachment> fromList(const QVariantList &list);
+    static Attachment fromData(const QVariant &data);
+    static QList<Attachment> fromVariantList(const QVariantList &list);
+    static QVariantList toList(const QList<Attachment> &list);
 
     QVariant property(const QString &name, const QVariant &def = QVariant()) const;
     template<typename T>
@@ -45,6 +46,8 @@ public:
     { return qVariantValue<T>(property(name, qVariantFromValue<T>(def))); }
     void setProperty(const QString &name, const QVariant &value);
     QStringList dynamicPropertyNames() const;
+protected:
+    Attachment(const QVariantMap &data);
 private:
     QSharedDataPointer<AttachmentData> d;
 };
