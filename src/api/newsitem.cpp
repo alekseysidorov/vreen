@@ -66,7 +66,7 @@ NewsItem NewsItem::fromData(const QVariant &data)
 void NewsItem::setData(const QVariantMap &data)
 {
     d->data = data;
-    d->attachmentList = Attachment::fromVariantList(d->data.take("attachments").toList());
+    //d->attachmentList = Attachment::fromVariantList(d->data.take("attachments").toList());
 }
 
 QVariantMap NewsItem::data() const

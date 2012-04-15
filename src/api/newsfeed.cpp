@@ -58,15 +58,15 @@ public:
         auto items = map.value("items").toList();
         foreach (auto item, items) {
             auto newsItem = NewsItem::fromData(item);
-            auto map = item.toMap();
-            for (int i = 0; i != sizeof(filters_str); i++) {
-                auto list = map.value(filters_str[i]).toList();
-                if (list.count()) {
-                    auto count = list.takeFirst().toInt();
-                    newsItem.setAttachments(Attachment::fromVariantList(list));
-                    break;
-                }
-            }
+            //auto map = item.toMap();
+            //for (int i = 0; i != sizeof(filters_str); i++) {
+            //    auto list = map.value(filters_str[i]).toList();
+            //    if (list.count()) {
+            //        auto count = list.takeFirst().toInt();
+            //        newsItem.setAttachments(Attachment::fromVariantList(list));
+            //        break;
+            //    }
+            //}
             emit q->newsAdded(newsItem);
         }
         q->setOffset(map.value("new_offset").toInt());
