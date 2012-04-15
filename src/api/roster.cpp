@@ -154,6 +154,7 @@ void RosterPrivate::addContact(Contact *contact)
     switch (contact->type()) {
     case Contact::FriendType:
         emit q->friendAdded(contact);
+        break;
     case Contact::BuddyType:
     case Contact::UserType: {
         IdList ids;

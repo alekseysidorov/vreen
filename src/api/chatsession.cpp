@@ -68,7 +68,7 @@ void ChatSession::setActive(bool set)
     d->isActive = set;
 }
 
-void ChatSession::getHistory(int count, int offset)
+Reply *ChatSession::getHistory(int count, int offset)
 {
     Q_D(ChatSession);
     QVariantMap args;
@@ -78,6 +78,7 @@ void ChatSession::getHistory(int count, int offset)
 
     auto reply = d->contact->client()->request("messages.getHistory", args);
     connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_history_received(QVariant)));
+    return reply;
 }
 
 void ChatSessionPrivate::_q_history_received(const QVariant &response)

@@ -5,6 +5,7 @@
 
 namespace vk {
 
+class Reply;
 class ChatSessionPrivate;
 class VK_SHARED_EXPORT ChatSession : public QObject
 {
@@ -22,7 +23,7 @@ public:
     bool isActive() const;
     void setActive(bool set);
 public slots:
-    void getHistory(int count = 16, int offset = 0);
+    Reply *getHistory(int count = 16, int offset = 0);
 signals:
     void messageAdded(const vk::Message &message);
     void messageDeleted(int id);

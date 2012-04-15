@@ -17,7 +17,8 @@ public:
         Post,
         Photo,
         PhotoTag,
-        Note
+        Note,
+        Invalid = -1
     };
 
     NewsItem();

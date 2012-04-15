@@ -4,7 +4,7 @@
 
 namespace vk {
 
-static QStringList types = QStringList()
+const static QStringList types = QStringList()
         << "photo"
         << "posted_photo"
         << "video"

@@ -9,7 +9,7 @@ Reply::Reply(QNetworkReply *reply) :
 {
     setReply(reply);
 
-    qDebug() << "--Send reply:" << reply->url();
+    //qDebug() << "--Send reply:" << reply->url();
 }
 
 Reply::~Reply()
@@ -43,7 +43,6 @@ void Reply::setReply(QNetworkReply *reply)
     setParent(reply);
 
     connect(reply, SIGNAL(finished()), SLOT(_q_reply_finished()));
-    //qDebug() << "--Request: " << reply->url();
 }
 
 } // namespace vk

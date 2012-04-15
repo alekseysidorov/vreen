@@ -17,13 +17,12 @@ public:
     AttachmentList attachmentList;
 };
 
-const char *types[] = {
-    "post",
-    "photo",
-    "photo_tag",
-    "friend",
-    "note"
-};
+const static QStringList types = QStringList()
+        << "post"
+        << "photo"
+        << "photo_tag"
+        << "friend"
+        << "note";
 
 /*!
  * \brief The NewsItem class
@@ -66,7 +65,7 @@ NewsItem NewsItem::fromData(const QVariant &data)
 void NewsItem::setData(const QVariantMap &data)
 {
     d->data = data;
-    //d->attachmentList = Attachment::fromVariantList(d->data.take("attachments").toList());
+    d->attachmentList = Attachment::fromVariantList(d->data.take("attachments").toList());
 }
 
 QVariantMap NewsItem::data() const
@@ -86,12 +85,12 @@ void NewsItem::setAttachments(const AttachmentList &attachments)
 
 NewsItem::Type NewsItem::type() const
 {
-    return strToEnum<Type>(d->data.value("type").toString(), types);
+    return static_cast<Type>(types.indexOf(d->data.value("type").toString()));
 }
 
 void NewsItem::setType(NewsItem::Type type)
 {
-    d->data.insert("type", enumToStr(type, types));
+    d->data.insert("type", types.value(type));
 }
 
 int NewsItem::postId() const
