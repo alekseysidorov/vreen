@@ -8,6 +8,7 @@ namespace vk {
 typedef QList<int> IdList;
 
 QString VK_SHARED_EXPORT join(IdList ids);
+QString VK_SHARED_EXPORT toCamelCase(QString string);
 
 template <typename T>
 Q_INLINE_TEMPLATE T sender_cast(QObject *sender)
