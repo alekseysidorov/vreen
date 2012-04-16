@@ -24,7 +24,7 @@ public:
         auto list = response.toList();
         list.takeFirst();
         foreach (auto item, list) {
-            WallPost post(item.toMap(), contact->client());
+            auto post = WallPost::fromData(item, contact->client());
             emit q_func()->postAdded(post);
         }
     }

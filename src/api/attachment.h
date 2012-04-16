@@ -13,7 +13,7 @@ class VK_SHARED_EXPORT Attachment
 {
     Q_GADGET
     Q_ENUMS(Type)
-public:
+public:    
     enum Type {
         Photo,
         PostedPhoto,
@@ -28,6 +28,8 @@ public:
         Page,
         Other = -1
     };
+    typedef QList<Attachment> List;
+    typedef QMultiHash<Attachment::Type, Attachment> Hash;
 
     Attachment();
     Attachment(const Attachment &);
@@ -39,8 +41,9 @@ public:
     Type type() const;
 
     static Attachment fromData(const QVariant &data);
-    static QList<Attachment> fromVariantList(const QVariantList &list);
-    static QVariantList toList(const QList<Attachment> &list);
+    static List fromVariantList(const QVariantList &list);
+    static QVariantList toVariantList(const List &list);
+    static Hash toHash(const List &list);
 
     QVariant property(const QString &name, const QVariant &def = QVariant()) const;
     template<typename T>
@@ -54,13 +57,10 @@ private:
     QSharedDataPointer<AttachmentData> d;
 };
 
-typedef QList<Attachment> AttachmentList;
-typedef QMultiHash<Attachment::Type, Attachment> AttachmentHash;
-
 } // namespace vk
 
 Q_DECLARE_METATYPE(vk::Attachment)
-Q_DECLARE_METATYPE(vk::AttachmentList)
-Q_DECLARE_METATYPE(vk::AttachmentHash)
+Q_DECLARE_METATYPE(vk::Attachment::List)
+Q_DECLARE_METATYPE(vk::Attachment::Hash)
 
 #endif // VK_ATTACHMENT_H

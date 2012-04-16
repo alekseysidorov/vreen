@@ -88,7 +88,7 @@ unix:!symbian {
 }
 
 unix {
-    QMAKE_CXXFLAGS += -std=c++0x -fvisibility=hidden
+    QMAKE_CXXFLAGS += -std=c++0x -fvisibility=hidden -Wall -Wextra
 }
 
 #!isEmpty(MEEGO_VERSION_MAJOR) {

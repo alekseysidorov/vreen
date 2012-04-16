@@ -32,9 +32,9 @@ public:
 
     void setData(const QVariantMap &data);
     QVariantMap data() const;
-    AttachmentList attachments() const;
-    AttachmentList attachments(Attachment::Type type) const;
-    void setAttachments(const AttachmentList &attachmentList);
+    Attachment::List attachments() const;
+    Attachment::List attachments(Attachment::Type type) const;
+    void setAttachments(const Attachment::List &attachmentList);
     Type type() const;
     void setType(Type type);
     int postId() const;

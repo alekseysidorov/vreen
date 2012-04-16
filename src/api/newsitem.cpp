@@ -14,7 +14,7 @@ public:
         attachmentHash(o.attachmentHash)
     {}
     QVariantMap data;
-    AttachmentHash attachmentHash;
+    Attachment::Hash attachmentHash;
 };
 
 const static QStringList types = QStringList()
@@ -75,21 +75,19 @@ QVariantMap NewsItem::data() const
     return d->data;
 }
 
-AttachmentList NewsItem::attachments() const
+Attachment::List NewsItem::attachments() const
 {
     return d->attachmentHash.values();
 }
 
-AttachmentList NewsItem::attachments(Attachment::Type type) const
+Attachment::List NewsItem::attachments(Attachment::Type type) const
 {
     return d->attachmentHash.values(type);
 }
 
-void NewsItem::setAttachments(const AttachmentList &attachmentList)
+void NewsItem::setAttachments(const Attachment::List &attachmentList)
 {
-    d->attachmentHash.clear();
-    foreach (auto attachment, attachmentList)
-        d->attachmentHash.insert(attachment.type(), attachment);
+    d->attachmentHash = Attachment::toHash(attachmentList);
 }
 
 NewsItem::Type NewsItem::type() const

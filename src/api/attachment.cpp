@@ -92,20 +92,28 @@ Attachment Attachment::fromData(const QVariant &data)
     return Attachment(data.toMap());
 }
 
-QList<Attachment> Attachment::fromVariantList(const QVariantList &list)
+Attachment::List Attachment::fromVariantList(const QVariantList &list)
 {
-    AttachmentList attachments;
+    Attachment::List attachments;
     foreach (auto item, list)
         attachments.append(Attachment::fromData(item.toMap()));
     return attachments;
 }
 
-QVariantList Attachment::toList(const QList<Attachment> &list)
+QVariantList Attachment::toVariantList(const Attachment::List &list)
 {
     QVariantList variantList;
     foreach (auto item, list)
         variantList.append(item.data());
     return variantList;
+}
+
+Attachment::Hash Attachment::toHash(const Attachment::List &list)
+{
+    Hash hash;
+    foreach (auto attachment, list)
+        hash.insert(attachment.type(), attachment);
+    return hash;
 }
 
 QVariant Attachment::property(const QString &name, const QVariant &def) const

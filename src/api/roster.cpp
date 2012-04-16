@@ -2,6 +2,7 @@
 #include "longpoll.h"
 
 #include <QDebug>
+#include <QTimer>
 
 namespace vk {
 
@@ -38,7 +39,7 @@ void Roster::setUid(int uid)
     qDeleteAll(d->contactHash);
     d->owner = new Buddy(uid, d->client);
     d->owner->setType(Contact::UserType);
-    d->owner->update(QStringList() << VK_ALL_FIELDS); //TODO move!
+    QTimer::singleShot(2000, d->owner, SLOT(update())); //TODO move me
     emit uidChanged(uid);
     d->addContact(d->owner);
 }
