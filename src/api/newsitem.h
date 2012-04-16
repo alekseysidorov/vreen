@@ -11,6 +11,8 @@ class NewsItemData;
 
 class VK_SHARED_EXPORT NewsItem
 {
+    Q_GADGET
+    Q_ENUMS(Type)
 public:
 
     enum Type {

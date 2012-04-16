@@ -11,6 +11,8 @@ class AttachmentData;
 
 class VK_SHARED_EXPORT Attachment
 {
+    Q_GADGET
+    Q_ENUMS(Type)
 public:
     enum Type {
         Photo,
