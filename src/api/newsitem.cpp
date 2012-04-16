@@ -11,10 +11,10 @@ public:
     NewsItemData() : QSharedData() {}
     NewsItemData(const NewsItemData &o) : QSharedData(o),
         data(o.data),
-        attachmentList(o.attachmentList)
+        attachmentHash(o.attachmentHash)
     {}
     QVariantMap data;
-    AttachmentList attachmentList;
+    AttachmentHash attachmentHash;
 };
 
 const static QStringList types = QStringList()
@@ -65,7 +65,9 @@ NewsItem NewsItem::fromData(const QVariant &data)
 void NewsItem::setData(const QVariantMap &data)
 {
     d->data = data;
-    d->attachmentList = Attachment::fromVariantList(d->data.take("attachments").toList());
+    auto attachmentList = Attachment::fromVariantList(d->data.take("attachments").toList());
+    setAttachments(attachmentList);
+
 }
 
 QVariantMap NewsItem::data() const
@@ -75,12 +77,19 @@ QVariantMap NewsItem::data() const
 
 AttachmentList NewsItem::attachments() const
 {
-    return d->attachmentList;
+    return d->attachmentHash.values();
 }
 
-void NewsItem::setAttachments(const AttachmentList &attachments)
+AttachmentList NewsItem::attachments(Attachment::Type type) const
 {
-    d->attachmentList = attachments;
+    return d->attachmentHash.values(type);
+}
+
+void NewsItem::setAttachments(const AttachmentList &attachmentList)
+{
+    d->attachmentHash.clear();
+    foreach (auto attachment, attachmentList)
+        d->attachmentHash.insert(attachment.type(), attachment);
 }
 
 NewsItem::Type NewsItem::type() const

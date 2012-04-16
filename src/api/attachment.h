@@ -55,10 +55,12 @@ private:
 };
 
 typedef QList<Attachment> AttachmentList;
+typedef QMultiHash<Attachment::Type, Attachment> AttachmentHash;
 
 } // namespace vk
 
 Q_DECLARE_METATYPE(vk::Attachment)
 Q_DECLARE_METATYPE(vk::AttachmentList)
+Q_DECLARE_METATYPE(vk::AttachmentHash)
 
 #endif // VK_ATTACHMENT_H

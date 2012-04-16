@@ -26,12 +26,20 @@ public:
     Attachment::Type type;
     QVariantMap data;
 
-    static Attachment::Type getType(const QVariantMap &data)
+    static Attachment::Type getType(const QString &type)
     {
-        return static_cast<Attachment::Type>(types.indexOf(data.value("type").toString()));
+        return static_cast<Attachment::Type>(types.indexOf(type));
     }
 };
 
+/*!
+ * \brief The Attachment class
+ * Api reference: \link http://vk.com/developers.php?oid=-1&p=Описание_поля_attachments
+ */
+
+/*!
+ * \brief Attachment::Attachment
+ */
 Attachment::Attachment() : d(new AttachmentData)
 {
 }
@@ -58,8 +66,15 @@ Attachment::~Attachment()
 
 void Attachment::setData(const QVariantMap &data)
 {
-    d->data = data;
-    d->data.insert("type", d->type = AttachmentData::getType(data));
+    d->data.clear();
+    QString type = data.value("type").toString();
+
+    //move properties to top level
+    auto map = data.value(type).toMap();
+    for (auto it = map.constBegin(); it != map.constEnd(); it++)
+        d->data.insert(it.key(), it.value());
+    //convert type to enum
+    d->data.insert("type", d->type = AttachmentData::getType(type));
 }
 
 QVariantMap Attachment::data() const
