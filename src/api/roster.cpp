@@ -39,7 +39,7 @@ void Roster::setUid(int uid)
     qDeleteAll(d->contactHash);
     d->owner = new Buddy(uid, d->client);
     d->owner->setType(Contact::UserType);
-    QTimer::singleShot(2000, d->owner, SLOT(update())); //TODO move me
+    //QTimer::singleShot(2000, d->owner, SLOT(update())); //TODO move me
     emit uidChanged(uid);
     d->addContact(d->owner);
 }

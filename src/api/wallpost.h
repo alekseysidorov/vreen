@@ -31,7 +31,7 @@ public:
     int toId() const;
     void setDate(const QDateTime &date);
     QDateTime date() const;
-    Attachment::List attachments() const;
+    Attachment::Hash attachments() const;
     Attachment::List attachments(Attachment::Type type) const;
     void setAttachments(const Attachment::List &attachmentList);
 

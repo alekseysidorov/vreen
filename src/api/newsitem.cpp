@@ -75,9 +75,9 @@ QVariantMap NewsItem::data() const
     return d->data;
 }
 
-Attachment::List NewsItem::attachments() const
+Attachment::Hash NewsItem::attachments() const
 {
-    return d->attachmentHash.values();
+    return d->attachmentHash;
 }
 
 Attachment::List NewsItem::attachments(Attachment::Type type) const

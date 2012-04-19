@@ -116,6 +116,15 @@ Attachment::Hash Attachment::toHash(const Attachment::List &list)
     return hash;
 }
 
+QVariantMap Attachment::toVariantMap(const Attachment::Hash &hash)
+{
+    //FIXME i want to Qt5
+    QVariantMap map;
+    foreach (auto key, hash.keys())
+        map.insert(QString::number(key), toVariantList(hash.values(key)));
+    return map;
+}
+
 QVariant Attachment::property(const QString &name, const QVariant &def) const
 {
     return d->data.value(name, def);

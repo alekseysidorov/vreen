@@ -44,6 +44,7 @@ public:
     static List fromVariantList(const QVariantList &list);
     static QVariantList toVariantList(const List &list);
     static Hash toHash(const List &list);
+    static QVariantMap toVariantMap(const Hash &hash);
 
     QVariant property(const QString &name, const QVariant &def = QVariant()) const;
     template<typename T>

@@ -122,9 +122,9 @@ QDateTime WallPost::date() const
     return d->date;
 }
 
-Attachment::List WallPost::attachments() const
+Attachment::Hash WallPost::attachments() const
 {
-    return d->attachmentHash.values();
+    return d->attachmentHash;
 }
 
 Attachment::List WallPost::attachments(Attachment::Type type) const

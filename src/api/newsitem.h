@@ -32,7 +32,7 @@ public:
 
     void setData(const QVariantMap &data);
     QVariantMap data() const;
-    Attachment::List attachments() const;
+    Attachment::Hash attachments() const;
     Attachment::List attachments(Attachment::Type type) const;
     void setAttachments(const Attachment::List &attachmentList);
     Type type() const;
