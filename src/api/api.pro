@@ -34,7 +34,8 @@ SOURCES += client.cpp \
     audioitem.cpp \
     abstractlistmodel.cpp \
     newsitem.cpp \
-    attachment.cpp
+    attachment.cpp \
+    photomanager.cpp
 
 HEADERS += client.h \
     vk_global.h \
@@ -64,7 +65,8 @@ HEADERS += client.h \
     audioitem.h \
     abstractlistmodel.h \
     newsitem.h \
-    attachment.h
+    attachment.h \
+    photomanager.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

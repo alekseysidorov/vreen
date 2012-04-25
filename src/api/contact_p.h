@@ -14,7 +14,7 @@ class ContactPrivate
 public:
     ContactPrivate(Contact *q, int id, Client *client) : q_ptr(q),
         client(client), id(id), type(Contact::BuddyType),
-        sources(Contact::PhotoSizeBigRec),
+        sources(Contact::PhotoSizeBigRec + 1),
         preferedSize(Contact::PhotoSizeMediumRec)
     {
 
