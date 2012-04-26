@@ -48,6 +48,7 @@ class VK_SHARED_EXPORT Contact : public QObject
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(Type type READ type NOTIFY typeChanged)
     Q_PRIVATE_PROPERTY(Contact::d_func(), QString photoSource READ defaultSource NOTIFY photoSourceChanged)
+    Q_PRIVATE_PROPERTY(Contact::d_func(), QString photoSourceBig READ bigSource NOTIFY photoSourceChanged)
 
     Q_PRIVATE_PROPERTY(Contact::d_func(), QString _q_photo READ smallSource WRITE setSmallSource DESIGNABLE false)
     Q_PRIVATE_PROPERTY(Contact::d_func(), QString _q_photo_medium READ mediumSource WRITE setMediumSource DESIGNABLE false)
