@@ -122,7 +122,6 @@ void MessageListModel::addMessage(const Message &message)
     Q_D(MessageListModel);
     int index = findMessage(message.id());
     if (index != -1) {
-        //replaceMessage(index, message);
         return;
     }
 
