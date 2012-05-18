@@ -129,8 +129,8 @@ void MessageListModel::addMessage(const Message &message)
         return;
     }
 
-    index = lowerBound(d->messageList, message, Qt::AscendingOrder ? lessThanId
-                                                                   : moreThanId);
+    index = lowerBound(d->messageList, message, d->sortOrder == Qt::AscendingOrder ? lessThanId
+                                                                                   : moreThanId);
     insertMessage(index, message);
 }
 
