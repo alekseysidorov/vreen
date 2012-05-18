@@ -12,17 +12,21 @@ static bool lessThanId(const Message &a, const Message &b)
     return a.id() < b.id();
 }
 
+static bool moreThanId(const Message &a, const Message &b)
+{
+    return a.id() > b.id();
+}
+
 class MessageListModel;
 class MessageListModelPrivate
 {
     Q_DECLARE_PUBLIC(MessageListModel)
 public:
     MessageListModelPrivate(MessageListModel *q) : q_ptr(q),
-        lessThan(&lessThanId), sortOrder(Qt::DescendingOrder) {}
+        sortOrder(Qt::DescendingOrder) {}
     MessageListModel *q_ptr;
 
     MessageList messageList;
-    MessageListModel::MessageLessThan lessThan;
     Qt::SortOrder sortOrder;
 };
 
@@ -125,7 +129,8 @@ void MessageListModel::addMessage(const Message &message)
         return;
     }
 
-    index = bound(d->messageList, d->sortOrder, message, d->lessThan);
+    index = lowerBound(d->messageList, message, Qt::AscendingOrder ? lessThanId
+                                                                   : moreThanId);
     insertMessage(index, message);
 }
 
@@ -188,9 +193,9 @@ void MessageListModel::sort(int column, Qt::SortOrder order)
     Q_D(MessageListModel);
     Q_UNUSED(column);
     if (order == Qt::AscendingOrder)
-        qStableSort(d->messageList.begin(), d->messageList.end(), d->lessThan);
+        qStableSort(d->messageList.begin(), d->messageList.end(), lessThanId);
     else
-        qStableSort(d->messageList.end(), d->messageList.begin(), d->lessThan);
+        qStableSort(d->messageList.begin(), d->messageList.end(), moreThanId);
     emit dataChanged(createIndex(0, 0), createIndex(d->messageList.count(), 0));
 }
 

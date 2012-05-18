@@ -3,6 +3,8 @@
 #include "vk_global.h"
 #include <QStringList>
 
+#include <QDebug>
+
 namespace vk {
 
 typedef QList<int> IdList;
@@ -54,11 +56,11 @@ Q_INLINE_TEMPLATE QStringList flagsToStrList(int i, const char *(&strings)[N])
 }
 
 template<typename Container, typename T, typename LessThan>
-int bound(Container container, Qt::SortOrder order, const T &value, LessThan lessThan)
+int lowerBound(Container container, const T &value, LessThan lessThan)
 {
-    auto it = order == Qt::AscendingOrder ? qLowerBound(container.begin(), container.end(), value, lessThan)
-                                          : qUpperBound(container.end(), container.begin(), value, lessThan);
-    return it - container.begin();
+    auto it =  qLowerBound(container.begin(), container.end(), value, lessThan);
+    int index = it - container.begin();
+    return index;
 }
 
 } //namespace vk

@@ -13,7 +13,6 @@ class VK_SHARED_EXPORT MessageListModel : public QAbstractListModel
     Q_DECLARE_PRIVATE(MessageListModel)
     Q_PROPERTY(Qt::SortOrder sortOrder READ sortOrder WRITE setSortOrder NOTIFY sortOrderChanged)
 public:
-    typedef bool (*MessageLessThan)(const Message &a, const Message &b);
 
     enum Roles {
         SubjectRole = Qt::UserRole + 1,

@@ -106,10 +106,10 @@ void LongPollPrivate::_q_on_data_received(const QVariant &response)
         case LongPoll::MessageAdded: {
             Message::Flags flags(update.value(2).toInt());
             Message message(client);
-            int id = update.value(3).toInt();
+            int cid = update.value(3).toInt();
             message.setId(update.value(1).toInt());
             message.setFlags(flags);
-            auto contact = client->roster()->contact(id);
+            auto contact = client->roster()->contact(cid);
             if (flags & Message::FlagOutbox) {
                 message.setTo(contact);
                 message.setFrom(client->me());
