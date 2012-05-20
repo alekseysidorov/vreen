@@ -15,9 +15,6 @@ class VK_SHARED_EXPORT NewsFeed : public QObject
     Q_OBJECT
     Q_DECLARE_PRIVATE(NewsFeed)
     Q_ENUMS(Filter)
-
-    Q_PROPERTY(int offset READ offset WRITE setOffset NOTIFY offsetChanged)
-    Q_PROPERTY(int from READ from WRITE setFrom NOTIFY fromChanged)
 public:
 
     enum Filter {
@@ -32,19 +29,10 @@ public:
 
     NewsFeed(Client *client);
     virtual ~NewsFeed();
-    int offset() const;
-    int from() const;
-
-    void setOffset(int offset);
-    void setFrom(int from);
 public slots:
-    Reply *getLatestNews(Filters filters = FilterNone, quint8 count = 50);
+    Reply *getNews(Filters filters = FilterNone, quint8 count = 25, int offset = 0);
 signals:
     void newsAdded(const vk::NewsItem &item);
-    void offsetChanged(int arg);
-
-    void fromChanged(int arg);
-
 private:
     QScopedPointer<NewsFeedPrivate> d_ptr;
 
