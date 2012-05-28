@@ -66,4 +66,6 @@ protected:
 
 } // namespace vk
 
+Q_DECLARE_METATYPE(vk::Roster*)
+
 #endif // VK_ROSTER_H

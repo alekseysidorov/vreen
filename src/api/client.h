@@ -96,9 +96,7 @@ private:
 
 } // namespace vk
 
-Q_DECLARE_METATYPE(vk::Roster*)
 Q_DECLARE_METATYPE(vk::Client*)
-Q_DECLARE_METATYPE(vk::LongPoll*)
 Q_DECLARE_METATYPE(vk::Reply*)
 
 #endif // VK_CLIENT_H

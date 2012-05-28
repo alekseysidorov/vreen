@@ -60,4 +60,6 @@ protected:
 
 } // namespace vk
 
+Q_DECLARE_METATYPE(vk::LongPoll*)
+
 #endif // VK_LONGPOLL_H
