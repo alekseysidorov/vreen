@@ -68,6 +68,8 @@ HEADERS += client.h \
     attachment.h \
     photomanager.h
 
+PUBLIC_HEADERS = $$HEADERS
+
 symbian {
     MMP_RULES += EXPORTUNFROZEN
     TARGET.UID3 = 0xE7156367
@@ -78,13 +80,31 @@ symbian {
     DEPLOYMENT += addFiles
 }
 
+win32 {
+	CONFIG(debug, debug|release) {
+		TARGET = $$member(TARGET, 0)d
+	}
+} else macx {
+	CONFIG(debug, debug|release) {
+		TARGET = $$member(TARGET, 0)_debug
+	}
+}
+
 unix:!symbian {
     maemo5 {
         target.path = /opt/usr/lib
     } else:!isEmpty(MEEGO_VERSION_MAJOR) {
         target.path = /opt/nonameIM/lib
     } else {
-        target.path = /usr/lib
+		target.path = $$[QT_INSTALL_LIBS]
+
+		installHeaders.files = $$PUBLIC_HEADERS
+		installHeaders.path = $$[QT_INSTALL_HEADERS]/vk
+		INSTALLS += installHeaders
+
+		features.files = ../../features/vk.prf
+		features.path = $$[QT_INSTALL_DATA]/mkspecs/features
+		INSTALLS += features
     }
     INSTALLS += target
 }
@@ -92,17 +112,6 @@ unix:!symbian {
 unix {
     QMAKE_CXXFLAGS += -std=c++0x -fvisibility=hidden -Wall -Wextra
 }
-
-#!isEmpty(MEEGO_VERSION_MAJOR) {
-#    CONFIG += static
-#}
-
-#linux-g++ {
-#    QMAKE_CXXFLAGS += -std=c++0x
-#}
-#linux-clang {
-#    QMAKE_CXXFLAGS += -std=c++0x
-#}
 
 exists(../3rdparty/k8json) {
     include(../3rdparty/k8json/k8json.pri)

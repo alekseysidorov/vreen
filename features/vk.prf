@@ -1,0 +1,8 @@
+win32:CONFIG(debug, debug|release) {
+	LIBS += -lvk$${QT_LIBINFIX}d
+} else {
+	LIBS += -lvk$${QT_LIBINFIX}
+}
+INCLUDEPATH += $$[QT_INSTALL_HEADERS]/vk
+
+QT += network
