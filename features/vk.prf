@@ -1,8 +1,18 @@
+VK_LIBDIR = $$[QT_INSTALL_LIBS]
+VK_HEADERS = $$[QT_INSTALL_HEADERS]
+
+VK_HEADERS ~= s!/qt4*!!
+VK_LIBDIR  ~= s!/qt4*!!
+
+LIBS += -L$$VK_LIBDIR
+
 win32:CONFIG(debug, debug|release) {
-	LIBS += -lvk$${QT_LIBINFIX}d
+	LINKAGE += -lvk$${QT_LIBINFIX}d
 } else {
-	LIBS += -lvk$${QT_LIBINFIX}
+	LINKAGE += -lvk$${QT_LIBINFIX}
 }
-INCLUDEPATH += $$[QT_INSTALL_HEADERS]/vk
+INCLUDEPATH += $${VK_HEADERS}/vk
 
 QT += network
+LIBS += $$LINKAGE
+

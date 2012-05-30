@@ -69,6 +69,26 @@ HEADERS += client.h \
     photomanager.h
 
 PUBLIC_HEADERS = $$HEADERS
+    
+exists(../3rdparty/k8json) {
+    include(../3rdparty/k8json/k8json.pri)
+    DEFINES += K8JSON_INCLUDE_GENERATOR
+    DEFINES += K8JSON_INCLUDE_COMPLEX_GENERATOR
+} else {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += k8json
+}
+
+isEmpty( PREFIX ):INSTALL_PREFIX = /usr
+else:INSTALL_PREFIX = $${PREFIX}
+
+VK_INSTALL_HEADERS = $${INSTALL_PREFIX}/include
+contains(QMAKE_HOST.arch, x86_64) {
+	VK_INSTALL_LIBS = $${INSTALL_PREFIX}/lib64
+} else {
+	VK_INSTALL_LIBS = $${INSTALL_PREFIX}/lib
+}
+#VK_INSTALL_LIBS = $$[QT_INSTALL_LIBS]
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN
@@ -96,10 +116,10 @@ unix:!symbian {
     } else:!isEmpty(MEEGO_VERSION_MAJOR) {
         target.path = /opt/nonameIM/lib
     } else {
-		target.path = $$[QT_INSTALL_LIBS]
+		target.path = $$VK_INSTALL_LIBS
 
 		installHeaders.files = $$PUBLIC_HEADERS
-		installHeaders.path = $$[QT_INSTALL_HEADERS]/vk
+		installHeaders.path = $$VK_INSTALL_HEADERS/vk
 		INSTALLS += installHeaders
 
 		features.files = ../../features/vk.prf
@@ -111,13 +131,4 @@ unix:!symbian {
 
 unix {
     QMAKE_CXXFLAGS += -std=c++0x -fvisibility=hidden -Wall -Wextra
-}
-
-exists(../3rdparty/k8json) {
-    include(../3rdparty/k8json/k8json.pri)
-    DEFINES += K8JSON_INCLUDE_GENERATOR
-    DEFINES += K8JSON_INCLUDE_COMPLEX_GENERATOR
-} else {
-    CONFIG += link_pkgconfig
-    PKGCONFIG += k8json
 }
