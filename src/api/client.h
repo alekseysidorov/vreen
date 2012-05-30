@@ -80,6 +80,7 @@ signals:
     void passwordChanged(const QString &password);
     void connectionStateChanged(vk::Client::State state);
     void error(vk::Reply*);
+    void error(vk::Client::Error);
     void onlineStateChanged(bool state);
     void rosterChanged(vk::Roster*);
     void longPollChanged(vk::LongPoll*);
