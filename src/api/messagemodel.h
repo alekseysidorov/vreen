@@ -43,8 +43,9 @@ public slots:
     void setMessages(const vk::MessageList &messages);
     void clear();
 protected:
-	void replaceMessage(int index, const::vk::Message &message);
-    void insertMessage(int index, const::vk::Message &message);
+    virtual void doReplaceMessage(int index, const::vk::Message &message);
+    virtual void doInsertMessage(int index, const::vk::Message &message);
+    virtual void doRemoveMessage(int index);
     virtual void sort(int column, Qt::SortOrder order);
 protected slots:
     void replaceMessageFlags(int id, int mask, int userId = 0);

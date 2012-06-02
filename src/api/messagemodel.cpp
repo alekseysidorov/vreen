@@ -43,7 +43,7 @@ MessageListModel::MessageListModel(QObject *parent) :
     roles[ReadStateRole] = "unread";
     roles[DirectionRole] = "incoming";
     roles[DateRole] = "date";
-    roles[IdRole] = "id";
+    roles[IdRole] = "mid";
     setRoleNames(roles);
 }
 
@@ -131,7 +131,7 @@ void MessageListModel::addMessage(const Message &message)
 
     index = lowerBound(d->messageList, message, d->sortOrder == Qt::AscendingOrder ? lessThanId
                                                                                    : moreThanId);
-    insertMessage(index, message);
+    doInsertMessage(index, message);
 }
 
 void MessageListModel::removeMessage(const Message &message)
@@ -140,20 +140,14 @@ void MessageListModel::removeMessage(const Message &message)
     int index = d->messageList.indexOf(message);
     if (index == -1)
         return;
-    beginRemoveRows(QModelIndex(), index, index);
-    d->messageList.removeAt(index);
-    endRemoveRows();
+    doRemoveMessage(index);
 }
 
 void MessageListModel::removeMessage(int id)
 {
-    Q_D(MessageListModel);
     int index = findMessage(id);
-    if (index != -1) {
-        beginRemoveRows(QModelIndex(), index, index);
-        d->messageList.removeAt(index);
-        endRemoveRows();
-    }
+    if (index != -1)
+        doRemoveMessage(index);
 }
 
 void MessageListModel::setMessages(const MessageList &messages)
@@ -173,19 +167,27 @@ void MessageListModel::clear()
     endRemoveRows();
 }
 
-void MessageListModel::replaceMessage(int i, const Message &message)
+void MessageListModel::doReplaceMessage(int i, const Message &message)
 {
     auto index = createIndex(i, 0);
     d_func()->messageList[i] = message;
     emit dataChanged(index, index);
 }
 
-void MessageListModel::insertMessage(int index, const Message &message)
+void MessageListModel::doInsertMessage(int index, const Message &message)
 {
     Q_D(MessageListModel);
     beginInsertRows(QModelIndex(), index, index);
     d->messageList.insert(index, message);
     endInsertRows();
+}
+
+void MessageListModel::doRemoveMessage(int index)
+{
+    Q_D(MessageListModel);
+    beginRemoveRows(QModelIndex(), index, index);
+    d->messageList.removeAt(index);
+    endRemoveRows();
 }
 
 void MessageListModel::sort(int column, Qt::SortOrder order)
@@ -210,7 +212,7 @@ void MessageListModel::replaceMessageFlags(int id, int mask, int userId)
     Message::Flags flags = message.flags();
     flags |= static_cast<Message::Flags>(mask);
     message.setFlags(flags);
-    replaceMessage(index, message);
+    doReplaceMessage(index, message);
 }
 
 void MessageListModel::resetMessageFlags(int id, int mask, int userId)
@@ -224,7 +226,7 @@ void MessageListModel::resetMessageFlags(int id, int mask, int userId)
     auto flags = message.flags();
     flags &= ~mask;
     message.setFlags(flags);
-    replaceMessage(index, message);
+    doReplaceMessage(index, message);
 }
 
 } //namespace vk
