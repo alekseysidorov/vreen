@@ -34,6 +34,8 @@ public:
     Attachment::Hash attachments() const;
     Attachment::List attachments(Attachment::Type type) const;
     void setAttachments(const Attachment::List &attachmentList);
+    QVariantMap likes() const;
+    void setLikes(const QVariantMap &likes);
 
     Contact *from();
     Contact *to();

@@ -21,6 +21,7 @@ public:
         body(o.body),
         fromId(o.fromId),
         toId(o.toId),
+        likes(o.likes),
         attachmentHash(o.attachmentHash),
         data(o.data)
     {}
@@ -31,6 +32,7 @@ public:
     QDateTime date;
     int fromId;
     int toId;
+    QVariantMap likes;
     Attachment::Hash attachmentHash;
     QVariantMap data;
 };
@@ -48,6 +50,7 @@ WallPost::WallPost(QVariantMap data, Client *client) :
     d->fromId = data.take("from_id").toInt();
     d->toId = data.take("to_id").toInt();
     d->date = QDateTime::fromTime_t(data.take("date").toUInt());
+    d->likes = data.take("likes").toMap();
     setAttachments(Attachment::fromVariantList(data.take("attachments").toList()));
     d->data = data;
 }
@@ -137,6 +140,16 @@ void WallPost::setAttachments(const Attachment::List &list)
     d->attachmentHash = Attachment::toHash(list);
 }
 
+QVariantMap WallPost::likes() const
+{
+    return d->likes;
+}
+
+void WallPost::setLikes(const QVariantMap &likes)
+{
+    d->likes = likes;
+}
+
 Contact *WallPost::from()
 {
     return d->client->roster()->contact(d->fromId);
@@ -166,5 +179,6 @@ QStringList WallPost::dynamicPropertyNames() const
 {
     return d->data.keys();
 }
+
 
 } //namespace vk
