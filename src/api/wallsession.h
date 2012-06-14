@@ -30,9 +30,9 @@ public slots:
     Reply *deleteLike(int postId);
 signals:
     void postAdded(const vk::WallPost &post);
-    void postDeleted(int id);
-    void postLikeAdded(int id, int likesCount, int repostsCount, bool isRetweeted);
-    void postLikeDeleted(int id, int likesCount);
+    void postDeleted(int postId);
+    void postLikeAdded(int postId, int likesCount, int repostsCount, bool isRetweeted);
+    void postLikeDeleted(int postId, int likesCount);
 protected:
     QScopedPointer<WallSessionPrivate> d_ptr;
 

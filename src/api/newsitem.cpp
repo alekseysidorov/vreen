@@ -11,9 +11,13 @@ public:
     NewsItemData() : QSharedData() {}
     NewsItemData(const NewsItemData &o) : QSharedData(o),
         data(o.data),
+        likes(o.likes),
+        reposts(o.reposts),
         attachmentHash(o.attachmentHash)
     {}
     QVariantMap data;
+    QVariantMap likes;
+    QVariantMap reposts;
     Attachment::Hash attachmentHash;
 };
 
@@ -65,6 +69,8 @@ NewsItem NewsItem::fromData(const QVariant &data)
 void NewsItem::setData(const QVariantMap &data)
 {
     d->data = data;
+    d->likes = d->data.take("likes").toMap();
+    d->reposts = d->data.take("reposts").toMap();
     auto attachmentList = Attachment::fromVariantList(d->data.take("attachments").toList());
     setAttachments(attachmentList);
 
@@ -153,6 +159,26 @@ QStringList NewsItem::dynamicPropertyNames() const
 void NewsItem::setProperty(const QString &name, const QVariant &value)
 {
     d->data.insert(name, value);
+}
+
+QVariantMap NewsItem::likes() const
+{
+    return d->likes;
+}
+
+void NewsItem::setLikes(const QVariantMap &likes)
+{
+    d->likes = likes;
+}
+
+QVariantMap NewsItem::reposts() const
+{
+    return d->reposts;
+}
+
+void NewsItem::setReposts(const QVariantMap &reposts)
+{
+    d->reposts = reposts;
 }
 
 } // namespace vk

@@ -2,6 +2,7 @@
 #include "contact.h"
 #include "wallpost.h"
 #include "utils.h"
+#include "client_p.h"
 #include <QNetworkReply>
 
 namespace vk {
@@ -109,14 +110,11 @@ Contact *WallSession::contact() const
 vk::Reply *vk::WallSession::addLike(int postId, bool retweet, const QString &message)
 {
     Q_D(WallSession);
-    QVariantMap args;
-    args.insert("owner_id", QString::number(d->contact->id()));
-    args.insert("post_id", postId);
-    args.insert("repost", retweet);
-    args.insert("message", message);
-    auto reply = d->contact->client()->request("wall.addLike", args);
+    auto reply = d->contact->client()->addLike(d->contact->id(),
+                                               postId,
+                                               retweet,
+                                               message);
     connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_like_added(QVariant)));
-
     return reply;
 }
 
@@ -128,12 +126,8 @@ vk::Reply *vk::WallSession::addLike(int postId, bool retweet, const QString &mes
 Reply *WallSession::deleteLike(int postId)
 {
     Q_D(WallSession);
-    QVariantMap args;
-    args.insert("owner_id", QString::number(d->contact->id()));
-    args.insert("post_id", postId);
-    auto reply = d->contact->client()->request("wall.deleteLike", args);
+    auto reply = d->contact->client()->deleteLike(d->contact->id(), postId);
     connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_like_deleted(QVariant)));
-
     return reply;
 }
 

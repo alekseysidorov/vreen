@@ -68,7 +68,9 @@ public:
     Reply *request(const QUrl &);
     Reply *request(const QString &method, const QVariantMap &args = QVariantMap());
     Reply *sendMessage(const Message &message);
-    Reply *getLastDialogs(int count = 16, int previewLength = -1); //TODO move method
+    Reply *getLastDialogs(int count = 16, int previewLength = -1); //TODO move method    
+    Reply *addLike(int ownerId, int postId, bool retweet = false, const QString &message = QString());
+    Reply *deleteLike(int ownerId, int postId);
 
     Q_INVOKABLE Contact *me() const;
 public slots:

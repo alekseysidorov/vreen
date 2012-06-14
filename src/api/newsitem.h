@@ -45,6 +45,10 @@ public:
     void setBody(const QString &body);
     QDateTime date() const;
     void setDate(const QDateTime &date);
+    QVariantMap likes() const;
+    void setLikes(const QVariantMap &likes);
+    QVariantMap reposts() const;
+    void setReposts(const QVariantMap &reposts);
 
     QVariant property(const QString &name, const QVariant &def = QVariant()) const;
     template<typename T>

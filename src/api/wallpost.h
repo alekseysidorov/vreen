@@ -36,6 +36,8 @@ public:
     void setAttachments(const Attachment::List &attachmentList);
     QVariantMap likes() const;
     void setLikes(const QVariantMap &likes);
+    QVariantMap reposts() const;
+    void setReposts(const QVariantMap &reposts);
 
     Contact *from();
     Contact *to();
