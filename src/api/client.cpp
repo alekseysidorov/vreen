@@ -174,7 +174,7 @@ Reply *Client::addLike(int ownerId, int postId, bool retweet, const QString &mes
     QVariantMap args;
     args.insert("owner_id", ownerId);
     args.insert("post_id", postId);
-    args.insert("repost", retweet);
+    args.insert("repost", (int)retweet);
     args.insert("message", message);
     return request("wall.addLike", args);
 }
