@@ -93,7 +93,6 @@ public:
         subject = data.value("title").toString();
         body = data.value("body").toString();
         attachmentHash = Attachment::toHash(Attachment::fromVariantList(data.value("attachments").toList()));
-        qDebug() << "attachments" << attachmentHash.count();
         //TODO forward messages
         //TODO groupchats
     }

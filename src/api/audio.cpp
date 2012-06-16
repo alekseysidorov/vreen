@@ -35,7 +35,7 @@ public:
             audio.setLyricsId(map.value("lyrics_id").toInt());
             audio.setUrl(map.value("url").toUrl());
             emit q->audioItemReceived(audio);
-            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+            //qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         }
     }
 };
@@ -145,8 +145,7 @@ void AudioModel::replaceAudio(int i, const AudioItem &item)
 void AudioModel::sort(int, Qt::SortOrder order)
 {
     Q_D(AudioModel);
-    (order == Qt::AscendingOrder) ? qSort(d->itemList.begin(), d->itemList.end())
-                                  : qSort(d->itemList.end(), d->itemList.begin());
+    //TODO reverse support
     emit dataChanged(createIndex(0, 0), createIndex(count() - 1, 0));
 }
 
@@ -167,14 +166,15 @@ void AudioModel::addAudio(const AudioItem &item)
     if (findAudio(item.id()) != -1)
         return;
 
-    auto it = d->sortOrder == Qt::AscendingOrder ? qLowerBound(d->itemList.begin(),
-                                                               d->itemList.end(),
-                                                               item)
-                                                 : qLowerBound(d->itemList.end(),
-                                                               d->itemList.begin(),
-                                                               item);
-    auto index = it - d->itemList.begin();
-    insertAudio(index, item);
+    int index = d->itemList.count();
+    beginInsertRows(QModelIndex(), index, index);
+    d->itemList.append(item);
+    endInsertRows();
+
+    //int index = 0;
+    //if (d->sortOrder == Qt::AscendingOrder)
+    //    index = d->itemList.count();
+    //insertAudio(index, item);
 }
 
 void AudioModel::clear()

@@ -33,6 +33,7 @@ public slots:
     Reply *getNews(Filters filters = FilterNone, quint8 count = 25, int offset = 0);
 signals:
     void newsAdded(const vk::NewsItem &item);
+    void newsRecieved(const vk::NewsItemList &list);
 private:
     QScopedPointer<NewsFeedPrivate> d_ptr;
 

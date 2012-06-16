@@ -130,5 +130,9 @@ unix:!symbian {
 }
 
 unix {
-    QMAKE_CXXFLAGS += -std=c++0x -fvisibility=hidden -Wall -Wextra
+    QMAKE_CXXFLAGS += -std=c++0x \
+        -fvisibility=hidden \
+        -Wall -Wextra \
+        -Wno-cast-align \
+        -O2 -finline-functions
 }
