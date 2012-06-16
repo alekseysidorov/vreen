@@ -44,6 +44,7 @@ MessageListModel::MessageListModel(QObject *parent) :
     roles[DirectionRole] = "incoming";
     roles[DateRole] = "date";
     roles[IdRole] = "mid";
+    roles[AttachmentRole] = "attachments";
     setRoleNames(roles);
 }
 
@@ -95,6 +96,8 @@ QVariant MessageListModel::data(const QModelIndex &index, int role) const
         return message.date();
     case IdRole:
         return message.id();
+    case AttachmentRole:
+        return Attachment::toVariantMap(message.attachments());
     default:
         break;
     }

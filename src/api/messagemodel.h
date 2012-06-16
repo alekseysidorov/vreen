@@ -22,7 +22,8 @@ public:
         ReadStateRole,
         DirectionRole,
         DateRole,
-        IdRole
+        IdRole,
+        AttachmentRole
     };
 
     MessageListModel(QObject *parent = 0);

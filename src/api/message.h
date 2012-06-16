@@ -2,7 +2,7 @@
 #define VK_MESSAGE_H
 #include <QVariant>
 #include <QSharedData>
-#include "vk_global.h"
+#include "attachment.h"
 
 namespace vk {
 
@@ -62,6 +62,9 @@ public:
     Flags flags() const;
     void setFlag(Flag flag, bool set = true);
     bool testFlag(Flag flag) const;
+    Attachment::Hash attachments() const;
+    Attachment::List attachments(Attachment::Type type) const;
+    void setAttachments(const Attachment::List &attachmentList);
 protected:
     QSharedDataPointer<MessageData> d;
 };
