@@ -38,6 +38,7 @@ public:
         StateOffline,
         StateConnecting,
         StateOnline,
+		StateInvisible,
         StateInvalid
     };
     enum Error {

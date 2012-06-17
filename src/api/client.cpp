@@ -215,6 +215,7 @@ void ClientPrivate::_q_connection_state_changed(Client::State state)
         emit q->onlineStateChanged(false);
         break;
     case Client::StateOnline:
+	case Client::StateInvisible:
         emit q->onlineStateChanged(true);
         if (!roster.isNull()) {
             roster.data()->setUid(connection.data()->uid());
