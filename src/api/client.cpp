@@ -169,6 +169,25 @@ Reply *Client::getLastDialogs(int count, int previewLength)
     return request("messages.getDialogs", args);
 }
 
+Reply *Client::addLike(int ownerId, int postId, bool retweet, const QString &message)
+{
+    QVariantMap args;
+    args.insert("owner_id", ownerId);
+    args.insert("post_id", postId);
+    args.insert("repost", (int)retweet);
+    args.insert("message", message);
+    return request("wall.addLike", args);
+}
+
+Reply *Client::deleteLike(int ownerId, int postId)
+{
+    QVariantMap args;
+    args.insert("owner_id", ownerId);
+    args.insert("post_id", postId);
+    auto reply = request("wall.deleteLike", args);
+    return reply;
+}
+
 void Client::connectToHost()
 {
     Q_D(Client);

@@ -53,6 +53,7 @@ public:
         updateGroups(map.value("groups").toList());
 
         auto items = map.value("items").toList();
+        NewsItemList news;
         foreach (auto item, items) {
             auto newsItem = NewsItem::fromData(item);
             auto map = item.toMap();
@@ -66,9 +67,11 @@ public:
                 }
             }
             emit q->newsAdded(newsItem);
+            news.append(newsItem);
         }
         //q->setOffset(map.value("new_offset").toInt());
         //q->setFrom(map.value("new_from").toInt());
+        emit q->newsRecieved(news);
     }
 };
 

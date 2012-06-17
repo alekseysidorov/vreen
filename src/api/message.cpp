@@ -4,6 +4,7 @@
 #include "roster.h"
 #include <QDateTime>
 #include "dynamicpropertydata_p.h"
+#include <QDebug>
 
 namespace vk {
 
@@ -55,6 +56,7 @@ public:
     QWeakPointer<Contact> admin;
     qreal latitude;
     qreal longitude;
+    Attachment::Hash attachmentHash;
 
     void fill(const QVariantMap &data)
     {
@@ -90,8 +92,8 @@ public:
         setFlag(Message::FlagUnread, !data.value("read_state").toBool());
         subject = data.value("title").toString();
         body = data.value("body").toString();
+        attachmentHash = Attachment::toHash(Attachment::fromVariantList(data.value("attachments").toList()));
         //TODO forward messages
-        //TODO attachments
         //TODO groupchats
     }
     void setFlag(Message::Flag flag, bool set = true)
@@ -242,6 +244,21 @@ void Message::setFlag(Flag flag, bool set)
 bool Message::testFlag(Flag flag) const
 {
     return d->flags.testFlag(flag);
+}
+
+Attachment::Hash Message::attachments() const
+{
+    return d->attachmentHash;
+}
+
+Attachment::List Message::attachments(Attachment::Type type) const
+{
+    return d->attachmentHash.values(type);
+}
+
+void Message::setAttachments(const Attachment::List &attachmentList)
+{
+    d->attachmentHash = Attachment::toHash(attachmentList);
 }
 
 } // namespace vk

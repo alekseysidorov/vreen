@@ -1,6 +1,9 @@
 #include "wallsession.h"
 #include "contact.h"
 #include "wallpost.h"
+#include "utils.h"
+#include "client_p.h"
+#include <QNetworkReply>
 
 namespace vk {
 
@@ -27,6 +30,31 @@ public:
             auto post = WallPost::fromData(item, contact->client());
             emit q_func()->postAdded(post);
         }
+    }
+
+    void _q_like_added(const QVariant &response)
+    {
+        //FIXME error handler
+        auto reply = sender_cast<Reply*>(q_func()->sender());
+        auto url = reply->networkReply()->url();
+        int id = url.queryItemValue("post_id").toInt();
+        int retweet = url.queryItemValue("repost").toInt();
+        auto map = response.toMap();
+
+        emit q_func()->postLikeAdded(id,
+                                     map.value("likes").toInt(),
+                                     map.value("reposts").toInt(),
+                                     retweet);
+    }
+
+    void _q_like_deleted(const QVariant &response)
+    {
+        auto reply = sender_cast<Reply*>(q_func()->sender());
+        auto url = reply->networkReply()->url();
+        int id = url.queryItemValue("post_id").toInt();
+        int likesCount = response.toMap().value("likes").toInt();
+
+        emit q_func()->postLikeDeleted(id, likesCount);
     }
 };
 
@@ -71,6 +99,36 @@ Reply *WallSession::getPosts(WallSession::Filter filter, quint8 count, int offse
 Contact *WallSession::contact() const
 {
     return d_func()->contact;
+}
+
+/*!
+ * \brief vk::WallSession::like A wrapper on API method wall.addLike \link http://vk.com/developers.php?oid=-1&p=wall.addLike
+ * \param postId
+ * \param retweet
+ * \return
+ */
+vk::Reply *vk::WallSession::addLike(int postId, bool retweet, const QString &message)
+{
+    Q_D(WallSession);
+    auto reply = d->contact->client()->addLike(d->contact->id(),
+                                               postId,
+                                               retweet,
+                                               message);
+    connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_like_added(QVariant)));
+    return reply;
+}
+
+/*!
+ * \brief WallSession::deleteLike a wrapper on API method wall.deleteLike \link http://vk.com/developers.php?oid=-1&p=wall.deleteLike
+ * \param postId
+ * \return
+ */
+Reply *WallSession::deleteLike(int postId)
+{
+    Q_D(WallSession);
+    auto reply = d->contact->client()->deleteLike(d->contact->id(), postId);
+    connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_like_deleted(QVariant)));
+    return reply;
 }
 
 } // namespace vk
