@@ -46,6 +46,8 @@ public:
 	void setId(int id);
     QDateTime date() const;
     void setDate(const QDateTime &date);
+	int fromId() const;
+	int toId() const;
     Contact *from() const;
     void setFrom(Contact *from);
     Contact *to() const;

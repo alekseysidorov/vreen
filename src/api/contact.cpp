@@ -57,6 +57,7 @@ void Contact::setPhotoSource(const QString &source, Contact::PhotoSize size)
 Buddy::Buddy(int id, Client *client) :
     Contact(new BuddyPrivate(this, id, client))
 {
+	connect(this, SIGNAL(typeChanged(vk::Contact::Type)), SLOT(_q_type_changed(vk::Contact::Type)));
 }
 
 QString Buddy::firstName() const
@@ -133,7 +134,12 @@ Buddy::Status Buddy::status() const
 void Buddy::setStatus(Buddy::Status status)
 {
     d_func()->status = status;
-    emit statusChanged(status);
+	emit statusChanged(status);
+}
+
+bool Buddy::isFriend() const
+{
+	return d_func()->type == FriendType;
 }
 
 /*!

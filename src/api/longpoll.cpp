@@ -150,6 +150,11 @@ void LongPollPrivate::_q_on_data_received(const QVariant &response)
             emit q->contactStatusChanged(id, status);
             break;
         }
+		case LongPoll::ChatTyping: {
+			int user_id = qAbs(update.at(1).toInt());
+			int flags = update.at(2).toInt();
+			emit q->contactTyping(user_id);
+		}
         }
     }
 

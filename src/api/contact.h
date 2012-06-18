@@ -105,7 +105,7 @@ protected:
     private:
 
 class BuddyPrivate;
-class Buddy : public Contact
+class VK_SHARED_EXPORT Buddy : public Contact
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(Buddy)
@@ -117,6 +117,7 @@ class Buddy : public Contact
     Q_PROPERTY(QStringList tags READ tags NOTIFY tagsChanged)
     Q_PROPERTY(QString activity READ activity NOTIFY activityChanged)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
+	Q_PROPERTY(bool isFriend READ isFriend NOTIFY isFriendChanged)
 
     //private properties
     Q_PROPERTY(QString _q_first_name READ firstName WRITE setFirstName DESIGNABLE false)
@@ -137,7 +138,7 @@ public:
     QString activity() const;
     Status status() const;
     void setStatus(Status status);
-
+	bool isFriend() const;
 public slots:
     void update(const QStringList &fields = QStringList()
             << VK_ALL_FIELDS);
@@ -149,15 +150,18 @@ signals:
     void tagsChanged(const QStringList &tags);
     void activityChanged(const QString &activity);
     void statusChanged(Status);
+	void isFriendChanged(bool isFriend);
 protected:
     Buddy(int id, Client *client);
 
     friend class Roster;
     friend class RosterPrivate;
+
+	Q_PRIVATE_SLOT(d_func(), void _q_type_changed(vk::Contact::Type))
 };
 
 class GroupPrivate;
-class Group : public Contact
+class VK_SHARED_EXPORT Group : public Contact
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(Group)

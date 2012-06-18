@@ -22,7 +22,11 @@ public:
         MessageFlagsReseted = 3,
         MessageAdded		= 4,
         UserOnline          = 8,
-        UserOffline         = 9
+		UserOffline         = 9,
+		ChatTyping			= 61
+		//GroupChatTyping	= 62,
+		//UserCall			= 70
+
     };
 
     enum OfflineFlag {
