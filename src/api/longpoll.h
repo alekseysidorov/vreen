@@ -54,7 +54,7 @@ public slots:
     void setRunning(bool set);
 protected slots:
     void requestServer();
-	void requestData(const QByteArray &timeStamp = QByteArray());
+    void requestData(const QByteArray &timeStamp);
 protected:
     QScopedPointer<LongPollPrivate> d_ptr;
 
