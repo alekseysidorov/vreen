@@ -20,7 +20,7 @@ class LongPollPrivate
     Q_DECLARE_PUBLIC(LongPoll)
 public:
     LongPollPrivate(LongPoll *q) : q_ptr(q), client(0),
-        mode(LongPoll::ReceiveAttachments), pollInterval(1000), waitInterval(25) {}
+		mode(LongPoll::RecieveAttachments), pollInterval(1000), waitInterval(25), isRunning(false) {}
     LongPoll *q_ptr;
     Client *client;
 
@@ -28,9 +28,10 @@ public:
     int pollInterval;
     int waitInterval;
     QUrl dataUrl;
+	bool isRunning;
 
 	void _q_request_server_finished(const QVariant &response);
-	void _q_on_data_received(const QVariant &response);
+	void _q_on_data_recieved(const QVariant &response);
 };
 
 

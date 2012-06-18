@@ -35,8 +35,8 @@ public:
     Q_DECLARE_FLAGS(OfflineFlags, OfflineFlag)
 
     enum Mode {
-        NoRecevieAttachments = 0,
-        ReceiveAttachments = 2
+		NoRecieveAttachments = 0,
+		RecieveAttachments = 2
     };
 
     LongPoll(Client *client);
@@ -54,12 +54,12 @@ public slots:
     void setRunning(bool set);
 protected slots:
     void requestServer();
-    void requestData(const QByteArray &timeStamp);
+	void requestData(const QByteArray &timeStamp = QByteArray());
 protected:
     QScopedPointer<LongPollPrivate> d_ptr;
 
     Q_PRIVATE_SLOT(d_func(), void _q_request_server_finished(const QVariant &))
-    Q_PRIVATE_SLOT(d_func(), void _q_on_data_received(const QVariant &))
+	Q_PRIVATE_SLOT(d_func(), void _q_on_data_recieved(const QVariant &))
 };
 
 } // namespace vk
