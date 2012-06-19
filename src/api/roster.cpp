@@ -20,8 +20,8 @@ Roster::Roster(Client *client, int uid) :
 	d_ptr(new RosterPrivate(this, client))
 {
 	Q_D(Roster);
-	connect(d->client->longPoll(), SIGNAL(contactStatusChanged(int, vk::Buddy::Status)),
-			this, SLOT(_q_status_changed(int, vk::Buddy::Status)));
+	connect(d->client->longPoll(), SIGNAL(contactStatusChanged(int, vk::Contact::Status)),
+			this, SLOT(_q_status_changed(int, vk::Contact::Status)));
 	connect(d->client, SIGNAL(onlineStateChanged(bool)), SLOT(_q_online_changed(bool)));
 	if (uid)
 		setUid(uid);

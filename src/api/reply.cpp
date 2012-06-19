@@ -9,7 +9,7 @@ Reply::Reply(QNetworkReply *reply) :
 {
     setReply(reply);
 
-    qDebug() << "--Send reply:" << reply->url();
+	//qDebug() << "--Send reply:" << reply->url();
 }
 
 Reply::~Reply()

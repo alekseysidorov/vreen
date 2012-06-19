@@ -58,7 +58,12 @@ bool Client::isOnline() const
     if (auto c = connection())
         return c->connectionState() == Client::StateOnline;
     else
-        return Client::StateInvalid;
+		return Client::StateInvalid;
+}
+
+QString Client::activity() const
+{
+	return d_func()->activity;
 }
 
 Connection *Client::connection() const
@@ -112,8 +117,10 @@ LongPoll *Client::longPoll()
     Q_D(Client);
     if (d->longPoll.isNull()) {
         d->longPoll = new LongPoll(this);
+
         connect(this, SIGNAL(onlineStateChanged(bool)),
                 d->longPoll.data(), SLOT(setRunning(bool)));
+
         emit longPollChanged(d->longPoll.data());
     }
     return d->longPoll.data();
@@ -207,25 +214,100 @@ void Client::disconnectFromHost()
     connection()->disconnectFromHost();
 }
 
+
+void Client::setActivity(const QString &activity)
+{
+	Q_D(Client);
+	if (d->activity != activity) {
+		auto reply = setStatus(activity);
+		connect(reply, SIGNAL(resultReady(const QVariant &)), SLOT(_q_activity_update_finished(const QVariant &)));
+	}
+}
+
+bool Client::isInvisible() const
+{
+	return d_func()->isInvisible;
+}
+
+void Client::setInvisible(bool set)
+{
+	Q_D(Client);
+	if (d->isInvisible != set) {
+		d->isInvisible = set;
+		if (isOnline())
+			d->setOnlineUpdaterRunning(!set);
+		emit invisibleChanged(set);
+	}
+}
+
+Reply *Client::setStatus(const QString &text, int aid)
+{
+	QVariantMap args;
+	args.insert("text", text);
+	if (aid)
+		args.insert("audio", QString("%1_%2").arg(me()->id()).arg(aid));
+	return request("status.set", args);
+}
+
+void ClientPrivate::_q_activity_update_finished(const QVariant &response)
+{
+	Q_Q(Client);
+	auto reply = sender_cast<Reply*>(q->sender());
+	if (response.toInt() == 1) {
+		activity = reply->networkReply()->url().queryItemValue("text");
+		emit q->activityChanged(activity);
+	}
+}
+
+void ClientPrivate::_q_update_online()
+{
+	Q_Q(Client);
+	q->request("account.setOnline");
+}
+
+void ClientPrivate::setOnlineUpdaterRunning(bool set)
+{
+	if (set) {
+		onlineUpdater.start();
+		_q_update_online();
+	} else
+		onlineUpdater.stop();
+}
+
 void ClientPrivate::_q_connection_state_changed(Client::State state)
 {
-    Q_Q(Client);
-    switch (state) {
-    case Client::StateOffline:
-        emit q->onlineStateChanged(false);
-        break;
-    case Client::StateOnline:
-	case Client::StateInvisible:
-        emit q->onlineStateChanged(true);
-        if (!roster.isNull()) {
-            roster.data()->setUid(connection.data()->uid());
-            emit q->meChanged(roster.data()->owner());
-        }
-        break;
-    default:
-        break;
-    }
-    emit q->connectionStateChanged(state);
+	Q_Q(Client);
+	switch (state) {
+	case Client::StateOffline:
+		emit q->onlineStateChanged(false);
+		setOnlineUpdaterRunning(false);
+		break;
+	case Client::StateOnline:
+		emit q->onlineStateChanged(true);
+		if (!roster.isNull()) {
+			roster.data()->setUid(connection.data()->uid());
+			emit q->meChanged(roster.data()->owner());
+		}
+		if (!isInvisible)
+			setOnlineUpdaterRunning(true);
+		break;
+	default:
+		break;
+	}
+	emit q->connectionStateChanged(state);
+}
+
+void ClientPrivate::_q_error_received(int error)
+{
+	auto reply = sender_cast<Reply*>(q_func()->sender());
+	qDebug() << "Error received :" << error;
+	reply->deleteLater();
+}
+
+void ClientPrivate::_q_reply_finished(const QVariant &)
+{
+	auto reply = sender_cast<Reply*>(q_func()->sender());
+	reply->deleteLater();
 }
 
 } // namespace vk

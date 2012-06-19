@@ -29,6 +29,8 @@ class VK_SHARED_EXPORT Client : public QObject
     Q_PROPERTY(vk::Roster* roster READ roster NOTIFY rosterChanged DESIGNABLE true)
     Q_PROPERTY(vk::LongPoll* longPoll READ longPoll NOTIFY longPollChanged DESIGNABLE true)
     Q_PROPERTY(vk::Contact* me READ me NOTIFY meChanged DESIGNABLE true)
+	Q_PROPERTY(QString activity READ activity WRITE setActivity NOTIFY activityChanged DESIGNABLE true)
+	Q_PROPERTY(bool invisible READ isInvisible WRITE setInvisible NOTIFY invisibleChanged)
 
     Q_ENUMS(State)
     Q_ENUMS(Error)
@@ -38,7 +40,6 @@ public:
         StateOffline,
         StateConnecting,
         StateOnline,
-		StateInvisible,
         StateInvalid
     };
     enum Error {
@@ -57,6 +58,10 @@ public:
     void setLogin(const QString &login);
     State connectionState() const;
     bool isOnline() const;
+	QString activity() const;
+	void setActivity(const QString &activity);
+	bool isInvisible() const;
+	void setInvisible(bool set);
 
     Connection *connection() const;
     Connection *connection();
@@ -68,7 +73,8 @@ public:
 
     Reply *request(const QUrl &);
     Reply *request(const QString &method, const QVariantMap &args = QVariantMap());
-    Reply *sendMessage(const Message &message);
+
+	Reply *sendMessage(const Message &message);
     Reply *getLastDialogs(int count = 16, int previewLength = -1); //TODO move method    
     Reply *addLike(int ownerId, int postId, bool retweet = false, const QString &message = QString());
     Reply *deleteLike(int ownerId, int postId);
@@ -88,7 +94,10 @@ signals:
     void rosterChanged(vk::Roster*);
     void longPollChanged(vk::LongPoll*);
     void meChanged(vk::Contact *me);
+	void activityChanged(const QString &activity);
+	void invisibleChanged(bool set);
 protected:
+	Reply *setStatus(const QString &text, int aid = 0);
     QScopedPointer<ClientPrivate> d_ptr;
 
 private:
@@ -96,6 +105,8 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_connection_state_changed(vk::Client::State))
     Q_PRIVATE_SLOT(d_func(), void _q_error_received(int))
     Q_PRIVATE_SLOT(d_func(), void _q_reply_finished(const QVariant &))
+	Q_PRIVATE_SLOT(d_func(), void _q_activity_update_finished(const QVariant &))
+	Q_PRIVATE_SLOT(d_func(), void _q_update_online())
 };
 
 } // namespace vk

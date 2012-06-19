@@ -149,7 +149,7 @@ signals:
     void onlineChanged(bool isOnline);
     void tagsChanged(const QStringList &tags);
     void activityChanged(const QString &activity);
-    void statusChanged(Status);
+	void statusChanged(vk::Contact::Status);
 	void isFriendChanged(bool isFriend);
 protected:
     Buddy(int id, Client *client);

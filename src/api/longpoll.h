@@ -48,7 +48,7 @@ signals:
     void messageDeleted(int mid);
     void messageFlagsReplaced(int mid, int mask, int userId = 0);
     void messageFlagsReseted(int mid, int mask, int userId = 0);
-	void contactStatusChanged(int userId, vk::Buddy::Status status);
+	void contactStatusChanged(int userId, vk::Contact::Status status);
 	void contactTyping(int userId);
 public slots:
     void setRunning(bool set);
