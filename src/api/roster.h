@@ -61,7 +61,7 @@ protected:
 
     Q_PRIVATE_SLOT(d_func(), void _q_tags_received(const QVariant &response))
     Q_PRIVATE_SLOT(d_func(), void _q_friends_received(const QVariant &response))
-    Q_PRIVATE_SLOT(d_func(), void _q_status_changed(int userId, vk::Buddy::Status status))
+	Q_PRIVATE_SLOT(d_func(), void _q_status_changed(int userId, vk::Contact::Status status))
 	Q_PRIVATE_SLOT(d_func(), void _q_online_changed(bool))
 };
 

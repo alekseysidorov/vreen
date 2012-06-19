@@ -29,7 +29,7 @@ public:
 
     void _q_tags_received(const QVariant &response);
     void _q_friends_received(const QVariant &response);
-    void _q_status_changed(int userId, vk::Buddy::Status status);
+	void _q_status_changed(int userId, vk::Contact::Status status);
 	void _q_online_changed(bool);
 };
 
