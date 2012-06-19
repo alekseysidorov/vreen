@@ -24,6 +24,7 @@ public:
     void setActive(bool set);
 public slots:
     Reply *getHistory(int count = 16, int offset = 0);
+	Reply *sendMessage(const QString &body, const QString &subject = QString());
 signals:
     void messageAdded(const vk::Message &message);
     void messageDeleted(int id);

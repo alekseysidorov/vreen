@@ -78,7 +78,17 @@ Reply *ChatSession::getHistory(int count, int offset)
 
     auto reply = d->contact->client()->request("messages.getHistory", args);
     connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_history_received(QVariant)));
-    return reply;
+	return reply;
+}
+
+Reply *ChatSession::sendMessage(const QString &body, const QString &subject)
+{
+	Q_D(ChatSession);
+	Message message(d->contact->client());
+	message.setBody(body);
+	message.setSubject(subject);
+	message.setTo(d->contact);
+	return d->contact->client()->sendMessage(message);
 }
 
 void ChatSessionPrivate::_q_history_received(const QVariant &response)
