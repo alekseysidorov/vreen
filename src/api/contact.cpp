@@ -94,7 +94,7 @@ bool Buddy::isOnline() const
 void Buddy::setOnline(bool set)
 {
     Q_D(Buddy);
-    d->status = static_cast<decltype(d->status)>(set);
+	setStatus(static_cast<decltype(d->status)>(set));
     emit onlineChanged(set);
 }
 
@@ -133,8 +133,11 @@ Buddy::Status Buddy::status() const
 
 void Buddy::setStatus(Buddy::Status status)
 {
-    d_func()->status = status;
-	emit statusChanged(status);
+	Q_D(Buddy);
+	if (d->status != status) {
+		d_func()->status = status;
+		emit statusChanged(status);
+	}
 }
 
 bool Buddy::isFriend() const
