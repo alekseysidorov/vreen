@@ -57,7 +57,7 @@ void Contact::setPhotoSource(const QString &source, Contact::PhotoSize size)
 Buddy::Buddy(int id, Client *client) :
     Contact(new BuddyPrivate(this, id, client))
 {
-	connect(this, SIGNAL(typeChanged(vk::Contact::Type)), SLOT(_q_type_changed(vk::Contact::Type)));
+    connect(this, SIGNAL(typeChanged(vk::Contact::Type)), SLOT(_q_type_changed(vk::Contact::Type)));
 }
 
 QString Buddy::firstName() const
@@ -94,7 +94,7 @@ bool Buddy::isOnline() const
 void Buddy::setOnline(bool set)
 {
     Q_D(Buddy);
-	setStatus(static_cast<decltype(d->status)>(set));
+    setStatus(static_cast<decltype(d->status)>(set));
     emit onlineChanged(set);
 }
 
@@ -115,7 +115,7 @@ QStringList Buddy::tags() const
     Q_D(const Buddy);
     QStringList tags;
     foreach (auto data, d->tagIdList) {
-		int id = data.toInt() - 1;
+        int id = data.toInt() - 1;
         tags.append(d->client->roster()->tags().value(id, tr("Unknown tag id %1").arg(id)));
     }
     return tags;
@@ -133,16 +133,16 @@ Buddy::Status Buddy::status() const
 
 void Buddy::setStatus(Buddy::Status status)
 {
-	Q_D(Buddy);
-	if (d->status != status) {
-		d_func()->status = status;
-		emit statusChanged(status);
-	}
+    Q_D(Buddy);
+    if (d->status != status) {
+        d_func()->status = status;
+        emit statusChanged(status);
+    }
 }
 
 bool Buddy::isFriend() const
 {
-	return d_func()->type == FriendType;
+    return d_func()->type == FriendType;
 }
 
 /*!

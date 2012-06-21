@@ -100,8 +100,8 @@ protected:
 
 #define VK_CONTACT_TYPE(ContactType) \
     public: \
-        static Contact::Type staticType() { return ContactType; } \
-        virtual Contact::Type type() const { return staticType(); } \
+    static Contact::Type staticType() { return ContactType; } \
+    virtual Contact::Type type() const { return staticType(); } \
     private:
 
 class BuddyPrivate;
@@ -117,7 +117,7 @@ class VK_SHARED_EXPORT Buddy : public Contact
     Q_PROPERTY(QStringList tags READ tags NOTIFY tagsChanged)
     Q_PROPERTY(QString activity READ activity NOTIFY activityChanged)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
-	Q_PROPERTY(bool isFriend READ isFriend NOTIFY isFriendChanged)
+    Q_PROPERTY(bool isFriend READ isFriend NOTIFY isFriendChanged)
 
     //private properties
     Q_PROPERTY(QString _q_first_name READ firstName WRITE setFirstName DESIGNABLE false)
@@ -125,9 +125,9 @@ class VK_SHARED_EXPORT Buddy : public Contact
     Q_PROPERTY(bool _q_online READ isOnline WRITE setOnline DESIGNABLE false)
     Q_PRIVATE_PROPERTY(d_func(), QVariantList _q_lists READ lists WRITE setLists DESIGNABLE false)
     Q_PRIVATE_PROPERTY(d_func(), QString _q_activity READ getActivity WRITE setActivity DESIGNABLE false)
-public:
-    //TODO name case support maybe needed
-    QString firstName() const;
+    public:
+        //TODO name case support maybe needed
+        QString firstName() const;
     void setFirstName(const QString &firstName);
     QString lastName() const;
     void setLastName(const QString &lastName);
@@ -138,7 +138,7 @@ public:
     QString activity() const;
     Status status() const;
     void setStatus(Status status);
-	bool isFriend() const;
+    bool isFriend() const;
 public slots:
     void update(const QStringList &fields = QStringList()
             << VK_ALL_FIELDS);
@@ -149,15 +149,15 @@ signals:
     void onlineChanged(bool isOnline);
     void tagsChanged(const QStringList &tags);
     void activityChanged(const QString &activity);
-	void statusChanged(vk::Contact::Status);
-	void isFriendChanged(bool isFriend);
+    void statusChanged(vk::Contact::Status);
+    void isFriendChanged(bool isFriend);
 protected:
     Buddy(int id, Client *client);
 
     friend class Roster;
     friend class RosterPrivate;
 
-	Q_PRIVATE_SLOT(d_func(), void _q_type_changed(vk::Contact::Type))
+    Q_PRIVATE_SLOT(d_func(), void _q_type_changed(vk::Contact::Type))
 };
 
 class GroupPrivate;
@@ -168,8 +168,8 @@ class VK_SHARED_EXPORT Group : public Contact
     VK_CONTACT_TYPE(GroupType)
 
     Q_PROPERTY(QString _q_name READ name WRITE setName DESIGNABLE false)
-public:
-    virtual QString name() const;
+    public:
+        virtual QString name() const;
     void setName(const QString &name);
 protected:
     Group(int id, Client *client);
