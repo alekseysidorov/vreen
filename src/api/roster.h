@@ -47,7 +47,7 @@ public slots:
             );
 signals:
     void contactAdded(vk::Contact *contact);
-	void friendAdded(vk::Buddy *contact);
+    void friendAdded(vk::Buddy *contact);
     void contactRemoved(int id);
     void tagsChanged(const QStringList &);
     void syncFinished(bool success);
@@ -61,8 +61,8 @@ protected:
 
     Q_PRIVATE_SLOT(d_func(), void _q_tags_received(const QVariant &response))
     Q_PRIVATE_SLOT(d_func(), void _q_friends_received(const QVariant &response))
-	Q_PRIVATE_SLOT(d_func(), void _q_status_changed(int userId, vk::Contact::Status status))
-	Q_PRIVATE_SLOT(d_func(), void _q_online_changed(bool))
+    Q_PRIVATE_SLOT(d_func(), void _q_status_changed(int userId, vk::Contact::Status status))
+    Q_PRIVATE_SLOT(d_func(), void _q_online_changed(bool))
 };
 
 } // namespace vk

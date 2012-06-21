@@ -67,9 +67,9 @@ class BuddyPrivate : public ContactPrivate
 {
     Q_DECLARE_PUBLIC(Buddy)
 public:
-	BuddyPrivate(Contact *q, int id, Client *client) :
-		ContactPrivate(q, id, client)
-	{}
+    BuddyPrivate(Contact *q, int id, Client *client) :
+        ContactPrivate(q, id, client)
+    {}
     QString firstName;
     QString lastName;
     Buddy::Status status;
@@ -92,9 +92,9 @@ public:
         emit q_func()->activityChanged(now);
     }
 
-	void _q_type_changed(Contact::Type type) {
-		emit q_func()->isFriendChanged(type == Contact::FriendType);
-	}
+    void _q_type_changed(Contact::Type type) {
+        emit q_func()->isFriendChanged(type == Contact::FriendType);
+    }
 };
 
 class GroupPrivate : public ContactPrivate
