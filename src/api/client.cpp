@@ -58,7 +58,7 @@ bool Client::isOnline() const
     if (auto c = connection())
         return c->connectionState() == Client::StateOnline;
     else
-		return Client::StateInvalid;
+        return false;
 }
 
 QString Client::activity() const
@@ -131,15 +131,14 @@ Reply *Client::request(const QUrl &url)
     QNetworkRequest request(url);
     auto networkReply = connection()->get(request);
     auto reply = new Reply(networkReply);
-    connect(reply, SIGNAL(resultReady(const QVariant &)), SLOT(_q_reply_finished(const QVariant &)));
-    connect(reply, SIGNAL(error(int)), SLOT(_q_error_received(int)));
+    d_func()->processReply(reply);
     return reply;
 }
 
 Reply *Client::request(const QString &method, const QVariantMap &args)
 {
     auto reply = new Reply(connection()->request(method, args));
-    connect(reply, SIGNAL(resultReady(const QVariant &)), SLOT(_q_reply_finished(const QVariant &)));
+    d_func()->processReply(reply);
     return reply;
 }
 
@@ -262,7 +261,15 @@ void ClientPrivate::_q_activity_update_finished(const QVariant &response)
 void ClientPrivate::_q_update_online()
 {
 	Q_Q(Client);
-	q->request("account.setOnline");
+    q->request("account.setOnline");
+}
+
+void ClientPrivate::processReply(Reply *reply)
+{
+    Q_Q(Client);
+    q->connect(reply, SIGNAL(resultReady(const QVariant &)), q, SLOT(_q_reply_finished(const QVariant &)));
+    q->connect(reply, SIGNAL(error(int)), q, SLOT(_q_error_received(int)));
+    emit q->replyCreated(reply);
 }
 
 void ClientPrivate::setOnlineUpdaterRunning(bool set)

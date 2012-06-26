@@ -4,6 +4,7 @@
 #include "roster.h"
 #include "contact.h"
 #include <QDateTime>
+#include <QDebug>
 
 namespace vk {
 
@@ -44,6 +45,7 @@ LongPoll::Mode LongPoll::mode() const
 
 void LongPoll::setRunning(bool set)
 {
+    qDebug() << Q_FUNC_INFO << set;
 	Q_D(LongPoll);
 	if (set != d->isRunning) {
 		d->isRunning = set;
@@ -54,6 +56,7 @@ void LongPoll::setRunning(bool set)
 
 void LongPoll::requestServer()
 {
+    qDebug() << Q_FUNC_INFO;
 	Q_D(LongPoll);
 	auto reply = d->client->request("messages.getLongPollServer");
 	connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_request_server_finished(QVariant)));

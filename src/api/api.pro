@@ -74,6 +74,7 @@ exists(../3rdparty/k8json) {
     include(../3rdparty/k8json/k8json.pri)
     DEFINES += K8JSON_INCLUDE_GENERATOR
     DEFINES += K8JSON_INCLUDE_COMPLEX_GENERATOR
+    INCLUDEPATH += ../3rdparty
 } else {
     CONFIG += link_pkgconfig
     PKGCONFIG += k8json
