@@ -35,7 +35,8 @@ SOURCES += client.cpp \
     abstractlistmodel.cpp \
     newsitem.cpp \
     attachment.cpp \
-    photomanager.cpp
+    photomanager.cpp \
+    contentdownloader.cpp
 
 HEADERS += client.h \
     vk_global.h \
@@ -66,7 +67,8 @@ HEADERS += client.h \
     abstractlistmodel.h \
     newsitem.h \
     attachment.h \
-    photomanager.h
+    photomanager.h \
+    contentdownloader.h
 
 PUBLIC_HEADERS = $$HEADERS
     
@@ -74,6 +76,7 @@ exists(../3rdparty/k8json) {
     include(../3rdparty/k8json/k8json.pri)
     DEFINES += K8JSON_INCLUDE_GENERATOR
     DEFINES += K8JSON_INCLUDE_COMPLEX_GENERATOR
+    INCLUDEPATH += ../3rdparty
 } else {
     CONFIG += link_pkgconfig
     PKGCONFIG += k8json

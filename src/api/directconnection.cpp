@@ -42,7 +42,8 @@ static const ServerUrls serverUrls = {
 };
 
 DirectConnection::DirectConnection(QObject *parent) :
-    Connection(parent)
+    Connection(parent),
+    m_connectionState(Client::StateOffline)
 {
 }
 

@@ -20,7 +20,7 @@ class LongPollPrivate
     Q_DECLARE_PUBLIC(LongPoll)
 public:
     LongPollPrivate(LongPoll *q) : q_ptr(q), client(0),
-		mode(LongPoll::RecieveAttachments), pollInterval(1000), waitInterval(25), isRunning(false) {}
+		mode(LongPoll::RecieveAttachments), pollInterval(1500), waitInterval(25), isRunning(false) {}
     LongPoll *q_ptr;
     Client *client;
 

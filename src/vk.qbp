@@ -5,7 +5,7 @@ Product {
     type: "dynamiclibrary"
 
     cpp.includePaths: [
-        "3rdparty/k8json",
+        "3rdparty",
         "api"
     ]
     cpp.defines: [
@@ -24,7 +24,7 @@ Product {
     }
 
     Depends { name: "cpp" }
-    Depends { name: "Qt"; submodules: ["core", "network"] }
+    Depends { name: "Qt"; submodules: ["core", "network", "gui"] }
     Depends { name: "k8json"}
 
     files: [
@@ -80,6 +80,8 @@ Product {
         "api/wallpost.cpp",
         "api/wallpost.h",
         "api/wallsession.cpp",
-        "api/wallsession.h"
+        "api/wallsession.h",
+        "api/contentdownloader.cpp",
+        "api/contentdownloader.h"
     ]
 }

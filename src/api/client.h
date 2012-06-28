@@ -88,6 +88,7 @@ signals:
     void loginChanged(const QString &login);
     void passwordChanged(const QString &password);
     void connectionStateChanged(vk::Client::State state);
+    void replyCreated(vk::Reply*);
     void error(vk::Reply*);
     void error(vk::Client::Error);
     void onlineStateChanged(bool state);
