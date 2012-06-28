@@ -6,8 +6,6 @@
 
 QT       += network
 
-QT       -= gui
-
 TARGET = vkit
 TEMPLATE = lib
 
@@ -119,15 +117,15 @@ unix:!symbian {
     } else:!isEmpty(MEEGO_VERSION_MAJOR) {
         target.path = /opt/nonameIM/lib
     } else {
-		target.path = $$VK_INSTALL_LIBS
+        target.path = $$VK_INSTALL_LIBS
 
-		installHeaders.files = $$PUBLIC_HEADERS
-		installHeaders.path = $$VK_INSTALL_HEADERS/vk
-		INSTALLS += installHeaders
+        installHeaders.files = $$PUBLIC_HEADERS
+        installHeaders.path = $$VK_INSTALL_HEADERS/vk
+        INSTALLS += installHeaders
 
-		features.files = ../../features/vk.prf
-		features.path = $$[QT_INSTALL_DATA]/mkspecs/features
-		INSTALLS += features
+        features.files = ../../features/vk.prf
+        features.path = $$[QT_INSTALL_DATA]/mkspecs/features
+        INSTALLS += features
     }
     INSTALLS += target
 }
