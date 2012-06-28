@@ -70,7 +70,10 @@ void Roster::setUid(int uid)
 
 int Roster::uid() const
 {
-    return d_func()->owner->id();
+    Q_D(const Roster);
+    if (d->owner)
+        return d->owner->id();
+    return 0;
 }
 
 Contact *Roster::owner() const

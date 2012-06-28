@@ -65,6 +65,20 @@ static const ServerUrls serverUrls = {
     QUrl(QLatin1String("https://api.vk.com/oauth/token"))
 };
 
+static QByteArray paranoicEscape(const QByteArray &raw)
+{
+    static char hex[17] = "0123456789ABCDEF";
+    QByteArray escaped;
+    escaped.reserve(raw.size() * 3);
+    for (int i = 0; i < raw.size(); ++i) {
+        const quint8 c = static_cast<quint8>(raw[i]);
+        escaped += '%';
+        escaped += hex[c >> 4];
+        escaped += hex[c & 0x0f];
+    }
+    return escaped;
+}
+
 DirectConnection::DirectConnection(QObject *parent) :
     Connection(parent),
     m_connectionState(Client::StateOffline)
@@ -132,7 +146,7 @@ void DirectConnection::getToken(const QString &login, const QString &password)
     url.addEncodedQueryItem("scope", QByteArray::number(loginVars.scope));
 
     url.addQueryItem(QLatin1String("username"), login); //TODO use C++11 literals in suffix
-    url.addQueryItem(QLatin1String("password"), password);
+    url.addEncodedQueryItem("password", paranoicEscape(password.toUtf8()));
 
     QNetworkReply *reply = get(QNetworkRequest(url));
     connect(reply, SIGNAL(finished()), SLOT(getTokenFinished()));

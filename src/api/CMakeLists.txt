@@ -1,5 +1,5 @@
-project(vk)
-add_simple_library(vk
+project(vkit)
+add_simple_library(vkit
     SHARED CXX11
     DEFINE_SYMBOL VK_LIBRARY
     DEFINES "K8JSON_INCLUDE_GENERATOR;K8JSON_INCLUDE_COMPLEX_GENERATOR"
