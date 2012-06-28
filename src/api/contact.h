@@ -92,7 +92,7 @@ public:
     void setPhotoSource(const QString &source, PhotoSize size = PhotoSizeSmall);
 signals:
     void nameChanged(const QString &name);
-    void photoSourceChanged(const QString &source, PhotoSize);
+	void photoSourceChanged(const QString &source, vk::Contact::PhotoSize);
     void typeChanged(vk::Contact::Type);
 protected:
     QScopedPointer<ContactPrivate> d_ptr;
