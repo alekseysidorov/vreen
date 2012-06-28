@@ -8,7 +8,7 @@ QT       += network
 
 QT       -= gui
 
-TARGET = vk
+TARGET = vkit
 TEMPLATE = lib
 
 DEFINES += VK_LIBRARY
@@ -98,7 +98,7 @@ symbian {
     TARGET.UID3 = 0xE7156367
     TARGET.CAPABILITY = 
     TARGET.EPOCALLOWDLLDATA = 1
-    addFiles.sources = api.dll
+    addFiles.sources = vkit.dll
     addFiles.path = !:/sys/bin
     DEPLOYMENT += addFiles
 }

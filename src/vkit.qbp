@@ -1,7 +1,7 @@
 import qbs.base 1.0
 
 Product {
-    name: "vk"
+    name: "vkit"
     type: "dynamiclibrary"
 
     cpp.includePaths: [

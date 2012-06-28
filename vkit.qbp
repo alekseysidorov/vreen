@@ -4,6 +4,6 @@ Project {
     moduleSearchPaths: "qbs"
     references: [
         "src/k8json.qbp",
-        "src/vk.qbp"
+        "src/vkit.qbp"
     ]
 }
