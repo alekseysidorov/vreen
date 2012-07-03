@@ -26,9 +26,9 @@ set(CMAKE_LIBVK_VERSION_STRING "${CMAKE_LIBVK_VERSION_MAJOR}.${CMAKE_LIBVK_VERSI
 #add pkgconfig file
 set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR})
 configure_file(vkit.pc.cmake
-	${CMAKE_CURRENT_BINARY_DIR}/vkit.pc
+    ${CMAKE_CURRENT_BINARY_DIR}/vkit.pc
 )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/vkit.pc
-	DESTINATION ${LIB_DESTINATION}/pkgconfig
+    DESTINATION ${LIB_DESTINATION}/pkgconfig
 )
 add_subdirectory(src)

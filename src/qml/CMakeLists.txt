@@ -1,0 +1,12 @@
+set(QT_USE_QTDECLARATIVE true)
+set(VKIT_IMPORTS_DIR "" CACHE INTERNAL "")
+
+add_qml_module(vkitplugin
+    CXX11
+    URI com.vk.api
+    QML_DIR qmldir
+    SOURCE_DIR src
+    LIBRARIES vkit ${QT_QTDECLARATIVE_LIBRARY}
+    INCLUDES ../api ${QT_QTDECLARATIVE_INCLUDE_DIR}
+    IMPORTS_DIR ${VKIT_IMPORTS_DIR}
+)
