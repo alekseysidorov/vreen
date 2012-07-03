@@ -1,5 +1,5 @@
 set(QT_USE_QTDECLARATIVE true)
-set(VKIT_IMPORTS_DIR "" CACHE INTERNAL "")
+set(VKIT_IMPORTS_DIR "${VKIT_IMPORTS_DIR}" CACHE INTERNAL "")
 
 add_qml_module(vkitplugin
     CXX11
