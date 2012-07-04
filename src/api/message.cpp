@@ -61,7 +61,8 @@ public:
 		userCount(o.userCount),
 		admin(o.admin),
 		latitude(o.latitude),
-		longitude(o.longitude)
+		longitude(o.longitude),
+		attachmentHash(o.attachmentHash)
 	{}
 	~MessageData() {}
 

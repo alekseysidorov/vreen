@@ -9,7 +9,8 @@
 #include <QDebug>
 
 CommentsModel::CommentsModel(QObject *parent) :
-    QAbstractListModel(parent)
+	QAbstractListModel(parent),
+	m_postId(0)
 {
     auto roles = roleNames();
     roles[BodyRole] = "body";

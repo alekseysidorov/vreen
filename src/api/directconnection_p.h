@@ -31,12 +31,6 @@
 
 namespace vk {
 
-struct AccessToken {
-    QByteArray accessToken;
-    int expireTime;
-    int uid;
-};
-
 class DirectConnection : public Connection
 {
     Q_OBJECT
@@ -60,6 +54,12 @@ protected slots:
     void onReplyError(QNetworkReply::NetworkError error);
 private:
     Client::State m_connectionState;
+	struct AccessToken {
+		AccessToken() {}
+		QByteArray accessToken;
+		int expireTime;
+		int uid;
+	};
     AccessToken m_token;
 };
 

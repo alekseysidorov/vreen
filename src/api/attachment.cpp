@@ -46,6 +46,7 @@ public:
     AttachmentData() : QSharedData(),
         type(Attachment::Other) {}
     AttachmentData(const AttachmentData &o) : QSharedData(o),
+		type(o.type),
         data(o.data) {}
     Attachment::Type type;
     QVariantMap data;

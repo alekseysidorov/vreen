@@ -45,6 +45,7 @@ public:
         body(o.body),
         fromId(o.fromId),
         toId(o.toId),
+		date(o.date),
         likes(o.likes),
         reposts(o.reposts),
         attachmentHash(o.attachmentHash),
