@@ -30,7 +30,7 @@
 #include "clientimpl.h"
 #include <roster.h>
 #include <contact.h>
-#include "contactsmodel.h"
+#include "buddymodel.h"
 #include "dialogsmodel.h"
 #include "chatmodel.h"
 #include "wallmodel.h"
@@ -50,7 +50,7 @@ public:
         Q_ASSERT(uri == QLatin1String("com.vk.api"));
 
         qmlRegisterType<Client>("com.vk.api", 1, 0, "Client");
-        qmlRegisterType<ContactsModel>("com.vk.api", 1, 0, "ContactsModel");
+        qmlRegisterType<BuddyModel>("com.vk.api", 1, 0, "BuddyModel");
         qmlRegisterType<DialogsModel>("com.vk.api", 1, 0, "DialogsModel");
         qmlRegisterType<ChatModel>("com.vk.api", 1, 0, "ChatModel");
         qmlRegisterType<WallModel>("com.vk.api", 1, 0, "WallModel");

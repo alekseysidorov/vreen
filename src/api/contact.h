@@ -98,9 +98,10 @@ public:
     };
 
     enum Status {
-        Offline,
         Online,
-        Away
+        Away,
+        Offline,
+        Unknown
     };
 
     Contact(int id, Client *client);
@@ -116,7 +117,7 @@ public:
     void setPhotoSource(const QString &source, PhotoSize size = PhotoSizeSmall);
 signals:
     void nameChanged(const QString &name);
-	void photoSourceChanged(const QString &source, vk::Contact::PhotoSize);
+    void photoSourceChanged(const QString &source, vk::Contact::PhotoSize);
     void typeChanged(vk::Contact::Type);
 protected:
     QScopedPointer<ContactPrivate> d_ptr;
@@ -149,9 +150,9 @@ class VK_SHARED_EXPORT Buddy : public Contact
     Q_PROPERTY(bool _q_online READ isOnline WRITE setOnline DESIGNABLE false)
     Q_PRIVATE_PROPERTY(d_func(), QVariantList _q_lists READ lists WRITE setLists DESIGNABLE false)
     Q_PRIVATE_PROPERTY(d_func(), QString _q_activity READ getActivity WRITE setActivity DESIGNABLE false)
-    public:
-        //TODO name case support maybe needed
-        QString firstName() const;
+public:
+    //TODO name case support maybe needed
+    QString firstName() const;
     void setFirstName(const QString &firstName);
     QString lastName() const;
     void setLastName(const QString &lastName);
@@ -221,6 +222,8 @@ Q_INLINE_TEMPLATE T contact_cast(Contact *contact)
 } // namespace vk
 
 Q_DECLARE_METATYPE(vk::Contact*)
+Q_DECLARE_METATYPE(vk::Buddy*)
+Q_DECLARE_METATYPE(vk::Group*)
 
 #endif // VK_USER_H
 

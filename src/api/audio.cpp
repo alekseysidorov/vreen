@@ -59,7 +59,7 @@ public:
             audio.setLyricsId(map.value("lyrics_id").toInt());
             audio.setUrl(map.value("url").toUrl());
             emit q->audioItemReceived(audio);
-            //qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         }
     }
 };
