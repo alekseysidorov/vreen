@@ -53,8 +53,8 @@ public:
             auto map = item.toMap();
             auto roster = client->roster();
             int uid = map.value("uid").toInt();
-            auto contact = roster->contact(uid);
-            Roster::fillContact(contact, map);
+            auto contact = roster->buddy(uid);
+            Contact::fillContact(contact, map);
         }
     }
 
@@ -64,8 +64,8 @@ public:
             auto map = item.toMap();
             auto roster = client->roster();
             int gid = -map.value("gid").toInt();
-            auto contact = roster->contact(gid, Contact::GroupType);
-            Roster::fillContact(contact, map);
+            auto contact = roster->buddy(gid); //FIXME
+            Contact::fillContact(contact, map);
         }
     }
 

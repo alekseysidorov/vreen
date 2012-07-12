@@ -82,7 +82,7 @@ QVariant CommentsModel::data(const QModelIndex &index, int role) const
         break;
     case FromRole: {
         int source = comment.value("uid").toInt();
-        return qVariantFromValue(roster->contact(source));
+        return qVariantFromValue(roster->buddy(source));
     }
     case DateRole:
         return QDateTime::fromTime_t(comment.value("date").toUInt());

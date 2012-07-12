@@ -30,7 +30,7 @@
 
 namespace vk {
 
-typedef QHash<int, Contact*> ContactHash;
+typedef QHash<int, Buddy*> BuddyHash;
 
 class Roster;
 class RosterPrivate
@@ -42,14 +42,14 @@ public:
     {}
     Roster *q_ptr;
     Client *client;
-    ContactHash contactHash;
+    BuddyHash buddyHash;
     Buddy *owner;
     QStringList tags;
 
     void getTags();
     void getOnline();
     void getFriends(const QVariantMap &args = QVariantMap());
-    void addContact(Contact *contact);
+    void addBuddy(Buddy *contact);
 
     void _q_tags_received(const QVariant &response);
     void _q_friends_received(const QVariant &response);

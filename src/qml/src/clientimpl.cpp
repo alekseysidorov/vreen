@@ -59,7 +59,7 @@ QObject *Client::request(const QString &method, const QVariantMap &args)
 
 vk::Contact *Client::contact(int id)
 {
-    return roster()->contact(id);
+    return roster()->buddy(id);
 }
 
 void Client::onOnlineStateChanged(bool isOnline)
@@ -88,19 +88,19 @@ void Client::onMessageAdded(const vk::Message &msg)
 
 void Client::onReplyCreated(vk::Reply *reply)
 {
-    //qDebug() << "--SendReply:" << reply->networkReply()->url();
+    qDebug() << "--SendReply:" << reply->networkReply()->url();
     connect(reply, SIGNAL(resultReady(QVariant)),SLOT(onReplyFinished(QVariant)));
 }
 
 void Client::onReplyFinished(const QVariant &)
 {
     vk::Reply *reply = vk::sender_cast<vk::Reply*>(sender());
-    //qDebug() << "--Reply finished" << reply->networkReply()->url().encodedPath();
+    qDebug() << "--Reply finished" << reply->networkReply()->url().encodedPath();
     //qDebug() << "--data" << reply->response();
 }
 
 void Client::onReplyError(vk::Reply *reply)
 {
-    //qDebug() << "--Error" << reply->response();
+    qDebug() << "--Error" << reply->response();
 }
 

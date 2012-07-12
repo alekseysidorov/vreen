@@ -49,13 +49,6 @@ Contact::Type Contact::type()
     return d_func()->type;
 }
 
-void Contact::setType(Contact::Type type)
-{
-    Q_D(Contact);
-    d->type = type;
-    emit typeChanged(type);
-}
-
 int Contact::id() const
 {
     return d_func()->id;
@@ -78,10 +71,18 @@ void Contact::setPhotoSource(const QString &source, Contact::PhotoSize size)
     emit photoSourceChanged(source, size);
 }
 
+void Contact::fillContact(Contact *contact, const QVariantMap &data)
+{
+    auto it = data.constBegin();
+    for (; it != data.constEnd(); it++) {
+        QByteArray property = "_q_" + it.key().toLatin1();
+        contact->setProperty(property.data(), it.value());
+    }
+}
+
 Buddy::Buddy(int id, Client *client) :
     Contact(new BuddyPrivate(this, id, client))
 {
-    connect(this, SIGNAL(typeChanged(vk::Contact::Type)), SLOT(_q_type_changed(vk::Contact::Type)));
 }
 
 QString Buddy::firstName() const
@@ -89,12 +90,14 @@ QString Buddy::firstName() const
     return d_func()->firstName;
 }
 
-void Buddy::setFirstName(const QString &firtName)
+void Buddy::setFirstName(const QString &firstName)
 {
     Q_D(Buddy);
-    d->firstName = firtName;
-    emit firstNameChanged(firtName);
-    emit nameChanged(name());
+    if (d->firstName != firstName) {
+        d->firstName = firstName;
+        emit firstNameChanged(firstName);
+        emit nameChanged(name());
+    }
 }
 
 QString Buddy::lastName() const
@@ -105,9 +108,11 @@ QString Buddy::lastName() const
 void Buddy::setLastName(const QString &lastName)
 {
     Q_D(Buddy);
-    d->lastName = lastName;
-    emit lastNameChanged(lastName);
-    emit nameChanged(name());
+    if (d->lastName != lastName) {
+        d->lastName = lastName;
+        emit lastNameChanged(lastName);
+        emit nameChanged(name());
+    }
 }
 
 bool Buddy::isOnline() const
@@ -129,6 +134,8 @@ QString Buddy::name() const
         return tr("id%1").arg(id());
     else if (d->lastName.isEmpty())
         return d->firstName;
+    else if (d->firstName.isEmpty())
+        return d->lastName;
     else
         return d->firstName + ' ' + d->lastName;
 
@@ -166,7 +173,16 @@ void Buddy::setStatus(Buddy::Status status)
 
 bool Buddy::isFriend() const
 {
-    return d_func()->type == FriendType;
+    return d_func()->isFriend;
+}
+
+void Buddy::setIsFriend(bool set)
+{
+    Q_D(Buddy);
+    if (d->isFriend != set) {
+        d->isFriend = set;
+        emit isFriendChanged(set);
+    }
 }
 
 /*!
