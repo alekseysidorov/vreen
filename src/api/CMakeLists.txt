@@ -1,4 +1,3 @@
-project(vkit)
 add_simple_library(vkit
     SHARED CXX11
     DEFINE_SYMBOL VK_LIBRARY
@@ -7,5 +6,6 @@ add_simple_library(vkit
     SOVERSION ${CMAKE_LIBVK_VERSION_MAJOR}
     LIBRARIES ${K8JSON_LIBRARIES}
     INCLUDES ${K8JSON_INCLUDE_DIRS}
+    INCLUDE_DIR vk
 )
- 
+
