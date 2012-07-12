@@ -92,13 +92,17 @@ class BuddyPrivate : public ContactPrivate
     Q_DECLARE_PUBLIC(Buddy)
 public:
     BuddyPrivate(Contact *q, int id, Client *client) :
-        ContactPrivate(q, id, client)
-    {}
+        ContactPrivate(q, id, client),
+        isFriend(false)
+    {
+        type = Contact::BuddyType;
+    }
     QString firstName;
     QString lastName;
     Buddy::Status status;
     QVariantList tagIdList;
     QString activity;
+    bool isFriend;
 
     QVariantList lists() const { return QVariantList(); }
     void setLists(const QVariantList &list)
@@ -114,10 +118,6 @@ public:
     {
         activity = now;
         emit q_func()->activityChanged(now);
-    }
-
-    void _q_type_changed(Contact::Type type) {
-        emit q_func()->isFriendChanged(type == Contact::FriendType);
     }
 };
 

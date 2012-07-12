@@ -43,9 +43,9 @@ public:
         client(o.client),
         id(o.id),
         body(o.body),
+        date(o.date),
         fromId(o.fromId),
         toId(o.toId),
-		date(o.date),
         likes(o.likes),
         reposts(o.reposts),
         attachmentHash(o.attachmentHash),
@@ -180,12 +180,12 @@ void WallPost::setLikes(const QVariantMap &likes)
 
 Contact *WallPost::from()
 {
-    return d->client->roster()->contact(d->fromId);
+    return d->client->roster()->buddy(d->fromId);
 }
 
 Contact *WallPost::to()
 {
-    return d->client->roster()->contact(d->toId);
+    return d->client->roster()->buddy(d->toId);
 }
 
 WallPost WallPost::fromData(const QVariant data, Client *client)

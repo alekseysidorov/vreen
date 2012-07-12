@@ -59,9 +59,9 @@ private Q_SLOTS:
         roster->sync();
         loop.exec();
 
-        QCOMPARE(roster->contacts().count() > 0, true);
+        QCOMPARE(roster->buddies().count() > 0, true);
 
-        foreach (vk::Contact *contact, roster->contacts()) {
+        foreach (vk::Contact *contact, roster->buddies()) {
             qDebug() << contact->name() << ":" << "\n";
             const QMetaObject *meta = contact->metaObject();
             for (int index = 0; index != meta->propertyCount(); index++) {

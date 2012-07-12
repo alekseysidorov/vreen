@@ -61,11 +61,10 @@ void Roster::setUid(int uid)
     Q_D(Roster);
     if (d->owner && uid == d->owner->id())
         return;
-    qDeleteAll(d->contactHash);
+    qDeleteAll(d->buddyHash);
     d->owner = new Buddy(uid, d->client);
-    d->owner->setType(Contact::UserType);
     emit uidChanged(uid);
-    d->addContact(d->owner);
+    d->addBuddy(d->owner);
 }
 
 int Roster::uid() const
@@ -76,43 +75,42 @@ int Roster::uid() const
     return 0;
 }
 
-Contact *Roster::owner() const
+Buddy *Roster::owner() const
 {
     return d_func()->owner;
 }
 
-Contact *Roster::contact(int id, Contact::Type type)
+Buddy *Roster::buddy(int id)
 {
     Q_D(Roster);
     if (!id) {
         qWarning("Contact id cannot be null!");
         return 0;
     }
-    auto contact = d->contactHash.value(id);
-    if (!contact) {
+    if (id < 0) {
+        id = qAbs(id);
+        qWarning("For groups use class GroupManager");
+    }
+
+
+    auto buddy = d->buddyHash.value(id);
+    if (!buddy) {
         if (d->owner && d->owner->id() == id)
             return d->owner;
-        if (type == Contact::GroupType) {
-            auto group = new Group(id, d->client);
-            contact = group;
-        } else {
-            auto buddy = new Buddy(id, d->client);
-            buddy->setType(type);
-            contact = buddy;
-        }
-        d->addContact(contact);
+            buddy = new Buddy(id, d->client);
+        d->addBuddy(buddy);
     }
-    return contact;
+    return buddy;
 }
 
-Contact *Roster::contact(int id) const
+Buddy *Roster::buddy(int id) const
 {
-    return d_func()->contactHash.value(id);
+    return d_func()->buddyHash.value(id);
 }
 
-ContactList Roster::contacts() const
+BuddyList Roster::buddies() const
 {
-    return d_func()->contactHash.values();
+    return d_func()->buddyHash.values();
 }
 
 QStringList Roster::tags() const
@@ -175,34 +173,18 @@ void RosterPrivate::getFriends(const QVariantMap &args)
                    q, SLOT(_q_friends_received(const QVariant&)));
 }
 
-void RosterPrivate::addContact(Contact *contact)
+void RosterPrivate::addBuddy(Buddy *buddy)
 {
     Q_Q(Roster);
-    emit q->contactAdded(contact);
-    switch (contact->type()) {
-    case Contact::FriendType:
-        emit q->friendAdded(static_cast<Buddy*>(contact));
-        break;
-    case Contact::BuddyType:
-    case Contact::UserType: {
+    emit q->buddyAdded(buddy);
+    if (buddy->isFriend())
+        emit q->friendAdded(static_cast<Buddy*>(buddy));
+    else {
         IdList ids;
-        ids.append(contact->id());
+        ids.append(buddy->id());
         q->update(ids, QStringList() << VK_COMMON_FIELDS); //TODO move!
-        break;
     }
-    default:
-        break;
-    }
-    contactHash.insert(contact->id(), contact);
-}
-
-void Roster::fillContact(Contact *contact, const QVariantMap &data)
-{
-    auto it = data.constBegin();
-    for (; it != data.constEnd(); it++) {
-        QByteArray property = "_q_" + it.key().toLatin1();
-        contact->setProperty(property.data(), it.value());
-    }
+    buddyHash.insert(buddy->id(), buddy);
 }
 
 void RosterPrivate::_q_tags_received(const QVariant &response)
@@ -223,18 +205,16 @@ void RosterPrivate::_q_friends_received(const QVariant &response)
     foreach (auto data, response.toList()) {
         auto map = data.toMap();
         int id = map.value("uid").toInt();
-        auto contact = contactHash.value(id);
-        if (!contact) {
+        auto buddy = buddyHash.value(id);
+        if (!buddy) {
             auto buddy = new Buddy(id, client);
-            if (isFriend)
-                buddy->setType(Contact::FriendType);
-            q->fillContact(buddy, map);
-            addContact(buddy);
+            buddy->setIsFriend(isFriend);
+            Contact::fillContact(buddy, map);
+            addBuddy(buddy);
         } else {
-            q->fillContact(contact, map);
-            auto buddy = static_cast<Buddy*>(contact);
-            if (isFriend && contact->type() != Contact::FriendType) {
-                buddy->setType(Contact::FriendType);
+            Contact::fillContact(buddy, map);
+            if (isFriend) {
+                buddy->setIsFriend(isFriend);
                 emit q->friendAdded(buddy);
             }
         }
@@ -245,7 +225,7 @@ void RosterPrivate::_q_friends_received(const QVariant &response)
 void RosterPrivate::_q_status_changed(int userId, Buddy::Status status)
 {
     Q_Q(Roster);
-    auto buddy = contact_cast<Buddy*>(q->contact(userId));
+    auto buddy = contact_cast<Buddy*>(q->buddy(userId));
     if (buddy)
         buddy->setStatus(status);
 }
@@ -253,7 +233,7 @@ void RosterPrivate::_q_status_changed(int userId, Buddy::Status status)
 void RosterPrivate::_q_online_changed(bool set)
 {
     if (!set)
-        foreach(auto contact, contactHash)
+        foreach(auto contact, buddyHash)
             if (auto buddy = contact_cast<Buddy*>(contact))
                 buddy->setOnline(false);
 

@@ -122,10 +122,6 @@ unix:!symbian {
         installHeaders.files = $$PUBLIC_HEADERS
         installHeaders.path = $$VK_INSTALL_HEADERS/vk
         INSTALLS += installHeaders
-
-        features.files = ../../features/vk.prf
-        features.path = $$[QT_INSTALL_DATA]/mkspecs/features
-        INSTALLS += features
     }
     INSTALLS += target
 }

@@ -140,7 +140,7 @@ void LongPollPrivate::_q_on_data_recieved(const QVariant &response)
 			int cid = update.value(3).toInt();
 			message.setId(update.value(1).toInt());
 			message.setFlags(flags);
-			auto contact = client->roster()->contact(cid);
+            auto contact = client->roster()->buddy(cid);
 			if (flags & Message::FlagOutbox) {
 				message.setTo(contact);
 				message.setFrom(client->me());

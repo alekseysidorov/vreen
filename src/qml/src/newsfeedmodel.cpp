@@ -102,7 +102,7 @@ QVariant NewsFeedModel::data(const QModelIndex &index, int role) const
     case OwnerNameRole: {
         int ownerId = news.property("copy_owner_id").toInt();
         if (ownerId) {
-            auto contact = m_client.data()->roster()->contact(ownerId);
+            auto contact = m_client.data()->roster()->buddy(ownerId);
             return contact->name();
         }
         return QVariant();
@@ -283,6 +283,6 @@ void NewsFeedModel::replaceNews(int i, const vk::NewsItem &news)
 
 vk::Contact *NewsFeedModel::findContact(int postId) const
 {
-    return m_client.data()->roster()->contact(postId);
+    return m_client.data()->roster()->buddy(postId);
 }
 

@@ -89,7 +89,7 @@ public:
 
 		int clientId = data.value("from_id").toInt();
 		if (clientId) {
-			auto contact = client->roster()->contact(clientId);
+            auto contact = client->roster()->buddy(clientId);
 			bool isIncoming = contact == client->me();
 			setFlag(Message::FlagOutbox, !isIncoming);
 			if (isIncoming) {
@@ -103,7 +103,7 @@ public:
 		} else {
 			setFlag(Message::FlagOutbox, data.value("out").toBool());
 			clientId = data.value("uid").toInt();
-			auto contact = client->roster()->contact(clientId);
+            auto contact = client->roster()->buddy(clientId);
 			if (!flags.testFlag(Message::FlagOutbox)) {
 				from = contact;
 				to = client->me();

@@ -59,7 +59,7 @@ QObject *Client::request(const QString &method, const QVariantMap &args)
 
 vk::Contact *Client::contact(int id)
 {
-    return roster()->contact(id);
+    return roster()->buddy(id);
 }
 
 void Client::onOnlineStateChanged(bool isOnline)
