@@ -27,6 +27,7 @@
 #include <roster.h>
 #include <client.h>
 #include <utils.h>
+#include <groupmanager.h>
 #include <QDateTime>
 #include <QNetworkReply>
 
@@ -102,7 +103,7 @@ QVariant NewsFeedModel::data(const QModelIndex &index, int role) const
     case OwnerNameRole: {
         int ownerId = news.property("copy_owner_id").toInt();
         if (ownerId) {
-            auto contact = m_client.data()->roster()->buddy(ownerId);
+            auto contact = findContact(ownerId);
             return contact->name();
         }
         return QVariant();
@@ -281,8 +282,12 @@ void NewsFeedModel::replaceNews(int i, const vk::NewsItem &news)
     emit dataChanged(index, index);
 }
 
-vk::Contact *NewsFeedModel::findContact(int postId) const
+vk::Contact *NewsFeedModel::findContact(int id) const
 {
-    return m_client.data()->roster()->buddy(postId);
+    if (id > 0)
+        return m_client.data()->roster()->buddy(id);
+    else
+        return m_client.data()->groupManager()->group(id);
+    return 0;
 }
 

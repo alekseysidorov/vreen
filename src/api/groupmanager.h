@@ -25,6 +25,7 @@
 #ifndef VK_GROUPMANAGER_H
 #define VK_GROUPMANAGER_H
 
+#include "vk_global.h"
 #include <QObject>
 
 namespace vk {
@@ -33,7 +34,7 @@ class Client;
 class Group;
 class GroupManagerPrivate;
 
-class GroupManager : public QObject
+class VK_SHARED_EXPORT GroupManager : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(GroupManager)
