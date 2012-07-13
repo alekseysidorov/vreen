@@ -34,7 +34,8 @@ SOURCES += client.cpp \
     newsitem.cpp \
     attachment.cpp \
     photomanager.cpp \
-    contentdownloader.cpp
+    contentdownloader.cpp \
+    groupmanager.cpp
 
 HEADERS += client.h \
     vk_global.h \
@@ -66,7 +67,8 @@ HEADERS += client.h \
     newsitem.h \
     attachment.h \
     photomanager.h \
-    contentdownloader.h
+    contentdownloader.h \
+    groupmanager.h
 
 PUBLIC_HEADERS = $$HEADERS
     
