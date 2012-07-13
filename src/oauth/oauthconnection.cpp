@@ -6,7 +6,7 @@
 #include <QStringBuilder>
 #include <QNetworkRequest>
 
-#include <qutim/json.h>
+#include <vk/json.h>
 
 #include <QDebug>
 #include <QWebElement>
@@ -196,7 +196,7 @@ void OAuthConnectionPrivate::_q_loadFinished(bool ok)
 {
 	Q_Q(OAuthConnection);
 	QUrl url = webPage->mainFrame()->url();
-	QVariantMap response = qutim_sdk_0_3::Json::parse(webPage->mainFrame()->toPlainText().toUtf8()).toMap();
+    QVariantMap response = vk::JSON::parse(webPage->mainFrame()->toPlainText().toUtf8()).toMap();
 	if (ok && response.value("error").isNull()) {
 		url = QUrl("http://foo.bar?" + url.fragment()); //evil hack for parse fragment as query items
 		if (!url.hasEncodedQueryItem("access_token")) {
