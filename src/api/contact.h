@@ -196,7 +196,7 @@ public:
 protected:
     Group(int id, Client *client);
 
-    friend class Roster;
+    friend class GroupManager;
 };
 
 //TODO group chats

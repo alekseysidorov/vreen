@@ -25,6 +25,7 @@
 #include "client_p.h"
 #include "message.h"
 #include "contact.h"
+#include "groupmanager.h"
 
 namespace vk {
 
@@ -148,6 +149,19 @@ LongPoll *Client::longPoll()
         emit longPollChanged(d->longPoll.data());
     }
     return d->longPoll.data();
+}
+
+GroupManager *Client::groupManager() const
+{
+    return d_func()->groupManager.data();
+}
+
+GroupManager *Client::groupManager()
+{
+    Q_D(Client);
+    if (!d->groupManager)
+        d->groupManager = new GroupManager(this);
+    return d->groupManager.data();
 }
 
 Reply *Client::request(const QUrl &url)

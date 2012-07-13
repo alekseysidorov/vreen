@@ -36,6 +36,7 @@
 #include "utils.h"
 #include <QDebug>
 #include <QTimer>
+#include <QPointer>
 
 namespace vk {
 
@@ -55,6 +56,7 @@ public:
     QWeakPointer<Connection> connection;
 	QWeakPointer<Roster> roster;
 	QWeakPointer<LongPoll> longPoll;
+    QPointer<GroupManager> groupManager;
 	QString activity;
 	bool isInvisible;
 	QTimer onlineUpdater;
