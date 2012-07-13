@@ -5,7 +5,7 @@ includedir=${CMAKE_INSTALL_PREFIX}/include
 
 Name: vkitoauth
 Description: OAuth2 connection library for vkit
-Requires: QtCore QtWebkit vkit
+Requires: QtCore QtWebKit vkit
 Version: ${CMAKE_LIBVK_VERSION_MAJOR}.${CMAKE_LIBVK_VERSION_MINOR}.${CMAKE_LIBVK_VERSION_PATCH}
 Libs: -L${LIB_DESTINATION} -lvkitoauth
 Cflags: -I${CMAKE_INSTALL_PREFIX}/include/
