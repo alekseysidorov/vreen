@@ -26,6 +26,7 @@
 #include "utils.h"
 #include "client.h"
 #include "roster.h"
+#include "groupmanager.h"
 #include <QVariantList>
 
 namespace vk {
@@ -51,10 +52,17 @@ public:
     {
         foreach (auto item, profiles) {
             auto map = item.toMap();
-            auto roster = client->roster();
             int uid = map.value("uid").toInt();
-            auto contact = roster->buddy(uid);
-            Contact::fillContact(contact, map);
+
+            if (uid > 0) {
+                auto roster = client->roster();
+                auto buddy = roster->buddy(uid);
+                Contact::fillContact(buddy, map);
+            } else {
+                auto manager = client->groupManager();
+                auto group = manager->group(-uid);
+                Contact::fillContact(group, map);
+            }
         }
     }
 
@@ -62,9 +70,9 @@ public:
     {
         foreach (auto item, groups) {
             auto map = item.toMap();
-            auto roster = client->roster();
+            auto manager = client->groupManager();
             int gid = -map.value("gid").toInt();
-            auto contact = roster->buddy(gid); //FIXME
+            auto contact = manager->group(gid);
             Contact::fillContact(contact, map);
         }
     }

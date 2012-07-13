@@ -39,6 +39,7 @@ class Connection;
 class ClientPrivate;
 class Reply;
 class Roster;
+class GroupManager;
 class LongPoll;
 class Contact;
 class VK_SHARED_EXPORT Client : public QObject
@@ -51,6 +52,7 @@ class VK_SHARED_EXPORT Client : public QObject
     Q_PROPERTY(bool online READ isOnline NOTIFY onlineStateChanged DESIGNABLE true)
     Q_PROPERTY(State connectionState READ connectionState NOTIFY connectionStateChanged DESIGNABLE true)
     Q_PROPERTY(vk::Roster* roster READ roster NOTIFY rosterChanged DESIGNABLE true)
+    Q_PROPERTY(vk::GroupManager* groupManager READ groupManager NOTIFY groupManagerChanged DESIGNABLE true)
     Q_PROPERTY(vk::LongPoll* longPoll READ longPoll NOTIFY longPollChanged DESIGNABLE true)
     Q_PROPERTY(vk::Contact* me READ me NOTIFY meChanged DESIGNABLE true)
 	Q_PROPERTY(QString activity READ activity WRITE setActivity NOTIFY activityChanged DESIGNABLE true)
@@ -94,6 +96,8 @@ public:
     Roster *roster();
 	LongPoll *longPoll() const;
 	LongPoll *longPoll();
+    GroupManager *groupManager() const;
+    GroupManager *groupManager();
 
     Reply *request(const QUrl &);
     Reply *request(const QString &method, const QVariantMap &args = QVariantMap());
@@ -117,6 +121,7 @@ signals:
     void error(vk::Client::Error);
     void onlineStateChanged(bool state);
     void rosterChanged(vk::Roster*);
+    void groupManagerChanged(vk::GroupManager*);
     void longPollChanged(vk::LongPoll*);
     void meChanged(vk::Contact *me);
 	void activityChanged(const QString &activity);

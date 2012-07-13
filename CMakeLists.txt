@@ -1,3 +1,4 @@
+project(vkit)
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 if(COMMAND cmake_policy)
@@ -19,16 +20,9 @@ set(RLIBDIR bin)
 set(LIBDIR lib${LIB_SUFFIX})
 
 set(CMAKE_LIBVK_VERSION_MAJOR 0 CACHE INT "Major vk version number" FORCE)
-set(CMAKE_LIBVK_VERSION_MINOR 8 CACHE INT "Minor vk version number" FORCE)
+set(CMAKE_LIBVK_VERSION_MINOR 9 CACHE INT "Minor vk version number" FORCE)
 set(CMAKE_LIBVK_VERSION_PATCH 0 CACHE INT "Release vk version number" FORCE)
 set(CMAKE_LIBVK_VERSION_STRING "${CMAKE_LIBVK_VERSION_MAJOR}.${CMAKE_LIBVK_VERSION_MINOR}.${CMAKE_LIBVK_VERSION_PATCH}" CACHE STRING "vkit version string" FORCE)
 
-#add pkgconfig file
-set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR})
-configure_file(vkit.pc.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/vkit.pc
-)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/vkit.pc
-    DESTINATION ${LIB_DESTINATION}/pkgconfig
-)
+add_pkgconfig_file(vkit.pc.cmake)
 add_subdirectory(src)
