@@ -48,13 +48,11 @@ void BuddyModel::setRoster(vk::Roster *roster)
         m_roster.data()->disconnect(this);
     m_roster = roster;
 
-    foreach (auto buddy, m_roster.data()->findChildren<vk::Buddy*>())
+    foreach (auto buddy, m_roster.data()->buddies())
         addFriend(buddy);
-
 
     connect(roster, SIGNAL(friendAdded(vk::Buddy*)), SLOT(addFriend(vk::Buddy*)));
     connect(roster, SIGNAL(contactRemoved(int)), SLOT(removeFriend(int)));
-
     emit rosterChanged(roster);
 }
 
@@ -143,13 +141,13 @@ int BuddyModel::findContact(int id) const
     return -1;
 }
 
-static bool buddyLessThan(const vk::Buddy *a, const vk::Buddy *b)
-{
-//    if (a->status() == b->status()) {
-//        return QString::compare(a->name(), b->name(), Qt::CaseInsensitive) < 0;
-//    } else
-    return a->status() < b->status();
-}
+//static bool buddyLessThan(const vk::Buddy *a, const vk::Buddy *b)
+//{
+////    if (a->status() == b->status()) {
+////        return QString::compare(a->name(), b->name(), Qt::CaseInsensitive) < 0;
+////    } else
+//    return a->status() < b->status();
+//}
 
 void BuddyModel::addFriend(vk::Buddy *contact)
 {

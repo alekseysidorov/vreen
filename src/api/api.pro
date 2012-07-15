@@ -35,7 +35,9 @@ SOURCES += client.cpp \
     attachment.cpp \
     photomanager.cpp \
     contentdownloader.cpp \
-    groupmanager.cpp
+    groupmanager.cpp \
+    groupchatsession.cpp \
+    messagesession.cpp
 
 HEADERS += client.h \
     vk_global.h \
@@ -53,7 +55,6 @@ HEADERS += client.h \
     message.h \
     messagemodel.h \
     chatsession.h \
-    chatsession_p.h \
     utils.h \
     dynamicpropertydata_p.h \
     wallsession.h \
@@ -68,7 +69,10 @@ HEADERS += client.h \
     attachment.h \
     photomanager.h \
     contentdownloader.h \
-    groupmanager.h
+    groupmanager.h \
+    groupchatsession.h \
+    messagesession.h \
+    messagesession_p.h
 
 PUBLIC_HEADERS = $$HEADERS
     

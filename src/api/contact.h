@@ -146,7 +146,6 @@ class VK_SHARED_EXPORT Buddy : public Contact
     Q_PROPERTY(bool _q_online READ isOnline WRITE setOnline DESIGNABLE false)
     Q_PRIVATE_PROPERTY(d_func(), QVariantList _q_lists READ lists WRITE setLists DESIGNABLE false)
     Q_PRIVATE_PROPERTY(d_func(), QString _q_activity READ getActivity WRITE setActivity DESIGNABLE false)
-	Q_PROPERTY(bool _q_friend READ isFriend WRITE setIsFriend DESIGNABLE false)
 public:
     //TODO name case support maybe needed
     QString firstName() const;

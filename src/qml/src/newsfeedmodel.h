@@ -76,7 +76,7 @@ signals:
 protected:
     void insertNews(int index, const vk::NewsItem &data);
     void replaceNews(int index, const vk::NewsItem &data);
-    vk::Contact *findContact(int id) const;
+    inline vk::Contact *findContact(int id) const;
 private slots:
     void onNewsAdded(const vk::NewsItem &data);
     void onAddLike(const QVariant &response);

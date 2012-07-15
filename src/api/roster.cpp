@@ -209,11 +209,14 @@ void RosterPrivate::_q_friends_received(const QVariant &response)
         if (!buddy) {
 			buddy = new Buddy(id, client);
 			Contact::fillContact(buddy, map);
+            buddy->setIsFriend(isFriend);
 			emit q->buddyAdded(buddy);
 			if (isFriend)
 				emit q->friendAdded(buddy);
-		} else
+        } else {
+            buddy->setIsFriend(isFriend);
 			Contact::fillContact(buddy, map);
+        }
     }
     emit q->syncFinished(true);
 }

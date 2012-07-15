@@ -26,12 +26,13 @@
 #define VK_CHATSESSION_H
 
 #include "message.h"
+#include "messagesession.h"
 
 namespace vk {
 
 class Reply;
 class ChatSessionPrivate;
-class VK_SHARED_EXPORT ChatSession : public QObject
+class VK_SHARED_EXPORT ChatSession : public MessageSession
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(ChatSession)
@@ -47,8 +48,8 @@ public:
     bool isActive() const;
     void setActive(bool set);
 public slots:
-    Reply *getHistory(int count = 16, int offset = 0);
-	Reply *sendMessage(const QString &body, const QString &subject = QString());
+    virtual Reply *getHistory(int count = 16, int offset = 0);
+    virtual Reply *sendMessage(const QString &body, const QString &subject = QString());
 signals:
     void messageAdded(const vk::Message &message);
     void messageDeleted(int id);

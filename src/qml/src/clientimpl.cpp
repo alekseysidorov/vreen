@@ -96,7 +96,7 @@ void Client::onReplyFinished(const QVariant &)
 {
     vk::Reply *reply = vk::sender_cast<vk::Reply*>(sender());
     qDebug() << "--Reply finished" << reply->networkReply()->url().encodedPath();
-    //qDebug() << "--data" << reply->response();
+    qDebug() << "--data" << reply->response();
 }
 
 void Client::onReplyError(vk::Reply *reply)

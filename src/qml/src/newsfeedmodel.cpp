@@ -284,10 +284,6 @@ void NewsFeedModel::replaceNews(int i, const vk::NewsItem &news)
 
 vk::Contact *NewsFeedModel::findContact(int id) const
 {
-    if (id > 0)
-        return m_client.data()->roster()->buddy(id);
-    else
-        return m_client.data()->groupManager()->group(id);
-    return 0;
+    return m_client.data()->contact(id);
 }
 

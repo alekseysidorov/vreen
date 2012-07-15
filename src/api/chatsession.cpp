@@ -22,7 +22,8 @@
 ** $VKIT_END_LICENSE$
 **
 ****************************************************************************/
-#include "chatsession_p.h"
+#include "chatsession.h"
+#include "messagesession_p.h"
 #include "contact.h"
 #include "client.h"
 #include "longpoll.h"
@@ -30,6 +31,23 @@
 #include <QStringBuilder>
 
 namespace vk {
+
+class ChatSessionPrivate : public MessageSessionPrivate
+{
+    Q_DECLARE_PUBLIC(ChatSession)
+public:
+    ChatSessionPrivate(ChatSession *q, Contact *contact) :
+        MessageSessionPrivate(q, contact->client(), contact->id()),
+        contact(contact), isActive(false) {}
+
+    Contact *contact;
+    bool isActive;
+
+    void _q_history_received(const QVariant &);
+    void _q_message_read_state_updated(const QVariant &);
+    void _q_message_added(const Message &message);
+};
+
 
 /*!
  * \brief The ChatSession class
@@ -41,8 +59,7 @@ namespace vk {
  * \param contact
  */
 ChatSession::ChatSession(Contact *contact) :
-    QObject(contact),
-    d_ptr(new ChatSessionPrivate(this, contact))
+    MessageSession(new ChatSessionPrivate(this, contact))
 {
     Q_D(ChatSession);
     auto longPoll = d->contact->client()->longPoll();
