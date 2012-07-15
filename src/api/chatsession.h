@@ -55,7 +55,6 @@ signals:
     void messageDeleted(int id);
     void messageReadStateChanged(int mid, bool isRead);
 private:
-    QScopedPointer<ChatSessionPrivate> d_ptr;
 
     Q_PRIVATE_SLOT(d_func(), void _q_history_received(const QVariant &))
     Q_PRIVATE_SLOT(d_func(), void _q_message_added(const vk::Message &))

@@ -3,12 +3,11 @@
 
 namespace vk {
 
-MessageSession::MessageSession(MessageSessionPrivate *data, Client *client) :
+MessageSession::MessageSession(MessageSessionPrivate *data) :
     QObject(data->client),
-    d_ptr(client)
+	d_ptr(data)
 {
 }
-
 MessageSession::~MessageSession()
 {
 }
