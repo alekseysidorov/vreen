@@ -30,18 +30,18 @@
 namespace vk {
 
 Client::Client(QObject *parent) :
-    QObject(parent),
-    d_ptr(new ClientPrivate(this))
+	QObject(parent),
+	d_ptr(new ClientPrivate(this))
 {
 }
 
 Client::Client(const QString &login, const QString &password, QObject *parent) :
-    QObject(parent),
-    d_ptr(new ClientPrivate(this))
+	QObject(parent),
+	d_ptr(new ClientPrivate(this))
 {
-    Q_D(Client);
-    d->login = login;
-    d->password = password;
+	Q_D(Client);
+	d->login = login;
+	d->password = password;
 }
 
 Client::~Client()
@@ -50,40 +50,40 @@ Client::~Client()
 
 QString Client::password() const
 {
-    return d_func()->password;
+	return d_func()->password;
 }
 
 void Client::setPassword(const QString &password)
 {
-    d_func()->password = password;
-    emit passwordChanged(password);
+	d_func()->password = password;
+	emit passwordChanged(password);
 }
 
 QString Client::login() const
 {
-    return d_func()->login;
+	return d_func()->login;
 }
 
 void Client::setLogin(const QString &login)
 {
-    d_func()->login = login;
-    emit loginChanged(login);
+	d_func()->login = login;
+	emit loginChanged(login);
 }
 
 Client::State Client::connectionState() const
 {
-    Q_D(const Client);
-    if (d->connection.isNull())
-        return StateInvalid;
-    return d->connection.data()->connectionState();
+	Q_D(const Client);
+	if (d->connection.isNull())
+		return StateInvalid;
+	return d->connection.data()->connectionState();
 }
 
 bool Client::isOnline() const
 {
-    if (auto c = connection())
-        return c->connectionState() == Client::StateOnline;
-    else
-        return false;
+	if (auto c = connection())
+		return c->connectionState() == Client::StateOnline;
+	else
+		return false;
 }
 
 QString Client::activity() const
@@ -93,162 +93,175 @@ QString Client::activity() const
 
 Connection *Client::connection() const
 {
-    return d_func()->connection.data();
+	return d_func()->connection.data();
 }
 
 Connection *Client::connection()
 {
-    Q_D(Client);
-    if (d->connection.isNull())
-        setConnection(new DirectConnection(this));
-    return d_func()->connection.data();
+	Q_D(Client);
+	if (d->connection.isNull())
+		setConnection(new DirectConnection(this));
+	return d_func()->connection.data();
 }
 
 void Client::setConnection(Connection *connection)
 {
-    Q_D(Client);
-    if (d->connection) {
-        //TODO cleanup
-    }
+	Q_D(Client);
+	if (d->connection) {
+		//TODO cleanup
+	}
 
-    d->connection = connection;
-    connect(connection, SIGNAL(connectionStateChanged(vk::Client::State)),
-            this, SLOT(_q_connection_state_changed(vk::Client::State)));
-    connect(connection, SIGNAL(error(vk::Client::Error)),
-            this, SIGNAL(error(vk::Client::Error))); //TODO error handler
+	d->connection = connection;
+	connect(connection, SIGNAL(connectionStateChanged(vk::Client::State)),
+			this, SLOT(_q_connection_state_changed(vk::Client::State)));
+	connect(connection, SIGNAL(error(vk::Client::Error)),
+			this, SIGNAL(error(vk::Client::Error))); //TODO error handler
 }
 
 Roster *Client::roster() const
 {
-    return d_func()->roster.data();
+	return d_func()->roster.data();
 }
 
 Roster *Client::roster()
 {
-    Q_D(Client);
-    if (d->roster.isNull()) {
-        d->roster = new Roster(this);
-    }
-    return d->roster.data();
+	Q_D(Client);
+	if (d->roster.isNull()) {
+		d->roster = new Roster(this);
+	}
+	return d->roster.data();
 }
 
 LongPoll *Client::longPoll() const
 {
-        return d_func()->longPoll.data();
+	return d_func()->longPoll.data();
 }
 
 LongPoll *Client::longPoll()
 {
-    Q_D(Client);
-    if (d->longPoll.isNull()) {
-        d->longPoll = new LongPoll(this);
+	Q_D(Client);
+	if (d->longPoll.isNull()) {
+		d->longPoll = new LongPoll(this);
 
-        connect(this, SIGNAL(onlineStateChanged(bool)),
-                d->longPoll.data(), SLOT(setRunning(bool)));
+		connect(this, SIGNAL(onlineStateChanged(bool)),
+				d->longPoll.data(), SLOT(setRunning(bool)));
 
-        emit longPollChanged(d->longPoll.data());
-    }
-    return d->longPoll.data();
+		emit longPollChanged(d->longPoll.data());
+	}
+	return d->longPoll.data();
 }
 
 GroupManager *Client::groupManager() const
 {
-    return d_func()->groupManager.data();
+	return d_func()->groupManager.data();
 }
 
 GroupManager *Client::groupManager()
 {
-    Q_D(Client);
-    if (!d->groupManager)
-        d->groupManager = new GroupManager(this);
-    return d->groupManager.data();
+	Q_D(Client);
+	if (!d->groupManager)
+		d->groupManager = new GroupManager(this);
+	return d->groupManager.data();
 }
 
 Reply *Client::request(const QUrl &url)
 {
-    QNetworkRequest request(url);
-    auto networkReply = connection()->get(request);
-    auto reply = new Reply(networkReply);
-    d_func()->processReply(reply);
-    return reply;
+	QNetworkRequest request(url);
+	auto networkReply = connection()->get(request);
+	auto reply = new Reply(networkReply);
+	d_func()->processReply(reply);
+	return reply;
 }
 
 Reply *Client::request(const QString &method, const QVariantMap &args)
 {
-    auto reply = new Reply(connection()->request(method, args));
-    d_func()->processReply(reply);
-    return reply;
+	auto reply = new Reply(connection()->request(method, args));
+	d_func()->processReply(reply);
+	return reply;
 }
 
 Contact *Client::me() const
 {
-    if (auto r = roster())
-        return r->owner();
-    return 0;
+	if (auto r = roster())
+		return r->owner();
+	return 0;
+}
+
+Contact *Client::contact(int id) const
+{
+	Contact *contact = 0;
+	if (id >= 0) {
+		if (roster())
+			contact = roster()->buddy(id);
+		if (!contact && groupManager())
+			contact = groupManager()->group(id);
+	} else if (groupManager())
+		contact = groupManager()->group(-id);
+	return contact;
 }
 
 Reply *Client::sendMessage(const Message &message)
 {
-    //TODO add delayed send
-    if (!isOnline())
-        return 0;
+	//TODO add delayed send
+	if (!isOnline())
+		return 0;
 
-    //checks
-    Q_ASSERT(message.to());
+	//checks
+	Q_ASSERT(message.to());
 
-    QVariantMap args;
-    //TODO add chat messages support and contact check
-    args.insert("uid", message.to()->id());
-    args.insert("message", message.body());
-    args.insert("title", message.subject());
-    return request("messages.send", args);
+	QVariantMap args;
+	//TODO add chat messages support and contact check
+	args.insert("uid", message.to()->id());
+	args.insert("message", message.body());
+	args.insert("title", message.subject());
+	return request("messages.send", args);
 }
 
 Reply *Client::getLastDialogs(int count, int previewLength)
 {
-    QVariantMap args;
-    args.insert("count", count);
-    if (previewLength != -1)
-        args.insert("preview_length", previewLength);
-    return request("messages.getDialogs", args);
+	QVariantMap args;
+	args.insert("count", count);
+	if (previewLength != -1)
+		args.insert("preview_length", previewLength);
+	return request("messages.getDialogs", args);
 }
 
 Reply *Client::addLike(int ownerId, int postId, bool retweet, const QString &message)
 {
-    QVariantMap args;
-    args.insert("owner_id", ownerId);
-    args.insert("post_id", postId);
-    args.insert("repost", (int)retweet);
-    args.insert("message", message);
-    return request("wall.addLike", args);
+	QVariantMap args;
+	args.insert("owner_id", ownerId);
+	args.insert("post_id", postId);
+	args.insert("repost", (int)retweet);
+	args.insert("message", message);
+	return request("wall.addLike", args);
 }
 
 Reply *Client::deleteLike(int ownerId, int postId)
 {
-    QVariantMap args;
-    args.insert("owner_id", ownerId);
-    args.insert("post_id", postId);
-    auto reply = request("wall.deleteLike", args);
-    return reply;
+	QVariantMap args;
+	args.insert("owner_id", ownerId);
+	args.insert("post_id", postId);
+	auto reply = request("wall.deleteLike", args);
+	return reply;
 }
 
 void Client::connectToHost()
 {
-    Q_D(Client);
-    //TODO add warnings
-    connection()->connectToHost(d->login, d->password);
+	Q_D(Client);
+	//TODO add warnings
+	connection()->connectToHost(d->login, d->password);
 }
 
 void Client::connectToHost(const QString &login, const QString &password)
 {
-    setLogin(login);
-    setPassword(password);
-    connectToHost();
+	setLogin(login);
+	setPassword(password);
+	connectToHost();
 }
 
 void Client::disconnectFromHost()
 {
-    connection()->disconnectFromHost();
+	connection()->disconnectFromHost();
 }
 
 
@@ -299,15 +312,15 @@ void ClientPrivate::_q_activity_update_finished(const QVariant &response)
 void ClientPrivate::_q_update_online()
 {
 	Q_Q(Client);
-    q->request("account.setOnline");
+	q->request("account.setOnline");
 }
 
 void ClientPrivate::processReply(Reply *reply)
 {
-    Q_Q(Client);
-    q->connect(reply, SIGNAL(resultReady(const QVariant &)), q, SLOT(_q_reply_finished(const QVariant &)));
-    q->connect(reply, SIGNAL(error(int)), q, SLOT(_q_error_received(int)));
-    emit q->replyCreated(reply);
+	Q_Q(Client);
+	q->connect(reply, SIGNAL(resultReady(const QVariant &)), q, SLOT(_q_reply_finished(const QVariant &)));
+	q->connect(reply, SIGNAL(error(int)), q, SLOT(_q_error_received(int)));
+	emit q->replyCreated(reply);
 }
 
 void ClientPrivate::setOnlineUpdaterRunning(bool set)

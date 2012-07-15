@@ -123,7 +123,7 @@ bool Buddy::isOnline() const
 void Buddy::setOnline(bool set)
 {
     Q_D(Buddy);
-    setStatus(static_cast<decltype(d->status)>(set));
+	setStatus(set ? Online : Offline);
     emit onlineChanged(set);
 }
 

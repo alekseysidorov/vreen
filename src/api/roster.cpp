@@ -178,7 +178,7 @@ void RosterPrivate::addBuddy(Buddy *buddy)
     Q_Q(Roster);
     emit q->buddyAdded(buddy);
     if (buddy->isFriend())
-        emit q->friendAdded(static_cast<Buddy*>(buddy));
+		emit q->friendAdded(buddy);
     else {
         IdList ids;
         ids.append(buddy->id());
@@ -207,17 +207,13 @@ void RosterPrivate::_q_friends_received(const QVariant &response)
         int id = map.value("uid").toInt();
         auto buddy = buddyHash.value(id);
         if (!buddy) {
-            auto buddy = new Buddy(id, client);
-            buddy->setIsFriend(isFriend);
-            Contact::fillContact(buddy, map);
-            addBuddy(buddy);
-        } else {
-            Contact::fillContact(buddy, map);
-            if (isFriend) {
-                buddy->setIsFriend(isFriend);
-                emit q->friendAdded(buddy);
-            }
-        }
+			buddy = new Buddy(id, client);
+			Contact::fillContact(buddy, map);
+			emit q->buddyAdded(buddy);
+			if (isFriend)
+				emit q->friendAdded(buddy);
+		} else
+			Contact::fillContact(buddy, map);
     }
     emit q->syncFinished(true);
 }
@@ -225,17 +221,15 @@ void RosterPrivate::_q_friends_received(const QVariant &response)
 void RosterPrivate::_q_status_changed(int userId, Buddy::Status status)
 {
     Q_Q(Roster);
-    auto buddy = contact_cast<Buddy*>(q->buddy(userId));
-    if (buddy)
-        buddy->setStatus(status);
+	auto buddy = q->buddy(userId);
+	buddy->setStatus(status);
 }
 
 void RosterPrivate::_q_online_changed(bool set)
 {
     if (!set)
-        foreach(auto contact, buddyHash)
-            if (auto buddy = contact_cast<Buddy*>(contact))
-                buddy->setOnline(false);
+		foreach(auto buddy, buddyHash)
+			buddy->setOnline(false);
 
 }
 
