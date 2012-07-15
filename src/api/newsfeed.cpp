@@ -71,7 +71,7 @@ public:
         foreach (auto item, groups) {
             auto map = item.toMap();
             auto manager = client->groupManager();
-            int gid = -map.value("gid").toInt();
+            int gid = map.value("gid").toInt();
             auto contact = manager->group(gid);
             Contact::fillContact(contact, map);
         }
