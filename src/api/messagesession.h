@@ -2,7 +2,7 @@
 #define VK_MESSAGESESSION_H
 
 #include <QObject>
-#include "vk_global.h"
+#include "attachment.h"
 
 namespace vk {
 
@@ -25,7 +25,8 @@ public:
     int uid() const;
 public slots:
     virtual Reply *getHistory(int count = 16, int offset = 0) = 0;
-    virtual Reply *sendMessage(const QString &body, const QString &subject = QString()) = 0; //FIXME add attachments support
+    virtual Reply *sendMessage(const QString &body, const QString &subject = QString(),
+                               const Attachment &attachment = Attachment()) = 0;
 signals:
     void messageAdded(const vk::Message &message);
     void messageDeleted(int id);

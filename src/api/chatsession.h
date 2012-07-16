@@ -49,7 +49,8 @@ public:
     void setActive(bool set);
 public slots:
     virtual Reply *getHistory(int count = 16, int offset = 0);
-    virtual Reply *sendMessage(const QString &body, const QString &subject = QString());
+    virtual Reply *sendMessage(const QString &body, const QString &subject = QString(),
+                               const Attachment &attachment = Attachment());
 signals:
     void messageAdded(const vk::Message &message);
     void messageDeleted(int id);

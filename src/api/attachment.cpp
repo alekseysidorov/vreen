@@ -44,11 +44,17 @@ const static QStringList types = QStringList()
 class AttachmentData : public QSharedData {
 public:
     AttachmentData() : QSharedData(),
-        type(Attachment::Other) {}
+        type(Attachment::Other),
+        ownerId(0),
+        mediaId(0) {}
     AttachmentData(const AttachmentData &o) : QSharedData(o),
 		type(o.type),
-        data(o.data) {}
+        data(o.data),
+        ownerId(o.ownerId),
+        mediaId(mediaId) {}
     Attachment::Type type;
+    int ownerId;
+    int mediaId;
     QVariantMap data;
 
     static Attachment::Type getType(const QString &type)
@@ -72,6 +78,16 @@ Attachment::Attachment() : d(new AttachmentData)
 Attachment::Attachment(const QVariantMap &data) : d(new AttachmentData)
 {
     setData(data);
+}
+
+Attachment::Attachment(const QString &string) : d(new AttachmentData)
+{
+    QRegExp regex("(\\w+)(\\d+)_(\\d+)");
+    regex.indexIn(string);
+    //convert type to enum
+    d->data.insert("type", d->type = AttachmentData::getType(regex.cap(1)));
+    d->ownerId = regex.cap(2).toInt();
+    d->mediaId = regex.cap(3).toInt();
 }
 
 Attachment::Attachment(const Attachment &rhs) : d(rhs.d)
@@ -110,6 +126,26 @@ QVariantMap Attachment::data() const
 Attachment::Type Attachment::type() const
 {
     return d->type;
+}
+
+int Attachment::ownerId() const
+{
+    return d->ownerId;
+}
+
+void Attachment::setOwnerId(int ownerId)
+{
+    d->ownerId = ownerId;
+}
+
+int Attachment::mediaId() const
+{
+    return d->mediaId;
+}
+
+void Attachment::setMediaId(int id)
+{
+    d->mediaId = id;
 }
 
 Attachment Attachment::fromData(const QVariant &data)
@@ -163,6 +199,11 @@ QStringList Attachment::dynamicPropertyNames() const
 void Attachment::setProperty(const QString &name, const QVariant &value)
 {
     d->data.insert(name, value);
+}
+
+bool Attachment::isFetched() const
+{
+    return !d->data.isEmpty();
 }
 
 } // namespace vk

@@ -63,6 +63,11 @@ public:
     void setData(const QVariantMap &data);
     QVariantMap data() const;
     Type type() const;
+    int ownerId() const;
+    void setOwnerId(int ownerId);
+    int mediaId() const;
+    void setMediaId(int mediaId);
+    bool isFetched() const;
 
     static Attachment fromData(const QVariant &data);
     static List fromVariantList(const QVariantList &list);
@@ -78,6 +83,7 @@ public:
     QStringList dynamicPropertyNames() const;
 protected:
     Attachment(const QVariantMap &data);
+    Attachment(const QString &string);
 private:
     QSharedDataPointer<AttachmentData> d;
 };

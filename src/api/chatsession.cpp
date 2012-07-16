@@ -115,20 +115,21 @@ Reply *ChatSession::getHistory(int count, int offset)
     QVariantMap args;
     args.insert("count", count);
     args.insert("offset", offset);
-    args.insert("uid", d->contact->id()); //TODO chat_id support!
+    args.insert("uid", d->contact->id());
 
     auto reply = d->contact->client()->request("messages.getHistory", args);
     connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_history_received(QVariant)));
-	return reply;
+    return reply;
 }
 
-Reply *ChatSession::sendMessage(const QString &body, const QString &subject)
+Reply *ChatSession::sendMessage(const QString &body, const QString &subject, const Attachment &attachment)
 {
 	Q_D(ChatSession);
 	Message message(d->contact->client());
 	message.setBody(body);
 	message.setSubject(subject);
 	message.setTo(d->contact);
+    message.setAttachments(Attachment::List() << attachment);
 	return d->contact->client()->sendMessage(message);
 }
 

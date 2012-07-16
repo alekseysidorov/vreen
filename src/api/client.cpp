@@ -211,7 +211,7 @@ Reply *Client::sendMessage(const Message &message)
 
 	QVariantMap args;
 	//TODO add chat messages support and contact check
-	args.insert("uid", message.to()->id());
+    args.insert("uid", message.to()->id());
 	args.insert("message", message.body());
 	args.insert("title", message.subject());
 	return request("messages.send", args);
