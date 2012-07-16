@@ -51,7 +51,7 @@ public:
 		type(o.type),
         data(o.data),
         ownerId(o.ownerId),
-        mediaId(mediaId) {}
+		mediaId(o.mediaId) {}
     Attachment::Type type;
     int ownerId;
     int mediaId;
