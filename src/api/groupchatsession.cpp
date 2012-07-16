@@ -1,7 +1,6 @@
 #include "groupchatsession.h"
 #include "messagesession_p.h"
 #include "client.h"
-#include "message.h"
 #include "roster.h"
 
 namespace vk {
@@ -28,11 +27,13 @@ public:
     void _q_participant_added(const QVariant &response);
     void _q_participant_removed(const QVariant &response);
     void _q_title_updated(const QVariant &response);
+	void _q_online_changed(bool set);
 };
 
 GroupChatSession::GroupChatSession(int chatId, Client *client) :
     MessageSession(new GroupChatSessionPrivate(this, client, chatId))
 {
+	connect(client, SIGNAL(onlineStateChanged(bool)), SLOT(_q_online_changed(bool)));
 }
 
 ContactList GroupChatSession::participants() const
@@ -54,7 +55,18 @@ Reply *GroupChatSession::sendMessage(const QString &body, const QString &subject
     args.insert("message", body);
     args.insert("title", subject);
 
-    return d->client->request("messages.send", args);
+	return d->client->request("messages.send", args);
+}
+
+Reply *GroupChatSession::create(Client *client, const IdList &uids, const QString &title)
+{
+	QStringList list;
+	foreach (auto &uid, uids)
+		list.append(QString::number(uid));
+	QVariantMap args;
+	args.insert("uids", list.join(","));
+	args.insert("title", title);
+	return client->request("messages.createChat", args);
 }
 
 void GroupChatSession::setTitle(const QString &title)
@@ -165,7 +177,19 @@ void GroupChatSessionPrivate::_q_title_updated(const QVariant &response)
 {
     Q_Q(GroupChatSession);
     auto map = response.toMap();
-    q->setTitle(map.value("title").toString());
+	q->setTitle(map.value("title").toString());
+}
+
+void GroupChatSessionPrivate::_q_online_changed(bool set)
+{
+	foreach (auto contact, contacts) {
+		if (auto buddy = qobject_cast<Buddy*>(contact)) {
+			if (set)
+				buddy->update();
+			else
+				buddy->setOnline(false);
+		}
+	}
 }
 
 void GroupChatSessionPrivate::addContact(int id)

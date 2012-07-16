@@ -20,9 +20,10 @@ public:
     Buddy *admin() const;
     QString title() const;
 
-    virtual Reply *getHistory(int count = 16, int offset = 0) = 0;
+	virtual Reply *getHistory(int count = 16, int offset = 0);
     virtual Reply *sendMessage(const QString &body, const QString &subject = QString(),
-                               const Attachment &attachment = Attachment()) = 0;
+							   const Attachment &attachment = Attachment());
+	static Reply *create(Client *client, const IdList &uids, const QString &title = QString());
 public slots:
     Reply *getInfo();
     Reply *addParticipant(Contact *buddy);
@@ -40,6 +41,7 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_participant_added(const QVariant &response))
     Q_PRIVATE_SLOT(d_func(), void _q_participant_removed(const QVariant &response))
     Q_PRIVATE_SLOT(d_func(), void _q_title_updated(const QVariant &response))
+	Q_PRIVATE_SLOT(d_func(), void _q_online_changed(bool))
 };
 
 } // namespace vk

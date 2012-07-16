@@ -2,7 +2,7 @@
 #define VK_MESSAGESESSION_H
 
 #include <QObject>
-#include "attachment.h"
+#include "message.h"
 
 namespace vk {
 

@@ -104,8 +104,8 @@ public:
 
 	Reply *sendMessage(const Message &message);
     Reply *getLastDialogs(int count = 16, int previewLength = -1); //TODO move method    
-    Reply *addLike(int ownerId, int postId, bool retweet = false, const QString &message = QString());
-    Reply *deleteLike(int ownerId, int postId);
+	Reply *addLike(int ownerId, int postId, bool retweet = false, const QString &message = QString()); //TODO move method
+	Reply *deleteLike(int ownerId, int postId); //TODO move method
 
     Q_INVOKABLE Contact *me() const;
 	Q_INVOKABLE Contact *contact(int id) const;
