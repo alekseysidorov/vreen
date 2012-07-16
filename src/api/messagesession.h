@@ -11,7 +11,7 @@ class Client;
 class Reply;
 class MessageSessionPrivate;
 
-class MessageSession : public QObject
+class VK_SHARED_EXPORT MessageSession : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(MessageSession)

@@ -17,6 +17,7 @@ include(CommonUtils)
 
 option(VKIT_WITH_OUATH "Enable webkit based oauth authorization" ON)
 option(VKIT_WITH_QMLAPI "Enable QtQuick bindings for vkit" ON)
+option(VKIT_INSTALL_HEADERS "Install devel headers for vkit" ON)
 
 #TODO check if vars is defined
 set(RLIBDIR bin)
@@ -27,5 +28,4 @@ set(CMAKE_LIBVK_VERSION_MINOR 9 CACHE INT "Minor vk version number" FORCE)
 set(CMAKE_LIBVK_VERSION_PATCH 0 CACHE INT "Release vk version number" FORCE)
 set(CMAKE_LIBVK_VERSION_STRING "${CMAKE_LIBVK_VERSION_MAJOR}.${CMAKE_LIBVK_VERSION_MINOR}.${CMAKE_LIBVK_VERSION_PATCH}" CACHE STRING "vkit version string" FORCE)
 
-add_pkgconfig_file(vkit.pc.cmake)
 add_subdirectory(src)

@@ -1,3 +1,7 @@
+if(NOT VKIT_INSTALL_HEADERS)
+    set(INTERNAL_FLAG "INTERNAL")
+endif()
+
 add_subdirectory(3rdparty)
 add_subdirectory(api)
 if(VKIT_WITH_QMLAPI)
