@@ -30,6 +30,19 @@ public:
 	void _q_online_changed(bool set);
 };
 
+/*!
+ * \brief The GroupChatSession class, based on
+ * \link http://vk.com/developers.php?oid=-1&p=messages.getChat
+ * \link http://vk.com/developers.php?o=-1&p=messages.createChat
+ * etc
+ */
+
+/*!
+ * \brief GroupChatSession::GroupChatSession
+ * \param chatId
+ * \param client
+ */
+
 GroupChatSession::GroupChatSession(int chatId, Client *client) :
     MessageSession(new GroupChatSessionPrivate(this, client, chatId))
 {

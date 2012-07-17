@@ -182,9 +182,19 @@ void LongPollPrivate::_q_on_data_recieved(const QVariant &response)
 			break;
 		}
 		case LongPoll::ChatTyping: {
-			int user_id = qAbs(update.at(1).toInt());
+			int user_id = update.at(1).toInt();
 			int flags = update.at(2).toInt();
 			emit q->contactTyping(user_id);
+		}
+		case LongPoll::GroupChatTyping: {
+			int user_id = update.at(1).toInt();
+			int chat_id = update.at(2).toInt();
+			emit q->contactTyping(user_id, chat_id);
+		}
+		case LongPoll::UserCall: {
+			int user_id = update.at(1).toInt();
+			int call_id = update.at(2).toInt();
+			emit q->contactCall(user_id, call_id);
 		}
 		}
 	}
