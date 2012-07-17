@@ -42,6 +42,8 @@ class Roster;
 class GroupManager;
 class LongPoll;
 class Contact;
+class Buddy;
+
 class VK_SHARED_EXPORT Client : public QObject
 {
     Q_OBJECT
@@ -124,7 +126,7 @@ signals:
     void rosterChanged(vk::Roster*);
     void groupManagerChanged(vk::GroupManager*);
     void longPollChanged(vk::LongPoll*);
-    void meChanged(vk::Contact *me);
+	void meChanged(vk::Buddy *me);
 	void activityChanged(const QString &activity);
 	void invisibleChanged(bool set);
 protected:

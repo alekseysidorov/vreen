@@ -109,7 +109,7 @@ void ChatSession::setActive(bool set)
     d->isActive = set;
 }
 
-Reply *ChatSession::getHistory(int count, int offset)
+Reply *ChatSession::doGetHistory(int count, int offset)
 {
     Q_D(ChatSession);
     QVariantMap args;
@@ -122,14 +122,9 @@ Reply *ChatSession::getHistory(int count, int offset)
     return reply;
 }
 
-Reply *ChatSession::sendMessage(const QString &body, const QString &subject, const Attachment &attachment)
+Reply *ChatSession::doSendMessage(const Message &message)
 {
 	Q_D(ChatSession);
-	Message message(d->contact->client());
-	message.setBody(body);
-	message.setSubject(subject);
-	message.setTo(d->contact);
-    message.setAttachments(Attachment::List() << attachment);
 	return d->contact->client()->sendMessage(message);
 }
 

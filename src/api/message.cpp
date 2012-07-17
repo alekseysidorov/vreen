@@ -37,9 +37,9 @@ class MessageData : public DynamicPropertyData
 public:
 	MessageData(Client *client) :
 		client(client),
-		id(0),
-		from(client->me()),
-		to(client->me()),
+		messageId(0),
+		fromId(0),
+		toId(0),
 		chatId(0),
 		userCount(0),
 		latitude(-1),
@@ -48,9 +48,9 @@ public:
 	MessageData(const MessageData &o) :
 		DynamicPropertyData(o),
 		client(o.client),
-		id(o.id),
-		from(o.from),
-		to(o.to),
+		messageId(o.messageId),
+		fromId(o.fromId),
+		toId(o.toId),
 		date(o.date),
 		flags(o.flags),
 		subject(o.subject),
@@ -67,9 +67,9 @@ public:
 	~MessageData() {}
 
 	Client *client;
-	int id;
-	QWeakPointer<Contact> from;
-	QWeakPointer<Contact> to;
+	int messageId;
+	int fromId;
+	int toId;
 	QDateTime date;
 	Message::Flags flags;
 	QString subject;
@@ -85,31 +85,30 @@ public:
 
 	void fill(const QVariantMap &data)
 	{
-		id = data.value("mid").toInt();
+		messageId = data.value("mid").toInt();
 
 		int clientId = data.value("from_id").toInt();
 		if (clientId) {
             auto contact = client->roster()->buddy(clientId);
-			bool isIncoming = contact == client->me();
+			bool isIncoming = (contact == client->me());
 			setFlag(Message::FlagOutbox, !isIncoming);
 			if (isIncoming) {
-				from = client->me();
-				to.clear();
-
+				fromId = getId(client->me());
+				toId = 0;
 			} else {
-				from = contact;
-				to = client->me();
+				fromId = getId(contact);
+				toId = getId(client->me());
 			}
 		} else {
 			setFlag(Message::FlagOutbox, data.value("out").toBool());
 			clientId = data.value("uid").toInt();
             auto contact = client->roster()->buddy(clientId);
 			if (!flags.testFlag(Message::FlagOutbox)) {
-				from = contact;
-				to = client->me();
+				fromId = getId(contact);
+				toId = getId(client->me());
 			} else {
-				to = contact;
-				from = client->me();
+				toId = getId(contact);
+				fromId = getId(client->me());
 			}
 		}
 
@@ -121,12 +120,22 @@ public:
 		//TODO forward messages
 		//TODO groupchats
 	}
+
 	void setFlag(Message::Flag flag, bool set = true)
 	{
 		if (set)
 			flags |= flag;
 		else
 			flags &= ~flag;
+	}
+
+	int getId(Contact *contact) const
+	{
+		return contact ? contact->id() : 0;
+	}
+	Contact *getContact(int id) const
+	{
+		return client ? client->contact(id) : 0;
 	}
 };
 
@@ -168,12 +177,12 @@ Message::~Message()
 
 int Message::id() const
 {
-	return d->id;
+	return d->messageId;
 }
 
 void Message::setId(int id)
 {
-	d->id = id;
+	d->messageId = id;
 }
 
 Client *Message::client() const
@@ -193,32 +202,42 @@ void Message::setDate(const QDateTime &date)
 
 int Message::fromId() const
 {
-	return d->from.isNull() ? -1 : d->from.data()->id();
+	return d->fromId;
+}
+
+void Message::setFromId(int id)
+{
+	d->fromId = id;
 }
 
 int Message::toId() const
 {
-	return d->to.isNull() ? -1 : d->to.data()->id();
+	return d->toId;
+}
+
+void Message::setToId(int id)
+{
+	d->toId = id;
 }
 
 Contact *Message::from() const
 {
-	return d->from.data();
+	return d->getContact(d->fromId);
 }
 
 void Message::setFrom(Contact *contact)
 {
-	d->from = contact;
+	d->fromId = contact->id();
 }
 
 Contact *Message::to() const
 {
-	return d->to.data();
+	return d->getContact(d->toId);
 }
 
 void Message::setTo(Contact *to)
 {
-	d->to = to;
+	d->toId = to->id();
 }
 
 QString Message::subject() const

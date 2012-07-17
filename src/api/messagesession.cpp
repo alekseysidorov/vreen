@@ -19,7 +19,27 @@ Client *MessageSession::client() const
 
 int MessageSession::uid() const
 {
-    return d_func()->uid;
+	return d_func()->uid;
+}
+
+Reply *MessageSession::getHistory(int count, int offset)
+{
+	return doGetHistory(count, offset);
+}
+
+Reply *MessageSession::sendMessage(const QString &body, const QString &subject)
+{
+	Q_D(MessageSession);
+	Message msg(d->client);
+	msg.setToId(d->uid);
+	msg.setBody(body);
+	msg.setSubject(subject);
+	return sendMessage(msg);
+}
+
+Reply *MessageSession::sendMessage(const Message &message)
+{
+	return doSendMessage(message);
 }
 
 } // namespace vk

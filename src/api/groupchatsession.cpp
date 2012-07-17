@@ -15,7 +15,7 @@ public:
         adminId(0)
     {}
     QString title;
-    ContactList contacts;
+	BuddyList buddies;
     int adminId;
 
     void addContact(int id);
@@ -49,26 +49,27 @@ GroupChatSession::GroupChatSession(int chatId, Client *client) :
 	connect(client, SIGNAL(onlineStateChanged(bool)), SLOT(_q_online_changed(bool)));
 }
 
-ContactList GroupChatSession::participants() const
+BuddyList GroupChatSession::participants() const
 {
-    return d_func()->contacts;
+	return d_func()->buddies;
+}
+
+Buddy *GroupChatSession::admin() const
+{
+	return static_cast<Buddy*>(findParticipant(d_func()->adminId));
 }
 
 QString GroupChatSession::title() const
 {
-    return d_func()->title;
+	return d_func()->title;
 }
 
-Reply *GroupChatSession::sendMessage(const QString &body, const QString &subject, const Attachment &attachment)
+Buddy *GroupChatSession::findParticipant(int uid) const
 {
-    Q_D(GroupChatSession);
-    QVariantMap args;
-    //TODO move to client
-    args.insert("chat_id", d->uid);
-    args.insert("message", body);
-    args.insert("title", subject);
-
-	return d->client->request("messages.send", args);
+	foreach (auto buddy, d_func()->buddies)
+		if (buddy->id() == uid)
+			return buddy;
+	return 0;
 }
 
 Reply *GroupChatSession::create(Client *client, const IdList &uids, const QString &title)
@@ -91,7 +92,7 @@ void GroupChatSession::setTitle(const QString &title)
     }
 }
 
-Reply *GroupChatSession::getHistory(int count, int offset)
+Reply *GroupChatSession::doGetHistory(int count, int offset)
 {
     Q_D(GroupChatSession);
     QVariantMap args;
@@ -101,7 +102,19 @@ Reply *GroupChatSession::getHistory(int count, int offset)
 
     auto reply = d->client->request("messages.getHistory", args);
     connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_history_received(QVariant)));
-    return reply;
+	return reply;
+}
+
+Reply *GroupChatSession::doSendMessage(const Message &message)
+{
+	Q_D(GroupChatSession);
+	QVariantMap args;
+	//TODO move to client
+	args.insert("chat_id", d->uid);
+	args.insert("message", message.body());
+	args.insert("title", message.subject());
+
+	return d->client->request("messages.send", args);
 }
 
 Reply *GroupChatSession::getInfo()
@@ -195,7 +208,7 @@ void GroupChatSessionPrivate::_q_title_updated(const QVariant &response)
 
 void GroupChatSessionPrivate::_q_online_changed(bool set)
 {
-	foreach (auto contact, contacts) {
+	foreach (auto contact, buddies) {
 		if (auto buddy = qobject_cast<Buddy*>(contact)) {
 			if (set)
 				buddy->update();
@@ -209,9 +222,9 @@ void GroupChatSessionPrivate::addContact(int id)
 {
     Q_Q(GroupChatSession);
     if (id) {
-        auto contact = client->contact(id);
-        if (!contacts.contains(contact)) {
-            contacts.append(contact);
+		auto contact = client->roster()->buddy(id);
+		if (!buddies.contains(contact)) {
+			buddies.append(contact);
             emit q->participantAdded(contact);
         }
     }
@@ -221,9 +234,9 @@ void GroupChatSessionPrivate::removeContact(int id)
 {
     Q_Q(GroupChatSession);
     if (id) {
-        auto contact = client->contact(id);
-        if (contacts.contains(contact)) {
-            contacts.removeAll(contact);
+		auto contact = client->roster()->buddy(id);
+		if (buddies.contains(contact)) {
+			buddies.removeAll(contact);
             emit q->participantRemoved(contact);
         }
     }

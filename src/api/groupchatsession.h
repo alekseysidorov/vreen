@@ -7,7 +7,7 @@ namespace vk {
 
 class GroupChatSessionPrivate;
 
-class GroupChatSession : public vk::MessageSession
+class VK_SHARED_EXPORT GroupChatSession : public vk::MessageSession
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(GroupChatSession)
@@ -16,13 +16,11 @@ class GroupChatSession : public vk::MessageSession
 public:
     explicit GroupChatSession(int chatId, Client *parent);
 
-    ContactList participants() const;
+	BuddyList participants() const;
     Buddy *admin() const;
     QString title() const;
+	Buddy *findParticipant(int uid) const;
 
-	virtual Reply *getHistory(int count = 16, int offset = 0);
-    virtual Reply *sendMessage(const QString &body, const QString &subject = QString(),
-							   const Attachment &attachment = Attachment());
 	static Reply *create(Client *client, const IdList &uids, const QString &title = QString());
 public slots:
     Reply *getInfo();
@@ -30,11 +28,13 @@ public slots:
     Reply *removeParticipant(Contact *buddy);
     Reply *updateTitle(const QString &title);
 signals:
-    void participantAdded(vk::Contact*);
-    void participantRemoved(vk::Contact*);
-    void titleChanged(QString arg);
+	void participantAdded(vk::Buddy*);
+	void participantRemoved(vk::Buddy*);
+	void titleChanged(QString);
 protected:
-    void setTitle(const QString &title);
+	void setTitle(const QString &title);
+	virtual Reply *doSendMessage(const vk::Message &message);
+	virtual Reply *doGetHistory(int count = 16, int offset = 0);
 private:
     Q_PRIVATE_SLOT(d_func(), void _q_history_received(const QVariant &response))
     Q_PRIVATE_SLOT(d_func(), void _q_info_received(const QVariant &response))

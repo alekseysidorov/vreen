@@ -47,14 +47,13 @@ public:
     QString title() const;
     bool isActive() const;
     void setActive(bool set);
-public slots:
-    virtual Reply *getHistory(int count = 16, int offset = 0);
-    virtual Reply *sendMessage(const QString &body, const QString &subject = QString(),
-                               const Attachment &attachment = Attachment());
 signals:
     void messageAdded(const vk::Message &message);
     void messageDeleted(int id);
     void messageReadStateChanged(int mid, bool isRead);
+protected:
+	virtual Reply *doGetHistory(int count = 16, int offset = 0);
+	virtual Reply *doSendMessage(const vk::Message &message);
 private:
 
     Q_PRIVATE_SLOT(d_func(), void _q_history_received(const QVariant &))
