@@ -72,13 +72,13 @@ void DialogsModel::setUnreadCount(int count)
 //    return m_client.data();
 //}
 
-void DialogsModel::getLastDialogs(int count, int previewLength)
+void DialogsModel::getDialogs(int offset, int count, int previewLength)
 {
     if (m_client.isNull()) {
         qWarning("Dialog model must have a client!");
         return;
     }
-    auto reply = m_client.data()->roster()->getDialogs(0, count, previewLength);
+    auto reply = m_client.data()->roster()->getDialogs(offset, count, previewLength);
     connect(reply, SIGNAL(resultReady(QVariant)), SLOT(onDialogsReceived(QVariant)));
     connect(reply, SIGNAL(resultReady(QVariant)), SIGNAL(requestFinished()));
 }
@@ -88,7 +88,7 @@ void DialogsModel::onDialogsReceived(const QVariant &dialogs)
 {
     auto list = dialogs.toList();
     Q_UNUSED(list.takeFirst().toInt());
-    vk::MessageList messageList = Message::fromVariantList(list, m_client.data());
+    vk::MessageList messageList = vk::Message::fromVariantList(list, m_client.data());
 
     foreach (auto message, messageList) {
         onAddMessage(message);

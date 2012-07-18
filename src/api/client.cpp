@@ -353,8 +353,6 @@ void ClientPrivate::_q_error_received(int code)
 	reply->deleteLater();
 	auto error = static_cast<Client::Error>(code);
 	emit q->error(error);
-	emit q->error(reply);
-
 	if (error == Client::ErrorAuthorizationFailed) {
 		connection.data()->disconnectFromHost();
 		connection.data()->clear();

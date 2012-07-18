@@ -46,7 +46,7 @@ public:
     void setUnreadCount(int count);
     int unreadCount() const;
 public slots:
-    void getLastDialogs(int count = 16, int previewLength = -1);
+    void getDialogs(int offset = 0, int count = 25, int previewLength = -1);
 signals:
     //void clientChanged(vk::Client*);
     void clientChanged(QObject*); //HACK

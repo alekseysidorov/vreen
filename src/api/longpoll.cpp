@@ -32,7 +32,7 @@
 
 namespace vk {
 
-static constexpr int chatMessageOffset = 2000000000;
+static const int chatMessageOffset = 2000000000;
 
 /*!
  * \brief The LongPoll class
