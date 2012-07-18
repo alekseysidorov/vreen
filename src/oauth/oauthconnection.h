@@ -29,6 +29,7 @@ public:
 	virtual QNetworkReply *request(const QString &method, const QVariantMap &args = QVariantMap());
 	virtual Client::State connectionState() const;
 	virtual int uid() const;
+	virtual void clear();
 
 	QByteArray accessToken() const;
 	time_t expiresIn() const;

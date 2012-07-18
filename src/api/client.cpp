@@ -108,14 +108,13 @@ void Client::setConnection(Connection *connection)
 {
 	Q_D(Client);
 	if (d->connection) {
-		//TODO cleanup
+		d->connection.data()->deleteLater();
 	}
 
 	d->connection = connection;
 	connect(connection, SIGNAL(connectionStateChanged(vk::Client::State)),
 			this, SLOT(_q_connection_state_changed(vk::Client::State)));
-	connect(connection, SIGNAL(error(vk::Client::Error)),
-			this, SIGNAL(error(vk::Client::Error))); //TODO error handler
+	connect(connection, SIGNAL(error(vk::Client::Error)), this, SIGNAL(error(vk::Client::Error)));
 }
 
 Roster *Client::roster() const
@@ -215,15 +214,6 @@ Reply *Client::sendMessage(const Message &message)
 	args.insert("message", message.body());
 	args.insert("title", message.subject());
 	return request("messages.send", args);
-}
-
-Reply *Client::getLastDialogs(int count, int previewLength)
-{
-	QVariantMap args;
-	args.insert("count", count);
-	if (previewLength != -1)
-		args.insert("preview_length", previewLength);
-	return request("messages.getDialogs", args);
 }
 
 Reply *Client::addLike(int ownerId, int postId, bool retweet, const QString &message)
@@ -355,17 +345,31 @@ void ClientPrivate::_q_connection_state_changed(Client::State state)
 	emit q->connectionStateChanged(state);
 }
 
-void ClientPrivate::_q_error_received(int error)
+void ClientPrivate::_q_error_received(int code)
 {
-	auto reply = sender_cast<Reply*>(q_func()->sender());
-	qDebug() << "Error received :" << error;
+	Q_Q(Client);
+	auto reply = sender_cast<Reply*>(q->sender());
+	qDebug() << "Error received :" << code << reply->networkReply()->url();
 	reply->deleteLater();
+	auto error = static_cast<Client::Error>(code);
+	emit q->error(error);
+	emit q->error(reply);
+
+	if (error == Client::ErrorAuthorizationFailed) {
+		connection.data()->disconnectFromHost();
+		connection.data()->clear();
+	}
 }
 
 void ClientPrivate::_q_reply_finished(const QVariant &)
 {
 	auto reply = sender_cast<Reply*>(q_func()->sender());
 	reply->deleteLater();
+}
+
+void ClientPrivate::_q_network_manager_error(int)
+{
+
 }
 
 } // namespace vk

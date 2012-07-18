@@ -71,10 +71,14 @@ public:
         StateInvalid
     };
     enum Error {
-        ServerIsUnavailableError,
-        AuthorizationError,
-        UnknownMethodPassedError,
-        IncorrectSignatureError
+		ErrorUnknown					= 1,
+		ErrorApplicationDisabled		= 2,
+		ErrorIncorrectSignature			= 4,
+		ErrorAuthorizationFailed		= 5,
+		ErrorToManyRequests				= 6,
+		ErrorPermissionDenied			= 7,
+		ErrorCaptchaNeeded				= 14,
+		ErrorMissingOrInvalidParameter	= 100
     };
 
     explicit Client(QObject *parent = 0);
@@ -105,7 +109,6 @@ public:
     Reply *request(const QString &method, const QVariantMap &args = QVariantMap());
 
 	Reply *sendMessage(const Message &message);
-    Reply *getLastDialogs(int count = 16, int previewLength = -1); //TODO move method    
 	Reply *addLike(int ownerId, int postId, bool retweet = false, const QString &message = QString()); //TODO move method
 	Reply *deleteLike(int ownerId, int postId); //TODO move method
 
@@ -140,6 +143,7 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_reply_finished(const QVariant &))
 	Q_PRIVATE_SLOT(d_func(), void _q_activity_update_finished(const QVariant &))
 	Q_PRIVATE_SLOT(d_func(), void _q_update_online())
+	Q_PRIVATE_SLOT(d_func(), void _q_network_manager_error(int))
 };
 
 } // namespace vk

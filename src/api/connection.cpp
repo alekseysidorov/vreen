@@ -31,5 +31,12 @@ Connection::Connection(QObject *parent) :
 {
 }
 
+/*!
+ * \brief Connection::clear clear auth data. Default implementation doesn't nothing.
+ */
+void Connection::clear()
+{
+}
+
 } // namespace vk
 

@@ -26,11 +26,13 @@
 #define VK_ROSTER_H
 
 #include "contact.h"
+#include "message.h"
 #include <QVariant>
 #include <QStringList>
 
 namespace vk {
 class Client;
+class Reply;
 typedef QList<int> IdList;
 
 class RosterPrivate;
@@ -47,7 +49,7 @@ public:
         AccCase,
         InsCase,
         AblCase
-    };
+    };	
 
     Roster(Client *client, int uid = 0);
     virtual ~Roster();
@@ -61,6 +63,8 @@ public:
 
     QStringList tags() const;
     void setTags(const QStringList &list);
+	Reply *getDialogs(int offset = 0, int count = 16, int previewLength = -1);
+	Reply *getMessages(int offset = 0, int count = 50, Message::Filter filter = Message::FilterNone);
 public slots:
     void sync(const QStringList &fields = QStringList()
             << VK_COMMON_FIELDS

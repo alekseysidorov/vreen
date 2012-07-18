@@ -32,6 +32,8 @@
 
 namespace vk {
 
+static constexpr int chatMessageOffset = 2000000000;
+
 /*!
  * \brief The LongPoll class
  * Api reference: \link http://vk.com/developers.php?oid=-1&p=messages.getLongPollServer
@@ -135,17 +137,20 @@ void LongPollPrivate::_q_on_data_recieved(const QVariant &response)
 			break;
 		}
 		case LongPoll::MessageAdded: {
+			qDebug() << update;
 			Message::Flags flags(update.value(2).toInt());
 			Message message(client);
 			int cid = update.value(3).toInt();
+			qDebug() << (flags & Message::FlagChat);
+			//if (flags & Message::FlagChat)
+			//	cid -= chatMessageOffset;
 			message.setId(update.value(1).toInt());
 			message.setFlags(flags);
-            auto contact = client->roster()->buddy(cid);
 			if (flags & Message::FlagOutbox) {
-				message.setTo(contact);
+				message.setToId(cid);
 				message.setFrom(client->me());
 			} else {
-				message.setFrom(contact);
+				message.setFromId(cid);
 				message.setTo(client->me());
 			}
 			message.setSubject(update.value(5).toString());
@@ -181,9 +186,15 @@ void LongPollPrivate::_q_on_data_recieved(const QVariant &response)
 			emit q->contactStatusChanged(id, status);
 			break;
 		}
+		case LongPoll::GroupChatUpdated: {
+			int chat_id = update.value(1).toInt();
+			bool self = update.value(1).toInt();
+			emit q->groupChatUpdated(chat_id, self);
+			break;
+		}
 		case LongPoll::ChatTyping: {
 			int user_id = qAbs(update.value(1).toInt());
-			int flags = update.at(2).toInt();
+			//int flags = update.at(2).toInt();
 			emit q->contactTyping(user_id);
 			break;
 		}

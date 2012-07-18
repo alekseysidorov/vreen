@@ -56,6 +56,12 @@ public:
         FlagMedia    = 512
     };
     Q_DECLARE_FLAGS(Flags, Flag)
+	enum Filter {
+		FilterNone			= 0,
+		FilterUnread		= 1,
+		FilterNotFromChat	= 2,
+		FilterFromFriends	= 4
+	};
 
     Message(Client *client = 0);
     Message(const QVariantMap &data, Client *client);
@@ -93,6 +99,8 @@ public:
     Attachment::Hash attachments() const;
     Attachment::List attachments(Attachment::Type type) const;
     void setAttachments(const Attachment::List &attachmentList);
+
+	static MessageList fromVariantList(const QVariantList &list, Client *client);
 protected:
     QSharedDataPointer<MessageData> d;
 };

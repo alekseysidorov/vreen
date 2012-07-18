@@ -66,6 +66,7 @@ public:
     void _q_connection_state_changed(vk::Client::State state);
 	void _q_error_received(int error);
 	void _q_reply_finished(const QVariant &);
+	void _q_network_manager_error(int);
 	void _q_activity_update_finished(const QVariant &);
 	void _q_update_online();
     void processReply(Reply *reply);

@@ -135,6 +135,11 @@ int OAuthConnection::uid() const
 	return d_func()->uid;
 }
 
+void OAuthConnection::clear()
+{
+	d_func()->clear();
+}
+
 QByteArray OAuthConnection::accessToken() const
 {
 	return d_func()->accessToken;
@@ -224,7 +229,7 @@ void OAuthConnectionPrivate::_q_loadFinished(bool ok)
 		}
 	} else {
 		setConnectionState(Client::StateOffline);
-		emit q->error(Client::AuthorizationError);
+		emit q->error(Client::ErrorAuthorizationFailed);
 	}
 }
 
@@ -232,6 +237,7 @@ void OAuthConnectionPrivate::clear()
 {
 	accessToken.clear();
 	expiresIn = 0;
+	uid = 0;
 }
 
 } // namespace vk

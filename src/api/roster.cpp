@@ -121,7 +121,40 @@ QStringList Roster::tags() const
 void Roster::setTags(const QStringList &tags)
 {
     d_func()->tags = tags;
-    emit tagsChanged(tags);
+	emit tagsChanged(tags);
+}
+
+/*!
+ * \brief Roster::getDialogs
+ * \param offset
+ * \param count
+ * \param previewLength
+ * \return
+ */
+Reply *Roster::getDialogs(int offset, int count, int previewLength)
+{
+	QVariantMap args;
+	args.insert("count", count);
+	args.insert("offset", offset);
+	if (previewLength != -1)
+		args.insert("preview_length", previewLength);
+	return d_func()->client->request("messages.getDialogs", args);
+}
+
+/*!
+ * \brief Roster::getMessages
+ * \param offset
+ * \param count
+ * \param filter
+ * \return
+ */
+Reply *Roster::getMessages(int offset, int count, Message::Filter filter)
+{
+	QVariantMap args;
+	args.insert("count", count);
+	args.insert("offset", offset);
+	args.insert("filter", filter);
+	return d_func()->client->request("messages.get", args);
 }
 
 void Roster::sync(const QStringList &fields)
@@ -233,7 +266,6 @@ void RosterPrivate::_q_online_changed(bool set)
     if (!set)
 		foreach(auto buddy, buddyHash)
 			buddy->setOnline(false);
-
 }
 
 } // namespace vk

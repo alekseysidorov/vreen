@@ -47,6 +47,7 @@ public:
         MessageAdded		= 4,
         UserOnline          = 8,
 		UserOffline         = 9,
+		GroupChatUpdated	= 51,
 		ChatTyping			= 61,
 		GroupChatTyping		= 62,
 		UserCall			= 70
@@ -75,6 +76,7 @@ signals:
 	void contactStatusChanged(int userId, vk::Contact::Status status);
 	void contactTyping(int userId, int chatId = 0);
 	void contactCall(int userId, int callId);
+	void groupChatUpdated(int chatId, bool self);
 public slots:
     void setRunning(bool set);
 protected slots:

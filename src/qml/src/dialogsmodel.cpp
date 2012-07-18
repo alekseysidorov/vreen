@@ -25,6 +25,7 @@
 #include "dialogsmodel.h"
 #include <client.h>
 #include <longpoll.h>
+#include <roster.h>
 #include <QDebug>
 #include <QApplication>
 
@@ -77,7 +78,7 @@ void DialogsModel::getLastDialogs(int count, int previewLength)
         qWarning("Dialog model must have a client!");
         return;
     }
-    auto reply = m_client.data()->getLastDialogs(count, previewLength);
+    auto reply = m_client.data()->roster()->getDialogs(0, count, previewLength);
     connect(reply, SIGNAL(resultReady(QVariant)), SLOT(onDialogsReceived(QVariant)));
     connect(reply, SIGNAL(resultReady(QVariant)), SIGNAL(requestFinished()));
 }
@@ -87,11 +88,7 @@ void DialogsModel::onDialogsReceived(const QVariant &dialogs)
 {
     auto list = dialogs.toList();
     Q_UNUSED(list.takeFirst().toInt());
-    vk::MessageList messageList;
-    foreach (auto item, list) {
-        vk::Message message(item.toMap(), m_client.data());
-        messageList.append(message);
-    }
+    vk::MessageList messageList = Message::fromVariantList(list, m_client.data());
 
     foreach (auto message, messageList) {
         onAddMessage(message);
