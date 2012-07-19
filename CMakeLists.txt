@@ -22,6 +22,7 @@ option(VKIT_INSTALL_HEADERS "Install devel headers for vkit" ON)
 #TODO check if vars is defined
 set(RLIBDIR bin)
 set(LIBDIR lib${LIB_SUFFIX})
+set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR})
 
 set(CMAKE_LIBVK_VERSION_MAJOR 0 CACHE INT "Major vk version number" FORCE)
 set(CMAKE_LIBVK_VERSION_MINOR 9 CACHE INT "Minor vk version number" FORCE)
