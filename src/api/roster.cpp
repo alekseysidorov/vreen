@@ -59,12 +59,19 @@ Roster::~Roster()
 void Roster::setUid(int uid)
 {
     Q_D(Roster);
-    if (d->owner && uid == d->owner->id())
-        return;
-    qDeleteAll(d->buddyHash);
-    d->owner = new Buddy(uid, d->client);
-    emit uidChanged(uid);
-    d->addBuddy(d->owner);
+    if (uid) {
+        if (d->owner) {
+            if (uid == d->owner->id())
+                return;
+            else
+                qDeleteAll(d->buddyHash);
+        }
+        d->owner = buddy(uid);
+        emit uidChanged(uid);
+    } else {
+        qDeleteAll(d->buddyHash);
+        emit uidChanged(uid);
+    }
 }
 
 int Roster::uid() const
@@ -97,7 +104,7 @@ Buddy *Roster::buddy(int id)
     if (!buddy) {
         if (d->owner && d->owner->id() == id)
             return d->owner;
-            buddy = new Buddy(id, d->client);
+        buddy = new Buddy(id, d->client);
         d->addBuddy(buddy);
     }
     return buddy;
@@ -121,7 +128,7 @@ QStringList Roster::tags() const
 void Roster::setTags(const QStringList &tags)
 {
     d_func()->tags = tags;
-	emit tagsChanged(tags);
+    emit tagsChanged(tags);
 }
 
 /*!
@@ -133,12 +140,12 @@ void Roster::setTags(const QStringList &tags)
  */
 Reply *Roster::getDialogs(int offset, int count, int previewLength)
 {
-	QVariantMap args;
-	args.insert("count", count);
-	args.insert("offset", offset);
-	if (previewLength != -1)
-		args.insert("preview_length", previewLength);
-	return d_func()->client->request("messages.getDialogs", args);
+    QVariantMap args;
+    args.insert("count", count);
+    args.insert("offset", offset);
+    if (previewLength != -1)
+        args.insert("preview_length", previewLength);
+    return d_func()->client->request("messages.getDialogs", args);
 }
 
 /*!
@@ -150,11 +157,11 @@ Reply *Roster::getDialogs(int offset, int count, int previewLength)
  */
 Reply *Roster::getMessages(int offset, int count, Message::Filter filter)
 {
-	QVariantMap args;
-	args.insert("count", count);
-	args.insert("offset", offset);
-	args.insert("filter", filter);
-	return d_func()->client->request("messages.get", args);
+    QVariantMap args;
+    args.insert("count", count);
+    args.insert("offset", offset);
+    args.insert("filter", filter);
+    return d_func()->client->request("messages.get", args);
 }
 
 void Roster::sync(const QStringList &fields)
@@ -174,7 +181,7 @@ void Roster::sync(const QStringList &fields)
  * \param ids
  * \param fields from \link http://vk.com/developers.php?oid=-1&p=Описание_полей_параметра_fields
  */
-void Roster::update(const IdList &ids, const QStringList &fields)
+Reply *Roster::update(const IdList &ids, const QStringList &fields)
 {
     Q_D(Roster);
     QVariantMap args;
@@ -183,6 +190,7 @@ void Roster::update(const IdList &ids, const QStringList &fields)
     auto reply = d->client->request("users.get", args);
     reply->connect(reply, SIGNAL(resultReady(const QVariant&)),
                    this, SLOT(_q_friends_received(const QVariant&)));
+    return reply;
 }
 
 void RosterPrivate::getTags()
@@ -212,7 +220,7 @@ void RosterPrivate::addBuddy(Buddy *buddy)
     if (!buddy->isFriend()) {
         IdList ids;
         ids.append(buddy->id());
-        q->update(ids, QStringList() << VK_COMMON_FIELDS); //TODO move!
+        //q->update(ids, QStringList() << VK_COMMON_FIELDS); //TODO move!
     }
     buddyHash.insert(buddy->id(), buddy);
     emit q->buddyAdded(buddy);
@@ -240,13 +248,14 @@ void RosterPrivate::_q_friends_received(const QVariant &response)
         int id = map.value("uid").toInt();
         auto buddy = buddyHash.value(id);
         if (!buddy) {
-			buddy = new Buddy(id, client);
-			Contact::fillContact(buddy, map);
+            buddy = new Buddy(id, client);
+            Contact::fillContact(buddy, map);
             buddy->setIsFriend(isFriend);
-			emit q->buddyAdded(buddy);
+            emit q->buddyAdded(buddy);
         } else {
             buddy->setIsFriend(isFriend);
-			Contact::fillContact(buddy, map);
+            Contact::fillContact(buddy, map);
+            emit q->buddyUpdated(buddy);
         }
     }
     emit q->syncFinished(true);
@@ -255,15 +264,15 @@ void RosterPrivate::_q_friends_received(const QVariant &response)
 void RosterPrivate::_q_status_changed(int userId, Buddy::Status status)
 {
     Q_Q(Roster);
-	auto buddy = q->buddy(userId);
-	buddy->setStatus(status);
+    auto buddy = q->buddy(userId);
+    buddy->setStatus(status);
 }
 
 void RosterPrivate::_q_online_changed(bool set)
 {
     if (!set)
-		foreach(auto buddy, buddyHash)
-			buddy->setOnline(false);
+        foreach(auto buddy, buddyHash)
+            buddy->setOnline(false);
 }
 
 } // namespace vk

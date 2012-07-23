@@ -69,11 +69,12 @@ public slots:
     void sync(const QStringList &fields = QStringList()
             << VK_COMMON_FIELDS
             );
-    void update(const IdList &ids, const QStringList &fields = QStringList()
+    Reply *update(const IdList &ids, const QStringList &fields = QStringList()
             << VK_ALL_FIELDS
             );
 signals:
     void buddyAdded(vk::Buddy *buddy);
+    void buddyUpdated(vk::Buddy *buddy);
     void contactRemoved(int id);
     void tagsChanged(const QStringList &);
     void syncFinished(bool success);

@@ -143,7 +143,7 @@ class VK_SHARED_EXPORT Buddy : public Contact
     //private properties
     Q_PROPERTY(QString _q_first_name READ firstName WRITE setFirstName DESIGNABLE false)
     Q_PROPERTY(QString _q_last_name READ lastName WRITE setLastName DESIGNABLE false)
-    Q_PROPERTY(bool _q_online READ isOnline WRITE setOnline DESIGNABLE false)
+    Q_PROPERTY(bool _q_online READ isOnline WRITE setOnline DESIGNABLE false STORED false)
     Q_PRIVATE_PROPERTY(d_func(), QVariantList _q_lists READ lists WRITE setLists DESIGNABLE false)
     Q_PRIVATE_PROPERTY(d_func(), QString _q_activity READ getActivity WRITE setActivity DESIGNABLE false)
 public:
