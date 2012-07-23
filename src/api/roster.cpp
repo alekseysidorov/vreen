@@ -209,15 +209,13 @@ void RosterPrivate::getFriends(const QVariantMap &args)
 void RosterPrivate::addBuddy(Buddy *buddy)
 {
     Q_Q(Roster);
-    emit q->buddyAdded(buddy);
-    if (buddy->isFriend())
-		emit q->friendAdded(buddy);
-    else {
+    if (!buddy->isFriend()) {
         IdList ids;
         ids.append(buddy->id());
         q->update(ids, QStringList() << VK_COMMON_FIELDS); //TODO move!
     }
     buddyHash.insert(buddy->id(), buddy);
+    emit q->buddyAdded(buddy);
 }
 
 void RosterPrivate::_q_tags_received(const QVariant &response)
@@ -235,7 +233,9 @@ void RosterPrivate::_q_friends_received(const QVariant &response)
 {
     Q_Q(Roster);
     bool isFriend = q->sender()->property("friend").toBool();
-    foreach (auto data, response.toList()) {
+    auto list = response.toList();
+    qDebug() << list.count() << isFriend;
+    foreach (auto data, list) {
         auto map = data.toMap();
         int id = map.value("uid").toInt();
         auto buddy = buddyHash.value(id);
@@ -244,8 +244,6 @@ void RosterPrivate::_q_friends_received(const QVariant &response)
 			Contact::fillContact(buddy, map);
             buddy->setIsFriend(isFriend);
 			emit q->buddyAdded(buddy);
-			if (isFriend)
-				emit q->friendAdded(buddy);
         } else {
             buddy->setIsFriend(isFriend);
 			Contact::fillContact(buddy, map);

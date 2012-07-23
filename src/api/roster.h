@@ -74,7 +74,6 @@ public slots:
             );
 signals:
     void buddyAdded(vk::Buddy *buddy);
-    void friendAdded(vk::Buddy *buddy);
     void contactRemoved(int id);
     void tagsChanged(const QStringList &);
     void syncFinished(bool success);
