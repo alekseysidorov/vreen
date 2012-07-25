@@ -37,6 +37,7 @@ class VK_SHARED_EXPORT LongPoll : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(LongPoll)
+    Q_PROPERTY(int pollInterval READ pollInterval WRITE setPollInterval NOTIFY pollIntervalChanged)
 public:
 
     enum ServerAnswer {
@@ -46,11 +47,11 @@ public:
         MessageFlagsReseted = 3,
         MessageAdded		= 4,
         UserOnline          = 8,
-		UserOffline         = 9,
-		GroupChatUpdated	= 51,
-		ChatTyping			= 61,
-		GroupChatTyping		= 62,
-		UserCall			= 70
+        UserOffline         = 9,
+        GroupChatUpdated	= 51,
+        ChatTyping			= 61,
+        GroupChatTyping		= 62,
+        UserCall			= 70
 
     };
 
@@ -60,23 +61,26 @@ public:
     Q_DECLARE_FLAGS(OfflineFlags, OfflineFlag)
 
     enum Mode {
-		NoRecieveAttachments = 0,
-		RecieveAttachments = 2
+        NoRecieveAttachments = 0,
+        RecieveAttachments = 2
     };
 
     LongPoll(Client *client);
     virtual ~LongPoll();
     void setMode(Mode mode);
     Mode mode() const;
+    int pollInterval() const;
+    void setPollInterval(int interval);
 signals:
-	void messageAdded(const vk::Message &msg);
+    void messageAdded(const vk::Message &msg);
     void messageDeleted(int mid);
     void messageFlagsReplaced(int mid, int mask, int userId = 0);
     void messageFlagsReseted(int mid, int mask, int userId = 0);
-	void contactStatusChanged(int userId, vk::Contact::Status status);
-	void contactTyping(int userId, int chatId = 0);
-	void contactCall(int userId, int callId);
-	void groupChatUpdated(int chatId, bool self);
+    void contactStatusChanged(int userId, vk::Contact::Status status);
+    void contactTyping(int userId, int chatId = 0);
+    void contactCall(int userId, int callId);
+    void groupChatUpdated(int chatId, bool self);
+    void pollIntervalChanged(int);
 public slots:
     void setRunning(bool set);
 protected slots:
@@ -86,7 +90,9 @@ protected:
     QScopedPointer<LongPollPrivate> d_ptr;
 
     Q_PRIVATE_SLOT(d_func(), void _q_request_server_finished(const QVariant &))
-	Q_PRIVATE_SLOT(d_func(), void _q_on_data_recieved(const QVariant &))
+    Q_PRIVATE_SLOT(d_func(), void _q_on_data_recieved(const QVariant &))
+private:
+    int m_pollInterval;
 };
 
 } // namespace vk

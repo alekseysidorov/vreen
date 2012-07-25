@@ -326,7 +326,7 @@ void ClientPrivate::_q_connection_state_changed(Client::State state)
 {
 	Q_Q(Client);
 	switch (state) {
-	case Client::StateOffline:
+    case Client::StateOffline:
 		emit q->onlineStateChanged(false);
 		setOnlineUpdaterRunning(false);
 		break;
