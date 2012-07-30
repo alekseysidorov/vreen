@@ -26,6 +26,8 @@
 #include "message.h"
 #include "contact.h"
 #include "groupmanager.h"
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 namespace vk {
 
@@ -99,8 +101,9 @@ Connection *Client::connection() const
 Connection *Client::connection()
 {
 	Q_D(Client);
-	if (d->connection.isNull())
-		setConnection(new DirectConnection(this));
+    if (d->connection.isNull())
+        qWarning("Unknown method of connection. Use oauth webkit connection");
+    //	setConnection(new DirectConnection(this));
 	return d_func()->connection.data();
 }
 

@@ -27,8 +27,8 @@
 
 #include "client.h"
 #include "reply.h"
+#include "connection.h"
 #include <QWeakPointer>
-#include "directconnection_p.h"
 #include "roster.h"
 #include "reply.h"
 #include "message.h"
