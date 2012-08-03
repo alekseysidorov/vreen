@@ -12,6 +12,7 @@ set(QT_USE_QTNETWORK true)
 #set(CMAKE_AUTOMOC true)
 
 find_package(Qt4 REQUIRED)
+
 include(UseQt4)
 include(CommonUtils)
 
