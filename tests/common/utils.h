@@ -42,10 +42,10 @@ QString getVariable(const char *name)
 #define VK_CREATE_CLIENT() \
     QFETCH(QString, login); \
     QFETCH(QString, password); \
-    vk::Client client(login, password); \
+	Vreen::Client client(login, password); \
     QEventLoop loop; \
     connect(&client, SIGNAL(onlineStateChanged(bool)), &loop, SLOT(quit())); \
-    connect(&client, SIGNAL(error(vk::Client::Error)), &loop, SLOT(quit())); \
+	connect(&client, SIGNAL(error(Vreen::Client::Error)), &loop, SLOT(quit())); \
     client.connectToHost(); \
     loop.exec();
 

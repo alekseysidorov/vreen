@@ -208,7 +208,7 @@ void Buddy::sendMessage(const QString &body, const QString &subject)
 }
 
 Group::Group(int id, Client *client) :
-    Contact(new GroupPrivate(this, id, client))
+	Contact(new GroupPrivate(this, id, client))
 {
     Q_D(Group);
     d->type = GroupType;

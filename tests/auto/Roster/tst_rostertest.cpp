@@ -54,14 +54,14 @@ private Q_SLOTS:
         if (!client.isOnline())
             QFAIL("Client is offline!");
 
-        vk::Roster *roster = client.roster();
+        Vreen::Roster *roster = client.roster();
         connect(roster, SIGNAL(syncFinished(bool)), &loop, SLOT(quit()));
         roster->sync();
         loop.exec();
 
         QCOMPARE(roster->buddies().count() > 0, true);
 
-        foreach (vk::Contact *contact, roster->buddies()) {
+        foreach (Vreen::Contact *contact, roster->buddies()) {
             qDebug() << contact->name() << ":" << "\n";
             const QMetaObject *meta = contact->metaObject();
             for (int index = 0; index != meta->propertyCount(); index++) {

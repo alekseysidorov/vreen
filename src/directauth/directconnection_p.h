@@ -29,7 +29,7 @@
 #include <QNetworkReply>
 #include "connection.h"
 
-namespace vk {
+namespace Vreen {
 
 class DirectConnection : public Connection
 {
@@ -64,7 +64,7 @@ private:
     AccessToken m_token;
 };
 
-} // namespace vk
+} // namespace Vreen
 
 #endif // VK_DIRECTCONNECTION_H
 

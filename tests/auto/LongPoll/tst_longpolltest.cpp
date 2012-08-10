@@ -52,18 +52,18 @@ private slots:
         QFETCH(QString, login);
         QFETCH(QString, password);
 
-        vk::Client client(login, password);
+        Vreen::Client client(login, password);
 
         QEventLoop loop;
         connect(&client, SIGNAL(onlineStateChanged(bool)), &loop, SLOT(quit()));
-        connect(&client, SIGNAL(error(vk::Client::Error)), &loop, SLOT(quit()));
+        connect(&client, SIGNAL(error(Vreen::Client::Error)), &loop, SLOT(quit()));
         client.connectToHost();
         loop.exec();
 
         if (!client.isOnline())
             QFAIL("Client is offline!");
 
-        vk::LongPoll poll(&client);
+        Vreen::LongPoll poll(&client);
         loop.exec();
     }
 };

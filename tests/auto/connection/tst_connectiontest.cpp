@@ -76,7 +76,7 @@ private slots:
         if (!client.isOnline())
             QFAIL("Client is offline!");
 
-        vk::Reply *reply = client.request("getUserSettings");
+		Vreen::Reply *reply = client.request("getUserSettings");
         connect(reply, SIGNAL(resultReady(QVariant)), &loop, SLOT(quit()));
         loop.exec();
         QCOMPARE(reply->response().toInt() > 6, true);

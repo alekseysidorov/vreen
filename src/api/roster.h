@@ -75,7 +75,7 @@ public slots:
 signals:
     void buddyAdded(Vreen::Buddy *buddy);
     void buddyUpdated(Vreen::Buddy *buddy);
-    void contactRemoved(int id);
+	void buddyRemoved(int id);
     void tagsChanged(const QStringList &);
     void syncFinished(bool success);
     void uidChanged(int uid);

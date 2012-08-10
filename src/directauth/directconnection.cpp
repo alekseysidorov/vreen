@@ -35,7 +35,7 @@
 #include <QDebug>
 
 
-namespace vk {
+namespace Vreen {
 
 //TODO use normal framework
 struct LoginVars {
@@ -194,5 +194,5 @@ void DirectConnection::onReplyError(QNetworkReply::NetworkError error)
     //TODO
 }
 
-} // namespace vk
+} // namespace Vreen
 

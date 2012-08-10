@@ -15,7 +15,6 @@ SOURCES += client.cpp \
     connection.cpp \
     reply.cpp \
     json.cpp \
-    directconnection.cpp \
     longpoll.cpp \
     newsfeed.cpp \
     roster.cpp \
@@ -46,7 +45,6 @@ HEADERS += client.h \
     reply.h \
     reply_p.h \
     json.h \
-    directconnection_p.h \
     longpoll.h \
     longpoll_p.h \
     newsfeed.h \

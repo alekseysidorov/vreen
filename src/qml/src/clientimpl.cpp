@@ -31,10 +31,13 @@
 #include <roster.h>
 #include <longpoll.h>
 #include <utils.h>
+#include "directauth/directconnection_p.h"
 
 Client::Client(QObject *parent) :
     Vreen::Client(parent)
 {
+	setConnection(new Vreen::DirectConnection(this));
+
     connect(this, SIGNAL(onlineStateChanged(bool)), this,
             SLOT(onOnlineStateChanged(bool)));
 

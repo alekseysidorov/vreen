@@ -51,8 +51,8 @@ void BuddyModel::setRoster(Vreen::Roster *roster)
     foreach (auto buddy, m_roster.data()->buddies())
         addFriend(buddy);
 
-    connect(roster, SIGNAL(friendAdded(Vreen::Buddy*)), SLOT(addFriend(Vreen::Buddy*)));
-    connect(roster, SIGNAL(contactRemoved(int)), SLOT(removeFriend(int)));
+	connect(roster, SIGNAL(buddyAdded(Vreen::Buddy*)), SLOT(addFriend(Vreen::Buddy*)));
+	connect(roster, SIGNAL(buddyRemoved(int)), SLOT(removeFriend(int)));
     emit rosterChanged(roster);
 }
 
