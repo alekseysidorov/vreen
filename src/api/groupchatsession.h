@@ -3,11 +3,11 @@
 #include "messagesession.h"
 #include "contact.h"
 
-namespace vk {
+namespace Vreen {
 
 class GroupChatSessionPrivate;
 
-class VK_SHARED_EXPORT GroupChatSession : public vk::MessageSession
+class VK_SHARED_EXPORT GroupChatSession : public Vreen::MessageSession
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(GroupChatSession)
@@ -28,12 +28,12 @@ public slots:
     Reply *removeParticipant(Contact *buddy);
     Reply *updateTitle(const QString &title);
 signals:
-    void participantAdded(vk::Buddy*);
-    void participantRemoved(vk::Buddy*);
+    void participantAdded(Vreen::Buddy*);
+    void participantRemoved(Vreen::Buddy*);
     void titleChanged(QString);
 protected:
     void setTitle(const QString &title);
-    virtual Reply *doSendMessage(const vk::Message &message);
+    virtual Reply *doSendMessage(const Vreen::Message &message);
     virtual Reply *doGetHistory(int count = 16, int offset = 0);
 private:
     Q_PRIVATE_SLOT(d_func(), void _q_history_received(const QVariant &response))
@@ -44,6 +44,6 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_online_changed(bool))
 };
 
-} // namespace vk
+} // namespace Vreen
 
 #endif // VK_GROUPCHATSESSION_H

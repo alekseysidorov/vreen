@@ -28,7 +28,7 @@
 #include <QObject>
 #include "vk_global.h"
 
-namespace vk {
+namespace Vreen {
 
 class Client;
 class PhotoManager : public QObject
@@ -41,7 +41,7 @@ public slots:
     
 };
 
-} // namespace vk
+} // namespace Vreen
 
 #endif // VK_PHOTOMANAGER_H
 

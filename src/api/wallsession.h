@@ -28,7 +28,7 @@
 #include "client.h"
 #include "wallpost.h"
 
-namespace vk {
+namespace Vreen {
 
 class Reply;
 class WallSessionPrivate;
@@ -53,7 +53,7 @@ public slots:
     Reply *addLike(int postId, bool retweet = false, const QString &message = QString());
     Reply *deleteLike(int postId);
 signals:
-    void postAdded(const vk::WallPost &post);
+    void postAdded(const Vreen::WallPost &post);
     void postDeleted(int postId);
     void postLikeAdded(int postId, int likesCount, int repostsCount, bool isRetweeted);
     void postLikeDeleted(int postId, int likesCount);
@@ -65,7 +65,7 @@ protected:
     Q_PRIVATE_SLOT(d_func(), void _q_like_deleted(QVariant))
 };
 
-} // namespace vk
+} // namespace Vreen
 
 #endif // VK_WALLSESSION_H
 

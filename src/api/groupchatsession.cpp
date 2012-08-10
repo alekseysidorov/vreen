@@ -3,7 +3,7 @@
 #include "client.h"
 #include "roster.h"
 
-namespace vk {
+namespace Vreen {
 
 class GroupChatSession;
 class GroupChatSessionPrivate : public MessageSessionPrivate
@@ -242,6 +242,6 @@ void GroupChatSessionPrivate::removeContact(int id)
     }
 }
 
-} // namespace vk
+} // namespace Vreen
 
 #include "moc_groupchatsession.cpp"

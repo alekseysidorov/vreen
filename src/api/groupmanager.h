@@ -28,7 +28,7 @@
 #include "vk_global.h"
 #include <QObject>
 
-namespace vk {
+namespace Vreen {
 
 class Client;
 class Group;
@@ -50,6 +50,6 @@ protected:
     QScopedPointer<GroupManagerPrivate> d_ptr;
 };
 
-} // namespace vk
+} // namespace Vreen
 
 #endif // VK_GROUPMANAGER_H

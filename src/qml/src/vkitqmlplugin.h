@@ -58,13 +58,13 @@ public:
         qmlRegisterType<CommentsModel>("com.vk.api", 1, 0, "CommentsModel");
         qmlRegisterType<AudioModel>("com.vk.api", 1, 0, "AudioModel");
 
-        qmlRegisterUncreatableType<vk::Roster>("com.vk.api", 1, 0, "Roster", QObject::tr("Use client.roster instead"));
-        qmlRegisterUncreatableType<vk::Contact>("com.vk.api", 1, 0, "Contact", QObject::tr("User Roster"));
-        qmlRegisterUncreatableType<vk::Message>("com.vk.api", 1, 0, "Message", QObject::tr("Only flags"));
-        qmlRegisterUncreatableType<vk::LongPoll>("com.vk.api", 1, 0, "LongPoll", QObject::tr("Use client.longPoll instead"));
-        qmlRegisterUncreatableType<vk::Attachment>("com.vk.api", 1, 0, "Attachment", QObject::tr("Attachment enums"));
-        qmlRegisterUncreatableType<vk::NewsItem>("com.vk.api", 1, 0, "NewsItem", QObject::tr("NewsItem enums"));
-        qmlRegisterUncreatableType<vk::NewsFeed>("com.vk.api", 1, 0, "NewsFeed", QObject::tr("NewsFeed enums"));
+        qmlRegisterUncreatableType<Vreen::Roster>("com.vk.api", 1, 0, "Roster", QObject::tr("Use client.roster instead"));
+        qmlRegisterUncreatableType<Vreen::Contact>("com.vk.api", 1, 0, "Contact", QObject::tr("User Roster"));
+        qmlRegisterUncreatableType<Vreen::Message>("com.vk.api", 1, 0, "Message", QObject::tr("Only flags"));
+        qmlRegisterUncreatableType<Vreen::LongPoll>("com.vk.api", 1, 0, "LongPoll", QObject::tr("Use client.longPoll instead"));
+        qmlRegisterUncreatableType<Vreen::Attachment>("com.vk.api", 1, 0, "Attachment", QObject::tr("Attachment enums"));
+        qmlRegisterUncreatableType<Vreen::NewsItem>("com.vk.api", 1, 0, "NewsItem", QObject::tr("NewsItem enums"));
+        qmlRegisterUncreatableType<Vreen::NewsFeed>("com.vk.api", 1, 0, "NewsFeed", QObject::tr("NewsFeed enums"));
     }
 };
 

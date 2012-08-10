@@ -29,7 +29,7 @@
 #include <QStringList>
 #include <QVector>
 
-namespace vk {
+namespace Vreen {
 
 class Contact;
 class ContactPrivate
@@ -130,7 +130,7 @@ public:
     QString name;
 };
 
-} //namespace vk
+} //namespace Vreen
 
 #endif // USER_P_H
 

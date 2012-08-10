@@ -30,7 +30,7 @@
 #include <QDateTime>
 #include <QDebug>
 
-namespace vk {
+namespace Vreen {
 
 static const int chatMessageOffset = 2000000000;
 
@@ -234,7 +234,7 @@ void LongPoll::setPollInterval(int interval)
     }
 }
 
-} // namespace vk
+} // namespace Vreen
 
 #include "moc_longpoll.cpp"
 

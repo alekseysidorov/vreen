@@ -26,7 +26,7 @@
 #include "client.h"
 #include "contact.h"
 
-namespace vk {
+namespace Vreen {
 
 class GroupManager;
 class GroupManagerPrivate
@@ -70,4 +70,4 @@ Group *GroupManager::group(int gid) const
     return d_func()->groupHash.value(gid);
 }
 
-} // namespace vk
+} // namespace Vreen

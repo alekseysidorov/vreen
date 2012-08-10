@@ -25,7 +25,7 @@
 #include "abstractlistmodel.h"
 #include <QDebug>
 
-namespace vk {
+namespace Vreen {
 
 AbstractListModel::AbstractListModel(QObject *parent) :
     QAbstractListModel(parent)
@@ -50,5 +50,5 @@ QVariant AbstractListModel::get(int row, const QByteArray &field)
     return data(index, roleNames().key(field));
 }
 
-} //namespace vk
+} //namespace Vreen
 

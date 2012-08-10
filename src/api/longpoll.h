@@ -28,7 +28,7 @@
 #include <QObject>
 #include "contact.h"
 
-namespace vk {
+namespace Vreen {
 
 class Message;
 class Client;
@@ -72,11 +72,11 @@ public:
     int pollInterval() const;
     void setPollInterval(int interval);
 signals:
-    void messageAdded(const vk::Message &msg);
+    void messageAdded(const Vreen::Message &msg);
     void messageDeleted(int mid);
     void messageFlagsReplaced(int mid, int mask, int userId = 0);
     void messageFlagsReseted(int mid, int mask, int userId = 0);
-    void contactStatusChanged(int userId, vk::Contact::Status status);
+    void contactStatusChanged(int userId, Vreen::Contact::Status status);
     void contactTyping(int userId, int chatId = 0);
     void contactCall(int userId, int callId);
     void groupChatUpdated(int chatId, bool self);
@@ -95,9 +95,9 @@ private:
     int m_pollInterval;
 };
 
-} // namespace vk
+} // namespace Vreen
 
-Q_DECLARE_METATYPE(vk::LongPoll*)
+Q_DECLARE_METATYPE(Vreen::LongPoll*)
 
 #endif // VK_LONGPOLL_H
 

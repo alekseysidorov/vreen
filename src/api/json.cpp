@@ -25,7 +25,7 @@
 #include "json.h"
 #include <k8json/k8json.h>
 
-namespace vk {
+namespace Vreen {
 
 namespace JSON {
 
@@ -57,5 +57,5 @@ QByteArray generate(const QVariant &data, int indent)
 
 } //namespace JSON
 
-} // namespace vk
+} // namespace Vreen
 

@@ -26,7 +26,7 @@
 #include "message.h"
 #include "roster.h"
 
-namespace vk {
+namespace Vreen {
 
 Contact::Contact(int id, Client *client) :
     QObject(client),
@@ -228,7 +228,7 @@ void Group::setName(const QString &name)
     emit nameChanged(name);
 }
 
-} // namespace vk
+} // namespace Vreen
 
 #include "moc_contact.cpp"
 

@@ -29,9 +29,9 @@
 #include <newsfeed.h>
 #include <QWeakPointer>
 
-namespace vk {
+namespace Vreen {
 class Contact;
-} //namespace vk
+} //namespace Vreen
 
 class NewsFeedModel : public QAbstractListModel
 {
@@ -64,7 +64,7 @@ public:
     int count() const;
     int findNews(int id);
 public slots:
-    void getNews(int filters = vk::NewsFeed::FilterPost | vk::NewsFeed::FilterPhoto,
+    void getNews(int filters = Vreen::NewsFeed::FilterPost | Vreen::NewsFeed::FilterPhoto,
                        quint8 count = 10, int offset = 0);
     void addLike(int postId, bool retweet = false, const QString &message = QString());
     void deleteLike(int postId);
@@ -74,17 +74,17 @@ signals:
     void clientChanged(QObject* client);
     void requestFinished();
 protected:
-    void insertNews(int index, const vk::NewsItem &data);
-    void replaceNews(int index, const vk::NewsItem &data);
-    inline vk::Contact *findContact(int id) const;
+    void insertNews(int index, const Vreen::NewsItem &data);
+    void replaceNews(int index, const Vreen::NewsItem &data);
+    inline Vreen::Contact *findContact(int id) const;
 private slots:
-    void onNewsAdded(const vk::NewsItem &data);
+    void onNewsAdded(const Vreen::NewsItem &data);
     void onAddLike(const QVariant &response);
     void onDeleteLike(const QVariant &response);
 private:
-    QWeakPointer<vk::Client> m_client;
-    QWeakPointer<vk::NewsFeed> m_newsFeed;
-    vk::NewsItemList m_newsList;
+    QWeakPointer<Vreen::Client> m_client;
+    QWeakPointer<Vreen::NewsFeed> m_newsFeed;
+    Vreen::NewsItemList m_newsList;
     Qt::SortOrder m_sortOrder;
 };
 

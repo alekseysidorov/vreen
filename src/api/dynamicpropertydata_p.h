@@ -30,7 +30,7 @@
 #include <QSharedData>
 #include <QVariant>
 
-namespace vk {
+namespace Vreen {
 
 class DynamicPropertyData;
 
@@ -57,7 +57,7 @@ public:
                      const QList<Setter> &setters);
 };
 
-} // namespace vk
+} // namespace Vreen
 
 #endif // VK_DYNAMICPROPERTYDATA_P_H
 

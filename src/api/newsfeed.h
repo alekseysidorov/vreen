@@ -28,7 +28,7 @@
 #include "newsitem.h"
 #include <QVariantMap>
 
-namespace vk {
+namespace Vreen {
 
 class NewsFeedPrivate;
 class Client;
@@ -56,17 +56,17 @@ public:
 public slots:
     Reply *getNews(Filters filters = FilterNone, quint8 count = 25, int offset = 0);
 signals:
-    void newsAdded(const vk::NewsItem &item);
-    void newsRecieved(const vk::NewsItemList &list);
+    void newsAdded(const Vreen::NewsItem &item);
+    void newsRecieved(const Vreen::NewsItemList &list);
 private:
     QScopedPointer<NewsFeedPrivate> d_ptr;
 
     Q_PRIVATE_SLOT(d_func(), void _q_news_received(QVariant))
 };
 
-} //namespace vk
+} //namespace Vreen
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(vk::NewsFeed::Filters)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Vreen::NewsFeed::Filters)
 
 #endif // NEWSFEED_H
 

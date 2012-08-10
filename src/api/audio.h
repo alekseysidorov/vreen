@@ -29,7 +29,7 @@
 #include "audioitem.h"
 #include "abstractlistmodel.h"
 
-namespace vk {
+namespace Vreen {
 
 class Client;
 class Reply;
@@ -45,7 +45,7 @@ public:
     Reply *getContactAudio(int uid, int count = 50, int offset = 0);
     Reply *searchAudio(const QString &query, int count = 50, int offset = 0);
 signals:
-    void audioItemReceived(const vk::AudioItem &items);
+    void audioItemReceived(const Vreen::AudioItem &items);
 protected:
     QScopedPointer<AudioProviderPrivate> d_ptr;
 
@@ -83,7 +83,7 @@ public:
     Qt::SortOrder sortOrder() const;
 public slots:
     void clear();
-    void addAudio(const vk::AudioItem &item);
+    void addAudio(const Vreen::AudioItem &item);
     void removeAudio(int aid);
 signals:
     void sortOrderChanged(Qt::SortOrder);
@@ -95,7 +95,7 @@ private:
     QScopedPointer<AudioModelPrivate> d_ptr;
 };
 
-} // namespace vk
+} // namespace Vreen
 
 #endif // VK_AUDIO_H
 

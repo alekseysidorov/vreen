@@ -5,7 +5,7 @@
 
 class QWebPage;
 
-namespace vk {
+namespace Vreen {
 
 class OAuthConnectionPrivate;
 
@@ -44,6 +44,6 @@ protected:
     Q_PRIVATE_SLOT(d_func(), void _q_loadFinished(bool))
 };
 
-} // namespace vk
+} // namespace Vreen
 
 #endif // VK_OAUTHCONNECTION_H

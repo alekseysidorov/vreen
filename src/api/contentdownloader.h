@@ -30,7 +30,7 @@
 
 class QUrl;
 
-namespace vk {
+namespace Vreen {
 
 class VK_SHARED_EXPORT ContentDownloader : public QObject
 {
@@ -44,7 +44,7 @@ private slots:
     void replyDone();
 };
 
-} // namespace vk
+} // namespace Vreen
 
 #endif // VK_CONTENTDOWNLOADER_H
 

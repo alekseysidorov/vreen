@@ -24,7 +24,7 @@
 ****************************************************************************/
 #include "connection.h"
 
-namespace vk {
+namespace Vreen {
 
 Connection::Connection(QObject *parent) :
     QNetworkAccessManager(parent)
@@ -38,5 +38,5 @@ void Connection::clear()
 {
 }
 
-} // namespace vk
+} // namespace Vreen
 

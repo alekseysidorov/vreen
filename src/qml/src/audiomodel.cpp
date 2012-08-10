@@ -27,16 +27,16 @@
 #include <reply.h>
 
 AudioModel::AudioModel(QObject *parent) :
-    vk::AudioModel(parent)
+    Vreen::AudioModel(parent)
 {
 }
 
-vk::Client *AudioModel::client() const
+Vreen::Client *AudioModel::client() const
 {
     return m_client.data();
 }
 
-void AudioModel::setClient(vk::Client *client)
+void AudioModel::setClient(Vreen::Client *client)
 {
     if (m_client.data() == client)
         return;
@@ -46,14 +46,14 @@ void AudioModel::setClient(vk::Client *client)
         return;
     }
 
-    auto provider = new vk::AudioProvider(client);
-    connect(provider, SIGNAL(audioItemReceived(vk::AudioItem)), SLOT(addAudio(vk::AudioItem)));
+    auto provider = new Vreen::AudioProvider(client);
+    connect(provider, SIGNAL(audioItemReceived(Vreen::AudioItem)), SLOT(addAudio(Vreen::AudioItem)));
     m_provider = provider;
     m_client = client;
     emit clientChanged(client);
 }
 
-void AudioModel::getContactAudio(vk::Contact *owner, int count, int offset)
+void AudioModel::getContactAudio(Vreen::Contact *owner, int count, int offset)
 {
     if (m_provider.data()) {
         auto reply = m_provider.data()->getContactAudio(owner->id(), count, offset);
@@ -78,6 +78,6 @@ QObject *AudioModel::clientObj() const
 
 void AudioModel::setClient(QObject *client)
 {
-    setClient(static_cast<vk::Client*>(client));
+    setClient(static_cast<Vreen::Client*>(client));
 }
 

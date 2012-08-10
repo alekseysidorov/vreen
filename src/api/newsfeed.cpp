@@ -29,7 +29,7 @@
 #include "groupmanager.h"
 #include <QVariantList>
 
-namespace vk {
+namespace Vreen {
 
 static const char *filters_str[] = {
     "post",
@@ -144,7 +144,7 @@ Reply *NewsFeed::getNews(Filters filters, quint8 count, int offset)
     return reply;
 }
 
-} //namespace vk
+} //namespace Vreen
 
 #include "moc_newsfeed.cpp"
 

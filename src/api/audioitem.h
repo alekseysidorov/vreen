@@ -30,7 +30,7 @@
 
 class QUrl;
 
-namespace vk {
+namespace Vreen {
 
 class Client;
 class AudioItemData;
@@ -66,7 +66,7 @@ private:
 };
 typedef QList<AudioItem> AudioItemList;
 
-} // namespace vk
+} // namespace Vreen
 
 #endif // VK_AUDIOITEM_H
 

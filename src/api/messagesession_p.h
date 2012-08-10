@@ -3,7 +3,7 @@
 #include "messagesession.h"
 #include "longpoll.h"
 
-namespace vk {
+namespace Vreen {
 
 class MessageSession;
 class MessageSessionPrivate
@@ -17,6 +17,6 @@ public:
     int uid;
 };
 
-} //namespace vk
+} //namespace Vreen
 
 #endif // MESSAGESESSION_P_H

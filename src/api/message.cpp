@@ -30,7 +30,7 @@
 #include "dynamicpropertydata_p.h"
 #include <QDebug>
 
-namespace vk {
+namespace Vreen {
 
 class MessageData : public DynamicPropertyData
 {
@@ -315,15 +315,15 @@ void Message::setAttachments(const Attachment::List &attachmentList)
     d->attachmentHash = Attachment::toHash(attachmentList);
 }
 
-MessageList Message::fromVariantList(const QVariantList &list, vk::Client *client)
+MessageList Message::fromVariantList(const QVariantList &list, Vreen::Client *client)
 {
     MessageList messageList;
     foreach (auto item, list) {
-        vk::Message message(item.toMap(), client);
+        Vreen::Message message(item.toMap(), client);
         messageList.append(message);
     }
     return messageList;
 }
 
-} // namespace vk
+} // namespace Vreen
 

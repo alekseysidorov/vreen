@@ -30,7 +30,7 @@
 #include "vk_global.h"
 #include "attachment.h"
 
-namespace vk {
+namespace Vreen {
 
 class WallPostData;
 class Client;
@@ -82,7 +82,7 @@ private:
 };
 typedef QList<WallPost> WallPostList;
 
-} //namespace vk
+} //namespace Vreen
 
 #endif // WALLPOST_H
 

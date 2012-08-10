@@ -33,7 +33,7 @@
 #include <utils.h>
 
 Client::Client(QObject *parent) :
-    vk::Client(parent)
+    Vreen::Client(parent)
 {
     connect(this, SIGNAL(onlineStateChanged(bool)), this,
             SLOT(onOnlineStateChanged(bool)));
@@ -47,17 +47,17 @@ Client::Client(QObject *parent) :
     auto manager = new QNetworkConfigurationManager(this);
     connect(manager, SIGNAL(onlineStateChanged(bool)), this, SLOT(setOnline(bool)));
 
-    connect(longPoll(), SIGNAL(messageAdded(vk::Message)), SLOT(onMessageAdded(vk::Message)));
-    connect(this, SIGNAL(replyCreated(vk::Reply*)), SLOT(onReplyCreated(vk::Reply*)));
-    connect(this, SIGNAL(error(vk::Reply*)), SLOT(onReplyError(vk::Reply*)));
+    connect(longPoll(), SIGNAL(messageAdded(Vreen::Message)), SLOT(onMessageAdded(Vreen::Message)));
+    connect(this, SIGNAL(replyCreated(Vreen::Reply*)), SLOT(onReplyCreated(Vreen::Reply*)));
+    connect(this, SIGNAL(error(Vreen::Reply*)), SLOT(onReplyError(Vreen::Reply*)));
 }
 
 QObject *Client::request(const QString &method, const QVariantMap &args)
 {
-    return vk::Client::request(method, args);
+    return Vreen::Client::request(method, args);
 }
 
-vk::Contact *Client::contact(int id)
+Vreen::Contact *Client::contact(int id)
 {
     return roster()->buddy(id);
 }
@@ -80,13 +80,13 @@ void Client::setOnline(bool set)
         : disconnectFromHost();
 }
 
-void Client::onMessageAdded(const vk::Message &msg)
+void Client::onMessageAdded(const Vreen::Message &msg)
 {
     if (msg.isIncoming() && msg.isUnread())
         emit messageReceived(msg.from());
 }
 
-void Client::onReplyCreated(vk::Reply *reply)
+void Client::onReplyCreated(Vreen::Reply *reply)
 {
     //qDebug() << "--SendReply:" << reply->networkReply()->url();
     connect(reply, SIGNAL(resultReady(QVariant)),SLOT(onReplyFinished(QVariant)));
@@ -94,12 +94,12 @@ void Client::onReplyCreated(vk::Reply *reply)
 
 void Client::onReplyFinished(const QVariant &)
 {
-    vk::Reply *reply = vk::sender_cast<vk::Reply*>(sender());
+    Vreen::Reply *reply = Vreen::sender_cast<Vreen::Reply*>(sender());
     //qDebug() << "--Reply finished" << reply->networkReply()->url().encodedPath();
     //qDebug() << "--data" << reply->response();
 }
 
-void Client::onReplyError(vk::Reply *reply)
+void Client::onReplyError(Vreen::Reply *reply)
 {
     qDebug() << "--Error" << reply->response();
 }

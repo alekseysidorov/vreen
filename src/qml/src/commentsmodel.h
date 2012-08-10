@@ -32,7 +32,7 @@
 class CommentsModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(vk::Contact* contact READ contact WRITE setContact NOTIFY contactChanged)
+    Q_PROPERTY(Vreen::Contact* contact READ contact WRITE setContact NOTIFY contactChanged)
     Q_PROPERTY(int postId READ postId WRITE setPostId NOTIFY postChangedId)
 public:
     explicit CommentsModel(QObject *parent = 0);
@@ -45,8 +45,8 @@ public:
         LikesRole
     };
 
-    vk::Contact* contact() const;
-    void setContact(vk::Contact* contact);
+    Vreen::Contact* contact() const;
+    void setContact(Vreen::Contact* contact);
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex &) const;
     int count() const;
@@ -54,7 +54,7 @@ public:
     int postId() const;
     void setPostId(int arg);
 signals:
-    void contactChanged(vk::Contact*);
+    void contactChanged(Vreen::Contact*);
     void requestFinished();
     void postChangedId(int);
 
@@ -65,9 +65,9 @@ private slots:
     void addComment(const QVariantMap &data);
     void deleteComment(int id);
 private:
-    QWeakPointer<vk::Contact> m_contact;
-    QWeakPointer<vk::CommentSession> m_session;
-    vk::CommentList m_comments;
+    QWeakPointer<Vreen::Contact> m_contact;
+    QWeakPointer<Vreen::CommentSession> m_session;
+    Vreen::CommentList m_comments;
     int m_postId;
 };
 

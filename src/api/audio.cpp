@@ -28,7 +28,7 @@
 #include <QCoreApplication>
 #include <QDebug>
 
-namespace vk {
+namespace Vreen {
 
 class AudioProvider;
 class AudioProviderPrivate
@@ -267,7 +267,7 @@ int AudioModel::findAudio(int id) const
     return -1;
 }
 
-} // namespace vk
+} // namespace Vreen
 
 #include "moc_audio.cpp"
 

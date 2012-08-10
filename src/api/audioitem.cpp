@@ -27,7 +27,7 @@
 #include <QUrl>
 #include "client.h"
 
-namespace vk {
+namespace Vreen {
 
 class AudioItemData : public QSharedData {
 public:
@@ -162,5 +162,5 @@ void AudioItem::setAlbumId(int albumId)
     data->albumId = albumId;
 }
 
-} // namespace vk
+} // namespace Vreen
 

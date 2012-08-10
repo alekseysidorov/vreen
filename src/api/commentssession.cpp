@@ -27,7 +27,7 @@
 #include "client.h"
 #include "reply.h"
 
-namespace vk {
+namespace Vreen {
 
 class CommentSession;
 class CommentSessionPrivate
@@ -99,7 +99,7 @@ Reply *CommentSession::getComments(int offset, int count)
     return reply;
 }
 
-} // namespace vk
+} // namespace Vreen
 
 #include "moc_commentssession.cpp"
 

@@ -25,12 +25,12 @@
 #include "photomanager.h"
 #include "client.h"
 
-namespace vk {
+namespace Vreen {
 
 PhotoManager::PhotoManager(Client *client) :
     QObject(client)
 {
 }
 
-} // namespace vk
+} // namespace Vreen
 

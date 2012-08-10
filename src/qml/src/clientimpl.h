@@ -28,22 +28,22 @@
 #include <QWeakPointer>
 #include <QtDeclarative>
 
-class Client : public vk::Client
+class Client : public Vreen::Client
 {
     Q_OBJECT
 public:
     Client(QObject *parent = 0);
     Q_INVOKABLE QObject *request(const QString &method, const QVariantMap &args = QVariantMap());
-    Q_INVOKABLE vk::Contact *contact(int id);
+    Q_INVOKABLE Vreen::Contact *contact(int id);
 signals:
-    void messageReceived(vk::Contact *from);
+    void messageReceived(Vreen::Contact *from);
 private slots:
     void onOnlineStateChanged(bool state);
     void setOnline(bool set);
-    void onMessageAdded(const vk::Message &msg);
-    void onReplyCreated(vk::Reply *reply);
+    void onMessageAdded(const Vreen::Message &msg);
+    void onReplyCreated(Vreen::Reply *reply);
     void onReplyFinished(const QVariant &);
-    void onReplyError(vk::Reply *reply);
+    void onReplyError(Vreen::Reply *reply);
 };
 
 #endif // CLIENT_H

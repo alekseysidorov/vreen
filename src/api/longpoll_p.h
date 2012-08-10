@@ -37,7 +37,7 @@
 
 #include <QDebug>
 
-namespace vk {
+namespace Vreen {
 
 class LongPoll;
 class LongPollPrivate
@@ -61,7 +61,7 @@ public:
 };
 
 
-} //namespace vk
+} //namespace Vreen
 
 #endif // LONGPOLL_P_H
 

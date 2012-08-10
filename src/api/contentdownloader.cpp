@@ -35,7 +35,7 @@
 #include <QTimer>
 #include <QDir>
 
-namespace vk {
+namespace Vreen {
 
 class NetworkAccessManager : public QNetworkAccessManager
 {
@@ -119,7 +119,7 @@ void ContentDownloader::replyDone()
     emit downloadFinished(path);
 }
 
-} // namespace vk
+} // namespace Vreen
 
 #include "contentdownloader.moc"
 

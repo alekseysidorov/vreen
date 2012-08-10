@@ -28,7 +28,7 @@
 #include "client_p.h"
 #include "contact_p.h"
 
-namespace vk {
+namespace Vreen {
 
 typedef QHash<int, Buddy*> BuddyHash;
 
@@ -53,11 +53,11 @@ public:
 
     void _q_tags_received(const QVariant &response);
     void _q_friends_received(const QVariant &response);
-    void _q_status_changed(int userId, vk::Contact::Status status);
+    void _q_status_changed(int userId, Vreen::Contact::Status status);
     void _q_online_changed(bool);
 };
 
-} //namespace vk
+} //namespace Vreen
 
 #endif // ROSTER_P_H
 

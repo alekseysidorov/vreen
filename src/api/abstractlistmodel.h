@@ -28,7 +28,7 @@
 #include <QAbstractListModel>
 #include "vk_global.h"
 
-namespace vk {
+namespace Vreen {
 
 class VK_SHARED_EXPORT AbstractListModel : public QAbstractListModel
 {
@@ -39,7 +39,7 @@ public:
     Q_INVOKABLE QVariant get(int row, const QByteArray &field);
 };
 
-} //namespace vk
+} //namespace Vreen
 
 #endif // ABSTRACTLISTMODEL_H
 

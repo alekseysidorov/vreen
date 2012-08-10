@@ -30,7 +30,7 @@
 #include "utils.h"
 #include <QStringBuilder>
 
-namespace vk {
+namespace Vreen {
 
 class ChatSessionPrivate : public MessageSessionPrivate
 {
@@ -63,8 +63,8 @@ ChatSession::ChatSession(Contact *contact) :
 {
     Q_D(ChatSession);
     auto longPoll = d->contact->client()->longPoll();
-    connect(longPoll, SIGNAL(messageAdded(vk::Message)),
-            this, SLOT(_q_message_added(vk::Message)));
+    connect(longPoll, SIGNAL(messageAdded(Vreen::Message)),
+            this, SLOT(_q_message_added(Vreen::Message)));
     connect(longPoll, SIGNAL(messageDeleted(int)),
             this, SIGNAL(messageDeleted(int)));
 }
@@ -158,7 +158,7 @@ void ChatSessionPrivate::_q_message_added(const Message &message)
         emit q_func()->messageAdded(message);
 }
 
-} // namespace vk
+} // namespace Vreen
 
 #include "moc_chatsession.cpp"
 

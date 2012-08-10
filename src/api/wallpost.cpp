@@ -28,7 +28,7 @@
 #include "roster.h"
 #include "client.h"
 
-namespace vk {
+namespace Vreen {
 
 class WallPostData : public QSharedData
 {
@@ -219,5 +219,5 @@ void WallPost::setReposts(const QVariantMap &reposts)
 }
 
 
-} //namespace vk
+} //namespace Vreen
 

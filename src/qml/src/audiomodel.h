@@ -28,21 +28,21 @@
 #include <QWeakPointer>
 #include <client.h>
 
-namespace vk {
+namespace Vreen {
 class Contact;
 }
 
-class AudioModel : public vk::AudioModel
+class AudioModel : public Vreen::AudioModel
 {
     Q_OBJECT
 
     Q_PROPERTY(QObject* client READ clientObj WRITE setClient NOTIFY clientChanged)
 public:
     explicit AudioModel(QObject *parent = 0);
-    vk::Client* client() const;
-    void setClient(vk::Client* client);
+    Vreen::Client* client() const;
+    void setClient(Vreen::Client* client);
 public slots:
-    void getContactAudio(vk::Contact *owner, int count = 100, int offset = 0);
+    void getContactAudio(Vreen::Contact *owner, int count = 100, int offset = 0);
     void searchAudio(const QString &query, int count = 50, int offset = 0);
 signals:
     void clientChanged(QObject*);
@@ -51,8 +51,8 @@ private:
     QObject* clientObj() const;
     void setClient(QObject* client);
 
-    QWeakPointer<vk::Client> m_client;
-    QWeakPointer<vk::AudioProvider> m_provider;
+    QWeakPointer<Vreen::Client> m_client;
+    QWeakPointer<Vreen::AudioProvider> m_provider;
 };
 
 #endif // AUDIOMODEL_H

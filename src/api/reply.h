@@ -29,7 +29,7 @@
 #include "vk_global.h"
 
 class QNetworkReply;
-namespace vk {
+namespace Vreen {
 
 class ReplyPrivate;
 class VK_SHARED_EXPORT Reply : public QObject
@@ -60,7 +60,7 @@ protected:
     Q_PRIVATE_SLOT(d_func(), void _q_reply_finished())
 };
 
-} // namespace vk
+} // namespace Vreen
 
 #endif // VK_REPLY_H
 

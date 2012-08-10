@@ -1,7 +1,7 @@
 #include "messagesession_p.h"
 #include "client.h"
 
-namespace vk {
+namespace Vreen {
 
 MessageSession::MessageSession(MessageSessionPrivate *data) :
     QObject(data->client),
@@ -42,6 +42,6 @@ Reply *MessageSession::sendMessage(const Message &message)
     return doSendMessage(message);
 }
 
-} // namespace vk
+} // namespace Vreen
 
 #include "moc_messagesession.cpp"

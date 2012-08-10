@@ -29,7 +29,7 @@
 
 #include <QDebug>
 
-namespace vk {
+namespace Vreen {
 
 typedef QList<int> IdList;
 
@@ -87,7 +87,7 @@ int lowerBound(Container container, const T &value, LessThan lessThan)
     return index;
 }
 
-} //namespace vk
+} //namespace Vreen
 
 #endif // UTILS_H
 

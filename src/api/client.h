@@ -32,7 +32,7 @@
 #include <QVariantMap>
 
 class QUrl;
-namespace vk {
+namespace Vreen {
 
 class Message;
 class Connection;
@@ -53,10 +53,10 @@ class VK_SHARED_EXPORT Client : public QObject
     Q_PROPERTY(QString login READ login WRITE setLogin NOTIFY loginChanged DESIGNABLE true)
     Q_PROPERTY(bool online READ isOnline NOTIFY onlineStateChanged DESIGNABLE true)
     Q_PROPERTY(State connectionState READ connectionState NOTIFY connectionStateChanged DESIGNABLE true)
-    Q_PROPERTY(vk::Roster* roster READ roster NOTIFY rosterChanged DESIGNABLE true)
-    Q_PROPERTY(vk::GroupManager* groupManager READ groupManager NOTIFY groupManagerChanged DESIGNABLE true)
-    Q_PROPERTY(vk::LongPoll* longPoll READ longPoll NOTIFY longPollChanged DESIGNABLE true)
-    Q_PROPERTY(vk::Contact* me READ me NOTIFY meChanged DESIGNABLE true)
+    Q_PROPERTY(Vreen::Roster* roster READ roster NOTIFY rosterChanged DESIGNABLE true)
+    Q_PROPERTY(Vreen::GroupManager* groupManager READ groupManager NOTIFY groupManagerChanged DESIGNABLE true)
+    Q_PROPERTY(Vreen::LongPoll* longPoll READ longPoll NOTIFY longPollChanged DESIGNABLE true)
+    Q_PROPERTY(Vreen::Contact* me READ me NOTIFY meChanged DESIGNABLE true)
     Q_PROPERTY(QString activity READ activity WRITE setActivity NOTIFY activityChanged DESIGNABLE true)
     Q_PROPERTY(bool invisible READ isInvisible WRITE setInvisible NOTIFY invisibleChanged)
 
@@ -121,14 +121,14 @@ public slots:
 signals:
     void loginChanged(const QString &login);
     void passwordChanged(const QString &password);
-    void connectionStateChanged(vk::Client::State state);
-    void replyCreated(vk::Reply*);
-    void error(vk::Client::Error error);
+    void connectionStateChanged(Vreen::Client::State state);
+    void replyCreated(Vreen::Reply*);
+    void error(Vreen::Client::Error error);
     void onlineStateChanged(bool state);
-    void rosterChanged(vk::Roster*);
-    void groupManagerChanged(vk::GroupManager*);
-    void longPollChanged(vk::LongPoll*);
-    void meChanged(vk::Buddy *me);
+    void rosterChanged(Vreen::Roster*);
+    void groupManagerChanged(Vreen::GroupManager*);
+    void longPollChanged(Vreen::LongPoll*);
+    void meChanged(Vreen::Buddy *me);
     void activityChanged(const QString &activity);
     void invisibleChanged(bool set);
 protected:
@@ -137,7 +137,7 @@ protected:
 
 private:
 
-    Q_PRIVATE_SLOT(d_func(), void _q_connection_state_changed(vk::Client::State))
+    Q_PRIVATE_SLOT(d_func(), void _q_connection_state_changed(Vreen::Client::State))
     Q_PRIVATE_SLOT(d_func(), void _q_error_received(int))
     Q_PRIVATE_SLOT(d_func(), void _q_reply_finished(const QVariant &))
     Q_PRIVATE_SLOT(d_func(), void _q_activity_update_finished(const QVariant &))
@@ -145,10 +145,10 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_network_manager_error(int))
 };
 
-} // namespace vk
+} // namespace Vreen
 
-Q_DECLARE_METATYPE(vk::Client*)
-Q_DECLARE_METATYPE(vk::Reply*)
+Q_DECLARE_METATYPE(Vreen::Client*)
+Q_DECLARE_METATYPE(Vreen::Reply*)
 
 #endif // VK_CLIENT_H
 

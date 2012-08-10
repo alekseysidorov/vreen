@@ -28,7 +28,7 @@
 #include <QStringList>
 #include <QDateTime>
 
-namespace vk {
+namespace Vreen {
 
 class NewsItemData : public QSharedData {
 public:
@@ -205,5 +205,5 @@ void NewsItem::setReposts(const QVariantMap &reposts)
     d->reposts = reposts;
 }
 
-} // namespace vk
+} // namespace Vreen
 

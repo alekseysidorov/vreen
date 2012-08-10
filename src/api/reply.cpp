@@ -25,7 +25,7 @@
 #include "reply_p.h"
 #include <QNetworkReply>
 
-namespace vk {
+namespace Vreen {
 
 Reply::Reply(QNetworkReply *reply) :
     QObject(reply),
@@ -69,7 +69,7 @@ void Reply::setReply(QNetworkReply *reply)
     connect(reply, SIGNAL(finished()), SLOT(_q_reply_finished()));
 }
 
-} // namespace vk
+} // namespace Vreen
 
 #include "moc_reply.cpp"
 

@@ -26,7 +26,7 @@
 #include <QSharedData>
 #include <QStringList>
 
-namespace vk {
+namespace Vreen {
 
 const static QStringList types = QStringList()
         << "photo"
@@ -206,5 +206,5 @@ bool Attachment::isFetched() const
     return !d->data.isEmpty();
 }
 
-} // namespace vk
+} // namespace Vreen
 

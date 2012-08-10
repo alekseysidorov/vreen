@@ -29,7 +29,7 @@
 #include <QVariantMap>
 #include "vk_global.h"
 
-namespace vk {
+namespace Vreen {
 
 class Reply;
 class Contact;
@@ -40,7 +40,7 @@ class VK_SHARED_EXPORT CommentSession : public QObject
     Q_OBJECT
     Q_DECLARE_PRIVATE(CommentSession)
 public:
-    CommentSession(vk::Contact *contact);
+    CommentSession(Vreen::Contact *contact);
     virtual ~CommentSession();
     void setPostId(int id);
     int postId() const;
@@ -57,7 +57,7 @@ private:
 
 typedef QList<QVariantMap> CommentList;
 
-} // namespace vk
+} // namespace Vreen
 
 #endif // VK_COMMENTSSESSION_H
 

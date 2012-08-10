@@ -29,7 +29,7 @@
 #include <QVariant>
 #include "attachment.h"
 
-namespace vk {
+namespace Vreen {
 
 class NewsItemData;
 
@@ -87,10 +87,10 @@ private:
 };
 typedef QList<NewsItem> NewsItemList;
 
-} // namespace vk
+} // namespace Vreen
 
-Q_DECLARE_METATYPE(vk::NewsItem)
-Q_DECLARE_METATYPE(vk::NewsItemList)
+Q_DECLARE_METATYPE(Vreen::NewsItem)
+Q_DECLARE_METATYPE(Vreen::NewsItemList)
 
 #endif // VK_NEWSITEM_H
 

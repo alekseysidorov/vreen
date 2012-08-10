@@ -29,7 +29,7 @@
 #include <QVariantMap>
 #include "client.h"
 
-namespace vk {
+namespace Vreen {
 
 class Reply;
 class VK_SHARED_EXPORT Connection : public QNetworkAccessManager
@@ -45,11 +45,11 @@ public:
     virtual int uid() const = 0;
     virtual void clear();
 signals:
-    void connectionStateChanged(vk::Client::State connectionState);
-    void error(vk::Client::Error);
+    void connectionStateChanged(Vreen::Client::State connectionState);
+    void error(Vreen::Client::Error);
 };
 
-} //namespace vk
+} //namespace Vreen
 
 #endif // VK_CONNECTION_H
 

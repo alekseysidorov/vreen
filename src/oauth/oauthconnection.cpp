@@ -11,7 +11,7 @@
 #include <QDebug>
 #include <QWebElement>
 
-namespace vk {
+namespace Vreen {
 
 const static QUrl authUrl("http://api.vk.com/oauth/authorize");
 const static QUrl apiUrl("https://api.vk.com/method/");
@@ -51,7 +51,7 @@ public:
     }
     OAuthConnection *q_ptr;
     QPointer<QWebPage> webPage;
-    vk::Client::State connectionState;
+    Vreen::Client::State connectionState;
 
     //OAuth settings
     int clientId; //appId
@@ -201,7 +201,7 @@ void OAuthConnectionPrivate::_q_loadFinished(bool ok)
 {
     Q_Q(OAuthConnection);
     QUrl url = webPage->mainFrame()->url();
-    QVariantMap response = vk::JSON::parse(webPage->mainFrame()->toPlainText().toUtf8()).toMap();
+    QVariantMap response = Vreen::JSON::parse(webPage->mainFrame()->toPlainText().toUtf8()).toMap();
     if (ok && response.value("error").isNull()) {
         url = QUrl("http://foo.bar?" + url.fragment()); //evil hack for parse fragment as query items
         if (!url.hasEncodedQueryItem("access_token")) {
@@ -240,6 +240,6 @@ void OAuthConnectionPrivate::clear()
     uid = 0;
 }
 
-} // namespace vk
+} // namespace Vreen
 
 #include "moc_oauthconnection.cpp"

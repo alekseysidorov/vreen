@@ -28,7 +28,7 @@
 #include <QSharedData>
 #include "attachment.h"
 
-namespace vk {
+namespace Vreen {
 
 class Contact;
 class Message;
@@ -107,12 +107,12 @@ protected:
 
 typedef QList<int> IdList;
 
-} // namespace vk
+} // namespace Vreen
 
-Q_DECLARE_METATYPE(vk::Message)
-Q_DECLARE_METATYPE(vk::MessageList)
-Q_DECLARE_METATYPE(vk::IdList)
-Q_DECLARE_OPERATORS_FOR_FLAGS(vk::Message::Flags)
+Q_DECLARE_METATYPE(Vreen::Message)
+Q_DECLARE_METATYPE(Vreen::MessageList)
+Q_DECLARE_METATYPE(Vreen::IdList)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Vreen::Message::Flags)
 
 #endif // VK_MESSAGE_H
 

@@ -33,7 +33,7 @@ class BuddyModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(vk::Roster *roster READ roster WRITE setRoster NOTIFY rosterChanged)
+    Q_PROPERTY(Vreen::Roster *roster READ roster WRITE setRoster NOTIFY rosterChanged)
     Q_PROPERTY(QString filterByName READ filterByName WRITE setFilterByName NOTIFY filterByNameChanged)
 public:
     enum Roles {
@@ -46,8 +46,8 @@ public:
 
     explicit BuddyModel(QObject *parent = 0);
     
-    void setRoster(vk::Roster *roster);
-    vk::Roster *roster() const;
+    void setRoster(Vreen::Roster *roster);
+    Vreen::Roster *roster() const;
     int count() const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex &parent) const;
@@ -57,17 +57,17 @@ public:
 public slots:
     int findContact(int id) const;
 signals:
-    void rosterChanged(vk::Roster*);
+    void rosterChanged(Vreen::Roster*);
     void filterByNameChanged(const QString &filter);
     void requestFinished();
 private slots:
-    void addFriend(vk::Buddy *);
+    void addFriend(Vreen::Buddy *);
     void removeFriend(int id);
 protected:
-    bool checkContact(vk::Buddy *);
+    bool checkContact(Vreen::Buddy *);
 private:
-    QWeakPointer<vk::Roster> m_roster;
-    vk::BuddyList m_buddyList;
+    QWeakPointer<Vreen::Roster> m_roster;
+    Vreen::BuddyList m_buddyList;
     bool m_showGroups;
     QString m_filterByName;
 };

@@ -25,7 +25,7 @@
 #include "utils.h"
 #include <QStringBuilder>
 
-namespace vk {
+namespace Vreen {
 
 QString join(IdList ids)
 {
@@ -51,5 +51,5 @@ QString toCamelCase(QString string)
     return string;
 }
 
-} //namespace vk
+} //namespace Vreen
 

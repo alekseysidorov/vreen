@@ -46,12 +46,12 @@ WallModel::WallModel(QObject *parent) :
     setRoleNames(roles);
 }
 
-vk::Contact *WallModel::contact() const
+Vreen::Contact *WallModel::contact() const
 {
     return m_contact.data();
 }
 
-void WallModel::setContact(vk::Contact *contact)
+void WallModel::setContact(Vreen::Contact *contact)
 {
     if (!m_session.isNull()) {
         clear();
@@ -59,8 +59,8 @@ void WallModel::setContact(vk::Contact *contact)
     }
     if (!contact)
         return;
-    auto session = new vk::WallSession(contact);
-    connect(session, SIGNAL(postAdded(vk::WallPost)), SLOT(addPost(vk::WallPost)));
+    auto session = new Vreen::WallSession(contact);
+    connect(session, SIGNAL(postAdded(Vreen::WallPost)), SLOT(addPost(Vreen::WallPost)));
     connect(session, SIGNAL(postLikeAdded(int,int,int,bool)), SLOT(onPostLikeAdded(int,int,int,bool)));
     connect(session, SIGNAL(postLikeDeleted(int,int)), SLOT(onPostLikeDeleted(int,int)));
 
@@ -85,7 +85,7 @@ QVariant WallModel::data(const QModelIndex &index, int role) const
     case DateRole:
         return post.date();
     case AttachmentsRole:
-        return vk::Attachment::toVariantMap(post.attachments());
+        return Vreen::Attachment::toVariantMap(post.attachments());
     case LikesRole:
         return post.likes();
     case RepostsRole:
@@ -108,7 +108,7 @@ int WallModel::count() const
     return m_posts.count();
 }
 
-void WallModel::getLastPosts(int count, vk::WallSession::Filter filter)
+void WallModel::getLastPosts(int count, Vreen::WallSession::Filter filter)
 {
     if (m_session.isNull())
         qWarning("WallModel: contact is null! Please set a contact!");
@@ -154,13 +154,13 @@ int WallModel::findPost(int id)
 }
 
 
-static bool postLessThan(const vk::WallPost &a, const vk::WallPost &b)
+static bool postLessThan(const Vreen::WallPost &a, const Vreen::WallPost &b)
 {
     return a.id() < b.id();
 }
 
 
-void WallModel::addPost(const vk::WallPost &post)
+void WallModel::addPost(const Vreen::WallPost &post)
 {
     if (findPost(post.id()) != -1)
         return;
@@ -173,7 +173,7 @@ void WallModel::addPost(const vk::WallPost &post)
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
-void WallModel::replacePost(int i, const vk::WallPost &post)
+void WallModel::replacePost(int i, const Vreen::WallPost &post)
 {
     auto index = createIndex(i, 0);
     m_posts[i] = post;
@@ -184,7 +184,7 @@ void WallModel::onPostLikeAdded(int postId, int likes, int reposts, bool isRetwe
 {
     int id = findPost(postId);
     if (id != -1) {
-        vk::WallPost post = m_posts.at(id);
+        Vreen::WallPost post = m_posts.at(id);
 
         auto map = post.likes();
         map.insert("count", likes);
@@ -204,7 +204,7 @@ void WallModel::onPostLikeDeleted(int postId, int count)
 {
     int id = findPost(postId);
     if (id != -1) {
-        vk::WallPost post = m_posts.at(id);
+        Vreen::WallPost post = m_posts.at(id);
 
         auto map = post.likes();
         map.insert("count", count);
@@ -220,7 +220,7 @@ void WallModel::onPostLikeDeleted(int postId, int count)
     }
 }
 
-vk::Roster *WallModel::roster() const
+Vreen::Roster *WallModel::roster() const
 {
     return m_contact.data()->client()->roster();
 }

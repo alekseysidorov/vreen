@@ -29,7 +29,7 @@
 #include <QStringList>
 #include <QVariant>
 
-namespace vk {
+namespace Vreen {
 
 #define VK_COMMON_FIELDS QLatin1String("first_name") \
     << QLatin1String("last_name") \
@@ -114,7 +114,7 @@ public:
     static void fillContact(Contact *contact, const QVariantMap &data);
 signals:
     void nameChanged(const QString &name);
-    void photoSourceChanged(const QString &source, vk::Contact::PhotoSize);
+    void photoSourceChanged(const QString &source, Vreen::Contact::PhotoSize);
 protected:
     QScopedPointer<ContactPrivate> d_ptr;
 };
@@ -171,7 +171,7 @@ signals:
     void onlineChanged(bool isOnline);
     void tagsChanged(const QStringList &tags);
     void activityChanged(const QString &activity);
-    void statusChanged(vk::Contact::Status);
+    void statusChanged(Vreen::Contact::Status);
     void isFriendChanged(bool isFriend);
 protected:
     Buddy(int id, Client *client);
@@ -214,11 +214,11 @@ Q_INLINE_TEMPLATE T contact_cast(Contact *contact)
     return qobject_cast<T>(contact);
 }
 
-} // namespace vk
+} // namespace Vreen
 
-Q_DECLARE_METATYPE(vk::Contact*)
-Q_DECLARE_METATYPE(vk::Buddy*)
-Q_DECLARE_METATYPE(vk::Group*)
+Q_DECLARE_METATYPE(Vreen::Contact*)
+Q_DECLARE_METATYPE(Vreen::Buddy*)
+Q_DECLARE_METATYPE(Vreen::Group*)
 
 #endif // VK_USER_H
 

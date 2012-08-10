@@ -31,7 +31,7 @@
 #include <QWeakPointer>
 #include <QDebug>
 
-namespace vk {
+namespace Vreen {
 
 class ReplyPrivate
 {
@@ -74,7 +74,7 @@ public:
 };
 
 
-} //namespace vk
+} //namespace Vreen
 
 #endif // REPLY_P_H
 

@@ -42,7 +42,7 @@ BuddyModel::BuddyModel(QObject *parent) :
     setRoleNames(roles);
 }
 
-void BuddyModel::setRoster(vk::Roster *roster)
+void BuddyModel::setRoster(Vreen::Roster *roster)
 {
     if (!m_roster.isNull())
         m_roster.data()->disconnect(this);
@@ -51,12 +51,12 @@ void BuddyModel::setRoster(vk::Roster *roster)
     foreach (auto buddy, m_roster.data()->buddies())
         addFriend(buddy);
 
-    connect(roster, SIGNAL(friendAdded(vk::Buddy*)), SLOT(addFriend(vk::Buddy*)));
+    connect(roster, SIGNAL(friendAdded(Vreen::Buddy*)), SLOT(addFriend(Vreen::Buddy*)));
     connect(roster, SIGNAL(contactRemoved(int)), SLOT(removeFriend(int)));
     emit rosterChanged(roster);
 }
 
-vk::Roster *BuddyModel::roster() const
+Vreen::Roster *BuddyModel::roster() const
 {
     return m_roster.data();
 }
@@ -77,13 +77,13 @@ QVariant BuddyModel::data(const QModelIndex &index, int role) const
     }
     case StatusStringRole: {
         auto buddy = m_buddyList.at(row);
-        auto status = buddy ? buddy->status() : vk::Contact::Unknown;
+        auto status = buddy ? buddy->status() : Vreen::Contact::Unknown;
         switch (status) {
-        case vk::Contact::Online:
+        case Vreen::Contact::Online:
             return tr("Online");
-        case vk::Contact::Offline:
+        case Vreen::Contact::Offline:
             return tr("Offline");
-        case vk::Contact::Away:
+        case Vreen::Contact::Away:
             return tr("Away");
         default:
             break;
@@ -97,7 +97,7 @@ QVariant BuddyModel::data(const QModelIndex &index, int role) const
     }
     case PhotoRole: {
         auto contact = m_buddyList.at(row);
-        return contact->photoSource(vk::Contact::PhotoSizeMediumRec);
+        return contact->photoSource(Vreen::Contact::PhotoSizeMediumRec);
     } default:
         break;
     }
@@ -118,7 +118,7 @@ void BuddyModel::setFilterByName(const QString &filter)
 
     //TODO write more fast algorythm
     clear();
-    foreach (auto buddy, m_roster.data()->findChildren<vk::Buddy*>())
+    foreach (auto buddy, m_roster.data()->findChildren<Vreen::Buddy*>())
         addFriend(buddy);
 }
 
@@ -141,7 +141,7 @@ int BuddyModel::findContact(int id) const
     return -1;
 }
 
-//static bool buddyLessThan(const vk::Buddy *a, const vk::Buddy *b)
+//static bool buddyLessThan(const Vreen::Buddy *a, const Vreen::Buddy *b)
 //{
 ////    if (a->status() == b->status()) {
 ////        return QString::compare(a->name(), b->name(), Qt::CaseInsensitive) < 0;
@@ -149,12 +149,12 @@ int BuddyModel::findContact(int id) const
 //    return a->status() < b->status();
 //}
 
-void BuddyModel::addFriend(vk::Buddy *contact)
+void BuddyModel::addFriend(Vreen::Buddy *contact)
 {
     if (!checkContact(contact))
         return;
     int index = m_buddyList.count();
-    //auto index = vk::lowerBound(m_buddyList, contact, buddyLessThan) + 1;
+    //auto index = Vreen::lowerBound(m_buddyList, contact, buddyLessThan) + 1;
 
     beginInsertRows(QModelIndex(), index, index);
     m_buddyList.insert(index, contact);
@@ -172,7 +172,7 @@ void BuddyModel::removeFriend(int id)
     endRemoveRows();
 }
 
-bool BuddyModel::checkContact(vk::Buddy *contact)
+bool BuddyModel::checkContact(Vreen::Buddy *contact)
 {
     if (!contact->isFriend())
         return false;

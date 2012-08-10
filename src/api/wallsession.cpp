@@ -29,7 +29,7 @@
 #include "client_p.h"
 #include <QNetworkReply>
 
-namespace vk {
+namespace Vreen {
 
 static const char *filters[] = {
     "owner",
@@ -126,12 +126,12 @@ Contact *WallSession::contact() const
 }
 
 /*!
- * \brief vk::WallSession::like A wrapper on API method wall.addLike \link http://vk.com/developers.php?oid=-1&p=wall.addLike
+ * \brief Vreen::WallSession::like A wrapper on API method wall.addLike \link http://vk.com/developers.php?oid=-1&p=wall.addLike
  * \param postId
  * \param retweet
  * \return
  */
-vk::Reply *vk::WallSession::addLike(int postId, bool retweet, const QString &message)
+Vreen::Reply *Vreen::WallSession::addLike(int postId, bool retweet, const QString &message)
 {
     Q_D(WallSession);
     auto reply = d->contact->client()->addLike(d->contact->id(),
@@ -155,7 +155,7 @@ Reply *WallSession::deleteLike(int postId)
     return reply;
 }
 
-} // namespace vk
+} // namespace Vreen
 
 #include "moc_wallsession.cpp"
 

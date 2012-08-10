@@ -28,7 +28,7 @@
 #include <QAbstractListModel>
 #include "message.h"
 
-namespace vk {
+namespace Vreen {
 
 class MessageListModelPrivate;
 class VK_SHARED_EXPORT MessageListModel : public QAbstractListModel
@@ -62,14 +62,14 @@ public:
 signals:
     void sortOrderChanged(Qt::SortOrder order);
 public slots:
-    void addMessage(const vk::Message &message);
-    void removeMessage(const vk::Message &message);
+    void addMessage(const Vreen::Message &message);
+    void removeMessage(const Vreen::Message &message);
     void removeMessage(int id);
-    void setMessages(const vk::MessageList &messages);
+    void setMessages(const Vreen::MessageList &messages);
     void clear();
 protected:
-    virtual void doReplaceMessage(int index, const::vk::Message &message);
-    virtual void doInsertMessage(int index, const::vk::Message &message);
+    virtual void doReplaceMessage(int index, const::Vreen::Message &message);
+    virtual void doInsertMessage(int index, const::Vreen::Message &message);
     virtual void doRemoveMessage(int index);
     virtual void sort(int column, Qt::SortOrder order);
 protected slots:
@@ -79,7 +79,7 @@ private:
     QScopedPointer<MessageListModelPrivate> d_ptr;
 };
 
-} //namespace vk
+} //namespace Vreen
 
 #endif // MESSAGEMODEL_H
 

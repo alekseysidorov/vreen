@@ -4,7 +4,7 @@
 #include <QObject>
 #include "message.h"
 
-namespace vk {
+namespace Vreen {
 
 class Message;
 class Client;
@@ -28,15 +28,15 @@ public slots:
     Reply *sendMessage(const QString &body, const QString &subject = QString());
     Reply *sendMessage(const Message &message);
 signals:
-    void messageAdded(const vk::Message &message);
+    void messageAdded(const Vreen::Message &message);
     void messageDeleted(int id);
     void messageReadStateChanged(int mid, bool isRead);
 protected:
-    virtual Reply *doSendMessage(const vk::Message &message) = 0;
+    virtual Reply *doSendMessage(const Vreen::Message &message) = 0;
     virtual Reply *doGetHistory(int count, int offset) = 0;
     QScopedPointer<MessageSessionPrivate> d_ptr;
 };
 
-} // namespace vk
+} // namespace Vreen
 
 #endif // VK_MESSAGESESSION_H

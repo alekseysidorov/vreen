@@ -38,7 +38,7 @@
 #include <QTimer>
 #include <QPointer>
 
-namespace vk {
+namespace Vreen {
 
 class ClientPrivate
 {
@@ -63,7 +63,7 @@ public:
 
     void setOnlineUpdaterRunning(bool set);
 
-    void _q_connection_state_changed(vk::Client::State state);
+    void _q_connection_state_changed(Vreen::Client::State state);
     void _q_error_received(int error);
     void _q_reply_finished(const QVariant &);
     void _q_network_manager_error(int);
@@ -72,7 +72,7 @@ public:
     void processReply(Reply *reply);
 };
 
-} //namespace vk
+} //namespace Vreen
 
 #endif // CLIENT_P_H
 

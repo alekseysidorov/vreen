@@ -29,7 +29,7 @@
 #include "utils.h"
 #include <QCoreApplication>
 
-namespace vk {
+namespace Vreen {
 
 static bool lessThanId(const Message &a, const Message &b)
 {
@@ -256,7 +256,7 @@ void MessageListModel::resetMessageFlags(int id, int mask, int userId)
     doReplaceMessage(index, message);
 }
 
-} //namespace vk
+} //namespace Vreen
 
 #include "moc_messagemodel.cpp"
 

@@ -28,7 +28,7 @@
 #include "message.h"
 #include "messagesession.h"
 
-namespace vk {
+namespace Vreen {
 
 class Reply;
 class ChatSessionPrivate;
@@ -48,19 +48,19 @@ public:
     bool isActive() const;
     void setActive(bool set);
 signals:
-    void messageAdded(const vk::Message &message);
+    void messageAdded(const Vreen::Message &message);
     void messageDeleted(int id);
     void messageReadStateChanged(int mid, bool isRead);
 protected:
     virtual Reply *doGetHistory(int count = 16, int offset = 0);
-    virtual Reply *doSendMessage(const vk::Message &message);
+    virtual Reply *doSendMessage(const Vreen::Message &message);
 private:
 
     Q_PRIVATE_SLOT(d_func(), void _q_history_received(const QVariant &))
-    Q_PRIVATE_SLOT(d_func(), void _q_message_added(const vk::Message &))
+    Q_PRIVATE_SLOT(d_func(), void _q_message_added(const Vreen::Message &))
 };
 
-} // namespace vk
+} // namespace Vreen
 
 #endif // VK_CHATSESSION_H
 

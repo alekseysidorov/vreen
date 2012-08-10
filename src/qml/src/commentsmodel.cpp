@@ -45,12 +45,12 @@ CommentsModel::CommentsModel(QObject *parent) :
     setRoleNames(roles);
 }
 
-vk::Contact *CommentsModel::contact() const
+Vreen::Contact *CommentsModel::contact() const
 {
     return m_contact.data();
 }
 
-void CommentsModel::setContact(vk::Contact *contact)
+void CommentsModel::setContact(Vreen::Contact *contact)
 {
     if (contact == m_contact.data())
         return;
@@ -60,7 +60,7 @@ void CommentsModel::setContact(vk::Contact *contact)
     }
     if (!contact)
         return;
-    auto session = new vk::CommentSession(contact);
+    auto session = new Vreen::CommentSession(contact);
     connect(session, SIGNAL(commentAdded(QVariantMap)), SLOT(addComment(QVariantMap)));
     connect(session, SIGNAL(commentDeleted(int)), SLOT(deleteComment(int)));
     session->setPostId(m_postId);

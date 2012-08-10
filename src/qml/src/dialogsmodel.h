@@ -28,7 +28,7 @@
 #include <roster.h>
 #include <QWeakPointer>
 
-class DialogsModel : public vk::MessageListModel
+class DialogsModel : public Vreen::MessageListModel
 {
     Q_OBJECT
 
@@ -39,8 +39,8 @@ public:
 
     //HACK workaround about "Unable to assign QObject* to void"
     void setClient(QObject *client);
-    //void setClient(vk::Client *client);
-    //vk::Client *client() const;
+    //void setClient(Vreen::Client *client);
+    //Vreen::Client *client() const;
     QObject *client() const;
 
     void setUnreadCount(int count);
@@ -48,19 +48,19 @@ public:
 public slots:
     void getDialogs(int offset = 0, int count = 25, int previewLength = -1);
 signals:
-    //void clientChanged(vk::Client*);
+    //void clientChanged(Vreen::Client*);
     void clientChanged(QObject*); //HACK
     void unreadCountChanged(int count);
     void requestFinished();
 protected:
-    virtual void doReplaceMessage(int index, const::vk::Message &message);
-    virtual void doInsertMessage(int index, const::vk::Message &message);
+    virtual void doReplaceMessage(int index, const::Vreen::Message &message);
+    virtual void doInsertMessage(int index, const::Vreen::Message &message);
     virtual void doRemoveMessage(int index);
 private slots:
     void onDialogsReceived(const QVariant &dialogs);
-    void onAddMessage(const vk::Message &message);
+    void onAddMessage(const Vreen::Message &message);
 private:
-    QWeakPointer<vk::Client> m_client;
+    QWeakPointer<Vreen::Client> m_client;
     int m_unreadCount;
 };
 

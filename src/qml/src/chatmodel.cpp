@@ -29,12 +29,12 @@
 #include "longpoll.h"
 
 ChatModel::ChatModel(QObject *parent) :
-    vk::MessageListModel(parent)
+    Vreen::MessageListModel(parent)
 {
     setSortOrder(Qt::AscendingOrder);
 }
 
-void ChatModel::setContact(vk::Contact *contact)
+void ChatModel::setContact(Vreen::Contact *contact)
 {
     if (!m_session.isNull()) {
         clear();
@@ -42,9 +42,9 @@ void ChatModel::setContact(vk::Contact *contact)
     }
     if (!contact)
         return;
-    auto session = new vk::ChatSession(contact);
+    auto session = new Vreen::ChatSession(contact);
     auto longPoll = contact->client()->longPoll();
-    connect(session, SIGNAL(messageAdded(vk::Message)), SLOT(addMessage(vk::Message)));
+    connect(session, SIGNAL(messageAdded(Vreen::Message)), SLOT(addMessage(Vreen::Message)));
     connect(session, SIGNAL(messageDeleted(int)), SLOT(removeMessage(int)));
     connect(session, SIGNAL(messageReadStateChanged(int,bool)),
             this, SLOT(messageReadStateChanged(int,bool)));
@@ -57,7 +57,7 @@ void ChatModel::setContact(vk::Contact *contact)
     emit titleChanged(session->title());
 }
 
-vk::Contact *ChatModel::contact() const
+Vreen::Contact *ChatModel::contact() const
 {
     if (m_session.isNull())
         return 0;
@@ -84,7 +84,7 @@ void ChatModel::getHistory(int count, int offset)
 void ChatModel::markAsRead(int mid, bool set)
 {
        if (!m_session.isNull()) {
-           vk::IdList ids;
+           Vreen::IdList ids;
            ids.append(mid);
            m_session.data()->markMessagesAsRead(ids, set);
        }

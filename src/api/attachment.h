@@ -29,7 +29,7 @@
 #include <QVariantMap>
 #include "vk_global.h"
 
-namespace vk {
+namespace Vreen {
 
 class AttachmentData;
 
@@ -88,11 +88,11 @@ private:
     QSharedDataPointer<AttachmentData> d;
 };
 
-} // namespace vk
+} // namespace Vreen
 
-Q_DECLARE_METATYPE(vk::Attachment)
-Q_DECLARE_METATYPE(vk::Attachment::List)
-Q_DECLARE_METATYPE(vk::Attachment::Hash)
+Q_DECLARE_METATYPE(Vreen::Attachment)
+Q_DECLARE_METATYPE(Vreen::Attachment::List)
+Q_DECLARE_METATYPE(Vreen::Attachment::Hash)
 
 #endif // VK_ATTACHMENT_H
 

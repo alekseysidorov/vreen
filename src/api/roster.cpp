@@ -28,7 +28,7 @@
 #include <QDebug>
 #include <QTimer>
 
-namespace vk {
+namespace Vreen {
 
 /*!
  * \brief The Roster class
@@ -44,8 +44,8 @@ Roster::Roster(Client *client, int uid) :
     d_ptr(new RosterPrivate(this, client))
 {
     Q_D(Roster);
-    connect(d->client->longPoll(), SIGNAL(contactStatusChanged(int, vk::Contact::Status)),
-            this, SLOT(_q_status_changed(int, vk::Contact::Status)));
+    connect(d->client->longPoll(), SIGNAL(contactStatusChanged(int, Vreen::Contact::Status)),
+            this, SLOT(_q_status_changed(int, Vreen::Contact::Status)));
     connect(d->client, SIGNAL(onlineStateChanged(bool)), SLOT(_q_online_changed(bool)));
     if (uid)
         setUid(uid);
@@ -275,7 +275,7 @@ void RosterPrivate::_q_online_changed(bool set)
             buddy->setOnline(false);
 }
 
-} // namespace vk
+} // namespace Vreen
 
 #include "moc_roster.cpp"
 

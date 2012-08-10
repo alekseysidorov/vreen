@@ -60,15 +60,15 @@ QObject *NewsFeedModel::client() const
 
 void NewsFeedModel::setClient(QObject *obj)
 {
-    auto client = static_cast<vk::Client*>(obj);
+    auto client = static_cast<Vreen::Client*>(obj);
     m_client = client;
     if (m_newsFeed.data())
         m_newsFeed.data()->deleteLater();
     if (!client)
         return;
 
-    auto newsFeed = new vk::NewsFeed(client);
-    connect(newsFeed, SIGNAL(newsAdded(vk::NewsItem)), SLOT(onNewsAdded(vk::NewsItem)));
+    auto newsFeed = new Vreen::NewsFeed(client);
+    connect(newsFeed, SIGNAL(newsAdded(Vreen::NewsItem)), SLOT(onNewsAdded(Vreen::NewsItem)));
 
     m_newsFeed = newsFeed;
 }
@@ -93,7 +93,7 @@ QVariant NewsFeedModel::data(const QModelIndex &index, int role) const
     case BodyRole:
         return news.body();
     case AttachmentsRole:
-        return vk::Attachment::toVariantMap(news.attachments());
+        return Vreen::Attachment::toVariantMap(news.attachments());
     case LikesRole:
         return news.likes();
     case RepostsRole:
@@ -145,7 +145,7 @@ void NewsFeedModel::getNews(int filters, quint8 count, int offset)
         return;
 
     qDebug() << Q_FUNC_INFO << filters << count << offset;
-    auto reply = m_newsFeed.data()->getNews(static_cast<vk::NewsFeed::Filters>(filters), count, offset);
+    auto reply = m_newsFeed.data()->getNews(static_cast<Vreen::NewsFeed::Filters>(filters), count, offset);
     connect(reply, SIGNAL(resultReady(QVariant)), SIGNAL(requestFinished()));
 }
 
@@ -199,23 +199,23 @@ void NewsFeedModel::truncate(int count)
     endRemoveRows();
 }
 
-static bool newsItemMoreThan(const vk::NewsItem &a, const vk::NewsItem &b)
+static bool newsItemMoreThan(const Vreen::NewsItem &a, const Vreen::NewsItem &b)
 {
     return a.date() > b.date();
 }
 
-void NewsFeedModel::onNewsAdded(const vk::NewsItem &item)
+void NewsFeedModel::onNewsAdded(const Vreen::NewsItem &item)
 {
     if (findNews(item.postId()) != -1)
         return;
 
-    auto index = vk::lowerBound(m_newsList, item, newsItemMoreThan);
+    auto index = Vreen::lowerBound(m_newsList, item, newsItemMoreThan);
     insertNews(index, item);
 }
 
 void NewsFeedModel::onAddLike(const QVariant &response)
 {
-    auto reply = vk::sender_cast<vk::Reply*>(sender());
+    auto reply = Vreen::sender_cast<Vreen::Reply*>(sender());
     auto url = reply->networkReply()->url();
 
     int postId = url.queryItemValue("post_id").toInt();
@@ -244,7 +244,7 @@ void NewsFeedModel::onAddLike(const QVariant &response)
 
 void NewsFeedModel::onDeleteLike(const QVariant &response)
 {
-    auto reply = vk::sender_cast<vk::Reply*>(sender());
+    auto reply = Vreen::sender_cast<Vreen::Reply*>(sender());
     auto url = reply->networkReply()->url();
 
     int postId = url.queryItemValue("post_id").toInt();
@@ -267,7 +267,7 @@ void NewsFeedModel::onDeleteLike(const QVariant &response)
 }
 
 
-void NewsFeedModel::insertNews(int index, const vk::NewsItem &item)
+void NewsFeedModel::insertNews(int index, const Vreen::NewsItem &item)
 {
     beginInsertRows(QModelIndex(), index, index);
     m_newsList.insert(index, item);
@@ -275,14 +275,14 @@ void NewsFeedModel::insertNews(int index, const vk::NewsItem &item)
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
-void NewsFeedModel::replaceNews(int i, const vk::NewsItem &news)
+void NewsFeedModel::replaceNews(int i, const Vreen::NewsItem &news)
 {
     auto index = createIndex(i, 0);
     m_newsList[i] = news;
     emit dataChanged(index, index);
 }
 
-vk::Contact *NewsFeedModel::findContact(int id) const
+Vreen::Contact *NewsFeedModel::findContact(int id) const
 {
     return m_client.data()->contact(id);
 }

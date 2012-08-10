@@ -29,7 +29,7 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 
-namespace vk {
+namespace Vreen {
 
 Client::Client(QObject *parent) :
     QObject(parent),
@@ -115,9 +115,9 @@ void Client::setConnection(Connection *connection)
     }
 
     d->connection = connection;
-    connect(connection, SIGNAL(connectionStateChanged(vk::Client::State)),
-            this, SLOT(_q_connection_state_changed(vk::Client::State)));
-    connect(connection, SIGNAL(error(vk::Client::Error)), this, SIGNAL(error(vk::Client::Error)));
+    connect(connection, SIGNAL(connectionStateChanged(Vreen::Client::State)),
+            this, SLOT(_q_connection_state_changed(Vreen::Client::State)));
+    connect(connection, SIGNAL(error(Vreen::Client::Error)), this, SIGNAL(error(Vreen::Client::Error)));
 }
 
 Roster *Client::roster() const
@@ -373,7 +373,7 @@ void ClientPrivate::_q_network_manager_error(int)
 
 }
 
-} // namespace vk
+} // namespace Vreen
 
 #include "moc_client.cpp"
 

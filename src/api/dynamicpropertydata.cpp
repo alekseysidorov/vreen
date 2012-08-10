@@ -25,7 +25,7 @@
 #include "dynamicpropertydata_p.h"
 #include <QSharedData>
 
-namespace vk {
+namespace Vreen {
 
 QVariant DynamicPropertyData::property(const char *name, const QVariant &def,
                                        const QList<QByteArray> &gNames,
@@ -69,5 +69,5 @@ void DynamicPropertyData::setProperty(const char *name, const QVariant &value,
     }
 }
 
-} // namespace vk
+} // namespace Vreen
 

@@ -30,7 +30,7 @@
 #include <QVariant>
 #include <QStringList>
 
-namespace vk {
+namespace Vreen {
 class Client;
 class Reply;
 typedef QList<int> IdList;
@@ -73,8 +73,8 @@ public slots:
             << VK_ALL_FIELDS
             );
 signals:
-    void buddyAdded(vk::Buddy *buddy);
-    void buddyUpdated(vk::Buddy *buddy);
+    void buddyAdded(Vreen::Buddy *buddy);
+    void buddyUpdated(Vreen::Buddy *buddy);
     void contactRemoved(int id);
     void tagsChanged(const QStringList &);
     void syncFinished(bool success);
@@ -88,13 +88,13 @@ protected:
 
     Q_PRIVATE_SLOT(d_func(), void _q_tags_received(const QVariant &response))
     Q_PRIVATE_SLOT(d_func(), void _q_friends_received(const QVariant &response))
-    Q_PRIVATE_SLOT(d_func(), void _q_status_changed(int userId, vk::Contact::Status status))
+    Q_PRIVATE_SLOT(d_func(), void _q_status_changed(int userId, Vreen::Contact::Status status))
     Q_PRIVATE_SLOT(d_func(), void _q_online_changed(bool))
 };
 
-} // namespace vk
+} // namespace Vreen
 
-Q_DECLARE_METATYPE(vk::Roster*)
+Q_DECLARE_METATYPE(Vreen::Roster*)
 
 #endif // VK_ROSTER_H
 

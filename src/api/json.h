@@ -27,14 +27,14 @@
 #include "vk_global.h"
 #include <QVariantMap>
 
-namespace vk {
+namespace Vreen {
 
 namespace JSON {
     VK_SHARED_EXPORT QVariant parse(const QByteArray &data);
     VK_SHARED_EXPORT QByteArray generate(const QVariant &data, int indent = 0);
 } //namespace JSON
 
-} // namespace vk
+} // namespace Vreen
 
 #endif // VK_JSON_H
 

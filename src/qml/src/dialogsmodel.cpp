@@ -30,7 +30,7 @@
 #include <QApplication>
 
 DialogsModel::DialogsModel(QObject *parent) :
-    vk::MessageListModel(parent),
+    Vreen::MessageListModel(parent),
     m_unreadCount(0)
 {
     setSortOrder(Qt::DescendingOrder);
@@ -44,7 +44,7 @@ void DialogsModel::setClient(QObject *client)
     m_client = static_cast<decltype(m_client.data())>(client);
 
     auto longPoll = m_client.data()->longPoll();
-    connect(longPoll, SIGNAL(messageAdded(const vk::Message)), SLOT(onAddMessage(vk::Message)));
+    connect(longPoll, SIGNAL(messageAdded(const Vreen::Message)), SLOT(onAddMessage(Vreen::Message)));
     connect(longPoll, SIGNAL(messageFlagsReplaced(int, int, int)), SLOT(replaceMessageFlags(int, int, int)));
     connect(longPoll, SIGNAL(messageFlagsReseted(int,int,int)), SLOT(resetMessageFlags(int,int)));
     emit clientChanged(m_client.data());
@@ -61,13 +61,13 @@ void DialogsModel::setUnreadCount(int count)
     emit unreadCountChanged(count);
 }
 
-//void DialogsModel::setClient(vk::Client *client)
+//void DialogsModel::setClient(Vreen::Client *client)
 //{
 //    m_client = client;
 //    emit clientChanged(client);
 //}
 
-//vk::Client *DialogsModel::client() const
+//Vreen::Client *DialogsModel::client() const
 //{
 //    return m_client.data();
 //}
@@ -88,7 +88,7 @@ void DialogsModel::onDialogsReceived(const QVariant &dialogs)
 {
     auto list = dialogs.toList();
     Q_UNUSED(list.takeFirst().toInt());
-    vk::MessageList messageList = vk::Message::fromVariantList(list, m_client.data());
+    Vreen::MessageList messageList = Vreen::Message::fromVariantList(list, m_client.data());
 
     foreach (auto message, messageList) {
         onAddMessage(message);
@@ -96,13 +96,13 @@ void DialogsModel::onDialogsReceived(const QVariant &dialogs)
     }
 }
 
-static vk::Contact *getContact(const vk::Message &message)
+static Vreen::Contact *getContact(const Vreen::Message &message)
 {
     return message.isIncoming() ? message.from()
                                 : message.to();
 }
 
-void DialogsModel::onAddMessage(const vk::Message &message)
+void DialogsModel::onAddMessage(const Vreen::Message &message)
 {
     //FIXME use declarative style
     for (int i = 0; i != count(); i++) {
@@ -122,7 +122,7 @@ int DialogsModel::unreadCount() const
 }
 
 
-void DialogsModel::doReplaceMessage(int index, const vk::Message &message)
+void DialogsModel::doReplaceMessage(int index, const Vreen::Message &message)
 {
     if (message.isIncoming()) {
         if (at(index).isUnread() && !message.isUnread()) {
@@ -136,7 +136,7 @@ void DialogsModel::doReplaceMessage(int index, const vk::Message &message)
     MessageListModel::doReplaceMessage(index, message);
 }
 
-void DialogsModel::doInsertMessage(int index, const vk::Message &message)
+void DialogsModel::doInsertMessage(int index, const Vreen::Message &message)
 {
     if (message.isIncoming() && message.isUnread()) {
         m_unreadCount++;
