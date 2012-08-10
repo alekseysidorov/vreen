@@ -1,7 +1,7 @@
 #ifndef VK_OAUTHCONNECTION_H
 #define VK_OAUTHCONNECTION_H
 
-#include <vk/connection.h>
+#include <vreen/connection.h>
 
 class QWebPage;
 

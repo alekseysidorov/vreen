@@ -6,7 +6,7 @@
 #include <QStringBuilder>
 #include <QNetworkRequest>
 
-#include <vk/json.h>
+#include <vreen/json.h>
 
 #include <QDebug>
 #include <QWebElement>
