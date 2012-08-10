@@ -1,0 +1,89 @@
+import qbs.base 1.0
+
+Product {
+    name: "vreen"
+    type: "dynamiclibrary"
+
+    cpp.includePaths: [
+        "3rdparty",
+        "api"
+    ]
+    cpp.defines: [
+        "VK_LIBRARY",
+        "K8JSON_INCLUDE_GENERATOR",
+        "K8JSON_INCLUDE_COMPLEX_GENERATOR"
+    ]
+    cpp.cxxFlags: {
+        var flags = [
+            "-fvisibility=hidden"
+        ]
+        //var regex = "clang|gcc"
+        //if (qbs.toolchain.indexOf(regex) !== -1)
+            flags.push("-std=c++0x")
+        return flags;
+    }
+
+    Depends { name: "cpp" }
+    Depends { name: "Qt"; submodules: ["core", "network", "gui"] }
+    Depends { name: "k8json"}
+
+    files: [
+        "api/abstractlistmodel.cpp",
+        "api/abstractlistmodel.h",
+        "api/attachment.cpp",
+        "api/attachment.h",
+        "api/audio.cpp",
+        "api/audio.h",
+        "api/audioitem.cpp",
+        "api/audioitem.h",
+        "api/chatsession.cpp",
+        "api/chatsession.h",
+        "api/chatsession_p.h",
+        "api/client.cpp",
+        "api/client.h",
+        "api/client_p.h",
+        "api/commentssession.cpp",
+        "api/commentssession.h",
+        "api/connection.cpp",
+        "api/connection.h",
+        "api/contact.cpp",
+        "api/contact.h",
+        "api/contact_p.h",
+        "api/dynamicpropertydata.cpp",
+        "api/dynamicpropertydata_p.h",
+        "api/json.cpp",
+        "api/json.h",
+        "api/longpoll.cpp",
+        "api/longpoll.h",
+        "api/longpoll_p.h",
+        "api/message.cpp",
+        "api/message.h",
+        "api/messagemodel.cpp",
+        "api/messagemodel.h",
+        "api/newsfeed.cpp",
+        "api/newsfeed.h",
+        "api/newsitem.cpp",
+        "api/newsitem.h",
+        "api/photomanager.cpp",
+        "api/photomanager.h",
+        "api/reply.cpp",
+        "api/reply.h",
+        "api/reply_p.h",
+        "api/roster.cpp",
+        "api/roster.h",
+        "api/roster_p.h",
+        "api/utils.cpp",
+        "api/utils.h",
+        "api/vk_global.h",
+        "api/wallpost.cpp",
+        "api/wallpost.h",
+        "api/wallsession.cpp",
+        "api/wallsession.h",
+        "api/contentdownloader.cpp",
+        "api/contentdownloader.h",
+        "api/groupmanager.h",
+        "api/groupmanager.cpp",
+        "api/messagesession.h",
+        "api/messagesession.cpp"
+    ]
+}
