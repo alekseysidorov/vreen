@@ -36,6 +36,7 @@ class VK_SHARED_EXPORT MessageListModel : public QAbstractListModel
     Q_OBJECT
     Q_DECLARE_PRIVATE(MessageListModel)
     Q_PROPERTY(Qt::SortOrder sortOrder READ sortOrder WRITE setSortOrder NOTIFY sortOrderChanged)
+	Q_PROPERTY(Vreen::Client* client READ client WRITE setClient NOTIFY clientChanged)
 public:
 
     enum Roles {
@@ -50,7 +51,7 @@ public:
         AttachmentRole
     };
 
-    MessageListModel(QObject *parent = 0);
+	MessageListModel(QObject *parent = 0);
     virtual ~MessageListModel();
     int count() const;
     Message at(int index) const;
@@ -59,8 +60,11 @@ public:
     virtual int rowCount(const QModelIndex &parent) const;
     void setSortOrder(Qt::SortOrder order);
     Qt::SortOrder sortOrder() const;
+	void setClient(Client *client);
+	Client *client() const;
 signals:
     void sortOrderChanged(Qt::SortOrder order);
+	void clientChanged(Vreen::Client*);
 public slots:
     void addMessage(const Vreen::Message &message);
     void removeMessage(const Vreen::Message &message);

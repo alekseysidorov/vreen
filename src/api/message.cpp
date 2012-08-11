@@ -220,26 +220,6 @@ void Message::setToId(int id)
     d->toId = id;
 }
 
-Contact *Message::from() const
-{
-    return d->getContact(d->fromId);
-}
-
-void Message::setFrom(Contact *contact)
-{
-    d->fromId = contact->id();
-}
-
-Contact *Message::to() const
-{
-    return d->getContact(d->toId);
-}
-
-void Message::setTo(Contact *to)
-{
-    d->toId = to->id();
-}
-
 QString Message::subject() const
 {
     return d->subject;

@@ -153,7 +153,7 @@ void ChatSessionPrivate::_q_message_read_state_updated(const QVariant &response)
 
 void ChatSessionPrivate::_q_message_added(const Message &message)
 {
-    auto sender = message.isIncoming() ? message.from() : message.to();
+	auto sender = client->contact(message.isIncoming() ? message.fromId() : message.toId());
     if (sender == contact || !sender) //HACK some workaround
         emit q_func()->messageAdded(message);
 }

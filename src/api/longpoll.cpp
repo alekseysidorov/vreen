@@ -157,10 +157,10 @@ void LongPollPrivate::_q_on_data_recieved(const QVariant &response)
             message.setFlags(flags);
             if (flags & Message::FlagOutbox) {
                 message.setToId(cid);
-                message.setFrom(client->me());
+				message.setFromId(client->me()->id());
             } else {
                 message.setFromId(cid);
-                message.setTo(client->me());
+				message.setToId(client->me()->id());
             }
             message.setSubject(update.value(5).toString());
             message.setBody(update.value(6).toString());

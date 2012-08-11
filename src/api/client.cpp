@@ -209,11 +209,11 @@ Reply *Client::sendMessage(const Message &message)
         return 0;
 
     //checks
-    Q_ASSERT(message.to());
+	Q_ASSERT(message.toId());
 
     QVariantMap args;
     //TODO add chat messages support and contact check
-    args.insert("uid", message.to()->id());
+	args.insert("uid", message.toId());
     args.insert("message", message.body());
     args.insert("title", message.subject());
     return request("messages.send", args);

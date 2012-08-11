@@ -83,7 +83,7 @@ void Client::setOnline(bool set)
 void Client::onMessageAdded(const Vreen::Message &msg)
 {
     if (msg.isIncoming() && msg.isUnread())
-        emit messageReceived(msg.from());
+		emit messageReceived(contact(msg.fromId()));
 }
 
 void Client::onReplyCreated(Vreen::Reply *reply)

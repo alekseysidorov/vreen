@@ -70,9 +70,9 @@ public:
     bool operator ==(const Message &other);
     virtual ~Message();
 
-    Client *client() const;
+	Client *client() const;
 
-    int id() const;
+	int id() const;
     void setId(int id);
     QDateTime date() const;
     void setDate(const QDateTime &date);
@@ -80,11 +80,7 @@ public:
     void setFromId(int id);
     int toId() const;
     void setToId(int id);
-    Contact *from() const;
-    void setFrom(Contact *from);
-    Contact *to() const;
-    void setTo(Contact *to);
-    QString subject() const;
+	QString subject() const;
     void setSubject(const QString &subject);
     QString body() const;
     void setBody(const QString &body);

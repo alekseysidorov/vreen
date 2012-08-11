@@ -24,10 +24,12 @@
 ****************************************************************************/
 #include "messagemodel.h"
 #include "contact.h"
-#include <QDateTime>
 #include "longpoll.h"
 #include "utils.h"
+#include "client.h"
 #include <QCoreApplication>
+#include <QDateTime>
+#include <QPointer>
 
 namespace Vreen {
 
@@ -46,9 +48,10 @@ class MessageListModelPrivate
 {
     Q_DECLARE_PUBLIC(MessageListModel)
 public:
-    MessageListModelPrivate(MessageListModel *q) : q_ptr(q),
+	MessageListModelPrivate(MessageListModel *q) : q_ptr(q),
         sortOrder(Qt::DescendingOrder) {}
     MessageListModel *q_ptr;
+	QPointer<Client> client;
 
     MessageList messageList;
     Qt::SortOrder sortOrder;
@@ -56,8 +59,8 @@ public:
 
 
 MessageListModel::MessageListModel(QObject *parent) :
-    QAbstractListModel(parent),
-    d_ptr(new MessageListModelPrivate(this))
+	QAbstractListModel(parent),
+	d_ptr(new MessageListModelPrivate(this))
 {
     auto roles = roleNames();
     roles[SubjectRole] = "subject";
@@ -109,9 +112,9 @@ QVariant MessageListModel::data(const QModelIndex &index, int role) const
     case BodyRole:
         return message.body();
     case FromRole:
-        return qVariantFromValue(message.from());
+		return qVariantFromValue(d->client->contact(message.fromId()));
     case ToRole:
-        return qVariantFromValue(message.to());
+		return qVariantFromValue(d->client->contact(message.toId()));
     case ReadStateRole:
         return message.isUnread();
     case DirectionRole:
@@ -145,7 +148,21 @@ void MessageListModel::setSortOrder(Qt::SortOrder order)
 
 Qt::SortOrder MessageListModel::sortOrder() const
 {
-    return d_func()->sortOrder;
+	return d_func()->sortOrder;
+}
+
+void MessageListModel::setClient(Client *client)
+{
+	Q_D(MessageListModel);
+	if (d->client != client) {
+		d->client = client;
+		emit clientChanged(client);
+	}
+}
+
+Client *MessageListModel::client() const
+{
+	return d_func()->client.data();
 }
 
 void MessageListModel::addMessage(const Message &message)

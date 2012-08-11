@@ -203,7 +203,7 @@ void Buddy::sendMessage(const QString &body, const QString &subject)
     Message message(d->client);
     message.setBody(body);
     message.setSubject(subject);
-    message.setTo(this);
+	message.setToId(id());
     d->client->sendMessage(message);
 }
 
