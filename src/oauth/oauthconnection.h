@@ -9,7 +9,7 @@ namespace Vreen {
 
 class OAuthConnectionPrivate;
 
-class OAuthConnection : public Connection
+class VK_SHARED_EXPORT OAuthConnection : public Connection
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(OAuthConnection)
