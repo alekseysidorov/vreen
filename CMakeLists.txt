@@ -32,12 +32,12 @@ set(CMAKE_VREEN_VERSION_STRING "${CMAKE_VREEN_VERSION_MAJOR}.${CMAKE_VREEN_VERSI
 
 add_subdirectory(src)
 
-get_target_property(UNINSTALL_LOCATION uninstall LOCATION)
-if(NOT UNINSTALL_LOCATION)
+if(NOT UNINSTALL_TARGET)
     configure_file(
-	"${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
-	"${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+	"${CMAKE_SOURCE_DIR}/cmake_uninstall.cmake.in"
+	"${CMAKE_BINARY_DIR}/cmake_uninstall.cmake"
 	IMMEDIATE @ONLY)
     add_custom_target(uninstall
-	"${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+	"${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake")
+    set(UNINSTALL_TARGET true CACHE TYPE INTERNAL)
 endif()
