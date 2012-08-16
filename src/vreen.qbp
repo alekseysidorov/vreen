@@ -2,8 +2,10 @@ import qbs.base 1.0
 
 Product {
     name: "vreen"
-    type: "dynamiclibrary"
+    destination: "lib"
+    type: ["dynamiclibrary", "installed_content"]
 
+    cpp.warningLevel: "all"
     cpp.includePaths: [
         "3rdparty",
         "api"
@@ -15,17 +17,12 @@ Product {
     ]
     cpp.cxxFlags: {
         var flags = [
-            "-fvisibility=hidden"
+                    "-fvisibility=hidden",
         ]
-        //var regex = "clang|gcc"
-        //if (qbs.toolchain.indexOf(regex) !== -1)
+        if (qbs.toolchain === "gcc")
             flags.push("-std=c++0x")
-        return flags;
+        return flags
     }
-
-    Depends { name: "cpp" }
-    Depends { name: "Qt"; submodules: ["core", "network", "gui"] }
-    Depends { name: "k8json"}
 
     files: [
         "api/abstractlistmodel.cpp",
@@ -38,7 +35,6 @@ Product {
         "api/audioitem.h",
         "api/chatsession.cpp",
         "api/chatsession.h",
-        "api/chatsession_p.h",
         "api/client.cpp",
         "api/client.h",
         "api/client_p.h",
@@ -86,4 +82,20 @@ Product {
         "api/messagesession.h",
         "api/messagesession.cpp"
     ]
+
+    Depends { name: "cpp" }
+    Depends { name: "Qt"; submodules: ["core", "network", "gui"] }
+    Depends { name: "k8json"}
+
+    FileTagger {
+        qbs.installDir: "include/vreen"
+        pattern: "*[^p].h"
+        fileTags: ["publicHeaders", "install"]
+    }
+
+    //FileTagger {
+    //    qbs.installDir: "include/vreen/" + project.vreenVersion + "/vreen/private"
+    //    pattern: "*_p.h"
+    //    fileTags: ["privateHeaders", "install"]
+    //}
 }
