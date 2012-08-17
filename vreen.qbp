@@ -9,6 +9,7 @@ Project {
     moduleSearchPaths: "qbs"
     references: [
         "src/k8json.qbp",
-        "src/api.qbp"
+        "src/api.qbp",
+        "src/oauth/oauth.qbp"
     ]
 }
