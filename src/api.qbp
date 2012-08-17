@@ -37,21 +37,17 @@ Product {
         "api/chatsession.h",
         "api/client.cpp",
         "api/client.h",
-        "api/client_p.h",
         "api/commentssession.cpp",
         "api/commentssession.h",
         "api/connection.cpp",
         "api/connection.h",
         "api/contact.cpp",
         "api/contact.h",
-        "api/contact_p.h",
         "api/dynamicpropertydata.cpp",
-        "api/dynamicpropertydata_p.h",
         "api/json.cpp",
         "api/json.h",
         "api/longpoll.cpp",
         "api/longpoll.h",
-        "api/longpoll_p.h",
         "api/message.cpp",
         "api/message.h",
         "api/messagemodel.cpp",
@@ -64,10 +60,8 @@ Product {
         "api/photomanager.h",
         "api/reply.cpp",
         "api/reply.h",
-        "api/reply_p.h",
         "api/roster.cpp",
         "api/roster.h",
-        "api/roster_p.h",
         "api/utils.cpp",
         "api/utils.h",
         "api/vk_global.h",
@@ -87,15 +81,22 @@ Product {
     Depends { name: "Qt"; submodules: ["core", "network", "gui"] }
     Depends { name: "k8json"}
 
+    Group {
+        qbs.installDir: "include/vreen/" + project.vreenVersion + "/vreen/private"
+        files: [
+            "api/dynamicpropertydata_p.h",
+            "api/longpoll_p.h",
+            "api/roster_p.h",
+            "api/client_p.h",
+            "api/contact_p.h",
+            "api/reply_p.h",
+        ]
+        fileTags: ["privateHeaders", "install"]
+    }
+
     FileTagger {
         qbs.installDir: "include/vreen"
         pattern: "*[^p].h"
         fileTags: ["publicHeaders", "install"]
     }
-
-    //FileTagger {
-    //    qbs.installDir: "include/vreen/" + project.vreenVersion + "/vreen/private"
-    //    pattern: "*_p.h"
-    //    fileTags: ["privateHeaders", "install"]
-    //}
 }
