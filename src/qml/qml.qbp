@@ -1,0 +1,49 @@
+import qbs.base 1.0
+
+Product {
+    name: "vreenplugin"
+    type: ["dynamiclibrary", "installed_content"]
+
+    property string uri: "com.vk.api"
+    property bool system: false
+
+    function __destination() {
+        return system ? "todo/" : "bin/" + uri.replace(/\./g, "/");
+    }
+
+    destination: __destination()
+
+    cpp.cxxFlags: {
+        var flags = []
+        if (qbs.toolchain === "gcc")
+            flags.push("-std=c++0x")
+        return flags
+    }
+    cpp.includePaths: [
+        product.buildDirectory + "/include/vreen"
+    ]
+
+    files: [
+        "src/audiomodel.cpp",       "src/buddymodel.h",
+        "src/clientimpl.cpp",       "src/commentsmodel.h",
+        "src/newsfeedmodel.cpp",    "src/wallmodel.cpp",
+        "src/audiomodel.h",         "src/chatmodel.cpp",
+        "src/clientimpl.h",         "src/dialogsmodel.cpp",
+        "src/newsfeedmodel.h",      "src/wallmodel.h",
+        "src/buddymodel.cpp",       "src/chatmodel.h",
+        "src/commentsmodel.cpp",    "src/dialogsmodel.h",
+        "src/vkitqmlplugin.h"
+    ]
+
+    Depends { name: "cpp" }
+    Depends { name: "vreen" }
+    Depends { name: "Qt"; submodules: ["declarative"] }
+
+    Group {
+        qbs.installDir: __destination()
+        fileTags: ["install", "qml"]
+        files: [
+            "qmldir/PhotoModel.qml",    "qmldir/qmldir"
+        ]
+    }
+}
