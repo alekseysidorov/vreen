@@ -59,7 +59,7 @@ Product {
 
     Group {
         qbs.installDir: "include/vreen/" + project.vreenVersion + "/vreen/private"
-        fileTags: ["privateHeaders", "install"]
+        fileTags: ["install"]
         files: [
             "api/dynamicpropertydata_p.h",
             "api/longpoll_p.h",
@@ -71,7 +71,7 @@ Product {
     }
     Group {
         qbs.installDir: "include/vreen"
-        fileTags: ["publicHeaders", "install"]
+        fileTags: ["install"]
         files: [
             "api/abstractlistmodel.h",
             "api/attachment.h",

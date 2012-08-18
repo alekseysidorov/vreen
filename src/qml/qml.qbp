@@ -33,8 +33,7 @@ Product {
         "src/newsfeedmodel.h",      "src/wallmodel.h",
         "src/buddymodel.cpp",       "src/chatmodel.h",
         "src/commentsmodel.cpp",    "src/dialogsmodel.h",
-        "src/vkitqmlplugin.h",      "vreenplugin_qt4.cpp",
-        //"vreenplugin_qt5.cpp"
+        "src/vkitqmlplugin.h",
     ]
 
     Depends { name: "cpp" }
@@ -51,12 +50,10 @@ Product {
     }
     Group {
         condition: qt.core.versionMajor === 4
-        fileTags: ["qt4"]
         files:  "vreenplugin_qt4.cpp"
     }
     Group {
         condition: qt.core.versionMajor === 5
-        fileTags: ["qt5"]
         files: "vreenplugin_qt5.cpp"
     }
 }
