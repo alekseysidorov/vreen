@@ -25,8 +25,6 @@
 #ifndef VKITQMLPLUGIN_H
 #define VKITQMLPLUGIN_H
 
-#include <QDeclarativeExtensionPlugin>
-
 #include "clientimpl.h"
 #include <roster.h>
 #include <contact.h>
@@ -41,35 +39,35 @@
 #include <attachment.h>
 #include <newsfeed.h>
 
-class VKitQmlPlugin : public QDeclarativeExtensionPlugin
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#include <qqmlextensionplugin.h>
+#include <qqml.h>
+#else
+#include <QDeclarativeExtensionPlugin>
+#include <QtDeclarative>
+#endif
+
+static inline void registerVreenTypes(const char *uri)
 {
-    Q_OBJECT
-public:
-    void registerTypes(const char *uri)
-    {
-        Q_ASSERT(uri == QLatin1String("com.vk.api"));
+    Q_ASSERT(uri == QLatin1String("com.vk.api"));
 
-        qmlRegisterType<Client>("com.vk.api", 1, 0, "Client");
-        qmlRegisterType<BuddyModel>("com.vk.api", 1, 0, "BuddyModel");
-        qmlRegisterType<DialogsModel>("com.vk.api", 1, 0, "DialogsModel");
-        qmlRegisterType<ChatModel>("com.vk.api", 1, 0, "ChatModel");
-        qmlRegisterType<WallModel>("com.vk.api", 1, 0, "WallModel");
-        qmlRegisterType<NewsFeedModel>("com.vk.api", 1, 0, "NewsFeedModel");
-        qmlRegisterType<CommentsModel>("com.vk.api", 1, 0, "CommentsModel");
-        qmlRegisterType<AudioModel>("com.vk.api", 1, 0, "AudioModel");
+    qmlRegisterType<Client>("com.vk.api", 1, 0, "Client");
+    qmlRegisterType<BuddyModel>("com.vk.api", 1, 0, "BuddyModel");
+    qmlRegisterType<DialogsModel>("com.vk.api", 1, 0, "DialogsModel");
+    qmlRegisterType<ChatModel>("com.vk.api", 1, 0, "ChatModel");
+    qmlRegisterType<WallModel>("com.vk.api", 1, 0, "WallModel");
+    qmlRegisterType<NewsFeedModel>("com.vk.api", 1, 0, "NewsFeedModel");
+    qmlRegisterType<CommentsModel>("com.vk.api", 1, 0, "CommentsModel");
+    qmlRegisterType<AudioModel>("com.vk.api", 1, 0, "AudioModel");
 
-        qmlRegisterUncreatableType<Vreen::Roster>("com.vk.api", 1, 0, "Roster", QObject::tr("Use client.roster instead"));
-        qmlRegisterUncreatableType<Vreen::Contact>("com.vk.api", 1, 0, "Contact", QObject::tr("User Roster"));
-        qmlRegisterUncreatableType<Vreen::Message>("com.vk.api", 1, 0, "Message", QObject::tr("Only flags"));
-        qmlRegisterUncreatableType<Vreen::LongPoll>("com.vk.api", 1, 0, "LongPoll", QObject::tr("Use client.longPoll instead"));
-        qmlRegisterUncreatableType<Vreen::Attachment>("com.vk.api", 1, 0, "Attachment", QObject::tr("Attachment enums"));
-        qmlRegisterUncreatableType<Vreen::NewsItem>("com.vk.api", 1, 0, "NewsItem", QObject::tr("NewsItem enums"));
-        qmlRegisterUncreatableType<Vreen::NewsFeed>("com.vk.api", 1, 0, "NewsFeed", QObject::tr("NewsFeed enums"));
-    }
-};
-
-Q_EXPORT_PLUGIN2(vkitplugin, VKitQmlPlugin)
-
+    qmlRegisterUncreatableType<Vreen::Roster>("com.vk.api", 1, 0, "Roster", QObject::tr("Use client.roster instead"));
+    qmlRegisterUncreatableType<Vreen::Contact>("com.vk.api", 1, 0, "Contact", QObject::tr("User Roster"));
+    qmlRegisterUncreatableType<Vreen::Message>("com.vk.api", 1, 0, "Message", QObject::tr("Only flags"));
+    qmlRegisterUncreatableType<Vreen::LongPoll>("com.vk.api", 1, 0, "LongPoll", QObject::tr("Use client.longPoll instead"));
+    qmlRegisterUncreatableType<Vreen::Attachment>("com.vk.api", 1, 0, "Attachment", QObject::tr("Attachment enums"));
+    qmlRegisterUncreatableType<Vreen::NewsItem>("com.vk.api", 1, 0, "NewsItem", QObject::tr("NewsItem enums"));
+    qmlRegisterUncreatableType<Vreen::NewsFeed>("com.vk.api", 1, 0, "NewsFeed", QObject::tr("NewsFeed enums"));
+}
 
 #endif // VKITQMLPLUGIN_H
 

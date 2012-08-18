@@ -26,7 +26,6 @@
 #define CLIENT_H
 #include <client.h>
 #include <QWeakPointer>
-#include <QtDeclarative>
 
 class Client : public Vreen::Client
 {

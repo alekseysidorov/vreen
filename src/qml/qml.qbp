@@ -20,7 +20,8 @@ Product {
         return flags
     }
     cpp.includePaths: [
-        product.buildDirectory + "/include/vreen"
+        product.buildDirectory + "/include/vreen",
+        "src"
     ]
 
     files: [
@@ -32,10 +33,12 @@ Product {
         "src/newsfeedmodel.h",      "src/wallmodel.h",
         "src/buddymodel.cpp",       "src/chatmodel.h",
         "src/commentsmodel.cpp",    "src/dialogsmodel.h",
-        "src/vkitqmlplugin.h"
+        "src/vkitqmlplugin.h",      "vreenplugin_qt4.cpp",
+        //"vreenplugin_qt5.cpp"
     ]
 
     Depends { name: "cpp" }
+    Depends { name: "Qt.core" }
     Depends { name: "vreen" }
     Depends { name: "Qt"; submodules: ["declarative"] }
 
@@ -45,5 +48,15 @@ Product {
         files: [
             "qmldir/PhotoModel.qml",    "qmldir/qmldir"
         ]
+    }
+    Group {
+        condition: qt.core.versionMajor === 4
+        fileTags: ["qt4"]
+        files:  "vreenplugin_qt4.cpp"
+    }
+    Group {
+        condition: qt.core.versionMajor === 5
+        fileTags: ["qt5"]
+        files: "vreenplugin_qt5.cpp"
     }
 }
