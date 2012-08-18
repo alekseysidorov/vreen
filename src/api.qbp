@@ -26,55 +26,31 @@ Product {
 
     files: [
         "api/abstractlistmodel.cpp",
-        "api/abstractlistmodel.h",
         "api/attachment.cpp",
-        "api/attachment.h",
         "api/audio.cpp",
-        "api/audio.h",
         "api/audioitem.cpp",
-        "api/audioitem.h",
         "api/chatsession.cpp",
-        "api/chatsession.h",
         "api/client.cpp",
-        "api/client.h",
         "api/commentssession.cpp",
-        "api/commentssession.h",
         "api/connection.cpp",
-        "api/connection.h",
         "api/contact.cpp",
-        "api/contact.h",
-        "api/dynamicpropertydata.cpp",
-        "api/json.cpp",
-        "api/json.h",
-        "api/longpoll.cpp",
-        "api/longpoll.h",
-        "api/message.cpp",
-        "api/message.h",
-        "api/messagemodel.cpp",
-        "api/messagemodel.h",
-        "api/newsfeed.cpp",
-        "api/newsfeed.h",
-        "api/newsitem.cpp",
-        "api/newsitem.h",
-        "api/photomanager.cpp",
-        "api/photomanager.h",
-        "api/reply.cpp",
-        "api/reply.h",
-        "api/roster.cpp",
-        "api/roster.h",
-        "api/utils.cpp",
-        "api/utils.h",
-        "api/vk_global.h",
-        "api/wallpost.cpp",
-        "api/wallpost.h",
-        "api/wallsession.cpp",
-        "api/wallsession.h",
         "api/contentdownloader.cpp",
-        "api/contentdownloader.h",
-        "api/groupmanager.h",
+        "api/dynamicpropertydata.cpp",
+        "api/groupchatsession.cpp",
         "api/groupmanager.cpp",
-        "api/messagesession.h",
-        "api/messagesession.cpp"
+        "api/json.cpp",
+        "api/longpoll.cpp",
+        "api/message.cpp",
+        "api/messagemodel.cpp",
+        "api/messagesession.cpp",
+        "api/newsfeed.cpp",
+        "api/newsitem.cpp",
+        "api/photomanager.cpp",
+        "api/reply.cpp",
+        "api/roster.cpp",
+        "api/utils.cpp",
+        "api/wallpost.cpp",
+        "api/wallsession.cpp"
     ]
 
     Depends { name: "cpp" }
@@ -83,6 +59,7 @@ Product {
 
     Group {
         qbs.installDir: "include/vreen/" + project.vreenVersion + "/vreen/private"
+        fileTags: ["privateHeaders", "install"]
         files: [
             "api/dynamicpropertydata_p.h",
             "api/longpoll_p.h",
@@ -90,13 +67,43 @@ Product {
             "api/client_p.h",
             "api/contact_p.h",
             "api/reply_p.h",
-        ]
-        fileTags: ["privateHeaders", "install"]
+        ]        
     }
-
-    FileTagger {
+    Group {
         qbs.installDir: "include/vreen"
-        pattern: "*[^p].h"
         fileTags: ["publicHeaders", "install"]
+        files: [
+            "api/abstractlistmodel.h",
+            "api/attachment.h",
+            "api/audio.h",
+            "api/audioitem.h",
+            "api/chatsession.h",
+            "api/client.h",
+            "api/commentssession.h",
+            "api/connection.h",
+            "api/contact.h",
+            "api/contentdownloader.h",
+            "api/groupchatsession.h",
+            "api/groupmanager.h",
+            "api/json.h",
+            "api/longpoll.h",
+            "api/message.h",
+            "api/messagemodel.h",
+            "api/messagesession.h",
+            "api/newsfeed.h",
+            "api/newsitem.h",
+            "api/photomanager.h",
+            "api/reply.h",
+            "api/roster.h",
+            "api/utils.h",
+            "api/vk_global.h",
+            "api/wallpost.h",
+            "api/wallsession.h"
+        ]
     }
+    //FileTagger {
+    //    qbs.installDir: "include/vreen"
+    //    pattern: "*[^p].h"
+    //    fileTags: ["publicHeaders", "install"]
+    //}
 }
