@@ -1,8 +1,8 @@
 set(QT_USE_QTDECLARATIVE true)
 set(VREEN_IMPORTS_DIR "${VREEN_IMPORTS_DIR}" CACHE INTERNAL "")
 
-list(APPEND exta_src
-	vreenplugin_qt4.cpp
+list(APPEND EXTRA_SRC
+    src/vreenplugin_qt4.cpp
 )
 
 add_qml_module(vreenplugin
@@ -10,7 +10,7 @@ add_qml_module(vreenplugin
     URI com.vk.api
     QML_DIR qmldir
     SOURCE_DIR src
-	SOURCE_FILES "vreenplugin_qt4.cpp;vreenplugin_qt4.h"
+    SOURCE_FILES ${EXTRA_SRC}
     LIBRARIES vreen ${QT_QTDECLARATIVE_LIBRARY}
     INCLUDES ../api ${QT_QTDECLARATIVE_INCLUDE_DIR}
     IMPORTS_DIR ${VREEN_IMPORTS_DIR}
