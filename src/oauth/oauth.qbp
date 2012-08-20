@@ -15,7 +15,8 @@ Product {
     Depends { name: "vreen"; }
 
     files: [
-        "oauthconnection.cpp"
+        "oauthconnection.cpp",
+        "oauthconnection.h"
     ]
 
     Group {

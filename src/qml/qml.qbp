@@ -33,13 +33,15 @@ Product {
         "src/newsfeedmodel.h",      "src/wallmodel.h",
         "src/buddymodel.cpp",       "src/chatmodel.h",
         "src/commentsmodel.cpp",    "src/dialogsmodel.h",
-        "src/vkitqmlplugin.h",
+        "src/vkitqmlplugin.h",      
     ]
 
-    Depends { name: "cpp" }
-    Depends { name: "Qt.core" }
-    Depends { name: "vreen" }
-    Depends { name: "Qt"; submodules: ["declarative"] }
+    Depends { name: "cpp" }    
+    Depends { name: "Qt.core" }    
+    Depends { name: "Qt.network" }        
+    Depends { name: "Qt.declarative"; condition: qt.core.versionMajor === 4 }
+    Depends { name: "Qt.quick"; condition: qt.core.versionMajor === 5 }    
+    Depends { name: "vreen"}
 
     Group {
         qbs.installDir: __destination()

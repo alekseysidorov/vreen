@@ -165,6 +165,10 @@ Buddy::Status Buddy::status() const
 void Buddy::setStatus(Buddy::Status status)
 {
     Q_D(Buddy);
+    //hack for delayed replies recieve
+    if (!d->client->isOnline())
+        status = Offline;
+
     if (d->status != status) {
         d_func()->status = status;
         emit statusChanged(status);
