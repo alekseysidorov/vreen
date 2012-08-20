@@ -50,7 +50,39 @@ Product {
         "api/roster.cpp",
         "api/utils.cpp",
         "api/wallpost.cpp",
-        "api/wallsession.cpp"
+        "api/wallsession.cpp",
+        "api/dynamicpropertydata_p.h",
+        "api/longpoll_p.h",
+        "api/roster_p.h",
+        "api/client_p.h",
+        "api/contact_p.h",
+        "api/reply_p.h",
+        "api/abstractlistmodel.h",
+        "api/attachment.h",
+        "api/audio.h",
+        "api/audioitem.h",
+        "api/chatsession.h",
+        "api/client.h",
+        "api/commentssession.h",
+        "api/connection.h",
+        "api/contact.h",
+        "api/contentdownloader.h",
+        "api/groupchatsession.h",
+        "api/groupmanager.h",
+        "api/json.h",
+        "api/longpoll.h",
+        "api/message.h",
+        "api/messagemodel.h",
+        "api/messagesession.h",
+        "api/newsfeed.h",
+        "api/newsitem.h",
+        "api/photomanager.h",
+        "api/reply.h",
+        "api/roster.h",
+        "api/utils.h",
+        "api/vk_global.h",
+        "api/wallpost.h",
+        "api/wallsession.h"
     ]
 
     Depends { name: "cpp" }
@@ -101,9 +133,5 @@ Product {
             "api/wallsession.h"
         ]
     }
-    //FileTagger {
-    //    qbs.installDir: "include/vreen"
-    //    pattern: "*[^p].h"
-    //    fileTags: ["publicHeaders", "install"]
-    //}
+
 }
