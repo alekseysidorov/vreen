@@ -8,5 +8,5 @@ Description: OAuth2 connection library for vreen
 Requires: QtCore QtWebKit vreen
 Version: ${CMAKE_VREEN_VERSION_MAJOR}.${CMAKE_VREEN_VERSION_MINOR}.${CMAKE_VREEN_VERSION_PATCH}
 Libs: -L${LIB_DESTINATION} -lvreenoauth
-Cflags: -I${CMAKE_INSTALL_PREFIX}/include/
+Cflags: -I${CMAKE_INSTALL_PREFIX}/include/vreen
 

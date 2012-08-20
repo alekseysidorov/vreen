@@ -10,7 +10,7 @@ add_qml_module(vreenplugin
     URI com.vk.api
     QML_DIR qmldir
     SOURCE_DIR src
-    SOURCES "vreenplugin_qt4.cpp"    
+	SOURCE_FILES "vreenplugin_qt4.cpp;vreenplugin_qt4.h"
     LIBRARIES vreen ${QT_QTDECLARATIVE_LIBRARY}
     INCLUDES ../api ${QT_QTDECLARATIVE_INCLUDE_DIR}
     IMPORTS_DIR ${VREEN_IMPORTS_DIR}
