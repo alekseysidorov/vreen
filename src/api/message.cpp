@@ -118,7 +118,7 @@ public:
         body = data.value("body").toString();
         attachmentHash = Attachment::toHash(Attachment::fromVariantList(data.value("attachments").toList()));
         //TODO forward messages
-        //TODO groupchats
+        chatId = data.value("chat_id").toInt();
     }
 
     void setFlag(Message::Flag flag, bool set = true)
@@ -218,6 +218,16 @@ int Message::toId() const
 void Message::setToId(int id)
 {
     d->toId = id;
+}
+
+int Message::chatId() const
+{
+    return d->chatId;
+}
+
+void Message::setChatId(int chatId)
+{
+    d->chatId = chatId;
 }
 
 QString Message::subject() const

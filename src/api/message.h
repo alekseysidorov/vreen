@@ -80,6 +80,8 @@ public:
     void setFromId(int id);
     int toId() const;
     void setToId(int id);
+    int chatId() const;
+    void setChatId(int chatId);
 	QString subject() const;
     void setSubject(const QString &subject);
     QString body() const;
