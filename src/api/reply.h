@@ -37,11 +37,6 @@ class VK_SHARED_EXPORT Reply : public QObject
     Q_OBJECT
     Q_DECLARE_PRIVATE(Reply)
 public:
-
-    enum ErrorCode {
-        CaptchaNeeded = 14
-    };
-
     virtual ~Reply();
     QNetworkReply *networkReply() const;
     QVariant response() const;
@@ -58,6 +53,7 @@ protected:
     friend class Client;
 
     Q_PRIVATE_SLOT(d_func(), void _q_reply_finished())
+    Q_PRIVATE_SLOT(d_func(), void _q_network_reply_error(QNetworkReply::NetworkError))
 };
 
 } // namespace Vreen

@@ -78,7 +78,8 @@ public:
         ErrorToManyRequests             = 6,
         ErrorPermissionDenied           = 7,
         ErrorCaptchaNeeded              = 14,
-        ErrorMissingOrInvalidParameter  = 100
+        ErrorMissingOrInvalidParameter  = 100,
+        ErrorNetworkReply               = 4096
     };
 
     explicit Client(QObject *parent = 0);
