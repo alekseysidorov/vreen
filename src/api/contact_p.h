@@ -117,8 +117,10 @@ public:
     QString getActivity() const { return activity; }
     void setActivity(const QString &now)
     {
-        activity = now;
-        emit q_func()->activityChanged(now);
+		if (activity != now) {
+			activity = now;
+			emit q_func()->activityChanged(now);
+		}
     }
 };
 
