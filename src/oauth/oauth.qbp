@@ -5,7 +5,7 @@ Product {
     name: "vreenoauth"
     destination: "lib"
 
-    cpp.warningLevel: "all"
+    //cpp.warningLevel: "all"
     cpp.includePaths: [
         product.buildDirectory + "/include"
     ]

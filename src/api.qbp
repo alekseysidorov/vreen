@@ -5,7 +5,7 @@ Product {
     destination: "lib"
     type: ["dynamiclibrary", "installed_content"]
 
-    cpp.warningLevel: "all"
+    //cpp.warningLevel: "all"
     cpp.includePaths: [
         "3rdparty",
         "api"
@@ -16,11 +16,12 @@ Product {
         "K8JSON_INCLUDE_COMPLEX_GENERATOR"
     ]
     cpp.cxxFlags: {
-        var flags = [
-                    "-fvisibility=hidden",
-        ]
-        if (qbs.toolchain === "gcc")
+        var flags = []
+        if (qbs.toolchain === "gcc") {
             flags.push("-std=c++0x")
+            if (qbs.platform !== "windows")
+                flags.push("-fvisibility=hidden")
+        }
         return flags
     }
 
