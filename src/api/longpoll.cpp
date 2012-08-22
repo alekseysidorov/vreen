@@ -125,7 +125,7 @@ void LongPollPrivate::_q_request_server_finished(const QVariant &response)
                       QString::number(waitInterval),
                       QString::number(mode));
 
-    q->requestData(data.value("ts").toByteArray());
+    qDebug() << dataUrl;
 }
 
 void LongPollPrivate::_q_on_data_recieved(const QVariant &response)
@@ -148,7 +148,9 @@ void LongPollPrivate::_q_on_data_recieved(const QVariant &response)
             break;
         }
         case LongPoll::MessageAdded: {
-            //qDebug() << update;
+            QVariantMap additional = update.value(7).toMap();
+
+            int rid = additional.value("from").toInt();
             Message::Flags flags(update.value(2).toInt());
             Message message(client);
             int cid = update.value(3).toInt();
@@ -160,10 +162,10 @@ void LongPollPrivate::_q_on_data_recieved(const QVariant &response)
             message.setId(update.value(1).toInt());
             message.setFlags(flags);
             if (flags & Message::FlagOutbox) {
-                message.setToId(message.chatId() ? 0 : cid);
+                message.setToId(message.chatId() ? rid : cid);
                 message.setFromId(client->me()->id());
             } else {
-                message.setFromId(message.chatId() ? 0 : cid);
+                message.setFromId(message.chatId() ? rid : cid);
                 message.setToId(client->me()->id());
             }
             message.setSubject(update.value(5).toString());
