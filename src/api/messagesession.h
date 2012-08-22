@@ -27,6 +27,7 @@ public slots:
     Reply *getHistory(int count = 16, int offset = 0);
     Reply *sendMessage(const QString &body, const QString &subject = QString());
     Reply *sendMessage(const Message &message);
+    Reply *markMessagesAsRead(IdList ids, bool set = true);
 signals:
     void messageAdded(const Vreen::Message &message);
     void messageDeleted(int id);

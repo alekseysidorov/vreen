@@ -27,7 +27,6 @@
 #include "contact.h"
 #include "client.h"
 #include "longpoll.h"
-#include "utils.h"
 #include <QStringBuilder>
 
 namespace Vreen {
@@ -74,23 +73,9 @@ ChatSession::~ChatSession()
 
 }
 
-
 Contact *ChatSession::contact() const
 {
     return d_func()->contact;
-}
-
-void ChatSession::markMessagesAsRead(QList<int> ids, bool set)
-{
-    Q_D(ChatSession);
-    QString request = set ? "messages.markAsRead"
-                          : "messages.markAsNew";
-    QVariantMap args;
-    args.insert("mids", join(ids));
-    auto reply = d->contact->client()->request(request, args);
-    reply->setProperty("mids", qVariantFromValue(ids));
-    reply->setProperty("set", set);
-
 }
 
 QString ChatSession::title() const
@@ -153,9 +138,12 @@ void ChatSessionPrivate::_q_message_read_state_updated(const QVariant &response)
 
 void ChatSessionPrivate::_q_message_added(const Message &message)
 {
-	auto sender = client->contact(message.isIncoming() ? message.fromId() : message.toId());
-    if (sender == contact || !sender) //HACK some workaround
+    //auto sender = client->contact();
+    //if (sender == contact || !sender) //HACK some workaround
+    int id = message.isIncoming() ? message.fromId() : message.toId();
+    if (!message.chatId() && id == contact->id()) {
         emit q_func()->messageAdded(message);
+    }
 }
 
 } // namespace Vreen

@@ -28,6 +28,7 @@ public:
     void _q_participant_removed(const QVariant &response);
     void _q_title_updated(const QVariant &response);
     void _q_online_changed(bool set);
+    void _q_message_added(const Vreen::Message &);
 };
 
 /*!
@@ -215,6 +216,13 @@ void GroupChatSessionPrivate::_q_online_changed(bool set)
             else
                 buddy->setOnline(false);
         }
+    }
+}
+
+void GroupChatSessionPrivate::_q_message_added(const Message &msg)
+{
+    if (msg.chatId() == uid) {
+        emit q_func()->messageAdded(msg);
     }
 }
 

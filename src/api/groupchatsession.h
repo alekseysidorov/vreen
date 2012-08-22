@@ -42,6 +42,7 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_participant_removed(const QVariant &response))
     Q_PRIVATE_SLOT(d_func(), void _q_title_updated(const QVariant &response))
     Q_PRIVATE_SLOT(d_func(), void _q_online_changed(bool))
+    Q_PRIVATE_SLOT(d_func(), void _q_message_added(const Vreen::Message &))
 };
 
 } // namespace Vreen

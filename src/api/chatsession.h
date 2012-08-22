@@ -43,7 +43,6 @@ public:
     virtual ~ChatSession();
 
     Contact *contact() const;
-    void markMessagesAsRead(IdList ids, bool set = true);
     QString title() const;
     bool isActive() const;
     void setActive(bool set);

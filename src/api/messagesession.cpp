@@ -1,5 +1,6 @@
 #include "messagesession_p.h"
 #include "client.h"
+#include "utils.h"
 
 namespace Vreen {
 
@@ -40,6 +41,19 @@ Reply *MessageSession::sendMessage(const QString &body, const QString &subject)
 Reply *MessageSession::sendMessage(const Message &message)
 {
     return doSendMessage(message);
+}
+
+Reply *MessageSession::markMessagesAsRead(IdList ids, bool set)
+{
+    Q_D(MessageSession);
+    QString request = set ? "messages.markAsRead"
+                          : "messages.markAsNew";
+    QVariantMap args;
+    args.insert("mids", join(ids));
+    auto reply = d->client->request(request, args);
+    reply->setProperty("mids", qVariantFromValue(ids));
+    reply->setProperty("set", set);
+    return reply;
 }
 
 } // namespace Vreen

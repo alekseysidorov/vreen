@@ -124,8 +124,7 @@ void LongPollPrivate::_q_request_server_finished(const QVariant &response)
                       data.value("key").toString(),
                       QString::number(waitInterval),
                       QString::number(mode));
-
-    qDebug() << dataUrl;
+	q->requestData(data.value("ts").toByteArray());
 }
 
 void LongPollPrivate::_q_on_data_recieved(const QVariant &response)
