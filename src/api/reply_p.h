@@ -44,33 +44,8 @@ public:
     QVariant response;
     QVariant error;
 
-    void _q_reply_finished()
-    {
-        Q_Q(Reply);
-        auto reply = static_cast<QNetworkReply*>(q->sender());
-        QVariantMap map = JSON::parse(reply->readAll()).toMap();
-        //TODO error and captcha handler
-
-        //qDebug() << "--Reply finished: " << reply->url().encodedPath();
-
-        response = map.value("response");
-        if (!response.isNull()) {
-            emit q->resultReady(response);
-            return;
-        } else {
-            error = map.value("error");
-            int errorCode = error.toMap().value("error_code").toInt();
-            if (errorCode) {
-                emit q->error(errorCode);
-                return;
-            }
-        }
-        if (!map.isEmpty()) {
-            response = map;
-            emit q->resultReady(response);
-        }
-
-    }
+    void _q_reply_finished();
+    void _q_network_reply_error(QNetworkReply::NetworkError);
 };
 
 

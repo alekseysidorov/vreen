@@ -100,11 +100,13 @@ void LongPoll::requestData(const QByteArray &timeStamp)
         d->dataRequestReply->disconnect(this, SLOT(_q_request_server_finished(QVariant)));
         d->dataRequestReply->deleteLater();
     }
-    QUrl url = d->dataUrl;
-    url.addQueryItem("ts", timeStamp);
-    auto reply = d->client->request(url);
-    connect(reply, SIGNAL(resultReady(QVariant)), this, SLOT(_q_on_data_recieved(QVariant)));
-    d->dataRequestReply = reply;
+    if (d->isRunning) {
+        QUrl url = d->dataUrl;
+        url.addQueryItem("ts", timeStamp);
+        auto reply = d->client->request(url);
+        connect(reply, SIGNAL(resultReady(QVariant)), this, SLOT(_q_on_data_recieved(QVariant)));
+        d->dataRequestReply = reply;
+    }
 }
 
 void LongPollPrivate::_q_request_server_finished(const QVariant &response)
@@ -150,19 +152,19 @@ void LongPollPrivate::_q_on_data_recieved(const QVariant &response)
             Message::Flags flags(update.value(2).toInt());
             Message message(client);
             int cid = update.value(3).toInt();
-            //qDebug() << (flags & Message::FlagChat);
-			//if (cid & chatMessageOffset) {
-			//    cid &= ~chatMessageOffset;
-			//	flags |= Message::FlagChat;
-			//}
+
+            if ((cid - chatMessageOffset) >= 0) {
+                //WTF chat flag?
+                message.setChatId(cid - chatMessageOffset);
+            }
             message.setId(update.value(1).toInt());
             message.setFlags(flags);
             if (flags & Message::FlagOutbox) {
-                message.setToId(cid);
-				message.setFromId(client->me()->id());
+                message.setToId(message.chatId() ? 0 : cid);
+                message.setFromId(client->me()->id());
             } else {
-                message.setFromId(cid);
-				message.setToId(client->me()->id());
+                message.setFromId(message.chatId() ? 0 : cid);
+                message.setToId(client->me()->id());
             }
             message.setSubject(update.value(5).toString());
             message.setBody(update.value(6).toString());

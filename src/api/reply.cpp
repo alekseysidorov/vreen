@@ -24,6 +24,7 @@
 ****************************************************************************/
 #include "reply_p.h"
 #include <QNetworkReply>
+#include "client.h"
 
 namespace Vreen {
 
@@ -67,6 +68,43 @@ void Reply::setReply(QNetworkReply *reply)
     setParent(reply);
 
     connect(reply, SIGNAL(finished()), SLOT(_q_reply_finished()));
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(_q_network_reply_error(QNetworkReply::NetworkError)));
+}
+
+void ReplyPrivate::_q_reply_finished()
+    {
+        Q_Q(Reply);
+        auto reply = static_cast<QNetworkReply*>(q->sender());
+        QVariantMap map = JSON::parse(reply->readAll()).toMap();
+        //TODO error and captcha handler
+
+        //qDebug() << "--Reply finished: " << reply->url().encodedPath();
+
+        response = map.value("response");
+        if (!response.isNull()) {
+            emit q->resultReady(response);
+            return;
+        } else {
+            error = map.value("error");
+            int errorCode = error.toMap().value("error_code").toInt();
+            if (errorCode) {
+                emit q->error(errorCode);
+                emit q->resultReady(response); //emit blank response to mark reply as finished
+                return;
+            }
+        }
+        if (!map.isEmpty()) {
+            response = map;
+            emit q->resultReady(response);
+        }
+    }
+
+void ReplyPrivate::_q_network_reply_error(QNetworkReply::NetworkError code)
+{
+    Q_Q(Reply);
+    error = code;
+    emit q->error(Client::ErrorNetworkReply);
+    emit q->resultReady(response);
 }
 
 } // namespace Vreen
