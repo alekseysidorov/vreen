@@ -109,6 +109,7 @@ public:
     Reply *request(const QString &method, const QVariantMap &args = QVariantMap());
 
     Reply *sendMessage(const Message &message);
+    Reply *getMessage(int mid, int previewLength = 0);
     Reply *addLike(int ownerId, int postId, bool retweet = false, const QString &message = QString()); //TODO move method
     Reply *deleteLike(int ownerId, int postId); //TODO move method
 

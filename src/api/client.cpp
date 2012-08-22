@@ -219,6 +219,17 @@ Reply *Client::sendMessage(const Message &message)
     return request("messages.send", args);
 }
 
+/*!
+ * \brief Client::getMessage see \link http://vk.com/developers.php?p=messages.getById
+ */
+Reply *Client::getMessage(int mid, int previewLength)
+{
+    QVariantMap args;
+    args.insert("mid", mid);
+    args.insert("preview_length", previewLength);
+    return request("messages.getById", args);
+}
+
 Reply *Client::addLike(int ownerId, int postId, bool retweet, const QString &message)
 {
     QVariantMap args;
