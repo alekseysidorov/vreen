@@ -2,6 +2,7 @@
 #include "messagesession_p.h"
 #include "client.h"
 #include "roster.h"
+#include <QSet>
 
 namespace Vreen {
 
@@ -15,7 +16,7 @@ public:
         adminId(0)
     {}
     QString title;
-    BuddyList buddies;
+    QHash<int, Buddy*> buddies;
     int adminId;
 
     Buddy *addContact(int id);
@@ -29,6 +30,7 @@ public:
     void _q_title_updated(const QVariant &response);
     void _q_online_changed(bool set);
     void _q_message_added(const Vreen::Message &);
+    void _q_group_chat_updated(int chatId, bool self);
 };
 
 /*!
@@ -48,11 +50,12 @@ GroupChatSession::GroupChatSession(int chatId, Client *client) :
     MessageSession(new GroupChatSessionPrivate(this, client, chatId))
 {
     connect(client, SIGNAL(onlineStateChanged(bool)), SLOT(_q_online_changed(bool)));
+    connect(client->longPoll(), SIGNAL(groupChatUpdated(int,bool)), SLOT(_q_group_chat_updated(int,bool)));
 }
 
 BuddyList GroupChatSession::participants() const
 {
-    return d_func()->buddies;
+    return d_func()->buddies.values();
 }
 
 Buddy *GroupChatSession::admin() const
@@ -76,7 +79,7 @@ Buddy *GroupChatSession::findParticipant(int uid) const
 bool GroupChatSession::isJoined() const
 {
     Q_D(const GroupChatSession);
-    return d->buddies.contains(static_cast<Buddy*>(d->client->me()))
+    return d->buddies.contains(d->client->me()->id())
             && d->client->isOnline();
 }
 
@@ -144,6 +147,11 @@ Reply *GroupChatSession::getInfo()
     return reply;
 }
 
+/*!
+ * \brief GroupChatSession::inviteParticipant \link http://vk.com/developers.php?oid=-1&p=messages.addChatUser
+ * \param buddy
+ * \return
+ */
 Reply *GroupChatSession::inviteParticipant(Contact *buddy)
 {
     Q_D(GroupChatSession);
@@ -152,6 +160,7 @@ Reply *GroupChatSession::inviteParticipant(Contact *buddy)
     args.insert("uid", buddy->id());
 
     auto reply = d->client->request("messages.addChatUser", args);
+    reply->setProperty("uid", buddy->id());
     connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_participant_added(QVariant)));
     return reply;
 }
@@ -164,6 +173,7 @@ Reply *GroupChatSession::removeParticipant(Contact *buddy)
     args.insert("uid", buddy->id());
 
     auto reply = d->client->request("messages.removeChatUser", args);
+    reply->setProperty("uid", buddy->id());
     connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_participant_removed(QVariant)));
     return reply;
 }
@@ -210,22 +220,34 @@ void GroupChatSessionPrivate::_q_info_received(const QVariant &response)
     auto map = response.toMap();
     adminId = map.value("admin_id").toInt();
     q->setTitle(map.value("title").toString());
+
+    QSet<int> uidsToAdd;
     foreach (auto item, map.value("users").toList())
-        addContact(item.toInt());
+        uidsToAdd.insert(item.toInt());
+
+    QSet<int> uids = buddies.keys().toSet();
+    QSet<int> uidsToRemove = uids  - uidsToAdd;
+    uidsToAdd -= uids;
+    foreach (auto uid, uidsToRemove)
+        removeContact(uid);
+    foreach (auto uid, uidsToAdd)
+        addContact(uid);
 }
 
 void GroupChatSessionPrivate::_q_participant_added(const QVariant &response)
 {
-    auto map = response.toMap();
-    int id = map.value("uid").toInt();
-    addContact(id);
+    if (response.toInt() == 1) {
+        int id = q_func()->sender()->property("uid").toInt();
+        addContact(id);
+    }
 }
 
 void GroupChatSessionPrivate::_q_participant_removed(const QVariant &response)
 {
-    auto map = response.toMap();
-    int id = map.value("uid").toInt();
-    removeContact(id);
+    if (response.toInt() == 1) {
+        int id = q_func()->sender()->property("uid").toInt();
+        removeContact(id);
+    }
 }
 
 void GroupChatSessionPrivate::_q_title_updated(const QVariant &response)
@@ -256,19 +278,26 @@ void GroupChatSessionPrivate::_q_message_added(const Message &msg)
     }
 }
 
+void GroupChatSessionPrivate::_q_group_chat_updated(int chatId, bool)
+{
+    Q_Q(GroupChatSession);
+    if (chatId == uid)
+        q->getInfo();
+}
+
 Buddy *GroupChatSessionPrivate::addContact(int id)
 {
     Q_Q(GroupChatSession);
     if (id) {
-        auto contact = client->roster()->buddy(id);
-        if (!buddies.contains(contact)) {
-            buddies.append(contact);
+        if (!buddies.contains(id)) {
+            auto contact = client->roster()->buddy(id);
+            buddies.insert(id, contact);
             emit q->participantAdded(contact);
             if (contact == client->me()) {
                 emit q->isJoinedChanged(true);
             }
+            return contact;
         }
-        return contact;
     }
     return 0;
 }
@@ -277,9 +306,9 @@ void GroupChatSessionPrivate::removeContact(int id)
 {
     Q_Q(GroupChatSession);
     if (id) {
-        auto contact = client->roster()->buddy(id);
-        if (buddies.contains(contact)) {
-            buddies.removeAll(contact);
+        if (buddies.contains(id)) {
+            buddies.remove(id);
+            auto contact = client->roster()->buddy(id);
             emit q->participantRemoved(contact);
             if (contact == client->me())
                 emit q->isJoinedChanged(false);
