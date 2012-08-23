@@ -13,6 +13,7 @@ class VK_SHARED_EXPORT GroupChatSession : public Vreen::MessageSession
     Q_DECLARE_PRIVATE(GroupChatSession)
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
+    Q_PROPERTY(bool joined READ isJoined NOTIFY isJoinedChanged)
 public:
     explicit GroupChatSession(int chatId, Client *parent);
 
@@ -20,17 +21,22 @@ public:
     Buddy *admin() const;
     QString title() const;
     Buddy *findParticipant(int uid) const;
+    //Buddy *participant(int uid);
+    bool isJoined() const;
 
     static Reply *create(Client *client, const IdList &uids, const QString &title = QString());
 public slots:
     Reply *getInfo();
-    Reply *addParticipant(Contact *buddy);
+    Reply *inviteParticipant(Contact *buddy);
     Reply *removeParticipant(Contact *buddy);
     Reply *updateTitle(const QString &title);
+    void join();
+    void leave();
 signals:
     void participantAdded(Vreen::Buddy*);
     void participantRemoved(Vreen::Buddy*);
     void titleChanged(QString);
+    void isJoinedChanged(bool);
 protected:
     void setTitle(const QString &title);
     virtual Reply *doSendMessage(const Vreen::Message &message);

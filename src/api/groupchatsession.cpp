@@ -18,7 +18,7 @@ public:
     BuddyList buddies;
     int adminId;
 
-    void addContact(int id);
+    Buddy *addContact(int id);
     void removeContact(int id);
 
     void _q_history_received(const QVariant &response);
@@ -72,6 +72,21 @@ Buddy *GroupChatSession::findParticipant(int uid) const
             return buddy;
     return 0;
 }
+
+bool GroupChatSession::isJoined() const
+{
+    Q_D(const GroupChatSession);
+    return d->buddies.contains(static_cast<Buddy*>(d->client->me()))
+            && d->client->isOnline();
+}
+
+//Buddy *GroupChatSession::participant(int uid)
+//{
+//    auto p = findParticipant(uid);
+//    if (!p)
+//        p = d_func()->addContact(uid);
+//    return p;
+//}
 
 Reply *GroupChatSession::create(Client *client, const IdList &uids, const QString &title)
 {
@@ -129,7 +144,7 @@ Reply *GroupChatSession::getInfo()
     return reply;
 }
 
-Reply *GroupChatSession::addParticipant(Contact *buddy)
+Reply *GroupChatSession::inviteParticipant(Contact *buddy)
 {
     Q_D(GroupChatSession);
     QVariantMap args;
@@ -163,6 +178,19 @@ Reply *GroupChatSession::updateTitle(const QString &title)
     auto reply = d->client->request("messages.editChat", args);
     connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_title_updated(QVariant)));
     return reply;
+}
+
+void GroupChatSession::join()
+{
+    Q_D(GroupChatSession);
+    if (!isJoined() && d->client->isOnline())
+        inviteParticipant(d_func()->client->me());
+}
+
+void GroupChatSession::leave()
+{
+    if (isJoined())
+        removeParticipant(d_func()->client->me());
 }
 
 void GroupChatSessionPrivate::_q_history_received(const QVariant &response)
@@ -217,6 +245,8 @@ void GroupChatSessionPrivate::_q_online_changed(bool set)
                 buddy->setOnline(false);
         }
     }
+    if (!set)
+        emit q_func()->isJoinedChanged(false);
 }
 
 void GroupChatSessionPrivate::_q_message_added(const Message &msg)
@@ -226,7 +256,7 @@ void GroupChatSessionPrivate::_q_message_added(const Message &msg)
     }
 }
 
-void GroupChatSessionPrivate::addContact(int id)
+Buddy *GroupChatSessionPrivate::addContact(int id)
 {
     Q_Q(GroupChatSession);
     if (id) {
@@ -234,8 +264,13 @@ void GroupChatSessionPrivate::addContact(int id)
         if (!buddies.contains(contact)) {
             buddies.append(contact);
             emit q->participantAdded(contact);
+            if (contact == client->me()) {
+                emit q->isJoinedChanged(true);
+            }
         }
+        return contact;
     }
+    return 0;
 }
 
 void GroupChatSessionPrivate::removeContact(int id)
@@ -246,6 +281,8 @@ void GroupChatSessionPrivate::removeContact(int id)
         if (buddies.contains(contact)) {
             buddies.removeAll(contact);
             emit q->participantRemoved(contact);
+            if (contact == client->me())
+                emit q->isJoinedChanged(false);
         }
     }
 }
