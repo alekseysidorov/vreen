@@ -22,6 +22,7 @@ class OAuthConnectionPrivate
     Q_DECLARE_PUBLIC(OAuthConnection)
 public:
     OAuthConnectionPrivate(OAuthConnection *q, int clientId) : q_ptr(q),
+        connectionState(Client::StateOffline),
         clientId(clientId),
         scope(QStringList() << QLatin1String("notify")
                             << QLatin1String("friends")
@@ -51,7 +52,7 @@ public:
     }
     OAuthConnection *q_ptr;
     QPointer<QWebPage> webPage;
-    Vreen::Client::State connectionState;
+    Client::State connectionState;
 
     //OAuth settings
     int clientId; //appId

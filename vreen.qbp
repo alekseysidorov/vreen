@@ -1,16 +1,5 @@
 import qbs.base 1.0
 
 Project {
-    property string vreenVersionMajor: '0'
-    property string vreenVersionMinor: '9'
-    property string vreenVersionRelease: '90'
-    property string vreenVersion: vreenVersionMajor + '.' + vreenVersionMinor + '.' + vreenVersionRelease
-
-    moduleSearchPaths: "qbs"
-    references: [
-        "src/k8json.qbp",
-        "src/api.qbp",
-        "src/qml/qml.qbp",
-        "src/oauth/oauth.qbp"
-    ]
+    references: ["vreen.qbs"]
 }
