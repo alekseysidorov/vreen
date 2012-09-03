@@ -1,6 +1,8 @@
 find_package(PkgConfig)
 if(PKG_CONFIG_FOUND)
     pkg_check_modules(K8JSON k8json)
+    message(${K8JSON_LDFLAGS})
+    set(K8JSON_LIBRARIES ${K8JSON_LDFLAGS})
 endif()
 if(NOT K8JSON_FOUND)
     message(STATUS "Using internal copy of k8json")
