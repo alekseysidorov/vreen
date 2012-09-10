@@ -6,9 +6,6 @@ Product {
     destination: "lib"
 
     //cpp.warningLevel: "all"
-    cpp.includePaths: [
-        product.buildDirectory + "/include"
-    ]
 
     Depends { name: "cpp" }
     Depends { name: "qt"; submodules: ['core', 'network', 'webkit'] }

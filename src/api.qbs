@@ -140,5 +140,11 @@ Product {
             "api/wallsession.h"
         ]
     }
-
+    ProductModule {
+        Depends { name: "cpp" }
+        cpp.includePaths: [
+            product.buildDirectory + "/include",
+            product.buildDirectory + "/include/vreen",
+        ]
+    }
 }

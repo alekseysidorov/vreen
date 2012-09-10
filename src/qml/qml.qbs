@@ -20,7 +20,6 @@ Product {
         return flags
     }
     cpp.includePaths: [
-        product.buildDirectory + "/include/vreen",
         "src"
     ]
 
