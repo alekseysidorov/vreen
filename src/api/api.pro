@@ -6,71 +6,71 @@
 
 QT       += network
 
-TARGET = vkit
+TARGET = vreen
 TEMPLATE = lib
 
 DEFINES += VK_LIBRARY
 
 SOURCES += client.cpp \
-    connection.cpp \
-    reply.cpp \
-    json.cpp \
-    longpoll.cpp \
-    newsfeed.cpp \
-    roster.cpp \
-    message.cpp \
-    messagemodel.cpp \
-    chatsession.cpp \
     utils.cpp \
-    dynamicpropertydata.cpp \
-    wallsession.cpp \
-    wallpost.cpp \
-    contact.cpp \
-    commentssession.cpp \
-    audio.cpp \
-    audioitem.cpp \
-    abstractlistmodel.cpp \
-    newsitem.cpp \
-    attachment.cpp \
+    roster.cpp \
+    reply.cpp \
     photomanager.cpp \
-    contentdownloader.cpp \
+    newsitem.cpp \
+    newsfeed.cpp \
+    messagesession.cpp \
+    messagemodel.cpp \
+    message.cpp \
+    longpoll.cpp \
+    json.cpp \
     groupmanager.cpp \
     groupchatsession.cpp \
-    messagesession.cpp
+    dynamicpropertydata.cpp \
+    contentdownloader.cpp \
+    contact.cpp \
+    connection.cpp \
+    commentssession.cpp \
+    chatsession.cpp \
+    audioitem.cpp \
+    audio.cpp \
+    attachment.cpp \
+    abstractlistmodel.cpp \
+    wallsession.cpp \
+    wallpost.cpp
 
 HEADERS += client.h \
     vk_global.h \
-    client_p.h \
-    connection.h \
-    reply.h \
-    reply_p.h \
-    json.h \
-    longpoll.h \
-    longpoll_p.h \
-    newsfeed.h \
-    roster.h \
-    roster_p.h \
-    message.h \
-    messagemodel.h \
-    chatsession.h \
     utils.h \
-    dynamicpropertydata_p.h \
-    wallsession.h \
-    wallpost.h \
-    contact.h \
-    contact_p.h \
-    commentssession.h \
-    audio.h \
-    audioitem.h \
-    abstractlistmodel.h \
-    newsitem.h \
-    attachment.h \
+    roster_p.h \
+    roster.h \
+    reply_p.h \
+    reply.h \
     photomanager.h \
-    contentdownloader.h \
+    newsitem.h \
+    newsfeed.h \
+    messagesession_p.h \
+    messagesession.h \
+    messagemodel.h \
+    message.h \
+    longpoll_p.h \
+    longpoll.h \
+    json.h \
     groupmanager.h \
     groupchatsession.h \
-    messagesession.h \
-    messagesession_p.h
+    dynamicpropertydata_p.h \
+    contentdownloader.h \
+    contact_p.h \
+    contact.h \
+    connection.h \
+    commentssession.h \
+    client_p.h \
+    chatsession.h \
+    audioitem.h \
+    audio.h \
+    attachment.h \
+    abstractlistmodel.h \
+    wallsession.h \
+    wallpost.h
 
 PUBLIC_HEADERS = $$HEADERS
     
@@ -100,7 +100,7 @@ symbian {
     TARGET.UID3 = 0xE7156367
     TARGET.CAPABILITY = 
     TARGET.EPOCALLOWDLLDATA = 1
-    addFiles.sources = vkit.dll
+    addFiles.sources = vreen.dll
     addFiles.path = !:/sys/bin
     DEPLOYMENT += addFiles
 }
@@ -137,3 +137,6 @@ unix {
         -Wno-cast-align \
         -O2 -finline-functions
 }
+
+OTHER_FILES += \
+    CMakeLists.txt

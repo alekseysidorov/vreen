@@ -94,6 +94,7 @@ public:
                 auto list = map.value(filters_str[i]).toList();
                 if (list.count()) {
                     auto count = list.takeFirst().toInt();
+                    Q_UNUSED(count);
                     newsItem.setAttachments(Attachment::fromVariantList(list));
                     break;
                 }

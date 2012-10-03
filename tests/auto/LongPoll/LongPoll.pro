@@ -18,10 +18,10 @@ TEMPLATE = app
 SOURCES += tst_longpolltest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../../src/api/release/ -lvkit
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../../src/api/debug/ -lvkit
-else:symbian: LIBS += -lvkit
-else:unix: LIBS += -L$$OUT_PWD/../../../src/api/ -lvkit
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../../src/api/release/ -lvreen
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../../src/api/debug/ -lvreen
+else:symbian: LIBS += -lvreen
+else:unix: LIBS += -L$$OUT_PWD/../../../src/api/ -lvreen
 
 INCLUDEPATH += $$PWD/../../../src/api
 DEPENDPATH += $$PWD/../../../src/api

@@ -168,7 +168,7 @@ void AudioModel::replaceAudio(int i, const AudioItem &item)
 
 void AudioModel::sort(int, Qt::SortOrder order)
 {
-    Q_D(AudioModel);
+    //Q_D(AudioModel);
     //TODO reverse support
     emit dataChanged(createIndex(0, 0), createIndex(count() - 1, 0));
 }

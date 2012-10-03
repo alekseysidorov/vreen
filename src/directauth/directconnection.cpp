@@ -191,6 +191,7 @@ void DirectConnection::onReplyFinished()
 
 void DirectConnection::onReplyError(QNetworkReply::NetworkError error)
 {
+    Q_UNUSED(error);
     //TODO
 }
 
