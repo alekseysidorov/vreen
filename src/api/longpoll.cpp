@@ -97,7 +97,7 @@ void LongPoll::requestData(const QByteArray &timeStamp)
 {
     Q_D(LongPoll);
     if (d->dataRequestReply) {
-        d->dataRequestReply->disconnect(this, SLOT(_q_request_server_finished(QVariant)));
+		d->dataRequestReply->disconnect(this, SLOT(_q_on_data_recieved(QVariant)));
         d->dataRequestReply->deleteLater();
     }
     if (d->isRunning) {
