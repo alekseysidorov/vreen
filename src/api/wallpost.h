@@ -71,7 +71,7 @@ public:
     QVariant property(const QString &name, const QVariant &def = QVariant()) const;
     template<typename T>
     T property(const char *name, const T &def) const
-    { return qVariantValue<T>(property(name, qVariantFromValue<T>(def))); }
+    { return QVariant::fromValue(property(name, QVariant::fromValue(def))); }
 
     void setProperty(const QString &name, const QVariant &value);
     QStringList dynamicPropertyNames() const;

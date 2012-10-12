@@ -27,7 +27,7 @@
 
 #include <QAbstractListModel>
 #include <newsfeed.h>
-#include <QWeakPointer>
+#include <QPointer>
 
 namespace Vreen {
 class Contact;
@@ -82,8 +82,8 @@ private slots:
     void onAddLike(const QVariant &response);
     void onDeleteLike(const QVariant &response);
 private:
-    QWeakPointer<Vreen::Client> m_client;
-    QWeakPointer<Vreen::NewsFeed> m_newsFeed;
+    QPointer<Vreen::Client> m_client;
+    QPointer<Vreen::NewsFeed> m_newsFeed;
     Vreen::NewsItemList m_newsList;
     Qt::SortOrder m_sortOrder;
 };

@@ -25,7 +25,7 @@
 #ifndef AUDIOMODEL_H
 #define AUDIOMODEL_H
 #include <audio.h>
-#include <QWeakPointer>
+#include <QPointer>
 #include <client.h>
 
 namespace Vreen {
@@ -51,8 +51,8 @@ private:
     QObject* clientObj() const;
     void setClient(QObject* client);
 
-    QWeakPointer<Vreen::Client> m_client;
-    QWeakPointer<Vreen::AudioProvider> m_provider;
+    QPointer<Vreen::Client> m_client;
+    QPointer<Vreen::AudioProvider> m_provider;
 };
 
 #endif // AUDIOMODEL_H

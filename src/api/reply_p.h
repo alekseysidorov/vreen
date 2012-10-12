@@ -28,8 +28,8 @@
 #include "json.h"
 #include "reply.h"
 #include "QNetworkReply"
-#include <QWeakPointer>
 #include <QDebug>
+#include <QPointer>
 
 namespace Vreen {
 
@@ -40,7 +40,7 @@ public:
     ReplyPrivate(Reply *q) : q_ptr(q) {}
     Reply *q_ptr;
 
-    QWeakPointer<QNetworkReply> networkReply;
+    QPointer<QNetworkReply> networkReply;
     QVariant response;
     QVariant error;
 

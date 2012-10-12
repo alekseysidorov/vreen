@@ -26,7 +26,7 @@
 #define CHATMODEL_H
 #include "chatmodel.h"
 #include <messagemodel.h>
-#include <QWeakPointer>
+#include <QPointer>
 
 namespace Vreen {
 class ChatSession;
@@ -52,7 +52,7 @@ signals:
 private slots:
     void messageReadStateChanged(int id, bool set);
 private:
-    QWeakPointer<Vreen::ChatSession> m_session;
+    QPointer<Vreen::ChatSession> m_session;
 };
 
 #endif // CHATMODEL_H

@@ -28,7 +28,7 @@
 #include <QAbstractListModel>
 #include <contact.h>
 #include <wallsession.h>
-#include <QWeakPointer>
+#include <QPointer>
 
 class WallModel : public QAbstractListModel
 {
@@ -69,8 +69,8 @@ private slots:
     void onPostLikeDeleted(int postId, int count);
 private:
     Vreen::Roster *roster() const;
-    QWeakPointer<Vreen::Contact> m_contact;
-    QWeakPointer<Vreen::WallSession> m_session;
+    QPointer<Vreen::Contact> m_contact;
+    QPointer<Vreen::WallSession> m_session;
     Vreen::WallPostList m_posts;
 };
 

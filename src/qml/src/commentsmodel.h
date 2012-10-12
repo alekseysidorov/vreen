@@ -26,7 +26,7 @@
 #define COMMENTSMODEL_H
 
 #include <QAbstractListModel>
-#include <QWeakPointer>
+#include <QPointer>
 #include <commentssession.h>
 
 class CommentsModel : public QAbstractListModel
@@ -65,8 +65,8 @@ private slots:
     void addComment(const QVariantMap &data);
     void deleteComment(int id);
 private:
-    QWeakPointer<Vreen::Contact> m_contact;
-    QWeakPointer<Vreen::CommentSession> m_session;
+    QPointer<Vreen::Contact> m_contact;
+    QPointer<Vreen::CommentSession> m_session;
     Vreen::CommentList m_comments;
     int m_postId;
 };

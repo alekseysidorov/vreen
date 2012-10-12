@@ -106,13 +106,14 @@ symbian {
 }
 
 win32 {
-	CONFIG(debug, debug|release) {
-		TARGET = $$member(TARGET, 0)d
-	}
-} else macx {
+    CONFIG(debug, debug|release) {
+	    TARGET = $$member(TARGET, 0)d
+    }
+} else
+    macx {
 	CONFIG(debug, debug|release) {
 		TARGET = $$member(TARGET, 0)_debug
-	}
+    }
 }
 
 unix:!symbian {

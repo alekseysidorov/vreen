@@ -53,9 +53,9 @@ public:
     Client *q_ptr;
     QString login;
     QString password;
-    QWeakPointer<Connection> connection;
-    QWeakPointer<Roster> roster;
-    QWeakPointer<LongPoll> longPoll;
+    QPointer<Connection> connection;
+    QPointer<Roster> roster;
+    QPointer<LongPoll> longPoll;
     QPointer<GroupManager> groupManager;
     QString activity;
     bool isInvisible;

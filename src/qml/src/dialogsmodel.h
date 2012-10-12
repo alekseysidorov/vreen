@@ -26,7 +26,7 @@
 #define DIALOGSMODEL_H
 #include <messagemodel.h>
 #include <roster.h>
-#include <QWeakPointer>
+#include <QPointer>
 
 class DialogsModel : public Vreen::MessageListModel
 {
@@ -60,7 +60,7 @@ private slots:
     void onDialogsReceived(const QVariant &dialogs);
     void onAddMessage(const Vreen::Message &message);
 private:
-    QWeakPointer<Vreen::Client> m_client;
+    QPointer<Vreen::Client> m_client;
     int m_unreadCount;
 };
 

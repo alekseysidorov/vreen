@@ -27,7 +27,7 @@
 
 #include <QAbstractListModel>
 #include <roster.h>
-#include <QWeakPointer>
+#include <QPointer>
 
 class BuddyModel : public QAbstractListModel
 {
@@ -66,7 +66,7 @@ private slots:
 protected:
     bool checkContact(Vreen::Buddy *);
 private:
-    QWeakPointer<Vreen::Roster> m_roster;
+    QPointer<Vreen::Roster> m_roster;
     Vreen::BuddyList m_buddyList;
     bool m_showGroups;
     QString m_filterByName;
