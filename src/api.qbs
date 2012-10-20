@@ -8,7 +8,12 @@ Product {
     property string versionRelease: '90'
     property string version: versionMajor + '.' + versionMinor + '.' + versionRelease
 
-    destination: "lib"
+    destination: {
+        if (qbs.targetOS === 'windows')
+            return "bin";
+        else
+            return "lib";
+    }
     type: ["dynamiclibrary", "installed_content"]
 
     //cpp.warningLevel: "all"
