@@ -23,13 +23,12 @@ Product {
     ]
     cpp.cxxFlags: {
         var flags = []
-        if (qbs.toolchain === "gcc") {
+        if (qbs.toolchain !== "msvc") {
             flags.push("-std=c++0x")
-            if (qbs.platform !== "windows")
-                flags.push("-fvisibility=hidden")
         }
         return flags
     }
+    cpp.visibility: "hidden"
 
     files: [
         "api/abstractlistmodel.cpp",

@@ -15,7 +15,7 @@ Product {
 
     cpp.cxxFlags: {
         var flags = []
-        if (qbs.toolchain === "gcc")
+        if (qbs.toolchain !== "msvc")
             flags.push("-std=c++0x")
         return flags
     }
