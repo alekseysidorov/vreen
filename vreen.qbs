@@ -1,6 +1,9 @@
 import qbs.base 1.0
 
 Project {   
+
+    moduleSearchPaths: "qbs/modules"
+
     references: [
         "src/k8json.qbs",
         "src/api.qbs",
