@@ -103,6 +103,7 @@ Product {
     Group {
         qbs.installDir: "include/vreen/" + version + "/vreen/private"
         fileTags: ["install"]
+        overrideTags: false
         files: [
             "api/dynamicpropertydata_p.h",
             "api/longpoll_p.h",
@@ -115,6 +116,7 @@ Product {
     Group {
         qbs.installDir: "include/vreen"
         fileTags: ["install"]
+        overrideTags: false
         files: [
             "api/abstractlistmodel.h",
             "api/attachment.h",

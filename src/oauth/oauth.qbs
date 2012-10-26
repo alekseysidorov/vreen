@@ -18,6 +18,7 @@ Product {
 
     Group {
         qbs.installDir: "include/vreen/auth"
+        overrideTags: false
         fileTags: ["install"]
         files: ["oauthconnection.h"]
     }
