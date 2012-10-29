@@ -56,7 +56,24 @@ QVariant Reply::response() const
 
 QVariant Reply::error() const
 {
-    return d_func()->error;
+	return d_func()->error;
+}
+
+QVariant Reply::result() const
+{
+	Q_D(const Reply);
+	return d->result;
+}
+
+void Reply::setResultHandler(const Reply::ResultHandler &handler)
+{
+	Q_D(Reply);
+	d->resultHandler = handler;
+}
+
+Reply::ResultHandler Reply::resultHandler() const
+{
+	return d_func()->resultHandler;
 }
 
 void Reply::setReply(QNetworkReply *reply)
@@ -83,6 +100,8 @@ void ReplyPrivate::_q_reply_finished()
         response = map.value("response");
         if (!response.isNull()) {
             emit q->resultReady(response);
+			if (resultHandler)
+				result = resultHandler(response);
             return;
         } else {
             error = map.value("error");

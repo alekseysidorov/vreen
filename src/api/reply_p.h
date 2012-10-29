@@ -43,6 +43,8 @@ public:
     QPointer<QNetworkReply> networkReply;
     QVariant response;
     QVariant error;
+	Reply::ResultHandler resultHandler;
+	QVariant result;
 
     void _q_reply_finished();
     void _q_network_reply_error(QNetworkReply::NetworkError);

@@ -37,10 +37,16 @@ class VK_SHARED_EXPORT Reply : public QObject
     Q_OBJECT
     Q_DECLARE_PRIVATE(Reply)
 public:
+	typedef QVariant (*ResultHandler)(const QVariant &response);
+
     virtual ~Reply();
     QNetworkReply *networkReply() const;
     QVariant response() const;
     QVariant error() const;
+	QVariant result() const;
+
+	void setResultHandler(const ResultHandler &handler);
+	ResultHandler resultHandler() const;
 signals:
     void resultReady(const QVariant &variables);
     void error(int code);
