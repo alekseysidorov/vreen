@@ -15,7 +15,6 @@ SOURCES += client.cpp \
     utils.cpp \
     roster.cpp \
     reply.cpp \
-    photomanager.cpp \
     newsitem.cpp \
     newsfeed.cpp \
     messagesession.cpp \
@@ -45,7 +44,6 @@ HEADERS += client.h \
     roster.h \
     reply_p.h \
     reply.h \
-    photomanager.h \
     newsitem.h \
     newsfeed.h \
     messagesession_p.h \
@@ -109,10 +107,11 @@ win32 {
     CONFIG(debug, debug|release) {
 	    TARGET = $$member(TARGET, 0)d
     }
-} else
-    macx {
-	CONFIG(debug, debug|release) {
-		TARGET = $$member(TARGET, 0)_debug
+} else {
+        macx {
+        CONFIG(debug, debug|release) {
+            TARGET = $$member(TARGET, 0)_debug
+        }
     }
 }
 
@@ -138,6 +137,3 @@ unix {
         -Wno-cast-align \
         -O2 -finline-functions
 }
-
-OTHER_FILES += \
-    CMakeLists.txt
