@@ -26,7 +26,9 @@
 #define VK_REPLY_H
 
 #include <QObject>
+#include <QVariant>
 #include "vk_global.h"
+#include <functional>
 
 class QNetworkReply;
 namespace Vreen {
@@ -37,16 +39,16 @@ class VK_SHARED_EXPORT Reply : public QObject
     Q_OBJECT
     Q_DECLARE_PRIVATE(Reply)
 public:
-	typedef QVariant (*ResultHandler)(const QVariant &response);
+    typedef std::function<QVariant (const QVariant &)> ResultHandler;
 
     virtual ~Reply();
     QNetworkReply *networkReply() const;
     QVariant response() const;
     QVariant error() const;
-	QVariant result() const;
+    QVariant result() const;
 
-	void setResultHandler(const ResultHandler &handler);
-	ResultHandler resultHandler() const;
+    void setResultHandler(const ResultHandler &handler);
+    ResultHandler resultHandler() const;
 signals:
     void resultReady(const QVariant &variables);
     void error(int code);
@@ -57,9 +59,23 @@ protected:
     QScopedPointer<ReplyPrivate> d_ptr;
 
     friend class Client;
-
+private:
     Q_PRIVATE_SLOT(d_func(), void _q_reply_finished())
     Q_PRIVATE_SLOT(d_func(), void _q_network_reply_error(QNetworkReply::NetworkError))
+};
+
+template<typename T>
+class ReplyBase : public Reply
+{
+protected:
+    explicit ReplyBase(ResultHandler handler, QNetworkReply *networkReply = 0) :
+        Reply(networkReply)
+    {
+        setResultHandler(handler);
+    }
+    T result() const { return qvariant_cast<T>(Reply::result()); }
+
+    friend class Client;
 };
 
 } // namespace Vreen

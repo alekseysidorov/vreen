@@ -108,7 +108,8 @@ public:
 
     Reply *request(const QUrl &);
     Reply *request(const QString &method, const QVariantMap &args = QVariantMap());
-
+    template <typename T>
+    ReplyBase<T> *request(const QString &method, const QVariantMap &args, const Reply::ResultHandler handler);
     Reply *sendMessage(const Message &message);
     Reply *getMessage(int mid, int previewLength = 0);
     Reply *addLike(int ownerId, int postId, bool retweet = false, const QString &message = QString()); //TODO move method
@@ -116,7 +117,7 @@ public:
 
     Q_INVOKABLE Contact *me() const;
     Q_INVOKABLE Contact *contact(int id) const;
-	int id() const;
+    int id() const;
 public slots:
     void connectToHost();
     void connectToHost(const QString &login, const QString &password);
@@ -137,8 +138,9 @@ signals:
 protected:
     Reply *setStatus(const QString &text, int aid = 0);
     QScopedPointer<ClientPrivate> d_ptr;
-
 private:
+    inline void processReply(Reply *reply);
+    inline QNetworkReply *requestHelper(const QString &method, const QVariantMap &args);
 
     Q_PRIVATE_SLOT(d_func(), void _q_connection_state_changed(Vreen::Client::State))
     Q_PRIVATE_SLOT(d_func(), void _q_error_received(int))
@@ -147,6 +149,14 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_update_online())
     Q_PRIVATE_SLOT(d_func(), void _q_network_manager_error(int))
 };
+
+template<typename T>
+ReplyBase<T> *Client::request(const QString &method, const QVariantMap &args, const Reply::ResultHandler handler)
+{
+    ReplyBase<T> *reply = new ReplyBase<T>(handler, requestHelper(method, args));
+    processReply(reply);
+    return reply;
+}
 
 } // namespace Vreen
 

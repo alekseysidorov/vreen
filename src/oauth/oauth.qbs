@@ -16,6 +16,15 @@ Product {
         "oauthconnection.h"
     ]
 
+    Properties {
+        condition: qbs.toolchain !== 'msvc'
+        cpp.cxxFlags: base.concat([ "-std=c++11" ])
+    }
+    Properties {
+        condition: qbs.targetOS === "mac"
+        cpp.cxxFlags: base.concat([ "-stdlib=libc++" ])
+    }
+
     Group {
         qbs.installDir: "include/vreen/auth"
         overrideTags: false

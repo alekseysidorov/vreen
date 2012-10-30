@@ -79,33 +79,31 @@ public:
 
     void _q_news_received(const QVariant &response)
     {
-        Q_Q(NewsFeed);
-        auto map = response.toMap();
+		Q_Q(NewsFeed);
+		auto map = response.toMap();
         updateProfiles(map.value("profiles").toList());
         updateGroups(map.value("groups").toList());
 
-        auto items = map.value("items").toList();
-        NewsItemList news;
-        foreach (auto item, items) {
-            auto newsItem = NewsItem::fromData(item);
-            auto map = item.toMap();
-            auto itemCount = sizeof(filters_str)/sizeof(*filters_str);
-            for (size_t i = 0; i != itemCount; i++) {
-                auto list = map.value(filters_str[i]).toList();
-                if (list.count()) {
-                    auto count = list.takeFirst().toInt();
-                    Q_UNUSED(count);
-                    newsItem.setAttachments(Attachment::fromVariantList(list));
-                    break;
-                }
-            }
-            emit q->newsAdded(newsItem);
-            news.append(newsItem);
-        }
-        //q->setOffset(map.value("new_offset").toInt());
-        //q->setFrom(map.value("new_from").toInt());
-        emit q->newsRecieved(news);
-    }
+		auto items = map.value("items").toList();
+		NewsItemList news;
+		foreach (auto item, items) {
+			auto newsItem = NewsItem::fromData(item);
+			auto map = item.toMap();
+			auto itemCount = sizeof(filters_str)/sizeof(*filters_str);
+			for (size_t i = 0; i != itemCount; i++) {
+				auto list = map.value(filters_str[i]).toList();
+				if (list.count()) {
+					auto count = list.takeFirst().toInt();
+					Q_UNUSED(count);
+					newsItem.setAttachments(Attachment::fromVariantList(list));
+					break;
+				}
+			}
+			emit q->newsAdded(newsItem);
+			news.append(newsItem);
+		}
+		emit q->newsRecieved(news);
+	}
 };
 
 /*!
@@ -140,7 +138,7 @@ Reply *NewsFeed::getNews(Filters filters, quint8 count, int offset)
     args.insert("filters", flagsToStrList(filters, filters_str).join(","));
     args.insert("offset", offset);
 
-    auto reply = d_func()->client->request("newsfeed.get", args);
+	auto reply = d_func()->client->request("newsfeed.get", args);
     connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_news_received(QVariant)));
     return reply;
 }

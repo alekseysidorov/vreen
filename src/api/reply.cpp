@@ -56,29 +56,29 @@ QVariant Reply::response() const
 
 QVariant Reply::error() const
 {
-	return d_func()->error;
+    return d_func()->error;
 }
 
 QVariant Reply::result() const
 {
-	Q_D(const Reply);
-	return d->result;
+    Q_D(const Reply);
+    return d->result;
 }
 
 void Reply::setResultHandler(const Reply::ResultHandler &handler)
 {
-	Q_D(Reply);
-	d->resultHandler = handler;
+    Q_D(Reply);
+    d->resultHandler = handler;
 }
 
 Reply::ResultHandler Reply::resultHandler() const
 {
-	return d_func()->resultHandler;
+    return d_func()->resultHandler;
 }
 
 void Reply::setReply(QNetworkReply *reply)
 {
-    Q_D(Reply);    
+    Q_D(Reply);
     if (!d->networkReply.isNull())
         d->networkReply.data()->deleteLater();
     d->networkReply = reply;
@@ -89,34 +89,34 @@ void Reply::setReply(QNetworkReply *reply)
 }
 
 void ReplyPrivate::_q_reply_finished()
-    {
-        Q_Q(Reply);
-        auto reply = static_cast<QNetworkReply*>(q->sender());
-        QVariantMap map = JSON::parse(reply->readAll()).toMap();
-        //TODO error and captcha handler
+{
+    Q_Q(Reply);
+    auto reply = static_cast<QNetworkReply*>(q->sender());
+    QVariantMap map = JSON::parse(reply->readAll()).toMap();
+    //TODO error and captcha handler
 
-        //qDebug() << "--Reply finished: " << reply->url().encodedPath();
+    //qDebug() << "--Reply finished: " << reply->url().encodedPath();
 
-        response = map.value("response");
-        if (!response.isNull()) {
-            emit q->resultReady(response);
-			if (resultHandler)
-				result = resultHandler(response);
+    response = map.value("response");
+    if (!response.isNull()) {
+        if (resultHandler)
+            result = resultHandler(response);
+        emit q->resultReady(response);
+        return;
+    } else {
+        error = map.value("error");
+        int errorCode = error.toMap().value("error_code").toInt();
+        if (errorCode) {
+            emit q->error(errorCode);
+            emit q->resultReady(response); //emit blank response to mark reply as finished
             return;
-        } else {
-            error = map.value("error");
-            int errorCode = error.toMap().value("error_code").toInt();
-            if (errorCode) {
-                emit q->error(errorCode);
-                emit q->resultReady(response); //emit blank response to mark reply as finished
-                return;
-            }
-        }
-        if (!map.isEmpty()) {
-            response = map;
-            emit q->resultReady(response);
         }
     }
+    if (!map.isEmpty()) {
+        response = map;
+        emit q->resultReady(response);
+    }
+}
 
 void ReplyPrivate::_q_network_reply_error(QNetworkReply::NetworkError code)
 {

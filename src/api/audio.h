@@ -45,7 +45,7 @@ public:
     Reply *getContactAudio(int uid, int count = 50, int offset = 0);
     Reply *searchAudio(const QString &query, int count = 50, int offset = 0);
 signals:
-    void audioItemReceived(const Vreen::AudioItem &items);
+    void audioItemReceived(const Vreen::AudioItem &item);
 protected:
     QScopedPointer<AudioProviderPrivate> d_ptr;
 

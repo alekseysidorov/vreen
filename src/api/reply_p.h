@@ -37,14 +37,14 @@ class ReplyPrivate
 {
     Q_DECLARE_PUBLIC(Reply)
 public:
-	ReplyPrivate(Reply *q) : q_ptr(q), resultHandler(0) {}
+    ReplyPrivate(Reply *q) : q_ptr(q), resultHandler(0) {}
     Reply *q_ptr;
 
     QPointer<QNetworkReply> networkReply;
     QVariant response;
     QVariant error;
-	Reply::ResultHandler resultHandler;
-	QVariant result;
+    Reply::ResultHandler resultHandler;
+    QVariant result;
 
     void _q_reply_finished();
     void _q_network_reply_error(QNetworkReply::NetworkError);

@@ -2,6 +2,7 @@
 #define VK_OAUTHCONNECTION_H
 
 #include <vreen/connection.h>
+#include <ctime>
 
 class QWebPage;
 

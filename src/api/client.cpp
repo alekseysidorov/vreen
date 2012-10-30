@@ -199,12 +199,12 @@ Contact *Client::contact(int id) const
             contact = groupManager()->group(id);
     } else if (groupManager())
         contact = groupManager()->group(-id);
-	return contact;
+    return contact;
 }
 
 int Client::id() const
 {
-	return me() ? me()->id() : 0;
+    return me() ? me()->id() : 0;
 }
 
 Reply *Client::sendMessage(const Message &message)
@@ -214,11 +214,11 @@ Reply *Client::sendMessage(const Message &message)
         return 0;
 
     //checks
-	Q_ASSERT(message.toId());
+    Q_ASSERT(message.toId());
 
     QVariantMap args;
     //TODO add chat messages support and contact check
-	args.insert("uid", message.toId());
+    args.insert("uid", message.toId());
     args.insert("message", message.body());
     args.insert("title", message.subject());
     return request("messages.send", args);
@@ -306,6 +306,16 @@ Reply *Client::setStatus(const QString &text, int aid)
     if (aid)
         args.insert("audio", QString("%1_%2").arg(me()->id()).arg(aid));
     return request("status.set", args);
+}
+
+void Client::processReply(Reply *reply)
+{
+    d_func()->processReply(reply);
+}
+
+QNetworkReply *Client::requestHelper(const QString &method, const QVariantMap &args)
+{
+    return connection()->request(method, args);
 }
 
 void ClientPrivate::_q_activity_update_finished(const QVariant &response)

@@ -26,13 +26,6 @@ Product {
         "K8JSON_INCLUDE_GENERATOR",
         "K8JSON_INCLUDE_COMPLEX_GENERATOR"
     ]
-    cpp.cxxFlags: {
-        var flags = []
-        if (qbs.toolchain !== "msvc") {
-            flags.push("-std=c++0x")
-        }
-        return flags
-    }
     cpp.visibility: "hidden"
 
     files: [
@@ -42,6 +35,16 @@ Product {
     Depends { name: "cpp" }
     Depends { name: "Qt"; submodules: ["core", "network", "gui"] }
     Depends { name: "k8json"}
+
+    Properties {
+        condition: qbs.toolchain !== 'msvc'
+        cpp.cxxFlags: base.concat([ "-std=c++11" ])
+    }
+    Properties {
+        condition: qbs.targetOS === "mac"
+        cpp.cxxFlags: base.concat([ "-stdlib=libc++" ])
+    }
+
 
     Group {
         qbs.installDir: "include/vreen/" + version + "/vreen/private"
