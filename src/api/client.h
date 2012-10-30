@@ -140,8 +140,8 @@ protected:
     Reply *setStatus(const QString &text, int aid = 0);
     QScopedPointer<ClientPrivate> d_ptr;
 private:
-    inline void processReply(Reply *reply);
-    inline QNetworkReply *requestHelper(const QString &method, const QVariantMap &args);
+    void processReply(Reply *reply);
+    QNetworkReply *requestHelper(const QString &method, const QVariantMap &args);
 
     Q_PRIVATE_SLOT(d_func(), void _q_connection_state_changed(Vreen::Client::State))
     Q_PRIVATE_SLOT(d_func(), void _q_error_received(int))
