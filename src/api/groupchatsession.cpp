@@ -1,6 +1,7 @@
 #include "groupchatsession.h"
 #include "messagesession_p.h"
 #include "client.h"
+#include "client_p.h"
 #include "roster.h"
 #include <QSet>
 
@@ -124,7 +125,7 @@ Reply *GroupChatSession::doGetHistory(int count, int offset)
     return reply;
 }
 
-Reply *GroupChatSession::doSendMessage(const Message &message)
+SendMessageReply *GroupChatSession::doSendMessage(const Message &message)
 {
     Q_D(GroupChatSession);
     QVariantMap args;
@@ -133,7 +134,7 @@ Reply *GroupChatSession::doSendMessage(const Message &message)
     args.insert("message", message.body());
     args.insert("title", message.subject());
 
-    return d->client->request("messages.send", args);
+    return d->client->request<SendMessageReply>("messages.send", args, ClientPrivate::handleSendMessage);
 }
 
 Reply *GroupChatSession::getInfo()

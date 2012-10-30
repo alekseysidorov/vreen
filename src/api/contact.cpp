@@ -200,14 +200,14 @@ void Buddy::update(const QStringList &fields)
     d_func()->client->roster()->update(ids, fields);
 }
 
-void Buddy::sendMessage(const QString &body, const QString &subject)
+SendMessageReply *Buddy::sendMessage(const QString &body, const QString &subject)
 {
     Q_D(Buddy);
     Message message(d->client);
     message.setBody(body);
     message.setSubject(subject);
 	message.setToId(id());
-    d->client->sendMessage(message);
+    return d->client->sendMessage(message);
 }
 
 Group::Group(int id, Client *client) :

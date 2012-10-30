@@ -25,7 +25,7 @@
 #ifndef VK_USER_H
 #define VK_USER_H
 
-#include "vk_global.h"
+#include "client.h"
 #include <QStringList>
 #include <QVariant>
 
@@ -164,7 +164,7 @@ public:
 public slots:
     void update(const QStringList &fields = QStringList()
             << VK_ALL_FIELDS);
-    void sendMessage(const QString &body, const QString &subject = QString());
+    SendMessageReply *sendMessage(const QString &body, const QString &subject = QString());
 signals:
     void firstNameChanged(const QString &name);
     void lastNameChanged(const QString &name);

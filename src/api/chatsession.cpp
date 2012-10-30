@@ -107,7 +107,7 @@ Reply *ChatSession::doGetHistory(int count, int offset)
     return reply;
 }
 
-Reply *ChatSession::doSendMessage(const Message &message)
+SendMessageReply *ChatSession::doSendMessage(const Message &message)
 {
     Q_D(ChatSession);
     return d->contact->client()->sendMessage(message);

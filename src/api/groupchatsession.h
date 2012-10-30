@@ -39,7 +39,7 @@ signals:
     void isJoinedChanged(bool);
 protected:
     void setTitle(const QString &title);
-    virtual Reply *doSendMessage(const Vreen::Message &message);
+    virtual SendMessageReply *doSendMessage(const Vreen::Message &message);
     virtual Reply *doGetHistory(int count = 16, int offset = 0);
 private:
     Q_PRIVATE_SLOT(d_func(), void _q_history_received(const QVariant &response))

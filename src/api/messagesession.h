@@ -3,12 +3,12 @@
 
 #include <QObject>
 #include "message.h"
+#include "client.h"
 
 namespace Vreen {
 
 class Message;
 class Client;
-class Reply;
 class MessageSessionPrivate;
 
 class VK_SHARED_EXPORT MessageSession : public QObject
@@ -25,15 +25,15 @@ public:
     int uid() const;
 public slots:
     Reply *getHistory(int count = 16, int offset = 0);
-    Reply *sendMessage(const QString &body, const QString &subject = QString());
-    Reply *sendMessage(const Message &message);
+    SendMessageReply *sendMessage(const QString &body, const QString &subject = QString());
+    SendMessageReply *sendMessage(const Message &message);
     Reply *markMessagesAsRead(IdList ids, bool set = true);
 signals:
     void messageAdded(const Vreen::Message &message);
     void messageDeleted(int id);
     void messageReadStateChanged(int mid, bool isRead);
 protected:
-    virtual Reply *doSendMessage(const Vreen::Message &message) = 0;
+    virtual SendMessageReply *doSendMessage(const Vreen::Message &message) = 0;
     virtual Reply *doGetHistory(int count, int offset) = 0;
     QScopedPointer<MessageSessionPrivate> d_ptr;
 };

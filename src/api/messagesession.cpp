@@ -28,7 +28,7 @@ Reply *MessageSession::getHistory(int count, int offset)
     return doGetHistory(count, offset);
 }
 
-Reply *MessageSession::sendMessage(const QString &body, const QString &subject)
+SendMessageReply *MessageSession::sendMessage(const QString &body, const QString &subject)
 {
     Q_D(MessageSession);
     Message msg(d->client);
@@ -38,7 +38,7 @@ Reply *MessageSession::sendMessage(const QString &body, const QString &subject)
     return sendMessage(msg);
 }
 
-Reply *MessageSession::sendMessage(const Message &message)
+SendMessageReply *MessageSession::sendMessage(const Message &message)
 {
     return doSendMessage(message);
 }

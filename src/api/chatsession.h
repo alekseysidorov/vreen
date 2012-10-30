@@ -52,7 +52,7 @@ signals:
     void messageReadStateChanged(int mid, bool isRead);
 protected:
     virtual Reply *doGetHistory(int count = 16, int offset = 0);
-    virtual Reply *doSendMessage(const Vreen::Message &message);
+    virtual SendMessageReply *doSendMessage(const Vreen::Message &message);
 private:
 
     Q_PRIVATE_SLOT(d_func(), void _q_history_received(const QVariant &))

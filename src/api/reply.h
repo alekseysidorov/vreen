@@ -79,7 +79,7 @@ protected:
 
     friend class Client;
 private:
-    inline void setHandlerImpl(ResultHandlerBase *handler);
+    void setHandlerImpl(ResultHandlerBase *handler);
 
     Q_PRIVATE_SLOT(d_func(), void _q_reply_finished())
     Q_PRIVATE_SLOT(d_func(), void _q_network_reply_error(QNetworkReply::NetworkError))
@@ -95,6 +95,8 @@ void Reply::setResultHandler(const Method &handler)
 template<typename T>
 class ReplyBase : public Reply
 {
+public:
+    T result() const { return qvariant_cast<T>(Reply::result()); }
 protected:
     template<typename Method>
     explicit ReplyBase(Method handler, QNetworkReply *networkReply = 0) :
@@ -102,8 +104,6 @@ protected:
     {
         setResultHandler(handler);
     }
-    T result() const { return qvariant_cast<T>(Reply::result()); }
-
     friend class Client;
 };
 

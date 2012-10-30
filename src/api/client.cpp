@@ -207,7 +207,7 @@ int Client::id() const
     return me() ? me()->id() : 0;
 }
 
-Reply *Client::sendMessage(const Message &message)
+SendMessageReply *Client::sendMessage(const Message &message)
 {
     //TODO add delayed send
     if (!isOnline())
@@ -221,7 +221,7 @@ Reply *Client::sendMessage(const Message &message)
     args.insert("uid", message.toId());
     args.insert("message", message.body());
     args.insert("title", message.subject());
-    return request("messages.send", args);
+    return request<SendMessageReply>("messages.send", args, ClientPrivate::handleSendMessage);
 }
 
 /*!
