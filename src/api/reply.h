@@ -39,7 +39,26 @@ class VK_SHARED_EXPORT Reply : public QObject
     Q_OBJECT
     Q_DECLARE_PRIVATE(Reply)
 public:
-    typedef std::function<QVariant (const QVariant &)> ResultHandler;
+
+    class ResultHandlerBase
+    {
+    public:
+        virtual ~ResultHandlerBase() {}
+        virtual QVariant handle(const QVariant &data) = 0;
+    };
+
+    template <typename Method>
+    class ResultHandlerImpl : public ResultHandlerBase
+    {
+    public:
+        ResultHandlerImpl(Method method) : m_method(method) {}
+        QVariant handle(const QVariant &data)
+        {
+            return m_method(data);
+        }
+    private:
+        Method m_method;
+    };
 
     virtual ~Reply();
     QNetworkReply *networkReply() const;
@@ -47,8 +66,8 @@ public:
     QVariant error() const;
     QVariant result() const;
 
-    void setResultHandler(const ResultHandler &handler);
-    ResultHandler resultHandler() const;
+    template <typename Method>
+    void setResultHandler(const Method &handler);
 signals:
     void resultReady(const QVariant &variables);
     void error(int code);
@@ -60,15 +79,25 @@ protected:
 
     friend class Client;
 private:
+    inline void setHandlerImpl(ResultHandlerBase *handler);
+
     Q_PRIVATE_SLOT(d_func(), void _q_reply_finished())
     Q_PRIVATE_SLOT(d_func(), void _q_network_reply_error(QNetworkReply::NetworkError))
 };
+
+
+template <typename Method>
+void Reply::setResultHandler(const Method &handler)
+{
+    setHandlerImpl(new ResultHandlerImpl<Method>(handler));
+}
 
 template<typename T>
 class ReplyBase : public Reply
 {
 protected:
-    explicit ReplyBase(ResultHandler handler, QNetworkReply *networkReply = 0) :
+    template<typename Method>
+    explicit ReplyBase(Method handler, QNetworkReply *networkReply = 0) :
         Reply(networkReply)
     {
         setResultHandler(handler);

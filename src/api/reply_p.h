@@ -30,6 +30,7 @@
 #include "QNetworkReply"
 #include <QDebug>
 #include <QPointer>
+#include <QSharedPointer>
 
 namespace Vreen {
 
@@ -43,7 +44,7 @@ public:
     QPointer<QNetworkReply> networkReply;
     QVariant response;
     QVariant error;
-    Reply::ResultHandler resultHandler;
+    QScopedPointer<Reply::ResultHandlerBase> resultHandler;
     QVariant result;
 
     void _q_reply_finished();

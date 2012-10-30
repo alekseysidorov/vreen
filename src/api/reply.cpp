@@ -65,17 +65,6 @@ QVariant Reply::result() const
     return d->result;
 }
 
-void Reply::setResultHandler(const Reply::ResultHandler &handler)
-{
-    Q_D(Reply);
-    d->resultHandler = handler;
-}
-
-Reply::ResultHandler Reply::resultHandler() const
-{
-    return d_func()->resultHandler;
-}
-
 void Reply::setReply(QNetworkReply *reply)
 {
     Q_D(Reply);
@@ -86,6 +75,12 @@ void Reply::setReply(QNetworkReply *reply)
 
     connect(reply, SIGNAL(finished()), SLOT(_q_reply_finished()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(_q_network_reply_error(QNetworkReply::NetworkError)));
+}
+
+void Reply::setHandlerImpl(Reply::ResultHandlerBase *handler)
+{
+    Q_D(Reply);
+    d->resultHandler.reset(handler);
 }
 
 void ReplyPrivate::_q_reply_finished()
@@ -100,7 +95,7 @@ void ReplyPrivate::_q_reply_finished()
     response = map.value("response");
     if (!response.isNull()) {
         if (resultHandler)
-            result = resultHandler(response);
+            result = resultHandler->handle(response);
         emit q->resultReady(response);
         return;
     } else {

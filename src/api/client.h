@@ -108,8 +108,8 @@ public:
 
     Reply *request(const QUrl &);
     Reply *request(const QString &method, const QVariantMap &args = QVariantMap());
-    template <typename T>
-    ReplyBase<T> *request(const QString &method, const QVariantMap &args, const Reply::ResultHandler handler);
+    template <typename T, typename Handler>
+    ReplyBase<T> *request(const QString &method, const QVariantMap &args, const Handler &handler);
     Reply *sendMessage(const Message &message);
     Reply *getMessage(int mid, int previewLength = 0);
     Reply *addLike(int ownerId, int postId, bool retweet = false, const QString &message = QString()); //TODO move method
@@ -150,8 +150,8 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_network_manager_error(int))
 };
 
-template<typename T>
-ReplyBase<T> *Client::request(const QString &method, const QVariantMap &args, const Reply::ResultHandler handler)
+template<typename T, typename Handler>
+ReplyBase<T> *Client::request(const QString &method, const QVariantMap &args, const Handler &handler)
 {
     ReplyBase<T> *reply = new ReplyBase<T>(handler, requestHelper(method, args));
     processReply(reply);
