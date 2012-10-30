@@ -35,19 +35,20 @@ namespace Vreen {
 class MessageData : public DynamicPropertyData
 {
 public:
-    MessageData(Client *client) :
-        client(client),
+	MessageData(int clientId) :
+		clientId(clientId),
         messageId(0),
         fromId(0),
         toId(0),
         chatId(0),
-        userCount(0),
+		userCount(0),
+		adminId(0),
         latitude(-1),
         longitude(-1)
     {}
     MessageData(const MessageData &o) :
         DynamicPropertyData(o),
-        client(o.client),
+		clientId(o.clientId),
         messageId(o.messageId),
         fromId(o.fromId),
         toId(o.toId),
@@ -59,14 +60,14 @@ public:
         chatId(o.chatId),
         chatActive(o.chatActive),
         userCount(o.userCount),
-        admin(o.admin),
+		adminId(o.adminId),
         latitude(o.latitude),
         longitude(o.longitude),
         attachmentHash(o.attachmentHash)
     {}
     ~MessageData() {}
 
-    Client *client;
+	int clientId;
     int messageId;
     int fromId;
     int toId;
@@ -78,7 +79,7 @@ public:
     int chatId;
     QList<int> chatActive;
     int userCount;
-    QWeakPointer<Contact> admin;
+	int adminId;
     qreal latitude;
     qreal longitude;
     Attachment::Hash attachmentHash;
@@ -87,28 +88,26 @@ public:
     {
         messageId = data.value("mid").toInt();
 
-        int clientId = data.value("from_id").toInt();
-        if (clientId) {
-            auto contact = client->roster()->buddy(clientId);
-            bool isIncoming = (contact == client->me());
+		int contactId = data.value("from_id").toInt();
+		if (contactId) {
+			bool isIncoming = (contactId == clientId);
             setFlag(Message::FlagOutbox, !isIncoming);
             if (isIncoming) {
-                fromId = getId(client->me());
+				fromId = clientId;
                 toId = 0;
             } else {
-                fromId = getId(contact);
-                toId = getId(client->me());
+				fromId = contactId;
+				toId = clientId;
             }
         } else {
             setFlag(Message::FlagOutbox, data.value("out").toBool());
-            clientId = data.value("uid").toInt();
-            auto contact = client->roster()->buddy(clientId);
+			contactId = data.value("uid").toInt();
             if (!flags.testFlag(Message::FlagOutbox)) {
-                fromId = getId(contact);
-                toId = getId(client->me());
+				fromId = contactId;
+				toId = clientId;
             } else {
-                toId = getId(contact);
-                fromId = getId(client->me());
+				toId = contactId;
+				fromId = clientId;
             }
         }
 
@@ -129,14 +128,10 @@ public:
             flags &= ~flag;
     }
 
-    int getId(Contact *contact) const
-    {
-        return contact ? contact->id() : 0;
-    }
-    Contact *getContact(int id) const
-    {
-        return client ? client->contact(id) : 0;
-    }
+	int getId(Contact *contact) const
+	{
+		return contact ? contact->id() : 0;
+	}
 };
 
 
@@ -145,12 +140,23 @@ public:
  * Api reference: \link http://vk.com/developers.php?oid=-1&p=Формат_описания_личных_сообщений */
 
 Message::Message(Client *client) :
-    d(new MessageData(client))
+	d(new MessageData(client->id()))
 {
 }
 
+Message::Message(int clientId) :
+	d(new MessageData(clientId))
+{
+}
+
+Message::Message(const QVariantMap &data, int clientId) :
+	d(new MessageData(clientId))
+{
+	d->fill(data);
+}
+
 Message::Message(const QVariantMap &data, Client *client) :
-    d(new MessageData(client))
+	d(new MessageData(client->id()))
 {
     d->fill(data);
 }
@@ -183,11 +189,6 @@ int Message::id() const
 void Message::setId(int id)
 {
     d->messageId = id;
-}
-
-Client *Message::client() const
-{
-    return d->client;
 }
 
 QDateTime Message::date() const
@@ -307,12 +308,17 @@ void Message::setAttachments(const Attachment::List &attachmentList)
 
 MessageList Message::fromVariantList(const QVariantList &list, Vreen::Client *client)
 {
-    MessageList messageList;
-    foreach (auto item, list) {
-        Vreen::Message message(item.toMap(), client);
-        messageList.append(message);
-    }
-    return messageList;
+	return fromVariantList(list, client->id());
+}
+
+MessageList Message::fromVariantList(const QVariantList &list, int clientId)
+{
+	MessageList messageList;
+	foreach (auto item, list) {
+		Vreen::Message message(item.toMap(), clientId);
+		messageList.append(message);
+	}
+	return messageList;
 }
 
 } // namespace Vreen

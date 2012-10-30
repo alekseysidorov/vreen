@@ -199,7 +199,12 @@ Contact *Client::contact(int id) const
             contact = groupManager()->group(id);
     } else if (groupManager())
         contact = groupManager()->group(-id);
-    return contact;
+	return contact;
+}
+
+int Client::id() const
+{
+	return me() ? me()->id() : 0;
 }
 
 Reply *Client::sendMessage(const Message &message)

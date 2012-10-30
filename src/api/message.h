@@ -63,14 +63,14 @@ public:
         FilterFromFriends   = 4
     };
 
-    Message(Client *client = 0);
+	Message(int clientId);
+	Message(const QVariantMap &data, int clientId);
+	Message(Client *client = 0);
     Message(const QVariantMap &data, Client *client);
     Message(const Message &other);
     Message &operator =(const Message &other);
     bool operator ==(const Message &other);
     virtual ~Message();
-
-	Client *client() const;
 
 	int id() const;
     void setId(int id);
@@ -99,6 +99,7 @@ public:
     void setAttachments(const Attachment::List &attachmentList);
 
     static MessageList fromVariantList(const QVariantList &list, Client *client);
+	static MessageList fromVariantList(const QVariantList &list, int clientId);
 protected:
     QSharedDataPointer<MessageData> d;
 };

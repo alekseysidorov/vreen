@@ -116,6 +116,7 @@ public:
 
     Q_INVOKABLE Contact *me() const;
     Q_INVOKABLE Contact *contact(int id) const;
+	int id() const;
 public slots:
     void connectToHost();
     void connectToHost(const QString &login, const QString &password);
