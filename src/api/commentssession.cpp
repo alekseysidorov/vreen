@@ -51,9 +51,11 @@ public:
     void _q_comments_received(const QVariant &response)
     {
         auto list = response.toList();
-        list.takeFirst();
-        foreach (auto item, list)
-            emit q_func()->commentAdded(item.toMap());
+        if (!list.isEmpty()) {
+            list.takeFirst();
+            foreach (auto item, list)
+                emit q_func()->commentAdded(item.toMap());
+        }
     }
 };
 
@@ -87,7 +89,7 @@ Reply *CommentSession::getComments(int offset, int count)
 {
     Q_D(CommentSession);
     QVariantMap args;
-	args.insert("owner_id", (d->contact->type() == Contact::GroupType ? -1 : 1) * d->contact->id());
+    args.insert("owner_id", (d->contact->type() == Contact::GroupType ? -1 : 1) * d->contact->id());
     args.insert("post_id", d->postId);
     args.insert("offset", offset);
     args.insert("count", count);
