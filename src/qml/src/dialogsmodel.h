@@ -24,6 +24,7 @@
 ****************************************************************************/
 #ifndef DIALOGSMODEL_H
 #define DIALOGSMODEL_H
+#include <client.h>
 #include <messagemodel.h>
 #include <roster.h>
 #include <QPointer>
@@ -37,19 +38,14 @@ class DialogsModel : public Vreen::MessageListModel
 public:
     explicit DialogsModel(QObject *parent = 0);
 
-    //HACK workaround about "Unable to assign QObject* to void"
     void setClient(QObject *client);
-    //void setClient(Vreen::Client *client);
-    //Vreen::Client *client() const;
-    QObject *client() const;
 
     void setUnreadCount(int count);
     int unreadCount() const;
 public slots:
     void getDialogs(int offset = 0, int count = 25, int previewLength = -1);
 signals:
-    //void clientChanged(Vreen::Client*);
-    void clientChanged(QObject*); //HACK
+    void clientChanged(QObject*);
     void unreadCountChanged(int count);
     void requestFinished();
 protected:
@@ -60,7 +56,6 @@ private slots:
     void onDialogsReceived(const QVariant &dialogs);
     void onAddMessage(const Vreen::Message &message);
 private:
-    QPointer<Vreen::Client> m_client;
     int m_unreadCount;
 };
 

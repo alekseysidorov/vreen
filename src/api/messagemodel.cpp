@@ -103,6 +103,7 @@ int MessageListModel::findMessage(int id)
 QVariant MessageListModel::data(const QModelIndex &index, int role) const
 {
     Q_D(const MessageListModel);
+
     int row = index.row();
     auto message = d->messageList.at(row);
     switch (role) {
@@ -157,6 +158,12 @@ void MessageListModel::setClient(Client *client)
 	if (d->client != client) {
 		d->client = client;
 		emit clientChanged(client);
+
+        if (d->client) {
+        auto longPoll = d->client.data()->longPoll();
+        connect(longPoll, SIGNAL(messageFlagsReplaced(int, int, int)), SLOT(replaceMessageFlags(int, int, int)));
+        connect(longPoll, SIGNAL(messageFlagsReseted(int,int,int)), SLOT(resetMessageFlags(int,int)));
+        }
 	}
 }
 
@@ -169,9 +176,8 @@ void MessageListModel::addMessage(const Message &message)
 {
     Q_D(MessageListModel);
     int index = findMessage(message.id());
-    if (index != -1) {
+    if (index != -1)
         return;
-    }
 
     index = lowerBound(d->messageList, message, d->sortOrder == Qt::AscendingOrder ? lessThanId
                                                                                    : moreThanId);

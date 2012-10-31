@@ -144,7 +144,6 @@ void NewsFeedModel::getNews(int filters, quint8 count, int offset)
     if (m_newsFeed.isNull())
         return;
 
-    qDebug() << Q_FUNC_INFO << filters << count << offset;
     auto reply = m_newsFeed.data()->getNews(static_cast<Vreen::NewsFeed::Filters>(filters), count, offset);
     connect(reply, SIGNAL(resultReady(QVariant)), SIGNAL(requestFinished()));
 }

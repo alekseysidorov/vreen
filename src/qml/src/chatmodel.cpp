@@ -42,6 +42,7 @@ void ChatModel::setContact(Vreen::Contact *contact)
     }
     if (!contact)
         return;
+    setClient(contact->client());
     auto session = new Vreen::ChatSession(contact);
     auto longPoll = contact->client()->longPoll();
     connect(session, SIGNAL(messageAdded(Vreen::Message)), SLOT(addMessage(Vreen::Message)));

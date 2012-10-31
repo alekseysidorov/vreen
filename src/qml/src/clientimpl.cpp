@@ -49,7 +49,7 @@ Client::Client(QObject *parent) :
 
     connect(longPoll(), SIGNAL(messageAdded(Vreen::Message)), SLOT(onMessageAdded(Vreen::Message)));
     connect(this, SIGNAL(replyCreated(Vreen::Reply*)), SLOT(onReplyCreated(Vreen::Reply*)));
-    connect(this, SIGNAL(error(Vreen::Reply*)), SLOT(onReplyError(Vreen::Reply*)));
+    connect(this, SIGNAL(error(Vreen::Client::Error)), SLOT(onReplyError(Vreen::Client::Error)));
 }
 
 QObject *Client::request(const QString &method, const QVariantMap &args)
@@ -99,8 +99,8 @@ void Client::onReplyFinished(const QVariant &)
     //qDebug() << "--data" << reply->response();
 }
 
-void Client::onReplyError(Vreen::Reply *reply)
+void Client::onReplyError(Error error)
 {
-    qDebug() << "--Error" << reply->response();
+    qDebug() << "--Error" <<  error;
 }
 

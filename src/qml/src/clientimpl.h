@@ -42,7 +42,17 @@ private slots:
     void onMessageAdded(const Vreen::Message &msg);
     void onReplyCreated(Vreen::Reply *reply);
     void onReplyFinished(const QVariant &);
-    void onReplyError(Vreen::Reply *reply);
+    void onReplyError(Vreen::Client::Error);
+};
+
+template <typename ConnectionImpl>
+class ClientImpl : public Client
+{
+public:
+    ClientImpl(QObject *parent = 0) : Client(parent)
+    {
+        setConnection(new ConnectionImpl(this));
+    }
 };
 
 #endif // CLIENT_H

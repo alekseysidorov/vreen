@@ -82,8 +82,8 @@ Q_INLINE_TEMPLATE QStringList flagsToStrList(int i, const char *(&strings)[N])
 template<typename Container, typename T, typename LessThan>
 int lowerBound(Container container, const T &value, LessThan lessThan)
 {
-    auto it =  qLowerBound(container.begin(), container.end(), value, lessThan);
-    int index = it - container.begin();
+    auto it =  qLowerBound(container.constBegin(), container.constEnd(), value, lessThan);
+    int index = it - container.constBegin();
     return index;
 }
 
