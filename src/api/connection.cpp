@@ -32,7 +32,7 @@ Connection::Connection(QObject *parent) :
 }
 
 /*!
- * \brief Connection::clear clear auth data. Default implementation doesn't nothing.
+ * \brief Connection::clear auth data. Default implementation doesn't nothing.
  */
 void Connection::clear()
 {

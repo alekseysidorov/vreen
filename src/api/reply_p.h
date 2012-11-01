@@ -49,8 +49,9 @@ public:
 
     void _q_reply_finished();
     void _q_network_reply_error(QNetworkReply::NetworkError);
-};
 
+	static QVariant handleInt(const QVariant &response) { return response.toInt(); }
+};
 
 } //namespace Vreen
 

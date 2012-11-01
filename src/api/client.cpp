@@ -26,6 +26,7 @@
 #include "message.h"
 #include "contact.h"
 #include "groupmanager.h"
+#include "reply_p.h"
 #include <QNetworkRequest>
 #include <QNetworkReply>
 
@@ -221,7 +222,7 @@ SendMessageReply *Client::sendMessage(const Message &message)
     args.insert("uid", message.toId());
     args.insert("message", message.body());
     args.insert("title", message.subject());
-    return request<SendMessageReply>("messages.send", args, ClientPrivate::handleSendMessage);
+	return request<SendMessageReply>("messages.send", args, ReplyPrivate::handleInt);
 }
 
 /*!

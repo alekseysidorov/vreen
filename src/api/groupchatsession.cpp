@@ -1,7 +1,7 @@
 #include "groupchatsession.h"
 #include "messagesession_p.h"
 #include "client.h"
-#include "client_p.h"
+#include "reply_p.h"
 #include "roster.h"
 #include <QSet>
 
@@ -134,7 +134,7 @@ SendMessageReply *GroupChatSession::doSendMessage(const Message &message)
     args.insert("message", message.body());
     args.insert("title", message.subject());
 
-    return d->client->request<SendMessageReply>("messages.send", args, ClientPrivate::handleSendMessage);
+	return d->client->request<SendMessageReply>("messages.send", args, ReplyPrivate::handleInt);
 }
 
 Reply *GroupChatSession::getInfo()

@@ -70,8 +70,6 @@ public:
     void _q_activity_update_finished(const QVariant &);
     void _q_update_online();
     void processReply(Reply *reply);
-
-    static QVariant handleSendMessage(const QVariant &response) { return response.toInt(); }
 };
 
 } //namespace Vreen
