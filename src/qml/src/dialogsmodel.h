@@ -33,12 +33,9 @@ class DialogsModel : public Vreen::MessageListModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(QObject* client READ client WRITE setClient NOTIFY clientChanged)
     Q_PROPERTY(int unreadCount READ unreadCount NOTIFY unreadCountChanged)
 public:
     explicit DialogsModel(QObject *parent = 0);
-
-    void setClient(QObject *client);
 
     void setUnreadCount(int count);
     int unreadCount() const;
@@ -54,7 +51,6 @@ protected:
     virtual void doRemoveMessage(int index);
 private slots:
     void onDialogsReceived(const QVariant &dialogs);
-    void onAddMessage(const Vreen::Message &message);
 private:
     int m_unreadCount;
 };

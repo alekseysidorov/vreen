@@ -39,6 +39,8 @@ class OAuthConnection : public Connection
     Q_OBJECT
     Q_DECLARE_PRIVATE(OAuthConnection)
     Q_ENUMS(DisplayType)
+    Q_PROPERTY(int appId READ appId WRITE setAppId NOTIFY appIdChanged)
+
 public:
     enum DisplayType {
         Page,
@@ -47,6 +49,7 @@ public:
         Wap
     };
     explicit OAuthConnection(int appId, QObject *parent = 0);
+    explicit OAuthConnection(QObject *parent = 0);
     virtual ~OAuthConnection();
 
     virtual void connectToHost(const QString &login, const QString &password);
@@ -60,9 +63,12 @@ public:
     time_t expiresIn() const;
     void setAccessToken(const QByteArray &token, time_t expiresIn = 0);
     void setUid(int uid);
+    int appId() const;
+    void setAppId(int appId);
 signals:
     void authConfirmRequested(QWebPage *page);
     void accessTokenChanged(const QByteArray &token, time_t expiresIn);
+    void appIdChanged(int appId);
 protected:
     QScopedPointer<OAuthConnectionPrivate> d_ptr;
 

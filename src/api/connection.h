@@ -51,5 +51,7 @@ signals:
 
 } //namespace Vreen
 
+Q_DECLARE_METATYPE(Vreen::Connection*)
+
 #endif // VK_CONNECTION_H
 

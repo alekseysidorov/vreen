@@ -22,5 +22,39 @@
 ** $VREEN_END_LICENSE$
 **
 ****************************************************************************/
- 
+#ifndef CONTENTDOWNLOADER_P_H
+#define CONTENTDOWNLOADER_P_H
+#include <QNetworkAccessManager>
+#include <QDir>
+#include <QUrl>
+#include <QDesktopServices>
+#include <QCryptographicHash>
+#include "contentdownloader.h"
 
+namespace Vreen {
+
+class NetworkAccessManager : public QNetworkAccessManager
+{
+    Q_OBJECT
+public:
+    NetworkAccessManager(QObject *parent = 0) : QNetworkAccessManager(parent)
+    {
+
+    }
+
+    QString fileHash(const QUrl &url) const
+    {
+        QCryptographicHash hash(QCryptographicHash::Md5);
+        hash.addData(url.toString().toUtf8());
+        return hash.result().toHex();
+    }
+    QString cacheDir() const
+    {
+        auto dir = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+        return dir + QLatin1String("/vk/");
+    }
+};
+
+} //namespace Vreen
+
+#endif // CONTENTDOWNLOADER_P_H

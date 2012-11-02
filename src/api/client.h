@@ -58,6 +58,7 @@ class VK_SHARED_EXPORT Client : public QObject
     Q_PROPERTY(Vreen::GroupManager* groupManager READ groupManager NOTIFY groupManagerChanged DESIGNABLE true)
     Q_PROPERTY(Vreen::LongPoll* longPoll READ longPoll NOTIFY longPollChanged DESIGNABLE true)
     Q_PROPERTY(Vreen::Contact* me READ me NOTIFY meChanged DESIGNABLE true)
+    Q_PROPERTY(Vreen::Connection* connection READ connection WRITE setConnection NOTIFY connectionChanged DESIGNABLE true)
     Q_PROPERTY(QString activity READ activity WRITE setActivity NOTIFY activityChanged DESIGNABLE true)
     Q_PROPERTY(bool invisible READ isInvisible WRITE setInvisible NOTIFY invisibleChanged)
 
@@ -126,6 +127,7 @@ public slots:
 signals:
     void loginChanged(const QString &login);
     void passwordChanged(const QString &password);
+    void connectionChanged(Vreen::Connection *connection);
     void connectionStateChanged(Vreen::Client::State state);
     void replyCreated(Vreen::Reply*);
     void error(Vreen::Client::Error error);

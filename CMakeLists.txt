@@ -27,10 +27,11 @@ set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR})
 
 set(CMAKE_VREEN_VERSION_MAJOR 0 CACHE INT "Major vk version number" FORCE)
 set(CMAKE_VREEN_VERSION_MINOR 9 CACHE INT "Minor vk version number" FORCE)
-set(CMAKE_VREEN_VERSION_PATCH 1 CACHE INT "Release vk version number" FORCE)
+set(CMAKE_VREEN_VERSION_PATCH 5 CACHE INT "Release vk version number" FORCE)
 set(CMAKE_VREEN_VERSION_STRING "${CMAKE_VREEN_VERSION_MAJOR}.${CMAKE_VREEN_VERSION_MINOR}.${CMAKE_VREEN_VERSION_PATCH}" CACHE STRING "vreen version string" FORCE)
 
 add_subdirectory(src)
+add_custom_directory(examples/qml DESCRIPTION "Qt quick example")
 
 if(NOT UNINSTALL_TARGET)
     configure_file(

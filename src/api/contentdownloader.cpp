@@ -22,42 +22,15 @@
 ** $VREEN_END_LICENSE$
 **
 ****************************************************************************/
-#include "contentdownloader.h"
+#include "contentdownloader_p.h"
 #include "utils.h"
-#include <QNetworkAccessManager>
 #include <QPointer>
 #include <QThread>
-#include <QCryptographicHash>
-#include <QUrl>
-#include <QDesktopServices>
 #include <QFileInfo>
 #include <QNetworkReply>
 #include <QTimer>
-#include <QDir>
 
 namespace Vreen {
-
-class NetworkAccessManager : public QNetworkAccessManager
-{
-    Q_OBJECT
-public:
-    NetworkAccessManager(QObject *parent = 0) : QNetworkAccessManager(parent)
-    {
-
-    }
-
-    QString fileHash(const QUrl &url) const
-    {
-        QCryptographicHash hash(QCryptographicHash::Md5);
-        hash.addData(url.toString().toUtf8());
-        return hash.result().toHex();
-    }
-    QString cacheDir() const
-    {
-        auto dir = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
-        return dir + QLatin1String("/vk/");
-    }
-};
 
 static QPointer<NetworkAccessManager> networkManager;
 
@@ -121,5 +94,5 @@ void ContentDownloader::replyDone()
 
 } // namespace Vreen
 
-#include "contentdownloader.moc"
+#include "moc_contentdownloader.cpp"
 

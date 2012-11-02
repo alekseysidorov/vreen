@@ -48,10 +48,10 @@ class MessageListModelPrivate
 {
     Q_DECLARE_PUBLIC(MessageListModel)
 public:
-	MessageListModelPrivate(MessageListModel *q) : q_ptr(q),
+    MessageListModelPrivate(MessageListModel *q) : q_ptr(q),
         sortOrder(Qt::DescendingOrder) {}
     MessageListModel *q_ptr;
-	QPointer<Client> client;
+    QPointer<Client> client;
 
     MessageList messageList;
     Qt::SortOrder sortOrder;
@@ -59,8 +59,8 @@ public:
 
 
 MessageListModel::MessageListModel(QObject *parent) :
-	QAbstractListModel(parent),
-	d_ptr(new MessageListModelPrivate(this))
+    QAbstractListModel(parent),
+    d_ptr(new MessageListModelPrivate(this))
 {
     auto roles = roleNames();
     roles[SubjectRole] = "subject";
@@ -113,9 +113,9 @@ QVariant MessageListModel::data(const QModelIndex &index, int role) const
     case BodyRole:
         return message.body();
     case FromRole:
-		return qVariantFromValue(d->client->contact(message.fromId()));
+        return qVariantFromValue(d->client->contact(message.fromId()));
     case ToRole:
-		return qVariantFromValue(d->client->contact(message.toId()));
+        return qVariantFromValue(d->client->contact(message.toId()));
     case ReadStateRole:
         return message.isUnread();
     case DirectionRole:
@@ -149,27 +149,28 @@ void MessageListModel::setSortOrder(Qt::SortOrder order)
 
 Qt::SortOrder MessageListModel::sortOrder() const
 {
-	return d_func()->sortOrder;
+    return d_func()->sortOrder;
 }
 
 void MessageListModel::setClient(Client *client)
 {
-	Q_D(MessageListModel);
-	if (d->client != client) {
-		d->client = client;
-		emit clientChanged(client);
+    Q_D(MessageListModel);
+    if (d->client != client) {
+        d->client = client;
+        emit clientChanged(client);
 
         if (d->client) {
-        auto longPoll = d->client.data()->longPoll();
-        connect(longPoll, SIGNAL(messageFlagsReplaced(int, int, int)), SLOT(replaceMessageFlags(int, int, int)));
-        connect(longPoll, SIGNAL(messageFlagsReseted(int,int,int)), SLOT(resetMessageFlags(int,int)));
+            auto longPoll = d->client.data()->longPoll();
+            connect(longPoll, SIGNAL(messageFlagsReplaced(int, int, int)), SLOT(replaceMessageFlags(int, int, int)));
+            connect(longPoll, SIGNAL(messageFlagsReseted(int,int,int)), SLOT(resetMessageFlags(int,int)));
+            connect(longPoll, SIGNAL(messageAdded(Vreen::Message)), SLOT(addMessage(Vreen::Message)));
         }
-	}
+    }
 }
 
 Client *MessageListModel::client() const
 {
-	return d_func()->client.data();
+    return d_func()->client.data();
 }
 
 void MessageListModel::addMessage(const Message &message)

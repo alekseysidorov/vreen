@@ -45,9 +45,9 @@ class OAuthConnectionPrivate
 {
     Q_DECLARE_PUBLIC(OAuthConnection)
 public:
-    OAuthConnectionPrivate(OAuthConnection *q, int clientId) : q_ptr(q),
+    OAuthConnectionPrivate(OAuthConnection *q, int appId) : q_ptr(q),
         connectionState(Client::StateOffline),
-        clientId(clientId),
+        appId(appId),
         scope(QStringList() << QLatin1String("notify")
                             << QLatin1String("friends")
                             << QLatin1String("photos")
@@ -79,7 +79,7 @@ public:
     Client::State connectionState;
 
     //OAuth settings
-    int clientId; //appId
+    int appId; //appId
     QStringList scope; //settings
     QString redirectUri;
     OAuthConnection::DisplayType displayType;
@@ -103,6 +103,12 @@ public:
 OAuthConnection::OAuthConnection(int appId, QObject *parent) :
     Connection(parent),
     d_ptr(new OAuthConnectionPrivate(this, appId))
+{
+}
+
+OAuthConnection::OAuthConnection(QObject *parent) :
+    Connection(parent),
+    d_ptr(new OAuthConnectionPrivate(this, -1))
 {
 }
 
@@ -190,6 +196,20 @@ void OAuthConnection::setUid(int uid)
     d_func()->uid = uid;
 }
 
+int OAuthConnection::appId() const
+{
+    return d_func()->appId;
+}
+
+void OAuthConnection::setAppId(int appId)
+{
+    Q_D(OAuthConnection);
+    if (d->appId != appId) {
+        d->appId = appId;
+        emit appIdChanged(appId);
+    }
+}
+
 void OAuthConnectionPrivate::requestToken()
 {
     Q_Q(OAuthConnection);
@@ -199,7 +219,7 @@ void OAuthConnectionPrivate::requestToken()
         q->connect(webPage->mainFrame(), SIGNAL(loadFinished(bool)), SLOT(_q_loadFinished(bool)));
     }
     QUrl url = authUrl;
-    url.addQueryItem(QLatin1String("client_id"), QByteArray::number(clientId));
+    url.addQueryItem(QLatin1String("client_id"), QByteArray::number(appId));
     url.addQueryItem(QLatin1String("scope"), scope.join(","));
     url.addQueryItem(QLatin1String("redirect_uri"), redirectUri);
     const char *type[] = {

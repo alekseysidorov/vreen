@@ -41,15 +41,6 @@ void DialogsModel::setUnreadCount(int count)
     emit unreadCountChanged(count);
 }
 
-void DialogsModel::setClient(QObject *obj)
-{
-    auto client = qobject_cast<Vreen::Client*>(obj);
-    MessageListModel::setClient(client);
-    if (client) {
-        connect(client->longPoll(), SIGNAL(messageAdded(const Vreen::Message)), SLOT(onAddMessage(Vreen::Message)));
-    }
-}
-
 void DialogsModel::getDialogs(int offset, int count, int previewLength)
 {
     if (!client()) {
@@ -71,7 +62,7 @@ void DialogsModel::onDialogsReceived(const QVariant &dialogs)
     Vreen::MessageList messageList = Vreen::Message::fromVariantList(list, client()->id());
 
     foreach (auto message, messageList) {
-        onAddMessage(message);
+        addMessage(message);
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     }
 }
@@ -80,20 +71,6 @@ static int getId(const Vreen::Message &message)
 {
     return message.isIncoming() ? message.fromId()
                                 : message.toId();
-}
-
-void DialogsModel::onAddMessage(const Vreen::Message &message)
-{
-    //FIXME use declarative style
-    for (int i = 0; i != count(); i++) {
-        auto old = at(i);
-        if (getId(message) == getId(old)) {
-            if (old.id() != message.id())
-                doReplaceMessage(i, message);
-            break;
-        }
-    }
-    addMessage(message);
 }
 
 int DialogsModel::unreadCount() const
@@ -117,6 +94,16 @@ void DialogsModel::doReplaceMessage(int index, const Vreen::Message &message)
 
 void DialogsModel::doInsertMessage(int index, const Vreen::Message &message)
 {
+    for (int i = 0; i != count(); i++) {
+        auto old = at(i);
+        if (getId(message) == getId(old)) {
+            if (old.id() != message.id())
+                removeMessage(i);
+                //doReplaceMessage(i, message);
+            break;
+        }
+    }
+
     if (message.isIncoming() && message.isUnread()) {
         m_unreadCount++;
         emit unreadCountChanged(m_unreadCount);

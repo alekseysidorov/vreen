@@ -103,4 +103,3 @@ void Client::onReplyError(Error error)
 {
     qDebug() << "--Error" <<  error;
 }
-

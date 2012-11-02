@@ -38,6 +38,7 @@
 #include <longpoll.h>
 #include <attachment.h>
 #include <newsfeed.h>
+#include <connection.h>
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <qqmlextensionplugin.h>
@@ -51,6 +52,8 @@ static inline void registerVreenTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("com.vk.api"));
 
+    qRegisterMetaType<Vreen::Connection*>();
+
     qmlRegisterType<Client>("com.vk.api", 1, 0, "Client");
     qmlRegisterType<BuddyModel>("com.vk.api", 1, 0, "BuddyModel");
     qmlRegisterType<DialogsModel>("com.vk.api", 1, 0, "DialogsModel");
@@ -60,7 +63,10 @@ static inline void registerVreenTypes(const char *uri)
     qmlRegisterType<CommentsModel>("com.vk.api", 1, 0, "CommentsModel");
     qmlRegisterType<AudioModel>("com.vk.api", 1, 0, "AudioModel");
 
+
+    qmlRegisterUncreatableType<Vreen::Client>("com.vk.api", 1, 0, "ClientBase", QObject::tr("Use SimpleClient instead"));
     qmlRegisterUncreatableType<Vreen::Roster>("com.vk.api", 1, 0, "Roster", QObject::tr("Use client.roster instead"));
+    qmlRegisterUncreatableType<Vreen::Connection>("com.vk.api", 1, 0, "Connection", QObject::tr("Use client.connection instead"));
     qmlRegisterUncreatableType<Vreen::Contact>("com.vk.api", 1, 0, "Contact", QObject::tr("User Roster"));
     qmlRegisterUncreatableType<Vreen::Message>("com.vk.api", 1, 0, "Message", QObject::tr("Only flags"));
     qmlRegisterUncreatableType<Vreen::LongPoll>("com.vk.api", 1, 0, "LongPoll", QObject::tr("Use client.longPoll instead"));

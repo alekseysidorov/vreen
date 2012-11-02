@@ -111,14 +111,18 @@ Connection *Client::connection()
 void Client::setConnection(Connection *connection)
 {
     Q_D(Client);
-    if (d->connection) {
-        d->connection.data()->deleteLater();
-    }
+    if (d->connection != connection) {
+        if (d->connection) {
+            d->connection.data()->deleteLater();
+        }
 
-    d->connection = connection;
-    connect(connection, SIGNAL(connectionStateChanged(Vreen::Client::State)),
-            this, SLOT(_q_connection_state_changed(Vreen::Client::State)));
-    connect(connection, SIGNAL(error(Vreen::Client::Error)), this, SIGNAL(error(Vreen::Client::Error)));
+        d->connection = connection;
+        connect(connection, SIGNAL(connectionStateChanged(Vreen::Client::State)),
+                this, SLOT(_q_connection_state_changed(Vreen::Client::State)));
+        connect(connection, SIGNAL(error(Vreen::Client::Error)), this, SIGNAL(error(Vreen::Client::Error)));
+
+        emit connectionChanged(d->connection);
+    }
 }
 
 Roster *Client::roster() const
