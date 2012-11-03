@@ -25,54 +25,65 @@
 #include <QString>
 #include <QtTest>
 #include <QCoreApplication>
+#include <client.h>
+#include <connection.h>
+#include <reply.h>
+
 #include "common/utils.h"
-#include "roster.h"
-#include "contact.h"
 
-#include <QMetaProperty>
-#include <QDebug>
-
-class RosterTest : public QObject
+class ConnectionTest: public QObject
 {
     Q_OBJECT
-    
-public:
-    RosterTest()
+private slots:
+    void testDirectConnection_data()
     {
-
-    }
-    
-private Q_SLOTS:
-    void testSync_data()
-    {
-        VK_ADD_LOGIN_VARS();
+        VREEN_ADD_LOGIN_VARS();
     }
 
-    void testSync()
+    void testDirectConnection()
     {
-        VK_CREATE_CLIENT();
+        VREEN_CREATE_CLIENT();
+
+        QCOMPARE(client.isOnline(), true);
+    }
+
+    void testDirectConnectionWrongData_data()
+    {
+        QTest::addColumn<QString>("login");
+        QTest::addColumn<QString>("password");
+
+        QTest::newRow("Wrong data")
+                << QString("Foo")
+                << QString("bar");
+    }
+
+    void testDirectConnectionWrongData()
+    {
+        VREEN_CREATE_CLIENT();
+
+        QCOMPARE(client.isOnline(), false);
+    }
+
+    void testRequest_data()
+    {
+        VREEN_ADD_LOGIN_VARS();
+    }
+
+    void testRequest()
+    {
+        VREEN_CREATE_CLIENT();
+
         if (!client.isOnline())
             QFAIL("Client is offline!");
 
-        Vreen::Roster *roster = client.roster();
-        connect(roster, SIGNAL(syncFinished(bool)), &loop, SLOT(quit()));
-        roster->sync();
+		Vreen::Reply *reply = client.request("getUserSettings");
+        connect(reply, SIGNAL(resultReady(QVariant)), &loop, SLOT(quit()));
         loop.exec();
-
-        QCOMPARE(roster->buddies().count() > 0, true);
-
-        foreach (Vreen::Contact *contact, roster->buddies()) {
-            qDebug() << contact->name() << ":" << "\n";
-            const QMetaObject *meta = contact->metaObject();
-            for (int index = 0; index != meta->propertyCount(); index++) {
-                QMetaProperty property = meta->property(index);
-                qDebug() << "Property name: " << property.name() << ". Value: " << property.read(contact);
-            }
-        }
+        QCOMPARE(reply->response().toInt() > 6, true);
     }
 };
 
-QTEST_MAIN(RosterTest)
+QTEST_MAIN(ConnectionTest)
 
-#include "tst_rostertest.moc"
+#include "tst_connection.moc"
 

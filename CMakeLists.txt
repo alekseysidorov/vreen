@@ -31,7 +31,8 @@ set(CMAKE_VREEN_VERSION_PATCH 5 CACHE INT "Release vk version number" FORCE)
 set(CMAKE_VREEN_VERSION_STRING "${CMAKE_VREEN_VERSION_MAJOR}.${CMAKE_VREEN_VERSION_MINOR}.${CMAKE_VREEN_VERSION_PATCH}" CACHE STRING "vreen version string" FORCE)
 
 add_subdirectory(src)
-add_custom_directory(examples/qml DESCRIPTION "Qt quick example")
+add_subdirectory(examples)
+add_subdirectory(tests)
 
 if(NOT UNINSTALL_TARGET)
     configure_file(

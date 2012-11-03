@@ -25,27 +25,31 @@
 #ifndef UTILS_H
 #define UTILS_H
 #include "client.h"
+#include <QTest>
 
-QString getVariable(const char *name)
+inline QString getVariable(const char *name)
 {
     return qgetenv(name);
 }
 
-#define VK_ADD_LOGIN_VARS() \
+#define VREEN_ADD_LOGIN_VARS() \
     QTest::addColumn<QString>("login"); \
     QTest::addColumn<QString>("password"); \
     QTest::newRow("From enviroment variables VK_LOGIN and VK_PASSWORD") \
-    << getVariable("VK_LOGIN") \
-    << getVariable("VK_PASSWORD");
+    << getVariable("VREEN_LOGIN") \
+    << getVariable("VREEN_PASSWORD");
 
+//TODO add oauth connection support
 
-#define VK_CREATE_CLIENT() \
+#define VREEN_CREATE_CLIENT() \
     QFETCH(QString, login); \
     QFETCH(QString, password); \
 	Vreen::Client client(login, password); \
     QEventLoop loop; \
     connect(&client, SIGNAL(onlineStateChanged(bool)), &loop, SLOT(quit())); \
-	connect(&client, SIGNAL(error(Vreen::Client::Error)), &loop, SLOT(quit())); \
+    connect(&client, SIGNAL(error(Vreen::Client::Error)), &loop, SLOT(quit())); \
+    if (login.isEmpty() || password.isEmpty()) \
+        QSKIP("Please set VREEN_LOGIN and VREEN_PASSWORD environment variables", SkipAll); \
     client.connectToHost(); \
     loop.exec();
 

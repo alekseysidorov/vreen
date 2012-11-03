@@ -24,14 +24,11 @@
 ****************************************************************************/
 #include <QString>
 #include <QtTest>
-#include <longpoll.h>
+#include <QCoreApplication>
 #include <client.h>
+#include <longpoll.h>
 
-static QString getVariable(const char *name)
-{
-    return qgetenv(name);
-}
-
+#include "common/utils.h"
 
 class LongPollTest : public QObject
 {
@@ -39,29 +36,12 @@ class LongPollTest : public QObject
 private slots:
     void testUpdates_data()
     {
-        QTest::addColumn<QString>("login");
-        QTest::addColumn<QString>("password");
-
-        QTest::newRow("From enviroment variables VK_LOGIN and VK_PASSWORD")
-                << getVariable("VK_LOGIN")
-                << getVariable("VK_PASSWORD");
+        VREEN_ADD_LOGIN_VARS();
     }
 
     void testUpdates()
     {
-        QFETCH(QString, login);
-        QFETCH(QString, password);
-
-        Vreen::Client client(login, password);
-
-        QEventLoop loop;
-        connect(&client, SIGNAL(onlineStateChanged(bool)), &loop, SLOT(quit()));
-        connect(&client, SIGNAL(error(Vreen::Client::Error)), &loop, SLOT(quit()));
-        client.connectToHost();
-        loop.exec();
-
-        if (!client.isOnline())
-            QFAIL("Client is offline!");
+        VREEN_CREATE_CLIENT();
 
         Vreen::LongPoll poll(&client);
         loop.exec();
@@ -70,5 +50,5 @@ private slots:
 
 QTEST_MAIN(LongPollTest)
 
-#include "tst_longpolltest.moc"
+#include "tst_longpoll.moc"
 
