@@ -23,8 +23,8 @@
 **
 ****************************************************************************/
 #include "directconnection_p.h"
-#include "json.h"
-#include "reply.h"
+#include <vreen/json.h>
+#include <vreen/reply.h>
 
 #include <QUrl>
 #include <QNetworkReply>
@@ -33,7 +33,6 @@
 #include <QStringBuilder>
 
 #include <QDebug>
-
 
 namespace Vreen {
 
@@ -46,11 +45,20 @@ struct LoginVars {
     int scope;
 };
 
+//static const LoginVars loginVars = {
+//    "password",
+//    "1950109",
+//    "bJKfYSu0LS6N52M0HnBo",
+//    "TitanIM",
+//    2 + 4 + 8 + 16 + 1024 + 4096 + 8192 //FIXME в нормальный вид привести
+
+//};
+
 static const LoginVars loginVars = {
     "password",
-    "1950109",
-    "bJKfYSu0LS6N52M0HnBo",
-    "TitanIM",
+    VREEN_DIRECTAUTH_CLIENT_ID,
+    VREEN_DIRECTAUTH_CLIENT_SECRET,
+    VREEN_DIRECTAUTH_CLIENT_NAME,
     2 + 4 + 8 + 16 + 1024 + 4096 + 8192 //FIXME в нормальный вид привести
 
 };

@@ -17,6 +17,7 @@ include(UseQt4)
 include(CommonUtils)
 
 option(VREEN_WITH_OAUTH "Enable webkit based oauth authorization" ON)
+option(VREEN_WITH_DIRECTAUTH "Enable direct authorization" OFF)
 option(VREEN_WITH_QMLAPI "Enable QtQuick bindings for vreen" ON)
 option(VREEN_INSTALL_HEADERS "Install devel headers for vreen" ON)
 

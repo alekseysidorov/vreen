@@ -27,7 +27,7 @@
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include "connection.h"
+#include <vreen/connection.h>
 
 namespace Vreen {
 

@@ -12,8 +12,8 @@ Product {
     Depends { name: "vreen"; }
 
     files: [
-        "oauthconnection.cpp",
-        "oauthconnection.h"
+        "*.cpp",
+        "*.h"
     ]
 
     Properties {
@@ -29,7 +29,7 @@ Product {
         qbs.installDir: "include/vreen/auth"
         overrideTags: false
         fileTags: ["install"]
-        files: ["oauthconnection.h"]
+        files: ["*.h"]
     }
 }
 
