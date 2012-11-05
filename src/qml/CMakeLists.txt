@@ -5,6 +5,12 @@ list(APPEND EXTRA_SRC
     vreenplugin_qt4.cpp
 )
 
+if(VREEN_WITH_OAUTH)
+    list(APPEND VREEN_PLUGIN_DEFINES "VREEN_WITH_OAUTH")
+    list(APPEND VREEN_PLUGIN_LIBS vreenoauth)
+    set(QT_USE_QTWEBKIT true)
+endif()
+
 add_qml_module(vreenplugin
     CXX11
     URI com.vk.api

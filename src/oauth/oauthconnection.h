@@ -40,6 +40,7 @@ class OAuthConnection : public Connection
     Q_DECLARE_PRIVATE(OAuthConnection)
     Q_ENUMS(DisplayType)
     Q_PROPERTY(int clientId READ clientId WRITE setClientId NOTIFY clientIdChanged)
+    Q_PROPERTY(DisplayType displayType READ displayType WRITE setDisplayType)
 public:
     enum DisplayType {
         Page,

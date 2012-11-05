@@ -55,8 +55,8 @@ public:
     virtual int uid() const = 0;
     virtual void clear();
 
-    void setConnectionOption(ConnectionOption option, const QVariant &value);
-    QVariant connectionOption(ConnectionOption option) const;
+    Q_INVOKABLE void setConnectionOption(ConnectionOption option, const QVariant &value);
+    Q_INVOKABLE QVariant connectionOption(ConnectionOption option) const;
 signals:
     void connectionStateChanged(Vreen::Client::State connectionState);
     void error(Vreen::Client::Error);

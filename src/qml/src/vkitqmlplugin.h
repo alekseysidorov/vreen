@@ -48,11 +48,13 @@
 #include <QtDeclarative>
 #endif
 
+#ifdef VREEN_WITH_OAUTH
+#include <vreen/auth/oauthconnection.h>
+#endif
+
 static inline void registerVreenTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("com.vk.api"));
-
-    qRegisterMetaType<Vreen::Connection*>();
 
     qmlRegisterType<Client>("com.vk.api", 1, 0, "Client");
     qmlRegisterType<BuddyModel>("com.vk.api", 1, 0, "BuddyModel");
@@ -62,6 +64,9 @@ static inline void registerVreenTypes(const char *uri)
     qmlRegisterType<NewsFeedModel>("com.vk.api", 1, 0, "NewsFeedModel");
     qmlRegisterType<CommentsModel>("com.vk.api", 1, 0, "CommentsModel");
     qmlRegisterType<AudioModel>("com.vk.api", 1, 0, "AudioModel");
+#ifdef VREEN_WITH_OAUTH
+    qmlRegisterType<Vreen::OAuthConnection>("com.vk.api", 1, 0, "OAuthConnection");
+#endif
 
 
     qmlRegisterUncreatableType<Vreen::Client>("com.vk.api", 1, 0, "ClientBase", QObject::tr("Use SimpleClient instead"));
@@ -73,7 +78,7 @@ static inline void registerVreenTypes(const char *uri)
     qmlRegisterUncreatableType<Vreen::Attachment>("com.vk.api", 1, 0, "Attachment", QObject::tr("Attachment enums"));
     qmlRegisterUncreatableType<Vreen::NewsItem>("com.vk.api", 1, 0, "NewsItem", QObject::tr("NewsItem enums"));
     qmlRegisterUncreatableType<Vreen::NewsFeed>("com.vk.api", 1, 0, "NewsFeed", QObject::tr("NewsFeed enums"));
-    //qmlRegisterUncreatableType<Vreen::MessageListModel>("com.vk.api", 1, 0, "MessageListModel", QObject::tr("Cannot use this class directly"));
+    qmlRegisterUncreatableType<Vreen::MessageListModel>("com.vk.api", 1, 0, "MessageListModel", QObject::tr("Cannot use this class directly"));
 }
 
 #endif // VKITQMLPLUGIN_H

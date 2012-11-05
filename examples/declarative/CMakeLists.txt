@@ -14,6 +14,6 @@ add_custom_target(quickvreen-qml
 add_simple_executable(quickvreen
     INTERNAL
     CXX11
-    INCLUDES ${QT_QTDECLARATIVE_INCLUDE_DIR} ${PROJECT_BINARY_DIR}/include
-    LIBRARIES ${QT_QTDECLARATIVE_LIBRARY} vreen vreenoauth
+    INCLUDES ${QT_QTDECLARATIVE_INCLUDE_DIR}
+    LIBRARIES ${QT_QTDECLARATIVE_LIBRARY}
 )

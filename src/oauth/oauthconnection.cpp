@@ -75,7 +75,7 @@ public:
         uid(0),
         expiresIn(0)
     {
-
+        options[Connection::ShowAuthDialog] = true;
     }
     QPointer<QWebPage> webPage;
     QPointer<QWebView> webView;
@@ -291,6 +291,7 @@ void OAuthConnectionPrivate::_q_loadFinished(bool ok)
         setConnectionState(Client::StateOffline);
         emit q->error(Client::ErrorAuthorizationFailed);
         webPage->deleteLater();
+        clear();
     }
 }
 

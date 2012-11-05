@@ -5,12 +5,6 @@ import com.vk.api 1.0
 Rectangle {
     id: root
 
-    Component.onCompleted: {
-        if (!client)
-            throw "Client not found. Cannot continue!";
-        dialogs.client = client;
-    }
-
     width: 500
     height: 800
 
@@ -27,6 +21,18 @@ Rectangle {
 
     DialogsModel {
         id: dialogs
+        client: client
+    }
+
+    Client {
+        id: client
+        connection: conn
+    }
+
+    OAuthConnection {
+        id: conn
+        clientId: 1865463 //qutIM id
+        displayType: OAuthConnection.Popup
     }
 
     ListView {
@@ -58,7 +64,7 @@ Rectangle {
 
             width: parent.width
             height: 120
-            color: index % 2 ? syspal.alternateBase : "transparent"
+            color: index % 2 ? "transparent" : syspal.alternateBase
 
             Image {
                 id: preview
