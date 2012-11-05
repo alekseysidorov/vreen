@@ -51,7 +51,7 @@ Rectangle {
             height: 50
             text: qsTr("Last dialogs")
             font.bold: true
-            font.pointSize: 11
+            font.pixelSize: login.font.pixelSize * 1.1
             horizontalAlignment: Qt.AlignHCenter
             verticalAlignment: Qt.AlignVCenter
         }
@@ -68,7 +68,7 @@ Rectangle {
 
             width: parent.width
             height: 120
-            color: index % 2 ? "transparent" : syspal.alternateBase
+            color: index % 2 ? syspal.alternateBase : "transparent"
 
             Image {
                 id: preview
@@ -126,7 +126,7 @@ Rectangle {
                 id: dateLabel
 
                 color: syspal.dark
-                font.pointSize: 7
+                font.pixelSize: login.font.pixelSize * 0.8
 
                 anchors {
                     bottom: hr.top
@@ -174,7 +174,7 @@ Rectangle {
 
     states: [
         State {
-            name: "chatview"
+            name: "online"
             when: client.online
             PropertyChanges {
                 target: login
