@@ -73,6 +73,7 @@ static inline void registerVreenTypes(const char *uri)
     qmlRegisterUncreatableType<Vreen::Attachment>("com.vk.api", 1, 0, "Attachment", QObject::tr("Attachment enums"));
     qmlRegisterUncreatableType<Vreen::NewsItem>("com.vk.api", 1, 0, "NewsItem", QObject::tr("NewsItem enums"));
     qmlRegisterUncreatableType<Vreen::NewsFeed>("com.vk.api", 1, 0, "NewsFeed", QObject::tr("NewsFeed enums"));
+    //qmlRegisterUncreatableType<Vreen::MessageListModel>("com.vk.api", 1, 0, "MessageListModel", QObject::tr("Cannot use this class directly"));
 }
 
 #endif // VKITQMLPLUGIN_H

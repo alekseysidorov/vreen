@@ -22,43 +22,23 @@
 ** $VREEN_END_LICENSE$
 **
 ****************************************************************************/
-#include "connection_p.h"
+#ifndef CONNECTION_P_H
+#define CONNECTION_P_H
+#include "connection.h"
 
 namespace Vreen {
 
-Connection::Connection(QObject *parent) :
-    QNetworkAccessManager(parent),
-    d_ptr(new ConnectionPrivate(this))
+class Connection;
+class VK_SHARED_EXPORT ConnectionPrivate
 {
+    Q_DECLARE_PUBLIC(Connection)
+public:
+    ConnectionPrivate(Connection *q) : q_ptr(q) {}
+    Connection *q_ptr;
+    QMap<Connection::ConnectionOption, QVariant> options;
+};
+
 }
 
-Connection::Connection(ConnectionPrivate *data, QObject *parent) :
-    QNetworkAccessManager(parent),
-    d_ptr(data)
-{
-}
 
-Connection::~Connection()
-{
-}
-
-/*!
- * \brief Connection::clear auth data. Default implementation doesn't nothing.
- */
-void Connection::clear()
-{
-}
-
-void Connection::setConnectionOption(Connection::ConnectionOption option, const QVariant &value)
-{
-    Q_D(Connection);
-    d->options[option] = value;
-}
-
-QVariant Connection::connectionOption(Connection::ConnectionOption option) const
-{
-    return d_func()->options[option];
-}
-
-} // namespace Vreen
-
+#endif // CONNECTION_P_H

@@ -131,7 +131,7 @@ signals:
     void connectionStateChanged(Vreen::Client::State state);
     void replyCreated(Vreen::Reply*);
     void error(Vreen::Client::Error error);
-    void onlineStateChanged(bool state);
+    void onlineStateChanged(bool online);
     void rosterChanged(Vreen::Roster*);
     void groupManagerChanged(Vreen::GroupManager*);
     void longPollChanged(Vreen::LongPoll*);

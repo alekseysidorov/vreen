@@ -30,10 +30,13 @@
 #include <QStringBuilder>
 #include <QNetworkRequest>
 
-#include <vreen/json.h>
+#include <json.h>
+#include <connection_p.h>
 
 #include <QDebug>
 #include <QWebElement>
+#include <QWebView>
+#include <QApplication>
 
 namespace Vreen {
 
@@ -41,13 +44,13 @@ const static QUrl authUrl("http://api.vk.com/oauth/authorize");
 const static QUrl apiUrl("https://api.vk.com/method/");
 
 class OAuthConnection;
-class OAuthConnectionPrivate
+class OAuthConnectionPrivate : public ConnectionPrivate
 {
     Q_DECLARE_PUBLIC(OAuthConnection)
 public:
-    OAuthConnectionPrivate(OAuthConnection *q, int appId) : q_ptr(q),
+    OAuthConnectionPrivate(OAuthConnection *q, int appId) : ConnectionPrivate(q),
         connectionState(Client::StateOffline),
-        appId(appId),
+        clientId(appId),
         scope(QStringList() << QLatin1String("notify")
                             << QLatin1String("friends")
                             << QLatin1String("photos")
@@ -74,12 +77,12 @@ public:
     {
 
     }
-    OAuthConnection *q_ptr;
     QPointer<QWebPage> webPage;
+    QPointer<QWebView> webView;
     Client::State connectionState;
 
     //OAuth settings
-    int appId; //appId
+    int clientId;
     QStringList scope; //settings
     QString redirectUri;
     OAuthConnection::DisplayType displayType;
@@ -97,18 +100,17 @@ public:
     void setConnectionState(Client::State state);
     void _q_loadFinished(bool);
     void clear();
+    void handleAuthRequest(QWebPage *page);
 };
 
 
 OAuthConnection::OAuthConnection(int appId, QObject *parent) :
-    Connection(parent),
-    d_ptr(new OAuthConnectionPrivate(this, appId))
+    Connection(new OAuthConnectionPrivate(this, appId), parent)
 {
 }
 
 OAuthConnection::OAuthConnection(QObject *parent) :
-    Connection(parent),
-    d_ptr(new OAuthConnectionPrivate(this, -1))
+    Connection(new OAuthConnectionPrivate(this, -1), parent)
 {
 }
 
@@ -196,17 +198,30 @@ void OAuthConnection::setUid(int uid)
     d_func()->uid = uid;
 }
 
-int OAuthConnection::appId() const
+int OAuthConnection::clientId() const
 {
-    return d_func()->appId;
+    return d_func()->clientId;
 }
 
-void OAuthConnection::setAppId(int appId)
+void OAuthConnection::setClientId(int clientId)
 {
     Q_D(OAuthConnection);
-    if (d->appId != appId) {
-        d->appId = appId;
-        emit appIdChanged(appId);
+    if (d->clientId != clientId) {
+        d->clientId = clientId;
+        emit clientIdChanged(clientId);
+    }
+}
+
+OAuthConnection::DisplayType OAuthConnection::displayType() const
+{
+    return d_func()->displayType;
+}
+
+void OAuthConnection::setDisplayType(OAuthConnection::DisplayType displayType)
+{
+    Q_D(OAuthConnection);
+    if (d->displayType != displayType) {
+        d->displayType = displayType;
     }
 }
 
@@ -219,7 +234,7 @@ void OAuthConnectionPrivate::requestToken()
         q->connect(webPage->mainFrame(), SIGNAL(loadFinished(bool)), SLOT(_q_loadFinished(bool)));
     }
     QUrl url = authUrl;
-    url.addQueryItem(QLatin1String("client_id"), QByteArray::number(appId));
+    url.addQueryItem(QLatin1String("client_id"), QByteArray::number(clientId));
     url.addQueryItem(QLatin1String("scope"), scope.join(","));
     url.addQueryItem(QLatin1String("redirect_uri"), redirectUri);
     const char *type[] = {
@@ -259,7 +274,7 @@ void OAuthConnectionPrivate::_q_loadFinished(bool ok)
                 element.setAttribute("value", password);
                 element = frame->findFirstElement("#login_enter");
                 element.setFocus();
-                emit q->authConfirmRequested(webPage.data());
+                handleAuthRequest(webPage.data());
             }
         } else {
             accessToken = url.encodedQueryItemValue("access_token");
@@ -275,6 +290,7 @@ void OAuthConnectionPrivate::_q_loadFinished(bool ok)
     } else {
         setConnectionState(Client::StateOffline);
         emit q->error(Client::ErrorAuthorizationFailed);
+        webPage->deleteLater();
     }
 }
 
@@ -283,6 +299,22 @@ void OAuthConnectionPrivate::clear()
     accessToken.clear();
     expiresIn = 0;
     uid = 0;
+}
+
+void OAuthConnectionPrivate::handleAuthRequest(QWebPage *page)
+{
+    Q_Q(OAuthConnection);
+    if (options.value(Connection::ShowAuthDialog).toBool()) {
+        if (!webView) {
+            webView = new QWebView;
+            webView->setWindowModality(Qt::ApplicationModal);
+            webView->connect(page, SIGNAL(destroyed()), webView.data(), SLOT(deleteLater()));
+            webView->setAttribute(Qt::WA_DeleteOnClose, true);
+            webView->setPage(page);
+        }
+        webView->showNormal();
+    } else
+        emit q->authConfirmRequested(page);
 }
 
 } // namespace Vreen

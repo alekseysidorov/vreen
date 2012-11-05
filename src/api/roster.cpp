@@ -242,7 +242,6 @@ void RosterPrivate::_q_friends_received(const QVariant &response)
     Q_Q(Roster);
     bool isFriend = q->sender()->property("friend").toBool();
     auto list = response.toList();
-    qDebug() << list.count() << isFriend;
     foreach (auto data, list) {
         auto map = data.toMap();
         int id = map.value("uid").toInt();

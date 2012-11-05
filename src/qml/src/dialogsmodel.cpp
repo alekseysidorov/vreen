@@ -29,6 +29,16 @@
 #include <QDebug>
 #include <QApplication>
 
+namespace  {
+
+int contactId(const Vreen::Message &message)
+{
+    return message.isIncoming() ? message.fromId()
+                                : message.toId();
+}
+
+} //namespace
+
 DialogsModel::DialogsModel(QObject *parent) :
     Vreen::MessageListModel(parent),
     m_unreadCount(0)
@@ -67,12 +77,6 @@ void DialogsModel::onDialogsReceived(const QVariant &dialogs)
     }
 }
 
-static int getId(const Vreen::Message &message)
-{
-    return message.isIncoming() ? message.fromId()
-                                : message.toId();
-}
-
 int DialogsModel::unreadCount() const
 {
     return m_unreadCount;
@@ -96,9 +100,9 @@ void DialogsModel::doInsertMessage(int index, const Vreen::Message &message)
 {
     for (int i = 0; i != count(); i++) {
         auto old = at(i);
-        if (getId(message) == getId(old)) {
+        if (contactId(message) == contactId(old)) {
             if (old.id() != message.id())
-                removeMessage(i);
+                doRemoveMessage(i);
                 //doReplaceMessage(i, message);
             break;
         }

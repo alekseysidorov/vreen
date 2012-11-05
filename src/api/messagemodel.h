@@ -48,6 +48,7 @@ public:
         DirectionRole,
         DateRole,
         IdRole,
+        ChatIdRole,
         AttachmentRole
     };
 

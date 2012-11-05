@@ -32,11 +32,21 @@
 namespace Vreen {
 
 class Reply;
+class ConnectionPrivate;
+
 class VK_SHARED_EXPORT Connection : public QNetworkAccessManager
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(Connection)
+    Q_ENUMS(ConnectionOption)
 public:
     Connection(QObject *parent = 0);
+    Connection(ConnectionPrivate *data, QObject *parent = 0);
+    ~Connection();
+
+    enum ConnectionOption {
+        ShowAuthDialog
+    };
 
     virtual void connectToHost(const QString &login, const QString &password) = 0;
     virtual void disconnectFromHost() = 0;
@@ -44,9 +54,14 @@ public:
     virtual Client::State connectionState() const = 0;
     virtual int uid() const = 0;
     virtual void clear();
+
+    void setConnectionOption(ConnectionOption option, const QVariant &value);
+    QVariant connectionOption(ConnectionOption option) const;
 signals:
     void connectionStateChanged(Vreen::Client::State connectionState);
     void error(Vreen::Client::Error);
+protected:
+    QScopedPointer<ConnectionPrivate> d_ptr;
 };
 
 } //namespace Vreen

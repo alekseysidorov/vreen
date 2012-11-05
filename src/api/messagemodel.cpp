@@ -72,6 +72,7 @@ MessageListModel::MessageListModel(QObject *parent) :
     roles[DateRole] = "date";
     roles[IdRole] = "mid";
     roles[AttachmentRole] = "attachments";
+    roles[ChatIdRole] = "chatId";
     setRoleNames(roles);
 }
 
@@ -126,6 +127,8 @@ QVariant MessageListModel::data(const QModelIndex &index, int role) const
         return message.id();
     case AttachmentRole:
         return Attachment::toVariantMap(message.attachments());
+    case ChatIdRole:
+        return message.chatId();
     default:
         break;
     }
