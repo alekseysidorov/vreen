@@ -75,7 +75,7 @@ public:
         uid(0),
         expiresIn(0)
     {
-        options[Connection::ShowAuthDialog] = true;
+		//options[Connection::ShowAuthDialog] = true;
     }
     QPointer<QWebPage> webPage;
     QPointer<QWebView> webView;
