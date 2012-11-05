@@ -31,5 +31,10 @@ Product {
         fileTags: ["install"]
         files: ["*.h"]
     }
+
+    ProductModule {
+        Depends { name: "cpp" }
+        Depends { name: "qt.webkit"}
+    }
 }
 

@@ -31,7 +31,7 @@
 #include <QNetworkRequest>
 
 #include <json.h>
-#include <connection_p.h>
+#include <vreen/private/connection_p.h>
 
 #include <QDebug>
 #include <QWebElement>

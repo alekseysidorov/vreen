@@ -41,6 +41,12 @@ Product {
     Depends { name: "Qt.declarative"; condition: qt.core.versionMajor === 4 }
     Depends { name: "Qt.quick"; condition: qt.core.versionMajor === 5 }    
     Depends { name: "vreen"}
+    Depends { name: "vreenoauth" }
+
+    Properties {
+        condition: true
+        cpp.defines: base.concat("VREEN_WITH_OAUTH")
+    }
 
     Group {
         qbs.installDir: __destination()

@@ -25,7 +25,9 @@ option(VREEN_INSTALL_HEADERS "Install devel headers for vreen" ON)
 set(RLIBDIR bin)
 set(LIBDIR lib${LIB_SUFFIX})
 set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR})
-set(CMAKE_INSTALL_NAME_DIR "${LIB_DESTINATION}")
+if(APPLE)
+    set(CMAKE_INSTALL_NAME_DIR "${LIB_DESTINATION}") #hack for mac
+endif()
 
 set(CMAKE_VREEN_VERSION_MAJOR 0 CACHE INT "Major vk version number" FORCE)
 set(CMAKE_VREEN_VERSION_MINOR 9 CACHE INT "Minor vk version number" FORCE)
