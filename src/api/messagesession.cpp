@@ -47,6 +47,20 @@ int MessageSession::uid() const
     return d_func()->uid;
 }
 
+QString MessageSession::title() const
+{
+    return d_func()->title;
+}
+
+void MessageSession::setTitle(const QString &title)
+{
+    Q_D(MessageSession);
+    if (d->title != title) {
+        d->title = title;
+        emit titleChanged(title);
+    }
+}
+
 Reply *MessageSession::getHistory(int count, int offset)
 {
     return doGetHistory(count, offset);

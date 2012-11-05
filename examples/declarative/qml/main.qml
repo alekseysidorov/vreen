@@ -51,7 +51,10 @@ Rectangle {
 
             property QtObject contact: incoming ? from : to;
 
-            Component.onCompleted: contact.update()
+            Component.onCompleted: {
+                from.update();
+                to.update();
+            }
 
             width: parent.width
             height: 120
@@ -94,7 +97,7 @@ Rectangle {
                     id: titleLabel
                     width: parent.width
                     font.bold: true
-                    text: contact.name
+                    text: qsTr("%1 ➜ %2 %3").arg(from.name).arg(to.name).arg(chatId ? qsTr("(from chat)") : "")
                     elide: Text.ElideRight
                     wrapMode: Text.Wrap
                     maximumLineCount: 1
@@ -121,9 +124,11 @@ Rectangle {
                     left: column.left
                 }
                 text: {
-                    var info = Qt.formatDateTime(date, "dddd in hh:mm");
+                    var info = Qt.formatDateTime(date, qsTr("dddd in hh:mm"));
                     if (unread)
                         info += qsTr(", unread");
+                    if (Object.keys(attachments).length > 0)
+                        info += qsTr(", has attachments")
                     return info;
                 }
             }
@@ -159,7 +164,7 @@ Rectangle {
 
     states: [
         State {
-            name: "online"
+            name: "chatview"
             when: client.online
             PropertyChanges {
                 target: login

@@ -28,6 +28,7 @@
 #include "longpoll.h"
 #include "client.h"
 #include "reply.h"
+#include "attachment.h"
 
 #include <QVariant>
 #include <QTimer>
@@ -58,6 +59,7 @@ public:
 
     void _q_request_server_finished(const QVariant &response);
     void _q_on_data_recieved(const QVariant &response);
+    Attachment::List getAttachments(const QVariantMap &map);
 };
 
 

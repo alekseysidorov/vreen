@@ -150,8 +150,11 @@ void LongPollPrivate::_q_on_data_recieved(const QVariant &response)
             QVariantMap additional = update.value(7).toMap();
 
             int rid = additional.value("from").toInt();
+            auto attachmets = getAttachments(additional);
+
             Message::Flags flags(update.value(2).toInt());
             Message message(client);
+            message.setAttachments(attachmets);
             int cid = update.value(3).toInt();
 
             if ((cid - chatMessageOffset) >= 0) {
@@ -228,6 +231,28 @@ void LongPollPrivate::_q_on_data_recieved(const QVariant &response)
     }
 
     q->requestData(data.value("ts").toByteArray());
+}
+
+Attachment::List LongPollPrivate::getAttachments(const QVariantMap &map)
+{
+    Attachment::List list;
+    auto it = map.constBegin();
+    for (; it != map.constEnd(); it++) {
+        QString key = it.key();
+        if (key.startsWith("attach")) {
+            key = key.remove(0, 6);
+            if (key.endsWith("type")) {
+                key.chop(4);
+                list[key.toInt()].setType(it.value().toString());
+            } else {
+                QStringList values = it.value().toString().split('_');
+                int i = key.toInt();
+                list[i].setOwnerId(values[0].toInt());
+                list[i].setMediaId(values[1].toInt());
+            }
+        }
+    }
+    return list;
 }
 
 void LongPoll::setPollInterval(int interval)

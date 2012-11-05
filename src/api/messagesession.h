@@ -42,20 +42,24 @@ class VK_SHARED_EXPORT MessageSession : public QObject
 
     Q_PROPERTY(int uid READ uid CONSTANT)
     Q_PROPERTY(Client* client READ client CONSTANT)
+    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
 public:
     explicit MessageSession(MessageSessionPrivate *data);
     virtual ~MessageSession();
     Client *client() const;
     int uid() const;
+    QString title() const;
 public slots:
     Reply *getHistory(int count = 16, int offset = 0);
     SendMessageReply *sendMessage(const QString &body, const QString &subject = QString());
     SendMessageReply *sendMessage(const Message &message);
     Reply *markMessagesAsRead(IdList ids, bool set = true);
+    void setTitle(const QString &title);
 signals:
     void messageAdded(const Vreen::Message &message);
     void messageDeleted(int id);
     void messageReadStateChanged(int mid, bool isRead);
+    void titleChanged(const QString &title);
 protected:
     virtual SendMessageReply *doSendMessage(const Vreen::Message &message) = 0;
     virtual Reply *doGetHistory(int count, int offset) = 0;

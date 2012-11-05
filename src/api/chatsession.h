@@ -43,7 +43,6 @@ public:
     virtual ~ChatSession();
 
     Contact *contact() const;
-    QString title() const;
     bool isActive() const;
     void setActive(bool set);
 signals:

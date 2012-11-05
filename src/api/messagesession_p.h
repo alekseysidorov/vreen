@@ -39,6 +39,7 @@ public:
     MessageSession *q_ptr;
     Client *client;
     int uid;
+    QString title;
 };
 
 } //namespace Vreen

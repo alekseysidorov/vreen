@@ -29,20 +29,20 @@
 #include <QPointer>
 
 namespace Vreen {
-class ChatSession;
+class MessageSession;
 } //namespace Vreen
 
 class ChatModel : public Vreen::MessageListModel
 {
     Q_OBJECT
-    Q_PROPERTY(Vreen::Contact* contact READ contact WRITE setContact NOTIFY contactChanged)
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
 public:
     explicit ChatModel(QObject *parent = 0);
-    void setContact(Vreen::Contact *contact);
-    Vreen::Contact *contact() const;
     QString title() const;
+    void setMessageSession(Vreen::MessageSession *session);
 public slots:
+    void setContact(Vreen::Contact *contact);
+    void setChatId(int chatId);
     void getHistory(int count = 16, int offset = 0);
     void markAsRead(int mid, bool set = true);
 signals:
@@ -52,7 +52,7 @@ signals:
 private slots:
     void messageReadStateChanged(int id, bool set);
 private:
-    QPointer<Vreen::ChatSession> m_session;
+    QPointer<Vreen::MessageSession> m_session;
 };
 
 #endif // CHATMODEL_H

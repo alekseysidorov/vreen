@@ -27,6 +27,7 @@
 #include "contact.h"
 #include "client.h"
 #include "longpoll.h"
+#include <groupchatsession.h>
 
 ChatModel::ChatModel(QObject *parent) :
     Vreen::MessageListModel(parent)
@@ -44,11 +45,36 @@ void ChatModel::setContact(Vreen::Contact *contact)
         return;
     setClient(contact->client());
     auto session = new Vreen::ChatSession(contact);
-    auto longPoll = contact->client()->longPoll();
+    setMessageSession(session);
+}
+
+void ChatModel::setChatId(int chatId)
+{
+    if (!m_session.isNull()) {
+        clear();
+        m_session.data()->deleteLater();
+    }
+    if (!client()) {
+        qWarning("ChatModel: client must be setted!");
+        return;
+    }
+    auto session = new Vreen::GroupChatSession(chatId, client());
+    setMessageSession(session);
+}
+
+QString ChatModel::title() const
+{
+    return m_session->title();
+}
+
+void ChatModel::setMessageSession(Vreen::MessageSession *session)
+{
+    auto longPoll = client()->longPoll();
     connect(session, SIGNAL(messageAdded(Vreen::Message)), SLOT(addMessage(Vreen::Message)));
     connect(session, SIGNAL(messageDeleted(int)), SLOT(removeMessage(int)));
     connect(session, SIGNAL(messageReadStateChanged(int,bool)),
             this, SLOT(messageReadStateChanged(int,bool)));
+    connect(session, SIGNAL(titleChanged(QString)), SIGNAL(titleChanged(QString)));
     connect(longPoll, SIGNAL(messageFlagsReplaced(int, int, int)),
             this, SLOT(replaceMessageFlags(int, int, int)));
     connect(longPoll, SIGNAL(messageFlagsReseted(int, int, int)),
@@ -56,22 +82,6 @@ void ChatModel::setContact(Vreen::Contact *contact)
 
     m_session = session;
     emit titleChanged(session->title());
-}
-
-Vreen::Contact *ChatModel::contact() const
-{
-    if (m_session.isNull())
-        return 0;
-    else
-        return m_session.data()->contact();
-}
-
-QString ChatModel::title() const
-{
-    if (m_session.isNull())
-        return tr("Contact isn't set!");
-    else
-        return m_session.data()->contact()->name();
 }
 
 void ChatModel::getHistory(int count, int offset)

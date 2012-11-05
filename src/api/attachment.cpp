@@ -128,6 +128,16 @@ Attachment::Type Attachment::type() const
     return d->type;
 }
 
+void Attachment::setType(Attachment::Type type)
+{
+    d->type = type;
+}
+
+void Attachment::setType(const QString &type)
+{
+    d->type = d->getType(type);
+}
+
 int Attachment::ownerId() const
 {
     return d->ownerId;

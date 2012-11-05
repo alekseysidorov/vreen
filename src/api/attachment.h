@@ -63,6 +63,8 @@ public:
     void setData(const QVariantMap &data);
     QVariantMap data() const;
     Type type() const;
+    void setType(Type);
+    void setType(const QString &type);
     int ownerId() const;
     void setOwnerId(int ownerId);
     int mediaId() const;

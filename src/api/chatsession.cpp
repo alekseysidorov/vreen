@@ -66,6 +66,7 @@ ChatSession::ChatSession(Contact *contact) :
             this, SLOT(_q_message_added(Vreen::Message)));
     connect(longPoll, SIGNAL(messageDeleted(int)),
             this, SIGNAL(messageDeleted(int)));
+    connect(d->contact, SIGNAL(nameChanged(QString)), SLOT(setTitle(QString)));
 }
 
 ChatSession::~ChatSession()
@@ -76,11 +77,6 @@ ChatSession::~ChatSession()
 Contact *ChatSession::contact() const
 {
     return d_func()->contact;
-}
-
-QString ChatSession::title() const
-{
-    return contact()->name();
 }
 
 bool ChatSession::isActive() const
