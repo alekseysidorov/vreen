@@ -3,9 +3,9 @@ import qbs.base 1.0
 Product {
     name: "vreen"
 
-    property string versionMajor: project.versionMajor
-    property string versionMinor: project.versionMinor
-    property string versionRelease: project.versionRelease
+    property string versionMajor:  0
+    property string versionMinor: 9
+    property string versionRelease: 5
     property string version: versionMajor + '.' + versionMinor + '.' + versionRelease
 
     destination: {
@@ -70,7 +70,7 @@ Product {
         cpp.includePaths: [
             product.buildDirectory + "/include",
             product.buildDirectory + "/include/vreen",
-            product.buildDirectory + "/include/vreen/" +  project.version
+            product.buildDirectory + "/include/vreen/" +  "0.9.5" //hack
         ]
     }
 }

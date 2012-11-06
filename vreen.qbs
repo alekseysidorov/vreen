@@ -1,11 +1,6 @@
 import qbs.base 1.0
 
 Project {   
-    property string versionMajor: '0'
-    property string versionMinor: '9'
-    property string versionRelease: '95'
-    property string version: versionMajor + '.' + versionMinor + '.' + versionRelease
-
     moduleSearchPaths: "qbs/modules"
 
     references: [
