@@ -19,6 +19,8 @@ include(CommonUtils)
 option(VREEN_WITH_OAUTH "Enable webkit based oauth authorization" ON)
 option(VREEN_WITH_DIRECTAUTH "Enable direct authorization" OFF)
 option(VREEN_WITH_QMLAPI "Enable QtQuick bindings for vreen" ON)
+option(VREEN_WITH_EXAMPLES "Enable vreen tests" ON)
+option(VREEN_WITH_TESTS "Enable vreen examples" ON)
 option(VREEN_INSTALL_HEADERS "Install devel headers for vreen" ON)
 
 #TODO check if vars is defined
@@ -38,8 +40,12 @@ set(VREEN_INCLUDE_DIR ${PROJECT_BINARY_DIR}/include)
 set(VREEN_PRIVATE_INCLUDE_DIR ${VREEN_INCLUDE_DIR}/vreen/${CMAKE_VREEN_VERSION_STRING})
 
 add_subdirectory(src)
-add_subdirectory(examples)
-add_subdirectory(tests)
+if(VREEN_WITH_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+if(VREEN_WITH_TESTS)
+    add_subdirectory(tests)
+endif()
 
 if(NOT UNINSTALL_TARGET)
     configure_file(

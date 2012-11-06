@@ -1,0 +1,1 @@
+vreen_add_declarative_example(photoalbum)

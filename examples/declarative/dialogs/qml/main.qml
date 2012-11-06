@@ -19,7 +19,7 @@ Rectangle {
     }
 
     DialogsModel {
-        id: dialogs
+        id: dialogsModel
         client: client
     }
 
@@ -41,11 +41,11 @@ Rectangle {
     }
 
     ListView {
-        id: chatsViews
+        id: dialogsView
 
         anchors.fill: parent
         scale: 0
-        model: dialogs
+        model: dialogsModel
 
         header: Text {
             width: parent.width
@@ -168,7 +168,7 @@ Rectangle {
         onOnlineChanged: {
             if (client.online) {
                 client.roster.sync();
-                dialogs.getDialogs(0, 15, 160);
+                dialogsModel.getDialogs(0, 15, 160);
             }
         }
     }
@@ -182,7 +182,7 @@ Rectangle {
                 scale: 0
             }
             PropertyChanges {
-                target: chatsViews
+                target: dialogsView
                 scale: 1
             }
         }
@@ -191,7 +191,7 @@ Rectangle {
         Transition {
             from: "*"
             to: "online"
-            NumberAnimation { target: chatsViews; property: "scale"; duration: 400; easing.type: Easing.InOutQuad }
+            NumberAnimation { target: dialogsView; property: "scale"; duration: 400; easing.type: Easing.InOutQuad }
             NumberAnimation { target: login; property: "scale"; duration: 400; easing.type: Easing.InOutQuad }
         }
     ]

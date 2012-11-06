@@ -28,7 +28,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    a.setApplicationName("phonefetcher");
+    a.setApplicationName("example");
     a.setOrganizationName("vreen");
     a.setOrganizationDomain("https://github.com/gorthauer/vreen");
     a.setQuitOnLastWindowClosed(false);

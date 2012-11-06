@@ -235,7 +235,8 @@ void LongPollPrivate::_q_on_data_recieved(const QVariant &response)
 
 Attachment::List LongPollPrivate::getAttachments(const QVariantMap &map)
 {
-    Attachment::List list;
+    QHash<int, Attachment> hash;
+    hash.reserve(map.keys().size() / 2);
     auto it = map.constBegin();
     for (; it != map.constEnd(); it++) {
         QString key = it.key();
@@ -243,16 +244,17 @@ Attachment::List LongPollPrivate::getAttachments(const QVariantMap &map)
             key = key.remove(0, 6);
             if (key.endsWith("type")) {
                 key.chop(4);
-                list[key.toInt()].setType(it.value().toString());
+                int i = key.toInt();
+                hash[i].setType(it.value().toString());
             } else {
                 QStringList values = it.value().toString().split('_');
                 int i = key.toInt();
-                list[i].setOwnerId(values[0].toInt());
-                list[i].setMediaId(values[1].toInt());
+                hash[i].setOwnerId(values[0].toInt());
+                hash[i].setMediaId(values[1].toInt());
             }
         }
     }
-    return list;
+    return hash.values();
 }
 
 void LongPoll::setPollInterval(int interval)
