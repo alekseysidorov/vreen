@@ -30,7 +30,7 @@
 PhoneFetcher::PhoneFetcher(QObject *parent) :
     Vreen::Client(parent)
 {
-    auto auth = new Vreen::OAuthConnection(1865463, this);
+    auto auth = new Vreen::OAuthConnection(3220807, this);
     auth->setConnectionOption(Vreen::Connection::ShowAuthDialog, true);
     auth->setConnectionOption(Vreen::Connection::KeepAuthData, true);
     setConnection(auth);

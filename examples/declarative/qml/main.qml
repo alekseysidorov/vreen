@@ -36,7 +36,7 @@ Rectangle {
             setConnectionOption(Connection.KeepAuthData, true);
         }
 
-        clientId: 1865463 //qutIM id
+        clientId: 3220807
         displayType: OAuthConnection.Popup
     }
 
