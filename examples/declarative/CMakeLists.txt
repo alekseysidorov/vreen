@@ -7,11 +7,11 @@ add_custom_command(
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/qml ${CMAKE_CURRENT_BINARY_DIR}/qml
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/qml
 )
-add_custom_target(quickvreen-qml
+add_custom_target(chatsview-qml
     ALL
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/qml)
 
-add_simple_executable(quickvreen
+add_simple_executable(chatsview
     INTERNAL
     CXX11
     INCLUDES ${QT_QTDECLARATIVE_INCLUDE_DIR}

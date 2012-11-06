@@ -45,7 +45,8 @@ public:
     ~Connection();
 
     enum ConnectionOption {
-        ShowAuthDialog
+        ShowAuthDialog,
+        KeepAuthData
     };
 
     virtual void connectToHost(const QString &login, const QString &password) = 0;

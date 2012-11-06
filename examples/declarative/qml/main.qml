@@ -33,6 +33,7 @@ Rectangle {
 
         Component.onCompleted: {
             setConnectionOption(Connection.ShowAuthDialog, true);
+            setConnectionOption(Connection.KeepAuthData, true);
         }
 
         clientId: 1865463 //qutIM id

@@ -22,19 +22,18 @@
 ** $VREEN_END_LICENSE$
 **
 ****************************************************************************/
-#include "declarativeview.h"
-#include <QDeclarativeContext>
+#include <QApplication>
+#include "phonefetcher.h"
 
-DeclarativeView::DeclarativeView(QWidget *parent) :
-    QDeclarativeView(parent)
+int main(int argc, char *argv[])
 {
-    //auto client = new Vreen::Client(this);
-    //auto con = new Vreen::OAuthConnection(1865463, client); //qutIM id
-    //con->setConnectionOption(Vreen::Connection::ShowAuthDialog, true);
-    //con->setDisplayType(Vreen::OAuthConnection::Popup);
-    //client->setConnection(con);
-    //rootContext()->setContextProperty("client", client);
+    QApplication a(argc, argv);
+    a.setApplicationName("phonefetcher");
+    a.setOrganizationName("vreen");
+    a.setOrganizationDomain("https://github.com/gorthauer/vreen");
+    a.setQuitOnLastWindowClosed(false);
 
-    setSource(QUrl("qml/main.qml"));
-    setResizeMode(SizeRootObjectToView);
+    PhoneFetcher fetcher;
+    fetcher.fetch();
+    return a.exec();
 }

@@ -34,6 +34,9 @@ set(CMAKE_VREEN_VERSION_MINOR 9 CACHE INT "Minor vk version number" FORCE)
 set(CMAKE_VREEN_VERSION_PATCH 5 CACHE INT "Release vk version number" FORCE)
 set(CMAKE_VREEN_VERSION_STRING "${CMAKE_VREEN_VERSION_MAJOR}.${CMAKE_VREEN_VERSION_MINOR}.${CMAKE_VREEN_VERSION_PATCH}" CACHE STRING "vreen version string" FORCE)
 
+set(VREEN_INCLUDE_DIR ${PROJECT_BINARY_DIR}/include)
+set(VREEN_PRIVATE_INCLUDE_DIR ${VREEN_INCLUDE_DIR}/vreen/${CMAKE_VREEN_VERSION_STRING})
+
 add_subdirectory(src)
 add_subdirectory(examples)
 add_subdirectory(tests)

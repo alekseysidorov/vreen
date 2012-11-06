@@ -193,6 +193,14 @@ Reply *Roster::update(const IdList &ids, const QStringList &fields)
     return reply;
 }
 
+Reply *Roster::update(const BuddyList &buddies, const QStringList &fields)
+{
+    IdList ids;
+    foreach (auto buddy, buddies)
+        ids.append(buddy->id());
+    return update(ids, fields);
+}
+
 void RosterPrivate::getTags()
 {
     Q_Q(Roster);
@@ -250,6 +258,7 @@ void RosterPrivate::_q_friends_received(const QVariant &response)
             buddy = new Buddy(id, client);
             Contact::fillContact(buddy, map);
             buddy->setIsFriend(isFriend);
+            buddyHash[id] = buddy;
             emit q->buddyAdded(buddy);
         } else {
             buddy->setIsFriend(isFriend);

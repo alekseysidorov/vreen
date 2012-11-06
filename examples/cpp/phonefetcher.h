@@ -22,19 +22,20 @@
 ** $VREEN_END_LICENSE$
 **
 ****************************************************************************/
-#include "declarativeview.h"
-#include <QDeclarativeContext>
+#ifndef PHONEFETCHER_H
+#define PHONEFETCHER_H
+#include <vreen/client.h>
+#include <vreen/auth/oauthconnection.h>
 
-DeclarativeView::DeclarativeView(QWidget *parent) :
-    QDeclarativeView(parent)
+class PhoneFetcher : public Vreen::Client
 {
-    //auto client = new Vreen::Client(this);
-    //auto con = new Vreen::OAuthConnection(1865463, client); //qutIM id
-    //con->setConnectionOption(Vreen::Connection::ShowAuthDialog, true);
-    //con->setDisplayType(Vreen::OAuthConnection::Popup);
-    //client->setConnection(con);
-    //rootContext()->setContextProperty("client", client);
+    Q_OBJECT
+public:
+    explicit PhoneFetcher(QObject *parent = 0); 
+    void fetch();
+public slots:
+    void onOnlineChanged(bool online);
+    void onSynced(bool success);
+};
 
-    setSource(QUrl("qml/main.qml"));
-    setResizeMode(SizeRootObjectToView);
-}
+#endif // PHONEFETCHER_H

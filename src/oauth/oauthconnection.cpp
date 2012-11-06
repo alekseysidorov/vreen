@@ -38,6 +38,8 @@
 #include <QWebView>
 #include <QApplication>
 
+#include <QSettings>
+
 namespace Vreen {
 
 const static QUrl authUrl("http://api.vk.com/oauth/authorize");
@@ -75,7 +77,6 @@ public:
         uid(0),
         expiresIn(0)
     {
-		//options[Connection::ShowAuthDialog] = true;
     }
     QPointer<QWebPage> webPage;
     QPointer<QWebView> webView;
@@ -101,6 +102,8 @@ public:
     void _q_loadFinished(bool);
     void clear();
     void handleAuthRequest(QWebPage *page);
+    void saveAuthData();
+    void loadAuthData();
 };
 
 
@@ -121,6 +124,9 @@ OAuthConnection::~OAuthConnection()
 void OAuthConnection::connectToHost(const QString &login, const QString &password)
 {
     Q_D(OAuthConnection);
+    if (d->options.value(Connection::KeepAuthData).toBool())
+        d->loadAuthData();
+
     if (d->login != login || d->password != password) {
         if (!(d->login.isNull() || d->password.isNull()))
             d->clear();
@@ -286,6 +292,8 @@ void OAuthConnectionPrivate::_q_loadFinished(bool ok)
 
             setConnectionState(Client::StateOnline);
             webPage->deleteLater();
+            if (options.value(Connection::KeepAuthData).toBool())
+                saveAuthData();
         }
     } else {
         setConnectionState(Client::StateOffline);
@@ -316,6 +324,29 @@ void OAuthConnectionPrivate::handleAuthRequest(QWebPage *page)
         webView->showNormal();
     } else
         emit q->authConfirmRequested(page);
+}
+
+void OAuthConnectionPrivate::saveAuthData()
+{
+    Q_Q(OAuthConnection);
+    QSettings cfg;
+    cfg.beginGroup("access");
+    cfg.setValue("uid", q->uid());
+    cfg.setValue("token", q->accessToken());
+    cfg.setValue("expires", qint64(q->expiresIn()));
+    cfg.endGroup();
+    cfg.sync();
+}
+
+void OAuthConnectionPrivate::loadAuthData()
+{
+    Q_Q(OAuthConnection);
+    QSettings cfg;
+    cfg.beginGroup("access");
+    q->setUid(cfg.value("uid").toInt());
+    q->setAccessToken(cfg.value("token").toByteArray(),
+                      cfg.value("expires").toLongLong());
+    cfg.endGroup();
 }
 
 } // namespace Vreen

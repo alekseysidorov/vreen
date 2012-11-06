@@ -72,6 +72,9 @@ public slots:
     Reply *update(const IdList &ids, const QStringList &fields = QStringList()
             << VK_ALL_FIELDS
             );
+    Reply *update(const BuddyList &buddies, const QStringList &fields = QStringList()
+            << VK_ALL_FIELDS
+            );
 signals:
     void buddyAdded(Vreen::Buddy *buddy);
     void buddyUpdated(Vreen::Buddy *buddy);
