@@ -52,12 +52,12 @@ public:
     explicit OAuthConnection(QObject *parent = 0);
     virtual ~OAuthConnection();
 
-    virtual void connectToHost(const QString &login, const QString &password);
-    virtual void disconnectFromHost();
-    virtual QNetworkReply *request(const QString &method, const QVariantMap &args = QVariantMap());
-    virtual Client::State connectionState() const;
-    virtual int uid() const;
-    virtual void clear();
+    void connectToHost(const QString &login, const QString &password);
+    void disconnectFromHost();
+    QNetworkReply *request(const QString &method, const QVariantMap &args = QVariantMap());
+    Client::State connectionState() const;
+    int uid() const;
+    void clear();
 
     QByteArray accessToken() const;
     time_t expiresIn() const;
@@ -71,6 +71,9 @@ signals:
     void authConfirmRequested(QWebPage *page);
     void accessTokenChanged(const QByteArray &token, time_t expiresIn);
     void clientIdChanged(int clientId);
+protected:
+    QNetworkRequest createRequest(const QString &method, const QVariantMap &args = QVariantMap());
+    void decorateRequest(QNetworkRequest &);
 private:
     Q_PRIVATE_SLOT(d_func(), void _q_loadFinished(bool))
 };

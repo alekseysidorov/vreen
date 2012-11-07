@@ -26,6 +26,7 @@
 #define VK_CONNECTION_H
 
 #include <QNetworkAccessManager>
+#include <QNetworkRequest>
 #include <QVariantMap>
 #include "client.h"
 
@@ -51,7 +52,12 @@ public:
 
     virtual void connectToHost(const QString &login, const QString &password) = 0;
     virtual void disconnectFromHost() = 0;
-    virtual QNetworkReply *request(const QString &method, const QVariantMap &args = QVariantMap()) = 0;
+
+    QNetworkReply *get(QNetworkRequest request);
+    QNetworkReply *get(const QString &method, const QVariantMap &args = QVariantMap());
+    QNetworkReply *put(const QString &method, QIODevice *data, const QVariantMap &args = QVariantMap());
+    QNetworkReply *put(const QString &method, const QByteArray &data, const QVariantMap &args = QVariantMap());
+
     virtual Client::State connectionState() const = 0;
     virtual int uid() const = 0;
     virtual void clear();
@@ -62,6 +68,8 @@ signals:
     void connectionStateChanged(Vreen::Client::State connectionState);
     void error(Vreen::Client::Error);
 protected:
+    virtual QNetworkRequest createRequest(const QString &method, const QVariantMap &args = QVariantMap()) = 0;
+    virtual void decorateRequest(QNetworkRequest &);
     QScopedPointer<ConnectionPrivate> d_ptr;
 };
 

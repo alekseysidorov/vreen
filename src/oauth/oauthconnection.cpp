@@ -147,7 +147,7 @@ void OAuthConnection::disconnectFromHost()
     d->setConnectionState(Client::StateOffline);
 }
 
-QNetworkReply *OAuthConnection::request(const QString &method, const QVariantMap &args)
+QNetworkRequest OAuthConnection::createRequest(const QString &method, const QVariantMap &args)
 {
     Q_D(OAuthConnection);
 
@@ -160,8 +160,15 @@ QNetworkReply *OAuthConnection::request(const QString &method, const QVariantMap
     url.addEncodedQueryItem("access_token", d->accessToken);
 
     QNetworkRequest request(url);
-    QNetworkReply *reply = get(request);
-    return reply;
+    return request;
+}
+
+void OAuthConnection::decorateRequest(QNetworkRequest &request)
+{
+    Q_D(OAuthConnection);
+    auto url = request.url();
+    url.addEncodedQueryItem("access_token", d->accessToken);
+    request.setUrl(url);
 }
 
 Client::State OAuthConnection::connectionState() const

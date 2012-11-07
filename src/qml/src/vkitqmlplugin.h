@@ -72,7 +72,8 @@ static inline void registerVreenTypes(const char *uri)
     qmlRegisterUncreatableType<Vreen::Client>("com.vk.api", 1, 0, "ClientBase", QObject::tr("Use SimpleClient instead"));
     qmlRegisterUncreatableType<Vreen::Roster>("com.vk.api", 1, 0, "Roster", QObject::tr("Use client.roster instead"));
     qmlRegisterUncreatableType<Vreen::Connection>("com.vk.api", 1, 0, "Connection", QObject::tr("Use client.connection instead"));
-    qmlRegisterUncreatableType<Vreen::Contact>("com.vk.api", 1, 0, "Contact", QObject::tr("User Roster"));
+    qmlRegisterUncreatableType<Vreen::Contact>("com.vk.api", 1, 0, "Contact", QObject::tr("Use client.contact(id)"));
+    qmlRegisterUncreatableType<Vreen::Buddy>("com.vk.api", 1, 0, "Buddy", QObject::tr("User roster.buddy(id)"));
     qmlRegisterUncreatableType<Vreen::Message>("com.vk.api", 1, 0, "Message", QObject::tr("Only flags"));
     qmlRegisterUncreatableType<Vreen::LongPoll>("com.vk.api", 1, 0, "LongPoll", QObject::tr("Use client.longPoll instead"));
     qmlRegisterUncreatableType<Vreen::Attachment>("com.vk.api", 1, 0, "Attachment", QObject::tr("Attachment enums"));

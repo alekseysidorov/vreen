@@ -42,6 +42,27 @@ Connection::~Connection()
 {
 }
 
+QNetworkReply *Connection::get(QNetworkRequest request)
+{
+    decorateRequest(request);
+    return QNetworkAccessManager::get(request);
+}
+
+QNetworkReply *Connection::get(const QString &method, const QVariantMap &args)
+{
+    return QNetworkAccessManager::get(createRequest(method, args));
+}
+
+QNetworkReply *Connection::put(const QString &method, QIODevice *data, const QVariantMap &args)
+{
+    return QNetworkAccessManager::put(createRequest(method, args), data);
+}
+
+QNetworkReply *Connection::put(const QString &method, const QByteArray &data, const QVariantMap &args)
+{
+     return QNetworkAccessManager::put(createRequest(method, args), data);
+}
+
 /*!
  * \brief Connection::clear auth data. Default implementation doesn't nothing.
  */
@@ -58,6 +79,10 @@ void Connection::setConnectionOption(Connection::ConnectionOption option, const 
 QVariant Connection::connectionOption(Connection::ConnectionOption option) const
 {
     return d_func()->options[option];
+}
+
+void Connection::decorateRequest(QNetworkRequest &)
+{
 }
 
 } // namespace Vreen

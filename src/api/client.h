@@ -57,7 +57,7 @@ class VK_SHARED_EXPORT Client : public QObject
     Q_PROPERTY(Vreen::Roster* roster READ roster NOTIFY rosterChanged DESIGNABLE true)
     Q_PROPERTY(Vreen::GroupManager* groupManager READ groupManager NOTIFY groupManagerChanged DESIGNABLE true)
     Q_PROPERTY(Vreen::LongPoll* longPoll READ longPoll NOTIFY longPollChanged DESIGNABLE true)
-    Q_PROPERTY(Vreen::Contact* me READ me NOTIFY meChanged DESIGNABLE true)
+    Q_PROPERTY(Vreen::Buddy* me READ me NOTIFY meChanged DESIGNABLE true)
     Q_PROPERTY(Vreen::Connection* connection READ connection WRITE setConnection NOTIFY connectionChanged DESIGNABLE true)
     Q_PROPERTY(QString activity READ activity WRITE setActivity NOTIFY activityChanged DESIGNABLE true)
     Q_PROPERTY(bool invisible READ isInvisible WRITE setInvisible NOTIFY invisibleChanged)
@@ -117,7 +117,7 @@ public:
     Reply *addLike(int ownerId, int postId, bool retweet = false, const QString &message = QString()); //TODO move method
     Reply *deleteLike(int ownerId, int postId); //TODO move method
 
-    Q_INVOKABLE Contact *me() const;
+    Q_INVOKABLE Buddy *me() const;
     Q_INVOKABLE Contact *contact(int id) const;
     int id() const;
 public slots:

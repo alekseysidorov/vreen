@@ -182,12 +182,12 @@ Reply *Client::request(const QUrl &url)
 
 Reply *Client::request(const QString &method, const QVariantMap &args)
 {
-    auto reply = new Reply(connection()->request(method, args));
+    auto reply = new Reply(connection()->get(method, args));
     d_func()->processReply(reply);
     return reply;
 }
 
-Contact *Client::me() const
+Buddy *Client::me() const
 {
     if (auto r = roster())
         return r->owner();
@@ -320,7 +320,7 @@ void Client::processReply(Reply *reply)
 
 QNetworkReply *Client::requestHelper(const QString &method, const QVariantMap &args)
 {
-    return connection()->request(method, args);
+    return connection()->get(method, args);
 }
 
 void ClientPrivate::_q_activity_update_finished(const QVariant &response)
