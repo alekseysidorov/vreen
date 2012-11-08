@@ -36,22 +36,21 @@ class AudioModel : public Vreen::AudioModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(QObject* client READ clientObj WRITE setClient NOTIFY clientChanged)
+    Q_PROPERTY(Vreen::Contact* owner READ owner WRITE setOwner NOTIFY ownerChanged)
 public:
     explicit AudioModel(QObject *parent = 0);
-    Vreen::Client* client() const;
-    void setClient(Vreen::Client* client);
+    Vreen::Contact* owner() const;
+    void setOwner(Vreen::Contact* owner);
 public slots:
-    void getContactAudio(Vreen::Contact *owner, int count = 100, int offset = 0);
+    void getAudio(int count = 100, int offset = 0);
     void searchAudio(const QString &query, int count = 50, int offset = 0);
 signals:
-    void clientChanged(QObject*);
+    void ownerChanged(Vreen::Contact*);
     void requestFinished();
+private slots:
+    void onResultReady();
 private:
-    QObject* clientObj() const;
-    void setClient(QObject* client);
-
-    QPointer<Vreen::Client> m_client;
+    QPointer<Vreen::Contact> m_owner;
     QPointer<Vreen::AudioProvider> m_provider;
 };
 

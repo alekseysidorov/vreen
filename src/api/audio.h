@@ -28,11 +28,12 @@
 #include <QAbstractListModel>
 #include "audioitem.h"
 #include "abstractlistmodel.h"
+#include "reply.h"
 
 namespace Vreen {
 
 class Client;
-class Reply;
+typedef ReplyBase<AudioItemList> AudioItemListReply;
 
 class AudioProviderPrivate;
 class VK_SHARED_EXPORT AudioProvider : public QObject
@@ -42,14 +43,10 @@ class VK_SHARED_EXPORT AudioProvider : public QObject
 public:
     AudioProvider(Client *client);
     virtual ~AudioProvider();
-    Reply *getContactAudio(int uid, int count = 50, int offset = 0);
-    Reply *searchAudio(const QString &query, int count = 50, int offset = 0);
-signals:
-    void audioItemReceived(const Vreen::AudioItem &item);
+	AudioItemListReply *getContactAudio(int uid, int count = 50, int offset = 0);
+	AudioItemListReply *searchAudio(const QString &query, int count = 50, int offset = 0);
 protected:
     QScopedPointer<AudioProviderPrivate> d_ptr;
-
-    Q_PRIVATE_SLOT(d_func(), void _q_audio_received(QVariant))
 };
 
 class AudioModelPrivate;

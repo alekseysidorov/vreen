@@ -134,7 +134,7 @@ Roster *Client::roster()
 {
     Q_D(Client);
     if (d->roster.isNull()) {
-        d->roster = new Roster(this);
+        d->roster = new Roster(this, d->connection.isNull() ? 0 : d->connection->uid());
     }
     return d->roster.data();
 }
@@ -192,6 +192,11 @@ Buddy *Client::me() const
     if (auto r = roster())
         return r->owner();
     return 0;
+}
+
+Buddy *Client::me()
+{
+    return roster()->owner();
 }
 
 Contact *Client::contact(int id) const
@@ -367,8 +372,8 @@ void ClientPrivate::_q_connection_state_changed(Client::State state)
     case Client::StateOnline:
         emit q->onlineStateChanged(true);
         if (!roster.isNull()) {
-            roster.data()->setUid(connection.data()->uid());
-            emit q->meChanged(roster.data()->owner());
+            roster->setUid(connection->uid());
+            emit q->meChanged(roster->owner());
         }
         if (!isInvisible)
             setOnlineUpdaterRunning(true);

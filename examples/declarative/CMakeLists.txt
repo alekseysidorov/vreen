@@ -23,3 +23,4 @@ endmacro()
 
 add_subdirectory(dialogs)
 add_subdirectory(photoalbum)
+add_subdirectory(audio)

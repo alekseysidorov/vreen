@@ -101,12 +101,12 @@ public:
     Connection *connection() const;
     Connection *connection();
     void setConnection(Connection *connection);
-    Roster *roster() const;
     Roster *roster();
-    LongPoll *longPoll() const;
+    Roster *roster() const;
     LongPoll *longPoll();
-    GroupManager *groupManager() const;
+    LongPoll *longPoll() const;
     GroupManager *groupManager();
+    GroupManager *groupManager() const;
 
     Reply *request(const QUrl &);
     Reply *request(const QString &method, const QVariantMap &args = QVariantMap());
@@ -117,7 +117,8 @@ public:
     Reply *addLike(int ownerId, int postId, bool retweet = false, const QString &message = QString()); //TODO move method
     Reply *deleteLike(int ownerId, int postId); //TODO move method
 
-    Q_INVOKABLE Buddy *me() const;
+    Q_INVOKABLE Buddy *me();
+    Buddy *me() const;
     Q_INVOKABLE Contact *contact(int id) const;
     int id() const;
 public slots:

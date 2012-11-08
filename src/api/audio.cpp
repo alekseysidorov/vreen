@@ -40,28 +40,27 @@ public:
     Client *client;
     bool autoComplete;
 
-    void _q_audio_received(const QVariant &response)
-    {
-        Q_Q(AudioProvider);
-        auto list = response.toList();
-        if (q->sender()->property("skipFirst").toBool())
-            list.removeFirst(); //HACK For stupid API(((
+	static QVariant handleAudio(const QVariant &response) {
+		AudioItemList items;
+		auto list = response.toList();
+		if (list.count() && list.first().canConvert<int>())
+			list.removeFirst(); //HACK For stupid API(((
 
-        foreach (auto item, list) {
-            auto map = item.toMap();
-            AudioItem audio(client);
-            audio.setId(map.value("aid").toInt());
-            audio.setOwnerId(map.value("owner_id").toInt());
-            audio.setArtist(map.value("artist").toString());
-            audio.setTitle(map.value("title").toString());
-            audio.setDuration(map.value("duration").toReal());
-            audio.setAlbumId(map.value("album").toInt());
-            audio.setLyricsId(map.value("lyrics_id").toInt());
-            audio.setUrl(map.value("url").toUrl());
-            emit q->audioItemReceived(audio);
-            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-        }
-    }
+		foreach (auto item, list) {
+			auto map = item.toMap();
+			AudioItem audio;
+			audio.setId(map.value("aid").toInt());
+			audio.setOwnerId(map.value("owner_id").toInt());
+			audio.setArtist(map.value("artist").toString());
+			audio.setTitle(map.value("title").toString());
+			audio.setDuration(map.value("duration").toReal());
+			audio.setAlbumId(map.value("album").toInt());
+			audio.setLyricsId(map.value("lyrics_id").toInt());
+			audio.setUrl(map.value("url").toUrl());
+			items.append(audio);
+		}
+		return QVariant::fromValue(items);
+	}
 };
 
 AudioProvider::AudioProvider(Client *client) :
@@ -82,7 +81,7 @@ AudioProvider::~AudioProvider()
  * \param offset
  * \return reply
  */
-Reply *AudioProvider::getContactAudio(int uid, int count, int offset)
+AudioItemListReply *AudioProvider::getContactAudio(int uid, int count, int offset)
 {
     Q_D(AudioProvider);
     QVariantMap args;
@@ -90,8 +89,7 @@ Reply *AudioProvider::getContactAudio(int uid, int count, int offset)
     args.insert("count", count);
     args.insert("offset", offset);
 
-    auto reply = d->client->request("audio.get", args);
-    connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_audio_received(QVariant)));
+    auto reply = d->client->request<AudioItemListReply>("audio.get", args, AudioProviderPrivate::handleAudio);
     return reply;
 }
 
@@ -102,7 +100,7 @@ Reply *AudioProvider::getContactAudio(int uid, int count, int offset)
  * \param offset
  * \return
  */
-Reply *AudioProvider::searchAudio(const QString &query, int count, int offset)
+AudioItemListReply *AudioProvider::searchAudio(const QString &query, int count, int offset)
 {
     Q_D(AudioProvider);
     QVariantMap args;
@@ -111,9 +109,7 @@ Reply *AudioProvider::searchAudio(const QString &query, int count, int offset)
     args.insert("offset", offset);
     args.insert("auto_complete", d->autoComplete);
 
-    auto reply = d->client->request("audio.search", args);
-    reply->setProperty("skipFirst", true);
-    connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_audio_received(QVariant)));
+    auto reply = d->client->request<AudioItemListReply>("audio.search", args, AudioProviderPrivate::handleAudio);
     return reply;
 }
 

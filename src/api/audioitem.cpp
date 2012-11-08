@@ -31,14 +31,13 @@ namespace Vreen {
 
 class AudioItemData : public QSharedData {
 public:
-    AudioItemData(Client *client) : client(client),
+	AudioItemData() :
         id(0), ownerId(0),
         duration(0),
         lyricsId(0),
         albumId(0)
     {}
     AudioItemData(AudioItemData &o) : QSharedData(),
-        client(o.client),
         id(o.id), ownerId(o.ownerId),
         artist(o.artist),
         title(o.title),
@@ -47,7 +46,6 @@ public:
         lyricsId(o.lyricsId),
         albumId(o.albumId)
     {}
-    Client *client;
     int id;
     int ownerId;
     QString artist;
@@ -58,7 +56,7 @@ public:
     int albumId;
 };
 
-AudioItem::AudioItem(Client *client) : data(new AudioItemData(client))
+AudioItem::AudioItem() : data(new AudioItemData)
 {
 }
 

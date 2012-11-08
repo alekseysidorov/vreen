@@ -27,6 +27,7 @@
 
 #include <QSharedDataPointer>
 #include "vk_global.h"
+#include <QVariant>
 
 class QUrl;
 
@@ -38,7 +39,7 @@ class AudioItemData;
 class VK_SHARED_EXPORT AudioItem
 {
 public:
-    AudioItem(Client *client);
+	AudioItem();
     AudioItem(const AudioItem &);
     AudioItem &operator=(const AudioItem &);
     ~AudioItem();
@@ -67,6 +68,9 @@ private:
 typedef QList<AudioItem> AudioItemList;
 
 } // namespace Vreen
+
+Q_DECLARE_METATYPE(Vreen::AudioItem)
+Q_DECLARE_METATYPE(Vreen::AudioItemList)
 
 #endif // VK_AUDIOITEM_H
 

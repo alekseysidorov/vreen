@@ -31,34 +31,29 @@ AudioModel::AudioModel(QObject *parent) :
 {
 }
 
-Vreen::Client *AudioModel::client() const
+Vreen::Contact *AudioModel::owner() const
 {
-    return m_client.data();
+    return m_owner.data();
 }
 
-void AudioModel::setClient(Vreen::Client *client)
+void AudioModel::setOwner(Vreen::Contact *owner)
 {
-    if (m_client.data() == client)
-        return;
-    if (!client) {
-        m_provider.data()->deleteLater();
-        emit clientChanged(client);
-        return;
+    if (m_owner != owner) {
+        m_owner = owner;
+        if (!owner)
+            m_provider.data()->deleteLater();
+        else
+            m_provider = new Vreen::AudioProvider(owner->client());
+        emit ownerChanged(owner);
     }
-
-    auto provider = new Vreen::AudioProvider(client);
-    connect(provider, SIGNAL(audioItemReceived(Vreen::AudioItem)), SLOT(addAudio(Vreen::AudioItem)));
-    m_provider = provider;
-    m_client = client;
-    emit clientChanged(client);
 }
 
-void AudioModel::getContactAudio(Vreen::Contact *owner, int count, int offset)
+void AudioModel::getAudio(int count, int offset)
 {
     if (m_provider.data()) {
-        auto reply = m_provider.data()->getContactAudio(owner->id(), count, offset);
+        auto reply = m_provider.data()->getContactAudio(m_owner->id(), count, offset);
         connect(reply, SIGNAL(resultReady(QVariant)),
-                this, SIGNAL(requestFinished()));
+                this, SLOT(onResultReady()));
     }
 }
 
@@ -67,17 +62,14 @@ void AudioModel::searchAudio(const QString &query, int count, int offset)
     if (m_provider.data()) {
         auto reply = m_provider.data()->searchAudio(query, count, offset);
         connect(reply, SIGNAL(resultReady(QVariant)),
-                this, SIGNAL(requestFinished()));
+                this, SLOT(onResultReady()));
     }
 }
 
-QObject *AudioModel::clientObj() const
+void AudioModel::onResultReady()
 {
-    return client();
+    auto reply = static_cast<Vreen::AudioItemListReply*>(sender());
+    foreach (auto item, reply->result())
+        addAudio(item);
+    emit requestFinished();
 }
-
-void AudioModel::setClient(QObject *client)
-{
-    setClient(static_cast<Vreen::Client*>(client));
-}
-
