@@ -50,17 +50,17 @@ QNetworkReply *Connection::get(QNetworkRequest request)
 
 QNetworkReply *Connection::get(const QString &method, const QVariantMap &args)
 {
-    return QNetworkAccessManager::get(createRequest(method, args));
+	return QNetworkAccessManager::get(makeRequest(method, args));
 }
 
 QNetworkReply *Connection::put(const QString &method, QIODevice *data, const QVariantMap &args)
 {
-    return QNetworkAccessManager::put(createRequest(method, args), data);
+	return QNetworkAccessManager::put(makeRequest(method, args), data);
 }
 
 QNetworkReply *Connection::put(const QString &method, const QByteArray &data, const QVariantMap &args)
 {
-     return QNetworkAccessManager::put(createRequest(method, args), data);
+	 return QNetworkAccessManager::put(makeRequest(method, args), data);
 }
 
 /*!

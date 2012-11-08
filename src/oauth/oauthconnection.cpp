@@ -147,7 +147,7 @@ void OAuthConnection::disconnectFromHost()
     d->setConnectionState(Client::StateOffline);
 }
 
-QNetworkRequest OAuthConnection::createRequest(const QString &method, const QVariantMap &args)
+QNetworkRequest OAuthConnection::makeRequest(const QString &method, const QVariantMap &args)
 {
     Q_D(OAuthConnection);
 

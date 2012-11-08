@@ -72,7 +72,7 @@ signals:
     void accessTokenChanged(const QByteArray &token, time_t expiresIn);
     void clientIdChanged(int clientId);
 protected:
-    QNetworkRequest createRequest(const QString &method, const QVariantMap &args = QVariantMap());
+	QNetworkRequest makeRequest(const QString &method, const QVariantMap &args = QVariantMap());
     void decorateRequest(QNetworkRequest &);
 private:
     Q_PRIVATE_SLOT(d_func(), void _q_loadFinished(bool))
