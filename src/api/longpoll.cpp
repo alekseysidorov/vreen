@@ -243,7 +243,7 @@ Attachment::List LongPollPrivate::getAttachments(const QVariantMap &map)
         if (key.startsWith("attach")) {
             key = key.remove(0, 6);
             if (key.endsWith("type")) {
-                key.chop(4);
+				key.chop(5);
                 int i = key.toInt();
                 hash[i].setType(it.value().toString());
             } else {
