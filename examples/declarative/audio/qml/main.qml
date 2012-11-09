@@ -31,19 +31,18 @@ Rectangle {
 
     Client {
         id: client
-        connection: conn
-    }
 
-    OAuthConnection {
-        id: conn
+        OAuthConnection {
+            id: conn
 
-        Component.onCompleted: {
-            setConnectionOption(Connection.ShowAuthDialog, true);
-            setConnectionOption(Connection.KeepAuthData, true);
+            Component.onCompleted: {
+                setConnectionOption(Connection.ShowAuthDialog, true);
+                setConnectionOption(Connection.KeepAuthData, true);
+            }
+
+            clientId: 3220807
+            displayType: OAuthConnection.Popup
         }
-
-        clientId: 3220807
-        displayType: OAuthConnection.Popup
     }
 
     ListView {

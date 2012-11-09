@@ -30,6 +30,7 @@
 class Client : public Vreen::Client
 {
     Q_OBJECT
+    Q_CLASSINFO("DefaultProperty", "connection")
 public:
     Client(QObject *parent = 0);
     Q_INVOKABLE QObject *request(const QString &method, const QVariantMap &args = QVariantMap());
