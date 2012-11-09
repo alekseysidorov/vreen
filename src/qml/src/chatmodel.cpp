@@ -64,7 +64,7 @@ void ChatModel::setChatId(int chatId)
 
 QString ChatModel::title() const
 {
-    return m_session->title();
+    return m_session ? m_session->title() : tr("unknown");
 }
 
 void ChatModel::setMessageSession(Vreen::MessageSession *session)

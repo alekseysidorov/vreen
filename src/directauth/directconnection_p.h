@@ -37,18 +37,16 @@ class DirectConnection : public Connection
 public:
     explicit DirectConnection(QObject *parent = 0);
 
-    virtual void connectToHost(const QString &login, const QString &password);
-    virtual void disconnectFromHost();
-    virtual QNetworkReply *request(const QString &method, const QVariantMap &args);
-    virtual Client::State connectionState() const;
-    virtual int uid() const;
-    virtual void clear();
-
-    using Connection::get;
-    QNetworkReply *get(const QString &method, const QVariantMap &args = QVariantMap());
+    void connectToHost(const QString &login, const QString &password);
+    void disconnectFromHost();
+    Client::State connectionState() const;
+    int uid() const;
+    void clear();
 protected:
     void setConnectionState(Client::State connectionState);
     void getToken(const QString &login, const QString &password);
+    QNetworkRequest makeRequest(const QString &method, const QVariantMap &args);
+    void decorateRequest(QNetworkRequest &request);
 protected slots:
     void getTokenFinished();
     void onReplyFinished();

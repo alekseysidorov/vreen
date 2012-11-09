@@ -4,6 +4,8 @@
 #
 #-------------------------------------------------
 
+include(../../vreen.pri)
+
 QT       += network
 
 TARGET = vreen
@@ -11,66 +13,12 @@ TEMPLATE = lib
 
 DEFINES += VK_LIBRARY
 
-SOURCES += client.cpp \
-    utils.cpp \
-    roster.cpp \
-    reply.cpp \
-    newsitem.cpp \
-    newsfeed.cpp \
-    messagesession.cpp \
-    messagemodel.cpp \
-    message.cpp \
-    longpoll.cpp \
-    json.cpp \
-    groupmanager.cpp \
-    groupchatsession.cpp \
-    dynamicpropertydata.cpp \
-    contentdownloader.cpp \
-    contact.cpp \
-    connection.cpp \
-    commentssession.cpp \
-    chatsession.cpp \
-    audioitem.cpp \
-    audio.cpp \
-    attachment.cpp \
-    abstractlistmodel.cpp \
-    wallsession.cpp \
-    wallpost.cpp
+SOURCES += $$PWD/*.cpp
 
-HEADERS += client.h \
-    vk_global.h \
-    utils.h \
-    roster_p.h \
-    roster.h \
-    reply_p.h \
-    reply.h \
-    newsitem.h \
-    newsfeed.h \
-    messagesession_p.h \
-    messagesession.h \
-    messagemodel.h \
-    message.h \
-    longpoll_p.h \
-    longpoll.h \
-    json.h \
-    groupmanager.h \
-    groupchatsession.h \
-    dynamicpropertydata_p.h \
-    contentdownloader.h \
-    contact_p.h \
-    contact.h \
-    connection.h \
-    commentssession.h \
-    client_p.h \
-    chatsession.h \
-    audioitem.h \
-    audio.h \
-    attachment.h \
-    abstractlistmodel.h \
-    wallsession.h \
-    wallpost.h
-
-PUBLIC_HEADERS = $$HEADERS
+PUBLIC_HEADERS += $$PWD/*[^p].h
+PRIVATE_HEADERS += $$PWD/*_p.h
+HEADERS = $$PUBLIC_HEADERS \
+    $$PRIVATE_HEADERS
     
 exists(../3rdparty/k8json) {
     include(../3rdparty/k8json/k8json.pri)
@@ -137,3 +85,7 @@ unix {
         -Wno-cast-align \
         -O2 -finline-functions
 }
+
+QMAKE_POST_LINK += $(MKDIR) $$VREEN_INCLUDE_DIR/private $$escape_expand(\\n\\t)
+QMAKE_POST_LINK += $(COPY) $$PWD/*.h $$VREEN_INCLUDE_DIR $$escape_expand(\\n\\t)
+QMAKE_POST_LINK += $(COPY) $$PWD/*_p.h $$VREEN_INCLUDE_DIR/private $$escape_expand(\\n\\t)

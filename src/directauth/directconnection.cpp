@@ -45,15 +45,6 @@ struct LoginVars {
     int scope;
 };
 
-//static const LoginVars loginVars = {
-//    "password",
-//    "1950109",
-//    "bJKfYSu0LS6N52M0HnBo",
-//    "TitanIM",
-//    2 + 4 + 8 + 16 + 1024 + 4096 + 8192 //FIXME в нормальный вид привести
-
-//};
-
 static const LoginVars loginVars = {
     "password",
     VREEN_DIRECTAUTH_CLIENT_ID,
@@ -106,9 +97,24 @@ void DirectConnection::disconnectFromHost()
     setConnectionState(Client::StateOffline);
 }
 
-QNetworkReply *DirectConnection::request(const QString &method, const QVariantMap &args)
+QNetworkRequest DirectConnection::makeRequest(const QString &method, const QVariantMap &args)
 {
-    return get(method, args);
+    QUrl url = serverUrls.apiServer;
+    url.setPath(url.path() % QLatin1Literal("/") % method);
+    auto it = args.constBegin();
+    for (; it != args.constEnd(); it++)
+        url.addQueryItem(it.key(), it.value().toString());
+    url.addEncodedQueryItem("access_token", m_token.accessToken);
+
+    QNetworkRequest request(url);
+    return request;
+}
+
+void DirectConnection::decorateRequest(QNetworkRequest &request)
+{
+    auto url = request.url();
+    url.addEncodedQueryItem("access_token", m_token.accessToken);
+    request.setUrl(url);
 }
 
 Client::State DirectConnection::connectionState() const
@@ -126,22 +132,6 @@ void DirectConnection::clear()
     m_token.accessToken.clear();
     m_token.expireTime = 0;
     m_token.uid = 0;
-}
-
-QNetworkReply *DirectConnection::get(const QString &method, const QVariantMap &args)
-{
-    QUrl url = serverUrls.apiServer;
-    url.setPath(url.path() % QLatin1Literal("/") % method);
-    auto it = args.constBegin();
-    for (; it != args.constEnd(); it++)
-        url.addQueryItem(it.key(), it.value().toString());
-    url.addEncodedQueryItem("access_token", m_token.accessToken);
-
-    QNetworkRequest request(url);
-    QNetworkReply *reply = QNetworkAccessManager::get(request);
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(onReplyError(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(finished()), this, SLOT(onReplyFinished()));
-    return reply;
 }
 
 void DirectConnection::setConnectionState(Client::State state)
