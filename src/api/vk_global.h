@@ -33,5 +33,7 @@
 #  define VK_SHARED_EXPORT Q_DECL_IMPORT
 #endif
 
+typedef QList<int> IdList;
+
 #endif // API_GLOBAL_H
 

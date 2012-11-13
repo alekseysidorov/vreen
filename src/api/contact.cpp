@@ -56,7 +56,12 @@ int Contact::id() const
 
 Client *Contact::client() const
 {
-    return d_func()->client;
+	return d_func()->client;
+}
+
+Roster *Contact::roster() const
+{
+	return d_func()->client->roster();
 }
 
 QString Contact::photoSource(Contact::PhotoSize size) const
@@ -207,7 +212,7 @@ SendMessageReply *Buddy::sendMessage(const QString &body, const QString &subject
     message.setBody(body);
     message.setSubject(subject);
 	message.setToId(id());
-    return d->client->sendMessage(message);
+	return d->client->sendMessage(message);
 }
 
 Group::Group(int id, Client *client) :

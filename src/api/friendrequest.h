@@ -22,46 +22,38 @@
 ** $VREEN_END_LICENSE$
 **
 ****************************************************************************/
-#ifndef ROSTER_P_H
-#define ROSTER_P_H
-#include "roster.h"
-#include "client_p.h"
-#include "contact_p.h"
+#ifndef VREEN_FRIENDREQUEST_H
+#define VREEN_FRIENDREQUEST_H
+
+#include "vk_global.h"
+#include <QVariant>
+#include <QSharedDataPointer>
 
 namespace Vreen {
 
-typedef QHash<int, Buddy*> BuddyHash;
+class FriendRequestData;
 
-class Roster;
-class RosterPrivate
+class VK_SHARED_EXPORT FriendRequest
 {
-    Q_DECLARE_PUBLIC(Roster)
 public:
-    RosterPrivate(Roster *q, Client *client) :
-        q_ptr(q), client(client), owner(0)
-    {}
-    Roster *q_ptr;
-    Client *client;
-    BuddyHash buddyHash;
-    Buddy *owner;
-    QStringList tags;
-
-    void getTags();
-    void getOnline();
-    void getFriends(const QVariantMap &args = QVariantMap());
-    void addBuddy(Buddy *contact);
-
-	static QVariant handleGetRequests(const QVariant &response);
-
-    void _q_tags_received(const QVariant &response);
-    void _q_friends_received(const QVariant &response);
-    void _q_status_changed(int userId, Vreen::Contact::Status status);
-    void _q_online_changed(bool);
-	void _q_friends_add_finished(const QVariant &response);
-	void _q_friends_delete_finished(const QVariant &response);
+    explicit FriendRequest(int uid = 0);
+    FriendRequest(const FriendRequest &);
+    FriendRequest &operator=(const FriendRequest &);
+    ~FriendRequest();
+    int uid() const;
+    void setUid(int uid);
+    QString message() const;
+    void setMessage(const QString &message);
+    IdList mutualFriends() const;
+    void setMutualFriends(const IdList &mutualFriends);
+private:
+    QSharedDataPointer<FriendRequestData> data;
 };
+typedef QList<FriendRequest> FriendRequestList;
 
-} //namespace Vreen
+} // namespace Vreen
 
-#endif // ROSTER_P_H
+Q_DECLARE_METATYPE(Vreen::FriendRequest)
+Q_DECLARE_METATYPE(Vreen::FriendRequestList)
 
+#endif // VREEN_FRIENDREQUEST_H

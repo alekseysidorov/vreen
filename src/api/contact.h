@@ -109,6 +109,7 @@ public:
     Type type();
     int id() const;
     Client *client() const;
+	Roster *roster() const;
     Q_INVOKABLE QString photoSource(PhotoSize size = PhotoSizeSmall) const;
     void setPhotoSource(const QString &source, PhotoSize size = PhotoSizeSmall);    
     static void fillContact(Contact *contact, const QVariantMap &data);

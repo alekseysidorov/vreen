@@ -107,6 +107,9 @@ protected:
     friend class Client;
 };
 
+//some useful typedefs
+typedef ReplyBase<int> IntReply;
+
 } // namespace Vreen
 
 #endif // VK_REPLY_H

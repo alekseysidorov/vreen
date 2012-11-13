@@ -27,19 +27,20 @@
 
 #include "contact.h"
 #include "message.h"
+#include "reply.h"
+#include "friendrequest.h"
 #include <QVariant>
 #include <QStringList>
 
 namespace Vreen {
 class Client;
-class Reply;
-typedef QList<int> IdList;
 
 class RosterPrivate;
 class VK_SHARED_EXPORT Roster : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(Roster)
+	Q_FLAGS(FriendRequestFlags)
 public:
 
     enum NameCase {
@@ -50,6 +51,13 @@ public:
         InsCase,
         AblCase
     };  
+
+	enum FriendRequestFlag {
+		NeedMutualFriends,
+		NeedMessages,
+		GetOutRequests
+	};
+	Q_DECLARE_FLAGS(FriendRequestFlags, FriendRequestFlag)
 
     Roster(Client *client, int uid = 0);
     virtual ~Roster();
@@ -75,6 +83,9 @@ public slots:
     Reply *update(const BuddyList &buddies, const QStringList &fields = QStringList()
             << VK_ALL_FIELDS
             );
+	Reply *addToFriends(int uid, const QString &reason = QString());
+	Reply *removeFromFriends(int uid);
+	ReplyBase<FriendRequestList> *getFriendRequests(int count = 100, int offset = 0, FriendRequestFlags flags = NeedMessages);
 signals:
     void buddyAdded(Vreen::Buddy *buddy);
     void buddyUpdated(Vreen::Buddy *buddy);
@@ -93,11 +104,14 @@ protected:
     Q_PRIVATE_SLOT(d_func(), void _q_friends_received(const QVariant &response))
     Q_PRIVATE_SLOT(d_func(), void _q_status_changed(int userId, Vreen::Contact::Status status))
     Q_PRIVATE_SLOT(d_func(), void _q_online_changed(bool))
+	Q_PRIVATE_SLOT(d_func(), void _q_friends_add_finished(const QVariant &response))
+	Q_PRIVATE_SLOT(d_func(), void _q_friends_delete_finished(const QVariant &response))
 };
 
 } // namespace Vreen
 
 Q_DECLARE_METATYPE(Vreen::Roster*)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Vreen::Roster::FriendRequestFlags)
 
 #endif // VK_ROSTER_H
 

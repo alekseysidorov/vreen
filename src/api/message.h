@@ -100,7 +100,7 @@ public:
 
     static MessageList fromVariantList(const QVariantList &list, Client *client);
 	static MessageList fromVariantList(const QVariantList &list, int clientId);
-protected:
+private:
     QSharedDataPointer<MessageData> d;
 };
 

@@ -198,7 +198,48 @@ Reply *Roster::update(const BuddyList &buddies, const QStringList &fields)
     IdList ids;
     foreach (auto buddy, buddies)
         ids.append(buddy->id());
-    return update(ids, fields);
+	return update(ids, fields);
+}
+
+Reply *Roster::addToFriends(int uid, const QString &reason)
+{
+	Q_D(Roster);
+	QVariantMap args;
+	args.insert("uid", uid);
+	args.insert("text", reason);
+	auto reply = d->client->request("friends.add", args);
+	reply->setProperty("uid", uid);
+	connect(reply, SIGNAL(resultReady(QVariant)), this, SLOT(_q_friends_add_finished(QVariant)));
+	return reply;
+}
+
+Reply *Roster::removeFromFriends(int uid)
+{
+	Q_D(Roster);
+	QVariantMap args;
+	args.insert("uid", uid);
+	auto reply = d->client->request("friends.delete", args);
+	reply->setProperty("uid", uid);
+	connect(reply, SIGNAL(resultReady(QVariant)), this, SLOT(_q_friends_delete_finished(QVariant)));
+	return reply;
+}
+
+ReplyBase<FriendRequestList> *Roster::getFriendRequests(int count, int offset, FriendRequestFlags flags)
+{
+	Q_D(Roster);
+	QVariantMap args;
+	args.insert("count", count);
+	args.insert("offset", offset);
+	if (flags & NeedMutualFriends)
+		args.insert("need_mutual", true);
+	if (flags & NeedMessages)
+		args.insert("need_messages", true);
+	if (flags & GetOutRequests)
+		args.insert("out", 1);
+	auto reply = d->client->request<ReplyBase<FriendRequestList>>("friends.getRequests",
+																  args,
+																  RosterPrivate::handleGetRequests);
+	return reply;
 }
 
 void RosterPrivate::getTags()
@@ -231,7 +272,25 @@ void RosterPrivate::addBuddy(Buddy *buddy)
         //q->update(ids, QStringList() << VK_COMMON_FIELDS); //TODO move!
     }
     buddyHash.insert(buddy->id(), buddy);
-    emit q->buddyAdded(buddy);
+	emit q->buddyAdded(buddy);
+}
+
+QVariant RosterPrivate::handleGetRequests(const QVariant &response)
+{
+	FriendRequestList list;
+	foreach (auto item, response.toList()) {
+		QVariantMap map = item.toMap();
+		FriendRequest request(map.value("uid").toInt());
+
+		request.setMessage(map.value("message").toString());
+		IdList ids;
+		QVariantMap mutuals = map.value("mutual").toMap();
+		foreach (auto user, mutuals.value("users").toList())
+			ids.append(user.toInt());
+		request.setMutualFriends(ids);
+		list.append(request);
+	}
+	return QVariant::fromValue(list);
 }
 
 void RosterPrivate::_q_tags_received(const QVariant &response)
@@ -280,7 +339,43 @@ void RosterPrivate::_q_online_changed(bool set)
 {
     if (!set)
         foreach(auto buddy, buddyHash)
-            buddy->setOnline(false);
+			buddy->setOnline(false);
+}
+
+void RosterPrivate::_q_friends_add_finished(const QVariant &response)
+{
+	Q_Q(Roster);
+	int answer = response.toInt();
+	int uid = q->sender()->property("uid").toInt();
+	switch (answer) {
+	case 1:
+		//TODO
+		break;
+	case 2:
+		q->buddy(uid)->setIsFriend(true);
+	case 4:
+		//TODO
+		break;
+	default:
+		break;
+	}
+}
+
+void RosterPrivate::_q_friends_delete_finished(const QVariant &response)
+{
+	Q_Q(Roster);
+	int answer = response.toInt();
+	int uid = q->sender()->property("uid").toInt();
+	switch (answer) {
+	case 1:
+		if (buddyHash.contains(uid))
+			buddyHash.value(uid)->setIsFriend(false);
+		break;
+	case 2:
+		//TODO
+	default:
+		break;
+	}
 }
 
 } // namespace Vreen
