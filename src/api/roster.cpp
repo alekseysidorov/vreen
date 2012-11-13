@@ -201,29 +201,6 @@ Reply *Roster::update(const BuddyList &buddies, const QStringList &fields)
 	return update(ids, fields);
 }
 
-Reply *Roster::addToFriends(int uid, const QString &reason)
-{
-	Q_D(Roster);
-	QVariantMap args;
-	args.insert("uid", uid);
-	args.insert("text", reason);
-	auto reply = d->client->request("friends.add", args);
-	reply->setProperty("uid", uid);
-	connect(reply, SIGNAL(resultReady(QVariant)), this, SLOT(_q_friends_add_finished(QVariant)));
-	return reply;
-}
-
-Reply *Roster::removeFromFriends(int uid)
-{
-	Q_D(Roster);
-	QVariantMap args;
-	args.insert("uid", uid);
-	auto reply = d->client->request("friends.delete", args);
-	reply->setProperty("uid", uid);
-	connect(reply, SIGNAL(resultReady(QVariant)), this, SLOT(_q_friends_delete_finished(QVariant)));
-	return reply;
-}
-
 ReplyBase<FriendRequestList> *Roster::getFriendRequests(int count, int offset, FriendRequestFlags flags)
 {
 	Q_D(Roster);
@@ -342,41 +319,6 @@ void RosterPrivate::_q_online_changed(bool set)
 			buddy->setOnline(false);
 }
 
-void RosterPrivate::_q_friends_add_finished(const QVariant &response)
-{
-	Q_Q(Roster);
-	int answer = response.toInt();
-	int uid = q->sender()->property("uid").toInt();
-	switch (answer) {
-	case 1:
-		//TODO
-		break;
-	case 2:
-		q->buddy(uid)->setIsFriend(true);
-	case 4:
-		//TODO
-		break;
-	default:
-		break;
-	}
-}
-
-void RosterPrivate::_q_friends_delete_finished(const QVariant &response)
-{
-	Q_Q(Roster);
-	int answer = response.toInt();
-	int uid = q->sender()->property("uid").toInt();
-	switch (answer) {
-	case 1:
-		if (buddyHash.contains(uid))
-			buddyHash.value(uid)->setIsFriend(false);
-		break;
-	case 2:
-		//TODO
-	default:
-		break;
-	}
-}
 
 } // namespace Vreen
 

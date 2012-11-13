@@ -122,6 +122,9 @@ public:
             emit q_func()->activityChanged(now);
         }
     }
+
+	void _q_friends_add_finished(const QVariant &response);
+	void _q_friends_delete_finished(const QVariant &response);
 };
 
 class GroupPrivate : public ContactPrivate

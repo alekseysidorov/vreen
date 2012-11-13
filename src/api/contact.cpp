@@ -59,11 +59,6 @@ Client *Contact::client() const
 	return d_func()->client;
 }
 
-Roster *Contact::roster() const
-{
-	return d_func()->client->roster();
-}
-
 QString Contact::photoSource(Contact::PhotoSize size) const
 {
     Q_D(const Contact);
@@ -215,6 +210,27 @@ SendMessageReply *Buddy::sendMessage(const QString &body, const QString &subject
 	return d->client->sendMessage(message);
 }
 
+Reply *Buddy::addToFriends(const QString &reason)
+{
+	Q_D(Buddy);
+	QVariantMap args;
+	args.insert("uid", d->id);
+	args.insert("text", reason);
+	auto reply = d->client->request("friends.add", args);
+	connect(reply, SIGNAL(resultReady(QVariant)), this, SLOT(_q_friends_add_finished(QVariant)));
+	return reply;
+}
+
+Reply *Buddy::removeFromFriends()
+{
+	Q_D(Buddy);
+	QVariantMap args;
+	args.insert("uid", d->id);
+	auto reply = d->client->request("friends.delete", args);
+	connect(reply, SIGNAL(resultReady(QVariant)), this, SLOT(_q_friends_delete_finished(QVariant)));
+	return reply;
+}
+
 Group::Group(int id, Client *client) :
 	Contact(new GroupPrivate(this, id, client))
 {
@@ -233,7 +249,40 @@ QString Group::name() const
 void Group::setName(const QString &name)
 {
     d_func()->name = name;
-    emit nameChanged(name);
+	emit nameChanged(name);
+}
+
+void BuddyPrivate::_q_friends_add_finished(const QVariant &response)
+{
+	Q_Q(Buddy);
+	int answer = response.toInt();
+	switch (answer) {
+	case 1:
+		//TODO
+		break;
+	case 2:
+		q->setIsFriend(true);
+	case 4:
+		//TODO
+		break;
+	default:
+		break;
+	}
+}
+
+void BuddyPrivate::_q_friends_delete_finished(const QVariant &response)
+{
+	Q_Q(Buddy);
+	int answer = response.toInt();
+	switch (answer) {
+	case 1:
+		q->setIsFriend(false);
+		break;
+	case 2:
+		//TODO
+	default:
+		break;
+	}
 }
 
 } // namespace Vreen

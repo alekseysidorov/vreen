@@ -109,7 +109,6 @@ public:
     Type type();
     int id() const;
     Client *client() const;
-	Roster *roster() const;
     Q_INVOKABLE QString photoSource(PhotoSize size = PhotoSizeSmall) const;
     void setPhotoSource(const QString &source, PhotoSize size = PhotoSizeSmall);    
     static void fillContact(Contact *contact, const QVariantMap &data);
@@ -166,6 +165,8 @@ public slots:
     void update(const QStringList &fields = QStringList()
             << VK_ALL_FIELDS);
     SendMessageReply *sendMessage(const QString &body, const QString &subject = QString());
+	Reply *addToFriends(const QString &reason = QString());
+	Reply *removeFromFriends();
 signals:
     void firstNameChanged(const QString &name);
     void lastNameChanged(const QString &name);
@@ -179,6 +180,9 @@ protected:
 
     friend class Roster;
     friend class RosterPrivate;
+
+	Q_PRIVATE_SLOT(d_func(), void _q_friends_add_finished(const QVariant &response))
+	Q_PRIVATE_SLOT(d_func(), void _q_friends_delete_finished(const QVariant &response))
 };
 
 class GroupPrivate;

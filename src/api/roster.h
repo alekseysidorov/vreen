@@ -83,8 +83,6 @@ public slots:
     Reply *update(const BuddyList &buddies, const QStringList &fields = QStringList()
             << VK_ALL_FIELDS
             );
-	Reply *addToFriends(int uid, const QString &reason = QString());
-	Reply *removeFromFriends(int uid);
 	ReplyBase<FriendRequestList> *getFriendRequests(int count = 100, int offset = 0, FriendRequestFlags flags = NeedMessages);
 signals:
     void buddyAdded(Vreen::Buddy *buddy);
@@ -104,8 +102,6 @@ protected:
     Q_PRIVATE_SLOT(d_func(), void _q_friends_received(const QVariant &response))
     Q_PRIVATE_SLOT(d_func(), void _q_status_changed(int userId, Vreen::Contact::Status status))
     Q_PRIVATE_SLOT(d_func(), void _q_online_changed(bool))
-	Q_PRIVATE_SLOT(d_func(), void _q_friends_add_finished(const QVariant &response))
-	Q_PRIVATE_SLOT(d_func(), void _q_friends_delete_finished(const QVariant &response))
 };
 
 } // namespace Vreen

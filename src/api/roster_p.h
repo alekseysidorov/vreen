@@ -57,8 +57,6 @@ public:
     void _q_friends_received(const QVariant &response);
     void _q_status_changed(int userId, Vreen::Contact::Status status);
     void _q_online_changed(bool);
-	void _q_friends_add_finished(const QVariant &response);
-	void _q_friends_delete_finished(const QVariant &response);
 };
 
 } //namespace Vreen
