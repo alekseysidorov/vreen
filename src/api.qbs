@@ -27,6 +27,7 @@ Product {
         "K8JSON_INCLUDE_COMPLEX_GENERATOR"
     ]
     cpp.visibility: "hidden"
+    cpp.cxxFlags: []
 
     files: [
         "api/*.cpp",
@@ -37,12 +38,12 @@ Product {
     Depends { name: "k8json"}
 
     Properties {
-        condition: qbs.toolchain !== 'msvc'
-        cpp.cxxFlags: base.concat([ "-std=c++11" ])
+        condition: qbs.toolchain != 'msvc'
+        cpp.cxxFlags: outer.concat([ "-std=c++11" ])
     }
     Properties {
-        condition: qbs.targetOS === "mac"
-        cpp.cxxFlags: base.concat([ "-stdlib=libc++" ])
+        condition: qbs.targetOS == "mac"
+        cpp.cxxFlags: outer.concat([ "-stdlib=libc++" ])
     }
 
 
