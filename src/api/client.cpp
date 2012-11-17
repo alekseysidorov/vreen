@@ -422,17 +422,6 @@ void ClientPrivate::_q_network_manager_error(int)
 
 }
 
-QVariant MessageListHandler::operator ()(const QVariant &response)
-{
-	MessageList msgList;
-	auto list = response.toList();
-	if (list.count()) {
-		list.removeFirst(); //remove count
-		msgList = Message::fromVariantList(list, clientId);
-	}
-	return QVariant::fromValue(msgList);
-}
-
 } // namespace Vreen
 
 #include "moc_client.cpp"

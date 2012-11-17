@@ -25,6 +25,7 @@
 #include "reply_p.h"
 #include <QNetworkReply>
 #include "client.h"
+#include "message.h"
 
 namespace Vreen {
 
@@ -119,6 +120,18 @@ void ReplyPrivate::_q_network_reply_error(QNetworkReply::NetworkError code)
     error = code;
     emit q->error(Client::ErrorNetworkReply);
     emit q->resultReady(response);
+}
+
+
+QVariant MessageListHandler::operator()(const QVariant &response)
+{
+    MessageList msgList;
+    auto list = response.toList();
+    if (list.count()) {
+        list.removeFirst(); //remove count
+        msgList = Message::fromVariantList(list, clientId);
+    }
+    return QVariant::fromValue(msgList);
 }
 
 } // namespace Vreen

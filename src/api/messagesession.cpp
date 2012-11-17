@@ -64,7 +64,7 @@ void MessageSession::setTitle(const QString &title)
 ReplyBase<MessageList> *MessageSession::getHistory(int count, int offset)
 {
 	auto reply = doGetHistory(count, offset);
-	connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_history_received(QVariant)));
+    connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_history_received(QVariant)));
 	return reply;
 }
 

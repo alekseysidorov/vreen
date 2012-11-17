@@ -47,7 +47,6 @@ public:
     Buddy *addContact(int id);
     void removeContact(int id);
 
-    void _q_history_received(const QVariant &response);
     void _q_message_sent(const QVariant &response);
     void _q_info_received(const QVariant &response);
     void _q_participant_added(const QVariant &response);

@@ -66,6 +66,7 @@ ChatSession::ChatSession(Contact *contact) :
     connect(longPoll, SIGNAL(messageDeleted(int)),
             this, SIGNAL(messageDeleted(int)));
     connect(d->contact, SIGNAL(nameChanged(QString)), SLOT(setTitle(QString)));
+    setTitle(d->contact->name());
 }
 
 ChatSession::~ChatSession()

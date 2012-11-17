@@ -45,10 +45,6 @@ public:
     Contact *contact() const;
     bool isActive() const;
     void setActive(bool set);
-signals:
-    void messageAdded(const Vreen::Message &message);
-    void messageDeleted(int id);
-    void messageReadStateChanged(int mid, bool isRead);
 protected:
 	virtual ReplyBase<MessageList> *doGetHistory(int count = 16, int offset = 0);
     virtual SendMessageReply *doSendMessage(const Vreen::Message &message);
