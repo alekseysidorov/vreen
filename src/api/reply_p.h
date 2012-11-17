@@ -53,6 +53,14 @@ public:
 	static QVariant handleInt(const QVariant &response) { return response.toInt(); }
 };
 
+
+struct MessageListHandler {
+	MessageListHandler(int clientId) : clientId(clientId) {}
+	QVariant operator()(const QVariant &response);
+
+	int clientId;
+};
+
 } //namespace Vreen
 
 #endif // REPLY_P_H

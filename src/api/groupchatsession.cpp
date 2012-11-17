@@ -24,7 +24,7 @@
 ****************************************************************************/
 #include "groupchatsession.h"
 #include "messagesession_p.h"
-#include "client.h"
+#include "client_p.h"
 #include "reply_p.h"
 #include "roster.h"
 #include <QSet>
@@ -136,7 +136,7 @@ void GroupChatSession::setTitle(const QString &title)
     }
 }
 
-Reply *GroupChatSession::doGetHistory(int count, int offset)
+ReplyBase<MessageList> *GroupChatSession::doGetHistory(int count, int offset)
 {
     Q_D(GroupChatSession);
     QVariantMap args;
@@ -144,9 +144,10 @@ Reply *GroupChatSession::doGetHistory(int count, int offset)
     args.insert("offset", offset);
     args.insert("chat_id", d->uid);
 
-    auto reply = d->client->request("messages.getHistory", args);
-    connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_history_received(QVariant)));
-    return reply;
+	auto reply = d->client->request<ReplyBase<MessageList>>("messages.getHistory",
+																	  args,
+																	  MessageListHandler(d->client->id()));
+	return reply;
 }
 
 SendMessageReply *GroupChatSession::doSendMessage(const Message &message)
@@ -226,17 +227,6 @@ void GroupChatSession::leave()
 {
     if (isJoined())
         removeParticipant(d_func()->client->me());
-}
-
-void GroupChatSessionPrivate::_q_history_received(const QVariant &response)
-{
-    auto list = response.toList();
-    Q_UNUSED(list.takeFirst());
-    foreach (auto item, list) {
-        QVariantMap map = item.toMap();
-        Message message(map, client);
-        emit q_func()->messageAdded(message);
-    }
 }
 
 void GroupChatSessionPrivate::_q_info_received(const QVariant &response)

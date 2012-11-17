@@ -32,6 +32,10 @@
 
 namespace Vreen {
 
+QString unescape(QString source) {
+	return source;
+}
+
 class MessageData : public DynamicPropertyData
 {
 public:
@@ -114,7 +118,7 @@ public:
         date = QDateTime::fromTime_t(data.value("date").toInt());
         setFlag(Message::FlagUnread, !data.value("read_state").toBool());
         subject = data.value("title").toString();
-        body = data.value("body").toString();
+		body = data.value("body").toString();
         attachmentHash = Attachment::toHash(Attachment::fromVariantList(data.value("attachments").toList()));
         //TODO forward messages
         chatId = data.value("chat_id").toInt();
@@ -248,7 +252,7 @@ QString Message::body() const
 
 void Message::setBody(const QString &body)
 {
-    d->body = body;
+	d->body = body;
 }
 
 bool Message::isUnread() const

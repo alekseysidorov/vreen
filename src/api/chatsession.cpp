@@ -25,7 +25,7 @@
 #include "chatsession.h"
 #include "messagesession_p.h"
 #include "contact.h"
-#include "client.h"
+#include "client_p.h"
 #include "longpoll.h"
 #include <QStringBuilder>
 
@@ -42,7 +42,6 @@ public:
     Contact *contact;
     bool isActive;
 
-    void _q_history_received(const QVariant &);
     void _q_message_read_state_updated(const QVariant &);
     void _q_message_added(const Message &message);
 };
@@ -90,7 +89,7 @@ void ChatSession::setActive(bool set)
     d->isActive = set;
 }
 
-Reply *ChatSession::doGetHistory(int count, int offset)
+ReplyBase<MessageList> *ChatSession::doGetHistory(int count, int offset)
 {
     Q_D(ChatSession);
     QVariantMap args;
@@ -98,8 +97,9 @@ Reply *ChatSession::doGetHistory(int count, int offset)
     args.insert("offset", offset);
     args.insert("uid", d->contact->id());
 
-    auto reply = d->contact->client()->request("messages.getHistory", args);
-    connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_history_received(QVariant)));
+	auto reply = d->client->request<ReplyBase<MessageList>>("messages.getHistory",
+																	  args,
+																	  MessageListHandler(d->client->id()));
     return reply;
 }
 
@@ -107,17 +107,6 @@ SendMessageReply *ChatSession::doSendMessage(const Message &message)
 {
     Q_D(ChatSession);
     return d->contact->client()->sendMessage(message);
-}
-
-void ChatSessionPrivate::_q_history_received(const QVariant &response)
-{
-    auto list = response.toList();
-    Q_UNUSED(list.takeFirst());
-    foreach (auto item, list) {
-        QVariantMap map = item.toMap();
-        Message message(map, contact->client());
-        emit q_func()->messageAdded(message);
-    }
 }
 
 void ChatSessionPrivate::_q_message_read_state_updated(const QVariant &response)

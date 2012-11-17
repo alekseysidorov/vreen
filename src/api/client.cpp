@@ -349,7 +349,20 @@ void ClientPrivate::processReply(Reply *reply)
     Q_Q(Client);
     q->connect(reply, SIGNAL(resultReady(const QVariant &)), q, SLOT(_q_reply_finished(const QVariant &)));
     q->connect(reply, SIGNAL(error(int)), q, SLOT(_q_error_received(int)));
-    emit q->replyCreated(reply);
+	emit q->replyCreated(reply);
+}
+
+ReplyBase<MessageList> *ClientPrivate::getMessages(Client *client, const IdList &list, int previewLength)
+{
+	QVariantMap map;
+	if (list.count() == 1)
+		map.insert("mid", list.first());
+	else
+		map.insert("mids", join(list));
+	map.insert("preview_length", previewLength);
+	return client->request<ReplyBase<MessageList>>("messages.getById",
+												   map,
+												   MessageListHandler(client->id()));
 }
 
 void ClientPrivate::setOnlineUpdaterRunning(bool set)
@@ -407,6 +420,17 @@ void ClientPrivate::_q_reply_finished(const QVariant &)
 void ClientPrivate::_q_network_manager_error(int)
 {
 
+}
+
+QVariant MessageListHandler::operator ()(const QVariant &response)
+{
+	MessageList msgList;
+	auto list = response.toList();
+	if (list.count()) {
+		list.removeFirst(); //remove count
+		msgList = Message::fromVariantList(list, clientId);
+	}
+	return QVariant::fromValue(msgList);
 }
 
 } // namespace Vreen

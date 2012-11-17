@@ -64,9 +64,8 @@ signals:
 protected:
     void setTitle(const QString &title);
     virtual SendMessageReply *doSendMessage(const Vreen::Message &message);
-    virtual Reply *doGetHistory(int count = 16, int offset = 0);
+	virtual ReplyBase<MessageList> *doGetHistory(int count = 16, int offset = 0);
 private:
-    Q_PRIVATE_SLOT(d_func(), void _q_history_received(const QVariant &response))
     Q_PRIVATE_SLOT(d_func(), void _q_info_received(const QVariant &response))
     Q_PRIVATE_SLOT(d_func(), void _q_participant_added(const QVariant &response))
     Q_PRIVATE_SLOT(d_func(), void _q_participant_removed(const QVariant &response))

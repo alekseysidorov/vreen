@@ -26,7 +26,7 @@
 #define CLIENT_P_H
 
 #include "client.h"
-#include "reply.h"
+#include "reply_p.h"
 #include "connection.h"
 #include <QWeakPointer>
 #include "roster.h"
@@ -69,7 +69,11 @@ public:
     void _q_network_manager_error(int);
     void _q_activity_update_finished(const QVariant &);
     void _q_update_online();
+
     void processReply(Reply *reply);
+
+	//some orphaned methods
+	static ReplyBase<MessageList> *getMessages(Client *client, const IdList &list, int previewLength = 0);
 };
 
 } //namespace Vreen

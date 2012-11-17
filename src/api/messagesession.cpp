@@ -61,9 +61,11 @@ void MessageSession::setTitle(const QString &title)
     }
 }
 
-Reply *MessageSession::getHistory(int count, int offset)
+ReplyBase<MessageList> *MessageSession::getHistory(int count, int offset)
 {
-    return doGetHistory(count, offset);
+	auto reply = doGetHistory(count, offset);
+	connect(reply, SIGNAL(resultReady(QVariant)), SLOT(_q_history_received(QVariant)));
+	return reply;
 }
 
 SendMessageReply *MessageSession::sendMessage(const QString &body, const QString &subject)
@@ -92,6 +94,14 @@ Reply *MessageSession::markMessagesAsRead(IdList ids, bool set)
     reply->setProperty("mids", qVariantFromValue(ids));
     reply->setProperty("set", set);
     return reply;
+}
+
+void MessageSessionPrivate::_q_history_received(const QVariant &)
+{
+	Q_Q(MessageSession);
+	auto reply = static_cast<ReplyBase<MessageList>*>(q->sender());
+	foreach (auto message, reply->result())
+		emit q->messageAdded(message);
 }
 
 } // namespace Vreen

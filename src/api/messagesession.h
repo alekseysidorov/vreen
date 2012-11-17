@@ -50,7 +50,7 @@ public:
     int uid() const;
     QString title() const;
 public slots:
-    Reply *getHistory(int count = 16, int offset = 0);
+	ReplyBase<MessageList> *getHistory(int count = 16, int offset = 0);
     SendMessageReply *sendMessage(const QString &body, const QString &subject = QString());
     SendMessageReply *sendMessage(const Message &message);
     Reply *markMessagesAsRead(IdList ids, bool set = true);
@@ -62,8 +62,10 @@ signals:
     void titleChanged(const QString &title);
 protected:
     virtual SendMessageReply *doSendMessage(const Vreen::Message &message) = 0;
-    virtual Reply *doGetHistory(int count, int offset) = 0;
+	virtual ReplyBase<MessageList> *doGetHistory(int count, int offset) = 0;
     QScopedPointer<MessageSessionPrivate> d_ptr;
+private:
+	Q_PRIVATE_SLOT(d_func(), void _q_history_received(const QVariant &))
 };
 
 } // namespace Vreen

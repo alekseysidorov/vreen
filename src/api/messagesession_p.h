@@ -40,6 +40,8 @@ public:
     Client *client;
     int uid;
     QString title;
+
+	void _q_history_received(const QVariant &);
 };
 
 } //namespace Vreen
