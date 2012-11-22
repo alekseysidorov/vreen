@@ -1,6 +1,7 @@
 import qbs.base 1.0
+import "../qbs/VreenProduct.qbs" as VreenProduct
 
-Product {
+VreenProduct {
     name: "vreen"
 
     property string versionMajor:  0
@@ -27,7 +28,6 @@ Product {
         "K8JSON_INCLUDE_COMPLEX_GENERATOR"
     ]
     cpp.visibility: "hidden"
-    cpp.cxxFlags: []
 
     files: [
         "api/*.cpp",
@@ -36,16 +36,6 @@ Product {
     Depends { name: "cpp" }
     Depends { name: "Qt"; submodules: ["core", "network", "gui"] }
     Depends { name: "k8json"}
-
-    Properties {
-        condition: qbs.toolchain != 'msvc'
-        cpp.cxxFlags: outer.concat([ "-std=c++11" ])
-    }
-    Properties {
-        condition: qbs.targetOS == "mac"
-        cpp.cxxFlags: outer.concat([ "-stdlib=libc++" ])
-    }
-
 
     Group {
         qbs.installDir: "include/vreen/" + version + "/vreen/private"

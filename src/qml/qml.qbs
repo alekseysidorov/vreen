@@ -1,6 +1,7 @@
 import qbs.base 1.0
+import "../../qbs/VreenProduct.qbs" as VreenProduct
 
-Product {
+VreenProduct {
     name: "vreenplugin"
     type: ["dynamiclibrary", "installed_content"]
 
@@ -13,15 +14,10 @@ Product {
 
     destination: __destination()
 
-    cpp.cxxFlags: {
-        var flags = []
-        if (qbs.toolchain !== "msvc")
-            flags.push("-std=c++0x")
-        return flags
-    }
     cpp.includePaths: [
         "src"
     ]
+    cpp.defines: []
 
     files: [
         "src/audiomodel.cpp",       "src/buddymodel.h",
@@ -45,7 +41,7 @@ Product {
 
     Properties {
         condition: true
-        cpp.defines: base.concat("VREEN_WITH_OAUTH")
+        cpp.defines: outer.concat("VREEN_WITH_OAUTH")
     }
 
     Group {
