@@ -103,14 +103,14 @@ AudioItemListReply *AudioProvider::getContactAudio(int uid, int count, int offse
  * \param offset
  * \return reply
  **/
-AudioItemListReply *AudioProvider::searchAudio(const QString& query, bool autoComplete, Vreen::AudioProvider::SortOrder sort, bool lyrics, int count, int offset)
+AudioItemListReply *AudioProvider::searchAudio(const QString& query, bool autoComplete, Vreen::AudioProvider::SortOrder sort, bool withLyrics, int count, int offset)
 {
     Q_D(AudioProvider);
     QVariantMap args;
     args.insert("q", query);
     args.insert("auto_complete", autoComplete);
     args.insert("sort", static_cast<int>(sort));
-    args.insert("lyrics", lyrics);
+    args.insert("lyrics", withLyrics);
     args.insert("count", count);
     args.insert("offset", offset);
 
