@@ -39,7 +39,7 @@ class AudioItemData;
 class VK_SHARED_EXPORT AudioItem
 {
 public:
-	AudioItem();
+    AudioItem();
     AudioItem(const AudioItem &);
     AudioItem &operator=(const AudioItem &);
     ~AudioItem();

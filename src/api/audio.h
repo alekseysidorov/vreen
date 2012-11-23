@@ -44,9 +44,9 @@ class VK_SHARED_EXPORT AudioProvider : public QObject
 public:
     
     enum SortOrder {
-      SortByDate = 0,
-      SortByDuration,
-      SortByPopularity
+        SortByDate = 0,
+        SortByDuration,
+        SortByPopularity
     };
     
     AudioProvider(Client *client);

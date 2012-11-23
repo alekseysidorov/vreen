@@ -39,27 +39,27 @@ public:
     AudioProvider *q_ptr;
     Client *client;
 
-	static QVariant handleAudio(const QVariant &response) {
-		AudioItemList items;
-		auto list = response.toList();
-		if (list.count() && list.first().canConvert<int>())
-			list.removeFirst(); //HACK For stupid API(((
+    static QVariant handleAudio(const QVariant &response) {
+        AudioItemList items;
+        auto list = response.toList();
+        if (list.count() && list.first().canConvert<int>())
+            list.removeFirst(); //HACK For stupid API(((
 
-		foreach (auto item, list) {
-			auto map = item.toMap();
-			AudioItem audio;
-			audio.setId(map.value("aid").toInt());
-			audio.setOwnerId(map.value("owner_id").toInt());
-			audio.setArtist(map.value("artist").toString());
-			audio.setTitle(map.value("title").toString());
-			audio.setDuration(map.value("duration").toReal());
-			audio.setAlbumId(map.value("album").toInt());
-			audio.setLyricsId(map.value("lyrics_id").toInt());
-			audio.setUrl(map.value("url").toUrl());
-			items.append(audio);
-		}
-		return QVariant::fromValue(items);
-	}
+        foreach (auto item, list) {
+            auto map = item.toMap();
+            AudioItem audio;
+            audio.setId(map.value("aid").toInt());
+            audio.setOwnerId(map.value("owner_id").toInt());
+            audio.setArtist(map.value("artist").toString());
+            audio.setTitle(map.value("title").toString());
+            audio.setDuration(map.value("duration").toReal());
+            audio.setAlbumId(map.value("album").toInt());
+            audio.setLyricsId(map.value("lyrics_id").toInt());
+            audio.setUrl(map.value("url").toUrl());
+            items.append(audio);
+        }
+        return QVariant::fromValue(items);
+    }
 };
 
 AudioProvider::AudioProvider(Client *client) :

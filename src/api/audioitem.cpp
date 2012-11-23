@@ -31,7 +31,7 @@ namespace Vreen {
 
 class AudioItemData : public QSharedData {
 public:
-	AudioItemData() :
+    AudioItemData() :
         id(0), ownerId(0),
         duration(0),
         lyricsId(0),
