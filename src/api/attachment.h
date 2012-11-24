@@ -83,6 +83,10 @@ public:
     { return QVariant::fromValue<T>(property(name, QVariant::fromValue(def))); }
     void setProperty(const QString &name, const QVariant &value);
     QStringList dynamicPropertyNames() const;
+    template <typename T>
+    static T to(const Attachment &attachment);
+    template <typename T>
+    static Attachment from(const T &item);
 protected:
     Attachment(const QVariantMap &data);
     Attachment(const QString &string);

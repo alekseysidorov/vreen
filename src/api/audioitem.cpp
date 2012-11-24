@@ -29,6 +29,19 @@
 
 namespace Vreen {
 
+template<>
+AudioItem Attachment::to(const Attachment &data)
+{
+    AudioItem item;
+    item.setId(data.property("aid").toInt());
+    item.setOwnerId(data.property("owner_id").toInt());
+    item.setArtist(data.property("performer").toString());
+    item.setTitle(data.property("title").toString());
+    item.setUrl(data.property("url").toUrl());
+    item.setDuration(data.property("duration").toDouble());
+    return item;
+}
+
 class AudioItemData : public QSharedData {
 public:
     AudioItemData() :

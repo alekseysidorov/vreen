@@ -26,7 +26,7 @@
 #define VK_AUDIOITEM_H
 
 #include <QSharedDataPointer>
-#include "vk_global.h"
+#include "attachment.h"
 #include <QVariant>
 
 class QUrl;
@@ -66,6 +66,9 @@ private:
     QSharedDataPointer<AudioItemData> data;
 };
 typedef QList<AudioItem> AudioItemList;
+
+template<>
+AudioItem Attachment::to(const Attachment &data);
 
 } // namespace Vreen
 
