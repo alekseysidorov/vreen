@@ -252,6 +252,7 @@ void OAuthConnection::setScopes(OAuthConnection::Scopes scopes)
     Q_D(OAuthConnection);
     if( d->scope != scopes ) {
         d->scope = scopes;
+        emit scopesChanged(scopes);
     }
 }
 

@@ -42,7 +42,7 @@ class OAuthConnection : public Connection
     Q_FLAGS(Scopes)
     Q_PROPERTY(int clientId READ clientId WRITE setClientId NOTIFY clientIdChanged)
     Q_PROPERTY(DisplayType displayType READ displayType WRITE setDisplayType)
-    Q_PROPERTY(Scopes scopes READ scopes WRITE setScopes)
+    Q_PROPERTY(Scopes scopes READ scopes WRITE setScopes NOTIFY scopesChanged)
 public:
     enum DisplayType {
         Page,
@@ -97,6 +97,7 @@ signals:
     void authConfirmRequested(QWebPage *page);
     void accessTokenChanged(const QByteArray &token, time_t expiresIn);
     void clientIdChanged(int clientId);
+    void scopesChanged(Vreen::OAuthConnection::Scopes scopes);
 protected:
 	QNetworkRequest makeRequest(const QString &method, const QVariantMap &args = QVariantMap());
     void decorateRequest(QNetworkRequest &);
