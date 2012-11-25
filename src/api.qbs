@@ -33,6 +33,11 @@ VreenProduct {
         "api/*.cpp",
     ]
 
+    Properties {
+        condition: qt.core.versionMajor === 5
+        cpp.defines: outer.concat("QT_DISABLE_DEPRECATED_BEFORE=0")
+    }
+
     Depends { name: "cpp" }
     Depends { name: "Qt"; submodules: ["core", "network", "gui"] }
     Depends { name: "k8json"}
@@ -46,8 +51,7 @@ VreenProduct {
             "api/draft/*_p.h",
             "api/draft/*.h"
         ]        
-    }
-    
+    }    
     Group {
         qbs.installDir: "include/vreen"
         fileTags: ["install"]
@@ -56,6 +60,8 @@ VreenProduct {
             "api/*[^_][a-z].h",
         ]
     }
+
+
     ProductModule {
         Depends { name: "cpp" }
         cpp.includePaths: [

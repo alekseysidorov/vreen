@@ -7,6 +7,7 @@ VreenProduct {
     destination: "lib"
 
     //cpp.warningLevel: "all"
+    cpp.defines: []
 
     Depends { name: "cpp" }
     Depends { name: "qt"; submodules: ['core', 'network', 'webkit'] }
@@ -21,6 +22,10 @@ VreenProduct {
         overrideTags: false
         fileTags: ["install"]
         files: ["*.h"]
+    }
+    Properties {
+        condition: qt.core.versionMajor === 5
+        cpp.defines: outer.concat("QT_DISABLE_DEPRECATED_BEFORE=0")
     }
 
     ProductModule {

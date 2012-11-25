@@ -43,6 +43,10 @@ VreenProduct {
         condition: true
         cpp.defines: outer.concat("VREEN_WITH_OAUTH")
     }
+    Properties {
+        condition: qt.core.versionMajor === 5
+        cpp.defines: outer.concat("QT_DISABLE_DEPRECATED_BEFORE=0")
+    }
 
     Group {
         qbs.installDir: __destination()

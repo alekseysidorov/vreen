@@ -37,7 +37,7 @@
 #include <QDebug>
 #include <QWebElement>
 #include <QWebView>
-#include <QApplication>
+#include <QCoreApplication>
 
 #include <QSettings>
 

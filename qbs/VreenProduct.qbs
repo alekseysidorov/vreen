@@ -3,8 +3,10 @@ import qbs.base 1.0
 Product {
 
     cpp.cxxFlags: []
+    cpp.defines: []
 
     Depends { name: "cpp" }
+    Depends { name: "qt.core"}
 
     Properties {
         condition: qbs.toolchain != 'msvc'

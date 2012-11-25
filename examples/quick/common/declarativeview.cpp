@@ -23,7 +23,6 @@
 **
 ****************************************************************************/
 #include "declarativeview.h"
-#include <QDeclarativeContext>
 #include <QDir>
 #include <QFileInfo>
 #include <QCoreApplication>
@@ -56,8 +55,8 @@ QString adjustPath(const QString &source)
 
 } //namespace
 
-DeclarativeView::DeclarativeView(QWidget *parent) :
-    QDeclarativeView(parent)
+DeclarativeView::DeclarativeView(QWindow *parent) :
+    QQuickView(parent)
 {
     //auto client = new Vreen::Client(this);
     //auto con = new Vreen::OAuthConnection(1865463, client); //qutIM id
