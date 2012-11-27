@@ -4,7 +4,8 @@ Project {
     moduleSearchPaths: "qbs/modules"
 
     references: [
-        "quick/dialogs/dialogs.qbs"
+        "quick/dialogs/dialogs.qbs",
+        "quick/audio/audio.qbs"
     ]
 }
 

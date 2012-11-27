@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import com.vk.api 1.0
+import QtMultimedia 5.0
 
 Rectangle {
     id: root
@@ -18,26 +19,35 @@ Rectangle {
         textFormat: TextEdit.RichText
     }
 
-    DialogsModel {
-        id: dialogsModel
-        client: client
+    Audio {
+        id: player
+    }
+
+    AudioModel {
+        id: audioModel
+
+        onOwnerChanged: {
+            owner.update();
+            getAudio();
+        }
+
+        owner: client.me
     }
 
     Client {
         id: client
-        connection: conn
-    }
 
-    OAuthConnection {
-        id: conn
+        OAuthConnection {
+            id: conn
 
-        Component.onCompleted: {
-            setConnectionOption(Connection.ShowAuthDialog, true);
-            setConnectionOption(Connection.KeepAuthData, true);
+            Component.onCompleted: {
+                setConnectionOption(Connection.ShowAuthDialog, true);
+                setConnectionOption(Connection.KeepAuthData, true);
+            }
+
+            clientId: 3220807
+            displayType: OAuthConnection.Popup
         }
-
-        clientId: 3220807
-        displayType: OAuthConnection.Popup
     }
 
     ListView {
@@ -45,12 +55,12 @@ Rectangle {
 
         anchors.fill: parent
         scale: 0
-        model: dialogsModel
+        model: audioModel
 
         header: Text {
             width: parent.width
             height: 50
-            text: qsTr("Last dialogs")
+            text: qsTr("%1 latest audio").arg(client.me ? client.me.name : qsTr("Unknown"))
             font.bold: true
             font.pixelSize: login.font.pixelSize * 1.1
             horizontalAlignment: Qt.AlignHCenter
@@ -60,24 +70,15 @@ Rectangle {
         delegate: Rectangle {
             id: item
 
-            property QtObject contact: incoming ? from : to;
-
-            Component.onCompleted: {
-                from.update();
-                to.update();
-            }
-
             width: parent.width
-            height: 120
+            height: 90
             color: index % 2 ? syspal.alternateBase : "transparent"
 
             Image {
                 id: preview
 
-                width: 75
-                height: Math.min(sourceSize.height, 75)
+                source: "images/media-optical-audio.png"
 
-                source: contact.photoSource
                 fillMode: Image.PreserveAspectFit
                 clip: true
                 smooth: true
@@ -86,6 +87,14 @@ Rectangle {
                     left: parent.left
                     leftMargin: 5
                     top: column.top
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        player.source = url;
+                        player.play();
+                    }
                 }
             }
 
@@ -108,7 +117,7 @@ Rectangle {
                     id: titleLabel
                     width: parent.width
                     font.bold: true
-                    text: qsTr("%1 ➜ %2 %3").arg(from.name).arg(to.name).arg(chatId ? qsTr("(from chat)") : "")
+                    text: artist
                     elide: Text.ElideRight
                     wrapMode: Text.Wrap
                     maximumLineCount: 1
@@ -116,10 +125,18 @@ Rectangle {
                 Text {
                     id: descriptionLabel
                     width: parent.width
-                    text: body
+                    text: title
                     elide: Text.ElideRight
                     wrapMode: Text.Wrap
-                    maximumLineCount: 3
+                    maximumLineCount: 2
+                }
+                Text {
+                    id: urlLabel
+                    width: parent.width
+                    text: url
+                    elide: Text.ElideRight
+                    wrapMode: Text.Wrap
+                    maximumLineCount: 1
                 }
             }
 
@@ -134,14 +151,7 @@ Rectangle {
                     bottomMargin: 3
                     left: column.left
                 }
-                text: {
-                    var info = Qt.formatDateTime(date, qsTr("dddd in hh:mm"));
-                    if (unread)
-                        info += qsTr(", unread");
-                    if (Object.keys(attachments).length > 0)
-                        info += qsTr(", has attachments")
-                    return info;
-                }
+                text: qsTr("duration %2").arg(duration)
             }
 
             Rectangle {
@@ -160,17 +170,6 @@ Rectangle {
 
     SystemPalette {
         id: syspal
-    }
-
-    Connections {
-        target: client
-
-        onOnlineChanged: {
-            if (client.online) {
-                client.roster.sync();
-                dialogsModel.getDialogs(0, 10, 160);
-            }
-        }
     }
 
     states: [
