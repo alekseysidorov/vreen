@@ -309,6 +309,20 @@ void Client::setInvisible(bool set)
     }
 }
 
+bool Client::trackMessages() const
+{
+    return d_func()->trackMessages;
+}
+
+void Client::setTrackMessages(bool set)
+{
+    Q_D(Client);
+    if( d->trackMessages != set ) {
+        d->trackMessages = set;
+        emit trackMessagesChanged(set);
+    }
+}
+
 Reply *Client::setStatus(const QString &text, int aid)
 {
     QVariantMap args;
