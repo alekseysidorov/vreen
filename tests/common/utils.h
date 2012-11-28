@@ -25,17 +25,25 @@
 #ifndef UTILS_H
 #define UTILS_H
 #include "client.h"
+#include "oauthconnection.h"
 #include <QTest>
+#include <QCoreApplication>
 
 inline QString getVariable(const char *name)
 {
     return qgetenv(name);
 }
 
+#define VREEN_TEST_PREPARE() \
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8")); \
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8")); \
+    qApp->setApplicationName("test"); \
+    qApp->setOrganizationName("vreen"); \
+
 #define VREEN_ADD_LOGIN_VARS() \
     QTest::addColumn<QString>("login"); \
     QTest::addColumn<QString>("password"); \
-    QTest::newRow("From enviroment variables VK_LOGIN and VK_PASSWORD") \
+    QTest::newRow("Env") \
     << getVariable("VREEN_LOGIN") \
     << getVariable("VREEN_PASSWORD");
 
@@ -44,13 +52,16 @@ inline QString getVariable(const char *name)
 #define VREEN_CREATE_CLIENT() \
     QFETCH(QString, login); \
     QFETCH(QString, password); \
-	Vreen::Client client(login, password); \
+    Vreen::Client client(login, password); \
+    auto connection = new Vreen::OAuthConnection(3220807, this); \
+    connection->setConnectionOption(Vreen::Connection::ShowAuthDialog, true); \
+    connection->setConnectionOption(Vreen::Connection::KeepAuthData, true); \
+    client.setConnection(connection); \
     QEventLoop loop; \
     connect(&client, SIGNAL(onlineStateChanged(bool)), &loop, SLOT(quit())); \
     connect(&client, SIGNAL(error(Vreen::Client::Error)), &loop, SLOT(quit())); \
-    if (login.isEmpty() || password.isEmpty()) \
-        QSKIP("Please set VREEN_LOGIN and VREEN_PASSWORD environment variables", SkipAll); \
     client.connectToHost(); \
+    if (!client.isOnline()) \
     loop.exec();
 
 #endif // UTILS_H

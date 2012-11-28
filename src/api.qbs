@@ -64,6 +64,8 @@ VreenProduct {
 
     ProductModule {
         Depends { name: "cpp" }
+        Depends { name: "Qt"; submodules: ["core", "network", "gui"] }
+
         cpp.includePaths: [
             product.buildDirectory + "/include",
             product.buildDirectory + "/include/vreen",

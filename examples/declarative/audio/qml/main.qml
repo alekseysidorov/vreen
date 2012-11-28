@@ -20,17 +20,18 @@ Rectangle {
 
     AudioModel {
         id: audioModel
-
-        onOwnerChanged: {
-            owner.update();
-            getAudio();
-        }
-
-        owner: client.me
+        client: client
     }
 
     Client {
         id: client
+
+        onOnlineChanged: {
+            if (online) {
+                owner.update();
+                getAudio(client.me);
+            }
+        }
 
         OAuthConnection {
             id: conn

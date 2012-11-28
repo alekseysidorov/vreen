@@ -44,6 +44,7 @@ if(VREEN_WITH_EXAMPLES)
     add_subdirectory(examples)
 endif()
 if(VREEN_WITH_TESTS)
+    enable_testing()
     add_subdirectory(tests)
 endif()
 

@@ -32,10 +32,6 @@
 
 namespace Vreen {
 
-QString unescape(QString source) {
-	return source;
-}
-
 class MessageData : public DynamicPropertyData
 {
 public:

@@ -21,21 +21,38 @@ Rectangle {
 
     Audio {
         id: player
+
+        onStatusChanged: {
+            switch (status) {
+            case Audio.Stalled:
+                break
+            case Audio.Buffered:
+                break
+            case Audio.EndOfMedia:
+                if (audioView.playingIndex === audioModel.count - 1)
+                    audioView.playingIndex = 0
+                else
+                    audioView.playingIndex++;
+            }
+        }
+
+        volume: 0.5
     }
 
     AudioModel {
         id: audioModel
-
-        onOwnerChanged: {
-            owner.update();
-            getAudio();
-        }
-
-        owner: client.me
+        client: client
     }
 
     Client {
         id: client
+
+        onMeChanged: {
+            if (online) {
+                client.me.update();
+                audioModel.getAudio(client.me);
+            }
+        }
 
         OAuthConnection {
             id: conn
@@ -51,7 +68,22 @@ Rectangle {
     }
 
     ListView {
-        id: dialogsView
+        id: audioView
+
+        property int playingIndex: -1
+
+        function play(index) {
+            player.stop();
+            player.source = audioModel.get(index, "url");
+            player.play();
+        }
+
+        onPlayingIndexChanged: {
+            if (playingIndex === -1)
+                player.pause();
+            else
+                play(playingIndex);
+        }
 
         anchors.fill: parent
         scale: 0
@@ -71,7 +103,7 @@ Rectangle {
             id: item
 
             width: parent.width
-            height: 90
+            height: 80
             color: index % 2 ? syspal.alternateBase : "transparent"
 
             Image {
@@ -91,10 +123,7 @@ Rectangle {
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: {
-                        player.source = url;
-                        player.play();
-                    }
+                    onClicked: audioView.playingIndex = index;
                 }
             }
 
@@ -128,30 +157,48 @@ Rectangle {
                     text: title
                     elide: Text.ElideRight
                     wrapMode: Text.Wrap
-                    maximumLineCount: 2
+                    maximumLineCount: 1
                 }
+
                 Text {
-                    id: urlLabel
+                    id: durationLabel
+
+                    color: syspal.dark
+                    font.pixelSize: login.font.pixelSize * 0.8
                     width: parent.width
-                    text: url
-                    elide: Text.ElideRight
                     wrapMode: Text.Wrap
                     maximumLineCount: 1
+
+                    text: qsTr("Duration %2").arg((duration / 60).toFixed(2))
                 }
             }
 
-            Text {
-                id: dateLabel
+            Rectangle {
+                id: background
+                color: "black"
 
-                color: syspal.dark
-                font.pixelSize: login.font.pixelSize * 0.8
+                opacity: index === audioView.playingIndex ? 0.15 : 0
+
+                height: 6
+                radius: 6
 
                 anchors {
                     bottom: hr.top
-                    bottomMargin: 3
+                    bottomMargin: 6
                     left: column.left
+                    right: column.right
                 }
-                text: qsTr("duration %2").arg(duration)
+
+                Rectangle {
+                    id: progress
+
+                    property real percentState: player.position / (duration * 1000)
+
+                    color: "black"
+                    height: parent.height
+
+                    width: parent.width * percentState
+                }
             }
 
             Rectangle {
@@ -181,7 +228,7 @@ Rectangle {
                 scale: 0
             }
             PropertyChanges {
-                target: dialogsView
+                target: audioView
                 scale: 1
             }
         }
@@ -190,7 +237,7 @@ Rectangle {
         Transition {
             from: "*"
             to: "online"
-            NumberAnimation { target: dialogsView; property: "scale"; duration: 400; easing.type: Easing.InOutQuad }
+            NumberAnimation { target: audioView; property: "scale"; duration: 400; easing.type: Easing.InOutQuad }
             NumberAnimation { target: login; property: "scale"; duration: 400; easing.type: Easing.InOutQuad }
         }
     ]

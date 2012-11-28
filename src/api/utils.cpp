@@ -24,6 +24,7 @@
 ****************************************************************************/
 #include "utils.h"
 #include <QStringBuilder>
+#include <QTextDocument>
 
 namespace Vreen {
 
@@ -49,6 +50,13 @@ QString toCamelCase(QString string)
         string.replace(index, 1, letter.toUpper());
     }
     return string;
+}
+
+QString unescape(const QString &source) {
+    //Simple hack from slashdot
+    QTextDocument text;
+    text.setHtml(source);
+    return text.toPlainText();
 }
 
 } //namespace Vreen

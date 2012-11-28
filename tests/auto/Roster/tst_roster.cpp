@@ -39,7 +39,7 @@ class RosterTest : public QObject
 public:
     RosterTest()
     {
-
+        VREEN_TEST_PREPARE();
     }
     
 private Q_SLOTS:

@@ -23,7 +23,8 @@
 **
 ****************************************************************************/
 #include "audio.h"
-#include <client.h>
+#include "client.h"
+#include "utils.h"
 #include <QUrl>
 #include <QCoreApplication>
 #include <QDebug>
@@ -50,8 +51,8 @@ public:
             AudioItem audio;
             audio.setId(map.value("aid").toInt());
             audio.setOwnerId(map.value("owner_id").toInt());
-            audio.setArtist(map.value("artist").toString());
-            audio.setTitle(map.value("title").toString());
+            audio.setArtist(unescape(map.value("artist").toString()));
+            audio.setTitle(unescape(map.value("title").toString()));
             audio.setDuration(map.value("duration").toReal());
             audio.setAlbumId(map.value("album").toInt());
             audio.setLyricsId(map.value("lyrics_id").toInt());

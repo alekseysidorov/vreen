@@ -33,6 +33,11 @@
 class LongPollTest : public QObject
 {
     Q_OBJECT
+public:
+    LongPollTest()
+    {
+        VREEN_TEST_PREPARE();
+    }
 private slots:
     void testUpdates_data()
     {
@@ -43,7 +48,8 @@ private slots:
     {
         VREEN_CREATE_CLIENT();
 
-        Vreen::LongPoll poll(&client);
+        client.longPoll()->setRunning(true);
+        connect(client.longPoll(), SIGNAL(contactStatusChanged(int,Vreen::Contact::Status)), &loop, SLOT(quit()));
         loop.exec();
     }
 };

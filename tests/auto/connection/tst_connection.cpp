@@ -34,36 +34,12 @@
 class ConnectionTest: public QObject
 {
     Q_OBJECT
+public:
+    ConnectionTest()
+    {
+        VREEN_TEST_PREPARE();
+    }
 private slots:
-    void testDirectConnection_data()
-    {
-        VREEN_ADD_LOGIN_VARS();
-    }
-
-    void testDirectConnection()
-    {
-        VREEN_CREATE_CLIENT();
-
-        QCOMPARE(client.isOnline(), true);
-    }
-
-    void testDirectConnectionWrongData_data()
-    {
-        QTest::addColumn<QString>("login");
-        QTest::addColumn<QString>("password");
-
-        QTest::newRow("Wrong data")
-                << QString("Foo")
-                << QString("bar");
-    }
-
-    void testDirectConnectionWrongData()
-    {
-        VREEN_CREATE_CLIENT();
-
-        QCOMPARE(client.isOnline(), false);
-    }
-
     void testRequest_data()
     {
         VREEN_ADD_LOGIN_VARS();
