@@ -28,6 +28,19 @@
 
 namespace Vreen {
 
+QDataStream &operator <<(QDataStream &out, const Vreen::Attachment &item)
+{
+    return out << item.data();
+}
+
+QDataStream &operator >>(QDataStream &out, Vreen::Attachment &item)
+{
+    QVariantMap data;
+    out >> data;
+    item.setData(data);
+    return out;
+}
+
 const static QStringList types = QStringList()
         << "photo"
         << "posted_photo"

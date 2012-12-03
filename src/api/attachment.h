@@ -87,6 +87,9 @@ public:
     static T to(const Attachment &attachment);
     template <typename T>
     static Attachment from(const T &item);
+
+    friend QDataStream &operator <<(QDataStream &out, const Vreen::Attachment &item);
+    friend QDataStream &operator >>(QDataStream &out, Vreen::Attachment &item);
 protected:
     Attachment(const QVariantMap &data);
     Attachment(const QString &string);
@@ -99,6 +102,8 @@ private:
 Q_DECLARE_METATYPE(Vreen::Attachment)
 Q_DECLARE_METATYPE(Vreen::Attachment::List)
 Q_DECLARE_METATYPE(Vreen::Attachment::Hash)
+Q_DECLARE_METATYPE(Vreen::Attachment::Type)
+
 
 #endif // VK_ATTACHMENT_H
 

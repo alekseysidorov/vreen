@@ -45,6 +45,27 @@ public:
     Attachment::Hash attachmentHash;
 };
 
+QDataStream &operator <<(QDataStream &out, const NewsItem &item)
+{
+    auto &d = item.d;
+    return out << d->data
+               << d->likes
+               << d->reposts
+               << d->attachmentHash.values();
+}
+
+QDataStream &operator >>(QDataStream &out, NewsItem &item)
+{
+    auto &d = item.d;
+    Attachment::List list;
+    out >> d->data
+               >> d->likes
+               >> d->reposts
+               >> list;
+    d->attachmentHash = Attachment::toHash(list);
+    return out;
+}
+
 const static QStringList types = QStringList()
         << "post"
         << "photo"
