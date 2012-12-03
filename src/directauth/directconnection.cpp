@@ -2,7 +2,7 @@
 **
 ** Vreen - vk.com API Qt bindings
 **
-** Copyright © 1024 + 4096 + 8192 //FIXME в нормальный вид привести
+** Copyright © 2012 Aleksey Sidorov <gorthauer87@ya.ru>
 **
 *****************************************************************************
 **
@@ -50,7 +50,7 @@ static const LoginVars loginVars = {
     VREEN_DIRECTAUTH_CLIENT_ID,
     VREEN_DIRECTAUTH_CLIENT_SECRET,
     VREEN_DIRECTAUTH_CLIENT_NAME,
-    2 + 4 + 8 + 16 + 1024 + 4096 + 8192 //FIXME в нормальный вид привести
+    2 + 4 + 8 + 16 + 1024 + 4096 + 8192 //FIXME use enum
 
 };
 
