@@ -2,8 +2,8 @@ import qbs.base 1.0
 
 Product {
 
-    cpp.cxxFlags: []
-    cpp.defines: []
+    cpp.cxxFlags: base
+    cpp.defines: base
 
     Depends { name: "cpp" }
     Depends { name: "qt.core"}
