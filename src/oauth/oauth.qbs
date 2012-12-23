@@ -10,7 +10,7 @@ VreenProduct {
     cpp.defines: []
 
     Depends { name: "cpp" }
-    Depends { name: "qt"; submodules: ['core', 'network', 'webkit'] }
+    Depends { name: "qt"; submodules: ['core', 'network', 'webkit', 'webkitWidgets'] }
     Depends { name: "vreen"; }
 
     files: [
@@ -31,6 +31,7 @@ VreenProduct {
     ProductModule {
         Depends { name: "cpp" }
         Depends { name: "qt.webkit"}
+        Depends { name: "qt.webkitwidgets"}
     }
 }
 
