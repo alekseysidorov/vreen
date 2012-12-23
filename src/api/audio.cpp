@@ -32,28 +32,6 @@
 
 namespace Vreen {
 
-template <typename T>
-struct IdComparator
-{
-    bool operator() (const T &a, const T &b) const
-    {
-        return sortOrder == Qt::AscendingOrder ? a.id() < b.id()
-                                               : a.id() > b.id();
-    }
-    bool operator() (const T &a, int id) const
-    {
-        return sortOrder == Qt::AscendingOrder ? a.id() < id
-                                               : a.id() > id;
-    }
-    bool operator() (int id, const T &b) const
-    {
-        return sortOrder == Qt::AscendingOrder ? id < b.id()
-                                               : id > b.id();
-    }
-
-    Qt::SortOrder sortOrder;
-};
-
 class AudioProvider;
 class AudioProviderPrivate
 {

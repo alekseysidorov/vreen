@@ -33,28 +33,18 @@
 
 namespace Vreen {
 
-static bool lessThanId(const Message &a, const Message &b)
-{
-    return a.id() < b.id();
-}
-
-static bool moreThanId(const Message &a, const Message &b)
-{
-    return a.id() > b.id();
-}
-
 class MessageListModel;
 class MessageListModelPrivate
 {
     Q_DECLARE_PUBLIC(MessageListModel)
 public:
     MessageListModelPrivate(MessageListModel *q) : q_ptr(q),
-        sortOrder(Qt::DescendingOrder) {}
+        messageComparator(Qt::DescendingOrder) {}
     MessageListModel *q_ptr;
     QPointer<Client> client;
 
     MessageList messageList;
-    Qt::SortOrder sortOrder;
+    IdComparator<Message> messageComparator;
 };
 
 
@@ -143,16 +133,15 @@ int MessageListModel::rowCount(const QModelIndex &) const
 void MessageListModel::setSortOrder(Qt::SortOrder order)
 {
     Q_D(MessageListModel);
-    if (d->sortOrder != order) {
+    if (d->messageComparator.sortOrder != order) {
         sort(0, order);
-        d->sortOrder = order;
         emit sortOrderChanged(order);
     }
 }
 
 Qt::SortOrder MessageListModel::sortOrder() const
 {
-    return d_func()->sortOrder;
+    return d_func()->messageComparator.sortOrder;
 }
 
 void MessageListModel::setClient(Client *client)
@@ -183,8 +172,7 @@ void MessageListModel::addMessage(const Message &message)
     if (index != -1)
         return;
 
-    index = lowerBound(d->messageList, message, d->sortOrder == Qt::AscendingOrder ? lessThanId
-                                                                                   : moreThanId);
+    index = lowerBound(d->messageList, message, d->messageComparator);
     doInsertMessage(index, message);
 }
 
@@ -248,10 +236,8 @@ void MessageListModel::sort(int column, Qt::SortOrder order)
 {
     Q_D(MessageListModel);
     Q_UNUSED(column);
-    if (order == Qt::AscendingOrder)
-        qStableSort(d->messageList.begin(), d->messageList.end(), lessThanId);
-    else
-        qStableSort(d->messageList.begin(), d->messageList.end(), moreThanId);
+    d->messageComparator.sortOrder = order;
+    qStableSort(d->messageList.begin(), d->messageList.end(), d->messageComparator);
     emit dataChanged(createIndex(0, 0), createIndex(d->messageList.count(), 0));
 }
 

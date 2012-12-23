@@ -88,6 +88,33 @@ int lowerBound(Container container, const T &value, LessThan lessThan)
     return index;
 }
 
+template <typename T>
+struct IdComparator
+{
+    IdComparator(Qt::SortOrder order = Qt::AscendingOrder) :
+        sortOrder(order)
+    {
+
+    }
+    bool operator() (const T &a, const T &b) const
+    {
+        return sortOrder == Qt::AscendingOrder ? a.id() < b.id()
+                                               : a.id() > b.id();
+    }
+    bool operator() (const T &a, int id) const
+    {
+        return sortOrder == Qt::AscendingOrder ? a.id() < id
+                                               : a.id() > id;
+    }
+    bool operator() (int id, const T &b) const
+    {
+        return sortOrder == Qt::AscendingOrder ? id < b.id()
+                                               : id > b.id();
+    }
+
+    Qt::SortOrder sortOrder;
+};
+
 } //namespace Vreen
 
 #endif // UTILS_H
