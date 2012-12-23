@@ -22,6 +22,7 @@ option(VREEN_WITH_QMLAPI "Enable QtQuick bindings for vreen" ON)
 option(VREEN_WITH_EXAMPLES "Enable vreen tests" ON)
 option(VREEN_WITH_TESTS "Enable vreen examples" ON)
 option(VREEN_INSTALL_HEADERS "Install devel headers for vreen" ON)
+option(VREEN_DEVELOPER_BUILD "Install devel headers for vreen" OFF)
 
 #TODO check if vars is defined
 set(RLIBDIR bin)

@@ -95,6 +95,7 @@ signals:
 protected:
     void insertAudio(int index, const AudioItem &item);
     void replaceAudio(int index, const AudioItem &item);
+    void setAudio(const AudioItemList &items);
     virtual void sort(int column, Qt::SortOrder order);
 private:
     QScopedPointer<AudioModelPrivate> d_ptr;

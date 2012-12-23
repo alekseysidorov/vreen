@@ -13,6 +13,7 @@ endif()
 
 add_qml_module(vreenplugin
     CXX11
+	${DEVELOPER_FLAG}
     URI com.vk.api
     QML_DIR qmldir
     SOURCE_DIR src

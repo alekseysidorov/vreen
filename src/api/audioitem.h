@@ -44,8 +44,6 @@ public:
     AudioItem &operator=(const AudioItem &);
     ~AudioItem();
 
-    bool operator <(const AudioItem &other) const;
-    
     int id() const;
     void setId(int aid);
     int ownerId() const;

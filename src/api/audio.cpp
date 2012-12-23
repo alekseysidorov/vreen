@@ -28,8 +28,31 @@
 #include <QUrl>
 #include <QCoreApplication>
 #include <QDebug>
+#include <QtCore/qalgorithms.h>
 
 namespace Vreen {
+
+template <typename T>
+struct IdComparator
+{
+    bool operator() (const T &a, const T &b) const
+    {
+        return sortOrder == Qt::AscendingOrder ? a.id() < b.id()
+                                               : a.id() > b.id();
+    }
+    bool operator() (const T &a, int id) const
+    {
+        return sortOrder == Qt::AscendingOrder ? a.id() < id
+                                               : a.id() > id;
+    }
+    bool operator() (int id, const T &b) const
+    {
+        return sortOrder == Qt::AscendingOrder ? id < b.id()
+                                               : id > b.id();
+    }
+
+    Qt::SortOrder sortOrder;
+};
 
 class AudioProvider;
 class AudioProviderPrivate
@@ -127,7 +150,8 @@ public:
     AudioModelPrivate(AudioModel *q) : q_ptr(q) {}
     AudioModel *q_ptr;
     AudioItemList itemList;
-    Qt::SortOrder sortOrder;
+
+    IdComparator<AudioItem> audioItemComparator;
 };
 
 AudioModel::AudioModel(QObject *parent) : AbstractListModel(parent),
@@ -168,11 +192,21 @@ void AudioModel::replaceAudio(int i, const AudioItem &item)
     emit dataChanged(index, index);
 }
 
+void AudioModel::setAudio(const AudioItemList &items)
+{
+    Q_D(AudioModel);
+    clear();
+    beginInsertRows(QModelIndex(), 0, items.count());
+    d->itemList = items;
+    qSort(d->itemList.begin(), d->itemList.end(), d->audioItemComparator);
+    endInsertRows();
+}
+
 void AudioModel::sort(int, Qt::SortOrder order)
 {
-    //Q_D(AudioModel);
-    //TODO reverse support
-    emit dataChanged(createIndex(0, 0), createIndex(count() - 1, 0));
+    Q_D(AudioModel);
+    d->audioItemComparator.sortOrder = order;
+    setAudio(d->itemList);
 }
 
 void AudioModel::removeAudio(int aid)
@@ -219,16 +253,17 @@ int AudioModel::rowCount(const QModelIndex &) const
 void AudioModel::setSortOrder(Qt::SortOrder order)
 {
     Q_D(AudioModel);
-    if (order != d->sortOrder) {
-        d->sortOrder = order;
+    if (order != d->audioItemComparator.sortOrder) {
+        d->audioItemComparator.sortOrder = order;
         emit sortOrderChanged(order);
-        sort(0, d->sortOrder);
+        sort(0, order);
     }
 }
 
 Qt::SortOrder AudioModel::sortOrder() const
 {
-    return d_func()->sortOrder;
+    Q_D(const AudioModel);
+    return d->audioItemComparator.sortOrder;
 }
 
 QVariant AudioModel::data(const QModelIndex &index, int role) const
@@ -263,10 +298,13 @@ QVariant AudioModel::data(const QModelIndex &index, int role) const
 int AudioModel::findAudio(int id) const
 {
     Q_D(const AudioModel);
-    for (int i = 0; i != d->itemList.count(); i++)
-        if (d->itemList.at(i).id() == id)
-            return id;
-    return -1;
+    auto it = qBinaryFind(d->itemList.begin(), d->itemList.end(), id, d->audioItemComparator);
+    return it - d->itemList.begin();
+
+    //for (int i = 0; i != d->itemList.count(); i++)
+    //    if (d->itemList.at(i).id() == id)
+    //        return id;
+    //return -1;
 }
 
 } // namespace Vreen

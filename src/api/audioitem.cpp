@@ -88,11 +88,6 @@ AudioItem::~AudioItem()
 {
 }
 
-bool AudioItem::operator <(const AudioItem &other) const
-{
-    return id() < other.id();
-}
-
 int AudioItem::id() const
 {
     return data->id;
