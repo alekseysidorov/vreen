@@ -5,10 +5,6 @@ QuickExample {
     type: "application"
     destination: "examples/audio"
 
-    files: [
-        appViewerPath + "main.cpp"
-    ]
-
     Group {
         fileTags: "install"
         qbs.installPrefix: destination

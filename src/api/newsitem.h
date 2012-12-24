@@ -81,7 +81,6 @@ public:
     void setProperty(const QString &name, const QVariant &value);
     QStringList dynamicPropertyNames() const;
 
-
     VK_SHARED_EXPORT friend QDataStream &operator <<(QDataStream &out, const Vreen::NewsItem &item);
     VK_SHARED_EXPORT friend QDataStream &operator >>(QDataStream &out, Vreen::NewsItem &item);
 protected:
