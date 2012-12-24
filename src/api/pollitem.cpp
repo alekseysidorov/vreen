@@ -26,6 +26,17 @@
 #include <QSharedData>
 #include <QDateTime>
 
+namespace Vreen {
+
+template<>
+PollItem Attachment::to(const Attachment &data)
+{
+    PollItem item;
+    item.setPollId(data.property("poll_id").toInt());
+    item.setQuestion(data.property("question").toString());
+    return item;
+}
+
 class PollItemData : public QSharedData {
 public:
     PollItemData() :
@@ -135,3 +146,4 @@ void PollItem::setAnswers(const PollItem::AnswerList &answers)
     data->answers = answers;
 }
 
+} //namespace Vreen

@@ -89,7 +89,7 @@ public:
 		foreach (auto item, items) {
 			auto newsItem = NewsItem::fromData(item);
 			auto map = item.toMap();
-			auto itemCount = sizeof(filters_str)/sizeof(*filters_str);
+            auto itemCount = strCount(filters_str);
 			for (size_t i = 0; i != itemCount; i++) {
 				auto list = map.value(filters_str[i]).toList();
 				if (list.count()) {

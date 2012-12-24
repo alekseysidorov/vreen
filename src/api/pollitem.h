@@ -27,7 +27,9 @@
 
 #include <QSharedDataPointer>
 #include <QVariant>
-#include "vk_global.h"
+#include "attachment.h"
+
+namespace Vreen {
 
 class PollItemData;
 
@@ -64,5 +66,10 @@ public:
 private:
     QSharedDataPointer<PollItemData> data;
 };
+
+template<>
+PollItem Attachment::to(const Attachment &data);
+
+} //namespace Vreen
 
 #endif // POLLITEM_H

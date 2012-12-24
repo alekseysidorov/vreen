@@ -22,27 +22,26 @@
 ** $VREEN_END_LICENSE$
 **
 ****************************************************************************/
-#ifndef VREEN_LOCALSTORAGE_H
-#define VREEN_LOCALSTORAGE_H
-#include "contact.h"
+#ifndef VREEN_POLLPROVIDER_H
+#define VREEN_POLLPROVIDER_H
+
+#include "client.h"
 
 namespace Vreen {
 
-class AbstractLocalStorage
+class PollProviderPrivate;
+
+class PollProvider : public QObject
 {
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(PollProvider)
 public:
-    AbstractLocalStorage();
-    virtual ~AbstractLocalStorage() {}
+    explicit PollProvider(Client *client);
+    ~PollProvider();
 protected:
-    virtual void loadBuddies(Roster *roster) = 0;
-    virtual void storeBuddies(Roster *roster) = 0;
-    //TODO group managers
-    //key value storage
-    virtual void store(const QString &key, const QVariant &value) = 0;
-    virtual QVariant load(const QString &key) = 0;
-    //TODO messages history async get and set
+    QScopedPointer<PollProviderPrivate> d_ptr;
 };
 
 } // namespace Vreen
 
-#endif // VREEN_LOCALSTORAGE_H
+#endif // VREEN_POLLPROVIDER_H

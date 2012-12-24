@@ -88,6 +88,45 @@ int lowerBound(Container container, const T &value, LessThan lessThan)
     return index;
 }
 
+template<int N>
+Q_INLINE_TEMPLATE size_t strCount(const char *(&)[N])
+{
+    return N;
+}
+
+template <typename Container>
+struct Comparator
+{
+    typedef int (Container::*Method)();
+
+    Comparator(Method method, Qt::SortOrder order = Qt::AscendingOrder) :
+        method(method),
+        sortOrder(order)
+    {
+
+    }
+    inline bool operator()(const Container &a, const Container &b) const
+    {
+        return operator ()(a.*method(), b.*method());
+    }
+    inline bool operator()(const Container &a, int id) const
+    {
+        return operator ()(a.*method(), id);
+    }
+    inline bool operator()(int id, const Container &b) const
+    {
+        return operator ()(id, b.*method());
+    }
+    inline bool operator ()(int a, int b) const
+    {
+        return sortOrder == Qt::AscendingOrder ? a < b
+                                               : a > b;
+    }
+
+    const Method method;
+    Qt::SortOrder sortOrder;
+};
+
 template <typename T>
 struct IdComparator
 {
@@ -96,20 +135,22 @@ struct IdComparator
     {
 
     }
-    bool operator() (const T &a, const T &b) const
+    inline bool operator() (const T &a, const T &b) const
     {
-        return sortOrder == Qt::AscendingOrder ? a.id() < b.id()
-                                               : a.id() > b.id();
+        return operator ()(a.id(), b.id());
     }
-    bool operator() (const T &a, int id) const
+    inline bool operator() (const T &a, int id) const
     {
-        return sortOrder == Qt::AscendingOrder ? a.id() < id
-                                               : a.id() > id;
+        return operator ()(a.id(), id);
     }
-    bool operator() (int id, const T &b) const
+    inline bool operator() (int id, const T &b) const
     {
-        return sortOrder == Qt::AscendingOrder ? id < b.id()
-                                               : id > b.id();
+        return operator ()(id, b.id());
+    }
+    inline bool operator ()(int a, int b) const
+    {
+        return sortOrder == Qt::AscendingOrder ? a < b
+                                               : a > b;
     }
 
     Qt::SortOrder sortOrder;
