@@ -9,6 +9,6 @@ Project {
         "src/qml/qml.qbs",
         "src/oauth/oauth.qbs",
         "src/directauth/directauth.qbs",
-        "examples/examples.qbs"
+        //"examples/examples.qbs"
     ]
 }

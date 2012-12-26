@@ -9,7 +9,7 @@ VreenProduct {
     property bool system: false
 
     function __destination() {
-        return system ? "todo/" : "bin/" + uri.replace(/\./g, "/");
+        return system ? "todo/" : product.buildDirectory + "/bin/" + uri.replace(/\./g, "/");
     }
 
     destination: __destination()
