@@ -1,7 +1,6 @@
 import qbs.base 1.0
-import "../qbs/VreenProduct.qbs" as VreenProduct
 
-VreenProduct {
+Product {
     name: "vreen"
 
     property string versionMajor:  0
@@ -9,12 +8,7 @@ VreenProduct {
     property string versionRelease: 5
     property string version: versionMajor + '.' + versionMinor + '.' + versionRelease
 
-    destination: {
-        if (qbs.targetOS === 'windows')
-            return "bin";
-        else
-            return "lib";
-    }
+    destination: vreen.core.libDestination
     type: ["dynamiclibrary", "installed_content"]
 
     //cpp.warningLevel: "all"
@@ -40,7 +34,8 @@ VreenProduct {
 
     Depends { name: "cpp" }
     Depends { name: "Qt"; submodules: ["core", "network", "gui"] }
-    Depends { name: "k8json"}
+    Depends { name: "k8json" }
+    Depends { name: "vreen.core" }
 
     Group {
         qbs.installDir: "include/vreen/" + version + "/vreen/private"
@@ -61,15 +56,16 @@ VreenProduct {
         ]
     }
 
-
     ProductModule {
         Depends { name: "cpp" }
         Depends { name: "Qt"; submodules: ["core", "network", "gui"] }
+        Depends { name: "vreen.core" }
 
         cpp.includePaths: [
             product.buildDirectory + "/include",
             product.buildDirectory + "/include/vreen",
             product.buildDirectory + "/include/vreen/" +  "0.9.5" //hack
         ]
+        cpp.rpaths: product.buildDirectory + "/" + vreen.core.libDestination
     }
 }

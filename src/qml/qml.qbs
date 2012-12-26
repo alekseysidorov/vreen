@@ -1,23 +1,18 @@
 import qbs.base 1.0
-import "../../qbs/VreenProduct.qbs" as VreenProduct
 
-VreenProduct {
+Product {
     name: "vreenplugin"
     type: ["dynamiclibrary", "installed_content"]
 
     property string uri: "com.vk.api"
     property bool system: false
 
-    function __destination() {
-        return system ? "todo/" : product.buildDirectory + "/bin/" + uri.replace(/\./g, "/");
-    }
-
-    destination: __destination()
+    destination: vreen.core.qmlDestination + "/" + uri.replace(/\./g, "/");
 
     cpp.includePaths: [
         "src"
     ]
-    cpp.defines: []
+    cpp.defines: base
 
     files: [
         "src/audiomodel.cpp",       "src/buddymodel.h",
@@ -38,6 +33,7 @@ VreenProduct {
     Depends { name: "Qt.quick"; condition: qt.core.versionMajor === 5 }    
     Depends { name: "vreen"}
     Depends { name: "vreenoauth" }
+    Depends { name: "vreen.core" }
 
     Properties {
         condition: true
@@ -49,7 +45,7 @@ VreenProduct {
     }
 
     Group {
-        qbs.installDir: __destination()
+        qbs.installDir: destination
         fileTags: ["install", "qml"]
         files: [
             "qmldir/PhotoModel.qml",    "qmldir/qmldir"

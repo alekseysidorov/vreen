@@ -1,7 +1,6 @@
 import qbs.base 1.0
-import "../../qbs/VreenProduct.qbs" as VreenProduct
 
-VreenProduct {
+Product {
     type: ["staticlibrary", "installed_content"]
     name: "vreenoauth"
     destination: "lib"
