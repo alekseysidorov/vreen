@@ -24,7 +24,6 @@
 ****************************************************************************/
 #ifndef DIALOGSMODEL_H
 #define DIALOGSMODEL_H
-#include <client.h>
 #include <messagemodel.h>
 #include <roster.h>
 #include <QPointer>

@@ -46,15 +46,5 @@ private slots:
     void onReplyError(Vreen::Client::Error);
 };
 
-template <typename ConnectionImpl>
-class ClientImpl : public Client
-{
-public:
-    ClientImpl(QObject *parent = 0) : Client(parent)
-    {
-        setConnection(new ConnectionImpl(this));
-    }
-};
-
 #endif // CLIENT_H
 
