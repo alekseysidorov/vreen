@@ -276,13 +276,14 @@ QVariant AudioModel::data(const QModelIndex &index, int role) const
 int AudioModel::findAudio(int id) const
 {
     Q_D(const AudioModel);
-    auto it = qBinaryFind(d->itemList.begin(), d->itemList.end(), id, d->audioItemComparator);
-    return it - d->itemList.begin();
+    //auto it = qBinaryFind(d->itemList.begin(), d->itemList.end(), id, d->audioItemComparator);
+    //auto index = it - d->itemList.begin();
+    //return index;
 
-    //for (int i = 0; i != d->itemList.count(); i++)
-    //    if (d->itemList.at(i).id() == id)
-    //        return id;
-    //return -1;
+    for (int i = 0; i != d->itemList.count(); i++)
+        if (d->itemList.at(i).id() == id)
+            return id;
+    return -1;
 }
 
 } // namespace Vreen
