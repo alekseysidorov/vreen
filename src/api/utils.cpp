@@ -53,7 +53,7 @@ QString toCamelCase(QString string)
     return string;
 }
 
-QString fromHtmlEscaped(const QString &source)
+QString fromHtmlEntities(const QString &source)
 {
     //Simple hack from slashdot
     QTextDocument text;
@@ -61,9 +61,9 @@ QString fromHtmlEscaped(const QString &source)
     return text.toPlainText();
 }
 
-QString toHtmlEscaped(const QString &source)
+QString toHtmlEntities(const QString &source)
 {
-    return QUrl::toPercentEncoding(source);
+    return Qt::escape(source);
 }
 
 } //namespace Vreen

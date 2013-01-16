@@ -161,7 +161,9 @@ QNetworkRequest OAuthConnection::makeRequest(const QString &method, const QVaria
     url.setPath(url.path() % QLatin1Literal("/") % method);
     QVariantMap::const_iterator it = args.constBegin();
     for (; it != args.constEnd(); it++)
-        url.addQueryItem(it.key(), toHtmlEscaped(it.value().toString()));
+        url.addEncodedQueryItem(QUrl::toPercentEncoding(it.key()),
+                                QUrl::toPercentEncoding(it.value().toString()));
+        //url.addQueryItem(it.key(), toHtmlEscaped(it.value().toString()));
     url.addEncodedQueryItem("access_token", d->accessToken);
 
     QNetworkRequest request(url);
