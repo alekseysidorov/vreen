@@ -63,7 +63,7 @@ public:
     virtual ~Reply();
     QNetworkReply *networkReply() const;
     QVariant response() const;
-    QVariant error() const;
+    Q_INVOKABLE QVariant error() const;
     QVariant result() const;
 
     template <typename Method>
@@ -111,6 +111,8 @@ protected:
 typedef ReplyBase<int> IntReply;
 
 } // namespace Vreen
+
+Q_DECLARE_METATYPE(Vreen::Reply*)
 
 #endif // VK_REPLY_H
 

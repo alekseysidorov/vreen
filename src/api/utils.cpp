@@ -25,6 +25,7 @@
 #include "utils.h"
 #include <QStringBuilder>
 #include <QTextDocument>
+#include <QUrl>
 
 namespace Vreen {
 
@@ -52,11 +53,17 @@ QString toCamelCase(QString string)
     return string;
 }
 
-QString unescape(const QString &source) {
+QString fromHtmlEscaped(const QString &source)
+{
     //Simple hack from slashdot
     QTextDocument text;
     text.setHtml(source);
     return text.toPlainText();
+}
+
+QString toHtmlEscaped(const QString &source)
+{
+    return QUrl::toPercentEncoding(source);
 }
 
 } //namespace Vreen

@@ -169,7 +169,6 @@ ReplyImpl *Client::request(const QString &method, const QVariantMap &args, const
 } // namespace Vreen
 
 Q_DECLARE_METATYPE(Vreen::Client*)
-Q_DECLARE_METATYPE(Vreen::Reply*)
 
 #endif // VK_CLIENT_H
 

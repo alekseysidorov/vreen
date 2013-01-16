@@ -35,7 +35,8 @@ typedef QList<int> IdList;
 
 QString VK_SHARED_EXPORT join(IdList ids);
 QString VK_SHARED_EXPORT toCamelCase(QString string);
-QString VK_SHARED_EXPORT unescape(const QString &source);
+QString VK_SHARED_EXPORT fromHtmlEscaped(const QString &source);
+QString VK_SHARED_EXPORT toHtmlEscaped(const QString &source);
 
 template <typename T>
 Q_INLINE_TEMPLATE T sender_cast(QObject *sender)

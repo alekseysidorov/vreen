@@ -89,14 +89,14 @@ void Client::onMessageAdded(const Vreen::Message &msg)
 
 void Client::onReplyCreated(Vreen::Reply *reply)
 {
-    //qDebug() << "--SendReply:" << reply->networkReply()->url();
+    qDebug() << "--SendReply:" << reply->networkReply()->url();
     connect(reply, SIGNAL(resultReady(QVariant)),SLOT(onReplyFinished(QVariant)));
 }
 
 void Client::onReplyFinished(const QVariant &)
 {
     Vreen::Reply *reply = Vreen::sender_cast<Vreen::Reply*>(sender());
-    //qDebug() << "--Reply finished" << reply->networkReply()->url().encodedPath();
+    qDebug() << "--Reply finished" << reply->networkReply()->url().encodedPath();
     //qDebug() << "--data" << reply->response();
 }
 

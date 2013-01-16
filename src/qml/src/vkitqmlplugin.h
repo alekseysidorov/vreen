@@ -39,6 +39,7 @@
 #include <attachment.h>
 #include <newsfeed.h>
 #include <connection.h>
+#include <reply.h>
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <qqmlextensionplugin.h>
@@ -68,7 +69,7 @@ static inline void registerVreenTypes(const char *uri)
     qmlRegisterType<Vreen::OAuthConnection>("com.vk.api", 1, 0, "OAuthConnection");
 #endif
 
-
+    qmlRegisterUncreatableType<Vreen::Reply>("com.vk.api", 1, 0, "Reply", QObject::tr("Don't use reply directly"));
     qmlRegisterUncreatableType<Vreen::Client>("com.vk.api", 1, 0, "ClientBase", QObject::tr("Use SimpleClient instead"));
     qmlRegisterUncreatableType<Vreen::Roster>("com.vk.api", 1, 0, "Roster", QObject::tr("Use client.roster instead"));
     qmlRegisterUncreatableType<Vreen::Connection>("com.vk.api", 1, 0, "Connection", QObject::tr("Use client.connection instead"));

@@ -37,6 +37,7 @@ class NewsFeedModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(QObject* client READ client WRITE setClient NOTIFY clientChanged)
+    Q_PROPERTY(int count READ count NOTIFY requestFinished)
 public:
 
     enum Roles {
@@ -49,9 +50,7 @@ public:
         LikesRole,
         RepostsRole,
         CommentsRole,
-        OwnerNameRole,
-        SourcePhotoRole,
-        SourceNameRole,
+        OwnerRole,
         LikesCount,
         CommentsCount
     };
@@ -64,7 +63,7 @@ public:
     int count() const;
     int findNews(int id);
 public slots:
-    void getNews(int filters = Vreen::NewsFeed::FilterPost | Vreen::NewsFeed::FilterPhoto,
+    Vreen::Reply *getNews(int filters = Vreen::NewsFeed::FilterPost | Vreen::NewsFeed::FilterPhoto,
                        quint8 count = 10, int offset = 0);
     void addLike(int postId, bool retweet = false, const QString &message = QString());
     void deleteLike(int postId);

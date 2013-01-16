@@ -28,6 +28,7 @@
 #include "roster.h"
 #include <QDateTime>
 #include "dynamicpropertydata_p.h"
+#include <utils.h>
 #include <QDebug>
 
 namespace Vreen {
@@ -113,8 +114,8 @@ public:
 
         date = QDateTime::fromTime_t(data.value("date").toInt());
         setFlag(Message::FlagUnread, !data.value("read_state").toBool());
-        subject = data.value("title").toString();
-		body = data.value("body").toString();
+        subject = fromHtmlEscaped(data.value("title").toString());
+        body = fromHtmlEscaped(data.value("body").toString());
         attachmentHash = Attachment::toHash(Attachment::fromVariantList(data.value("attachments").toList()));
         //TODO forward messages
         chatId = data.value("chat_id").toInt();

@@ -45,9 +45,7 @@ NewsFeedModel::NewsFeedModel(QObject *parent) :
     roles[LikesRole] = "likes";
     roles[RepostsRole] = "reposts";
     roles[CommentsRole] = "comments";
-    roles[OwnerNameRole] = "ownerName";
-    roles[SourcePhotoRole] = "sourcePhoto";
-    roles[SourceNameRole] = "sourceName";
+    roles[OwnerRole] = "owner";
     roles[LikesCount] = "likesCount";
     roles[CommentsCount] = "commentsCount";
     setRoleNames(roles);
@@ -100,23 +98,13 @@ QVariant NewsFeedModel::data(const QModelIndex &index, int role) const
         return news.reposts();
     case CommentsRole:
         return news.property("comments");
-    case OwnerNameRole: {
+    case OwnerRole: {
         int ownerId = news.property("copy_owner_id").toInt();
         if (ownerId) {
             auto contact = findContact(ownerId);
-            return contact->name();
+            return QVariant::fromValue(contact);
         }
         return QVariant();
-    }
-    case SourcePhotoRole: {
-        if (auto contact = findContact(news.sourceId()))
-            return contact->photoSource();
-        break;
-    }
-    case SourceNameRole: {
-        if (auto contact = findContact(news.sourceId()))
-            return contact->name();
-        break;
     }
     case LikesCount: {
         return news.likes().value("count").toInt();
@@ -139,13 +127,14 @@ int NewsFeedModel::count() const
     return m_newsList.count();
 }
 
-void NewsFeedModel::getNews(int filters, quint8 count, int offset)
+Vreen::Reply *NewsFeedModel::getNews(int filters, quint8 count, int offset)
 {
     if (m_newsFeed.isNull())
-        return;
+        return nullptr;
 
-    auto reply = m_newsFeed.data()->getNews(static_cast<Vreen::NewsFeed::Filters>(filters), count, offset);
+    auto reply = m_newsFeed.data()->getNews(Vreen::NewsFeed::Filters(filters), count, offset);
     connect(reply, SIGNAL(resultReady(QVariant)), SIGNAL(requestFinished()));
+    return reply;
 }
 
 void NewsFeedModel::addLike(int postId, bool retweet, const QString &message)
@@ -193,9 +182,11 @@ void NewsFeedModel::truncate(int count)
     if (count >= m_newsList.count())
         count = m_newsList.count() - 1;
 
-    beginRemoveRows(QModelIndex(), count, m_newsList.count() - 1);
-    m_newsList.erase(m_newsList.begin() + count - 1, m_newsList.end());
-    endRemoveRows();
+    if (count > 0) {
+        beginRemoveRows(QModelIndex(), count, m_newsList.count() - 1);
+        m_newsList.erase(m_newsList.begin() + count - 1, m_newsList.end());
+        endRemoveRows();
+    }
 }
 
 static bool newsItemMoreThan(const Vreen::NewsItem &a, const Vreen::NewsItem &b)

@@ -104,9 +104,9 @@ QVariant MessageListModel::data(const QModelIndex &index, int role) const
     case BodyRole:
         return message.body();
     case FromRole:
-        return qVariantFromValue(d->client->contact(message.fromId()));
+        return QVariant::fromValue(d->client->contact(message.fromId()));
     case ToRole:
-        return qVariantFromValue(d->client->contact(message.toId()));
+        return QVariant::fromValue(d->client->contact(message.toId()));
     case ReadStateRole:
         return message.isUnread();
     case DirectionRole:

@@ -52,8 +52,8 @@ public:
             AudioItem audio;
             audio.setId(map.value("aid").toInt());
             audio.setOwnerId(map.value("owner_id").toInt());
-            audio.setArtist(unescape(map.value("artist").toString()));
-            audio.setTitle(unescape(map.value("title").toString()));
+            audio.setArtist(fromHtmlEscaped(map.value("artist").toString()));
+            audio.setTitle(fromHtmlEscaped(map.value("title").toString()));
             audio.setDuration(map.value("duration").toReal());
             audio.setAlbumId(map.value("album").toInt());
             audio.setLyricsId(map.value("lyrics_id").toInt());
