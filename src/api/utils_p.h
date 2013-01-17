@@ -26,8 +26,12 @@
 #define UTILS_P_H
 #include "utils.h"
 
+namespace Vreen {
+
 QString VK_SHARED_EXPORT join(IdList ids);
 QString VK_SHARED_EXPORT toCamelCase(QString string);
 QString VK_SHARED_EXPORT fromHtmlEntities(const QString &source);
+
+} //namespace Vreen
 
 #endif // UTILS_P_H
