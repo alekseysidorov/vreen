@@ -24,7 +24,7 @@
 ****************************************************************************/
 #include "audio.h"
 #include "client.h"
-#include "utils.h"
+#include "utils_p.h"
 #include <QUrl>
 #include <QCoreApplication>
 #include <QDebug>

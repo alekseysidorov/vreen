@@ -28,7 +28,7 @@
 #include "roster.h"
 #include <QDateTime>
 #include "dynamicpropertydata_p.h"
-#include <utils.h>
+#include "utils_p.h"
 #include <QDebug>
 
 namespace Vreen {

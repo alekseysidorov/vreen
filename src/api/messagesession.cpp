@@ -24,7 +24,7 @@
 ****************************************************************************/
 #include "messagesession_p.h"
 #include "client.h"
-#include "utils.h"
+#include "utils_p.h"
 
 namespace Vreen {
 

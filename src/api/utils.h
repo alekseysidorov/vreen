@@ -33,11 +33,6 @@ namespace Vreen {
 
 typedef QList<int> IdList;
 
-QString VK_SHARED_EXPORT join(IdList ids);
-QString VK_SHARED_EXPORT toCamelCase(QString string);
-QString VK_SHARED_EXPORT fromHtmlEntities(const QString &source);
-QString VK_SHARED_EXPORT toHtmlEntities(const QString &source);
-
 template <typename T>
 Q_INLINE_TEMPLATE T sender_cast(QObject *sender)
 {

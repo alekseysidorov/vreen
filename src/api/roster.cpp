@@ -24,6 +24,7 @@
 ****************************************************************************/
 #include "roster_p.h"
 #include "longpoll.h"
+#include "utils_p.h"
 
 #include <QDebug>
 #include <QTimer>

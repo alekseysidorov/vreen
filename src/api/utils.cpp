@@ -27,6 +27,9 @@
 #include <QTextDocument>
 #include <QUrl>
 
+//#define MAX_ENTITY 258
+//extern const struct QTextHtmlEntity { const char *name; quint16 code; } entities[MAX_ENTITY];
+
 namespace Vreen {
 
 QString join(IdList ids)

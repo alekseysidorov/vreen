@@ -27,6 +27,7 @@
 #include "contact.h"
 #include "groupmanager.h"
 #include "reply_p.h"
+#include "utils_p.h"
 #include <QNetworkRequest>
 #include <QNetworkReply>
 
