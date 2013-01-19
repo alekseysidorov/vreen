@@ -1,7 +1,8 @@
 # This file is used to ignore files which are generated in the Qt build system
 # ----------------------------------------------------------------------------
 
-
+qt-*
+build
 callgrind.out.*
 pcviewer.cfg
 *~
