@@ -9,7 +9,7 @@ Product {
     cpp.defines: []
 
     Depends { name: "cpp" }
-    Depends { name: "qt"; submodules: ['core', 'network', 'webkit', 'webkitWidgets'] }
+    Depends { name: "qt"; submodules: ['core', 'network', 'widgets', 'webkit', 'webkitWidgets'] }
     Depends { name: "vreen"; }
 
     files: [
