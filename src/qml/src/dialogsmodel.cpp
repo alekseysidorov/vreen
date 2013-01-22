@@ -51,17 +51,16 @@ void DialogsModel::setUnreadCount(int count)
     emit unreadCountChanged(count);
 }
 
-void DialogsModel::getDialogs(int offset, int count, int previewLength)
+Vreen::Reply *DialogsModel::getDialogs(int offset, int count, int previewLength)
 {
     if (!client()) {
         qWarning("Dialog model must have a client!");
-        return;
+        return 0;
     }
     auto reply = client()->roster()->getDialogs(offset, count, previewLength);
     connect(reply, SIGNAL(resultReady(QVariant)), SLOT(onDialogsReceived(QVariant)));
-    connect(reply, SIGNAL(resultReady(QVariant)), SIGNAL(requestFinished()));
+    return reply;
 }
-
 
 void DialogsModel::onDialogsReceived(const QVariant &dialogs)
 {

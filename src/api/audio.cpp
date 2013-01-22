@@ -223,6 +223,18 @@ void AudioModel::clear()
     endRemoveRows();
 }
 
+void AudioModel::truncate(int count)
+{
+    Q_D(AudioModel);
+    if (count > 0 && count > d->itemList.count()) {
+        qWarning("Unable to truncate");
+        return;
+    }
+    beginRemoveRows(QModelIndex(), 0, count);
+    d->itemList.erase(d->itemList.begin() + count, d->itemList.end());
+    endRemoveRows();
+}
+
 int AudioModel::rowCount(const QModelIndex &) const
 {
     return count();

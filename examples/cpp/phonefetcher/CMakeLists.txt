@@ -3,4 +3,5 @@ add_simple_executable(phonefetcher
     CXX11
     INCLUDES ${VREEN_INCLUDE_DIR}
     LIBRARIES vreen vreenoauth
+    QT Core Network Gui Declarative
 )

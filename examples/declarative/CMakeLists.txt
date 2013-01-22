@@ -1,6 +1,4 @@
 macro(VREEN_ADD_DECLARATIVE_EXAMPLE name)
-    set(QT_USE_QTDECLARATIVE true)
-
     add_custom_directory(qml)
 
     add_custom_command(
@@ -18,6 +16,7 @@ macro(VREEN_ADD_DECLARATIVE_EXAMPLE name)
 	INCLUDES ${QT_QTDECLARATIVE_INCLUDE_DIR}
 	LIBRARIES ${QT_QTDECLARATIVE_LIBRARY}
 	SOURCE_DIR ../common
+	QT Core Gui Declarative
     )
 endmacro()
 

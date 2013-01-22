@@ -88,6 +88,7 @@ public:
     Qt::SortOrder sortOrder() const;
 public slots:
     void clear();
+    void truncate(int count);
     void addAudio(const Vreen::AudioItem &item);
     void removeAudio(int aid);
 signals:

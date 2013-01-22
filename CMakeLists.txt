@@ -7,13 +7,6 @@ endif(COMMAND cmake_policy)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-set(QT_USE_QTCORE true)
-set(QT_USE_QTNETWORK true)
-#set(CMAKE_AUTOMOC true)
-
-find_package(Qt4 REQUIRED)
-
-include(UseQt4)
 include(CommonUtils)
 
 option(VREEN_WITH_OAUTH "Enable webkit based oauth authorization" ON)

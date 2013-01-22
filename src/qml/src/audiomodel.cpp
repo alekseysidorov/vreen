@@ -48,27 +48,31 @@ void AudioModel::setClient(Vreen::Client* client)
     }
 }
 
-void AudioModel::getAudio(Vreen::Contact* contact, int count, int offset)
+Vreen::Reply *AudioModel::getAudio(Vreen::Contact* contact, int count, int offset)
 {
-    getAudio(contact->id(), count, offset);
+    return getAudio(contact->id(), count, offset);
 }
 
-void AudioModel::getAudio(int id, int count, int offset)
+Vreen::Reply *AudioModel::getAudio(int id, int count, int offset)
 {
     if (m_provider.data()) {
         auto reply = m_provider.data()->getContactAudio(id, count, offset);
         connect(reply, SIGNAL(resultReady(QVariant)),
                 this, SLOT(onResultReady()));
+        return reply;
     }
+    return nullptr;
 }
 
-void AudioModel::searchAudio(const QString& query, int count, int offset, bool autoComplete, Vreen::AudioProvider::SortOrder sort, bool withLyrics)
+Vreen::Reply *AudioModel::searchAudio(const QString& query, int count, int offset, bool autoComplete, Vreen::AudioProvider::SortOrder sort, bool withLyrics)
 {
     if (m_provider.data()) {
         auto reply = m_provider.data()->searchAudio(query, count, offset, autoComplete, sort, withLyrics);
         connect(reply, SIGNAL(resultReady(QVariant)),
                 this, SLOT(onResultReady()));
+        return reply;
     }
+    return nullptr;
 }
 
 void AudioModel::onResultReady()
@@ -76,5 +80,4 @@ void AudioModel::onResultReady()
     auto reply = static_cast<Vreen::AudioItemListReply*>(sender());
     foreach (auto item, reply->result())
         addAudio(item);
-    emit requestFinished();
 }

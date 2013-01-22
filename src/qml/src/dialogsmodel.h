@@ -39,11 +39,10 @@ public:
     void setUnreadCount(int count);
     int unreadCount() const;
 public slots:
-    void getDialogs(int offset = 0, int count = 25, int previewLength = -1);
+    Vreen::Reply *getDialogs(int offset = 0, int count = 25, int previewLength = -1);
 signals:
     void clientChanged(QObject*);
     void unreadCountChanged(int count);
-    void requestFinished();
 protected:
     virtual void doReplaceMessage(int index, const::Vreen::Message &message);
     virtual void doInsertMessage(int index, const::Vreen::Message &message);
