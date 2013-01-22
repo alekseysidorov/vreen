@@ -72,7 +72,7 @@ void DialogsModel::onDialogsReceived(const QVariant &dialogs)
 
     foreach (auto message, messageList) {
         addMessage(message);
-        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+        //qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     }
 }
 
@@ -100,9 +100,9 @@ void DialogsModel::doInsertMessage(int index, const Vreen::Message &message)
     for (int i = 0; i != count(); i++) {
         auto old = at(i);
         if (contactId(message) == contactId(old)) {
-            if (old.id() != message.id())
-                doRemoveMessage(i);
-                //doReplaceMessage(i, message);
+            if (old.id() < message.id())
+                //doRemoveMessage(i);
+                doReplaceMessage(i, message);
             break;
         }
     }
