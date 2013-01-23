@@ -324,3 +324,4 @@ MessageList Message::fromVariantList(const QVariantList &list, int clientId)
 
 } // namespace Vreen
 
+#include "moc_message.cpp"

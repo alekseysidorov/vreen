@@ -228,3 +228,4 @@ void NewsItem::setReposts(const QVariantMap &reposts)
 
 } // namespace Vreen
 
+#include "moc_newsitem.cpp"
