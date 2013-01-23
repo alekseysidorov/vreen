@@ -10,13 +10,19 @@ macro(VREEN_ADD_DECLARATIVE_EXAMPLE name)
 	ALL
 	DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/qml)
 
+    if(USE_QT5)
+	set(_declarative Quick)
+    else()
+	set(_declarative Declarative)
+    endif()
+
     add_simple_executable(${name}
 	INTERNAL
 	CXX11
 	INCLUDES ${QT_QTDECLARATIVE_INCLUDE_DIR}
 	LIBRARIES ${QT_QTDECLARATIVE_LIBRARY}
 	SOURCE_DIR ../common
-	QT Core Gui Declarative
+	QT Core Gui Widgets ${_declarative}
     )
 endmacro()
 

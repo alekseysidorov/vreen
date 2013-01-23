@@ -8,8 +8,8 @@ add_simple_library(vreenoauth
     VERSION ${CMAKE_VREEN_VERSION_STRING}
     SOVERSION ${CMAKE_VREEN_VERSION_MAJOR}
     LIBRARIES vreen ${QT_QTWEBKIT_LIBRARY}
-    INCLUDES ${VREEN_INCLUDE_DIR} ${QT_QTWEBKIT_INCLUDE_DIR} ../api ${VREEN_PRIVATE_INCLUDE_DIR}
+    INCLUDES ${VREEN_INCLUDE_DIR} ../api ${VREEN_PRIVATE_INCLUDE_DIR}
     INCLUDE_DIR vreen/auth
     PKGCONFIG_TEMPLATE vreenoauth.pc.cmake
-    QT Core Network Gui Widgets #WebKit WebKitWidgets
+    QT Core Network Gui Widgets WebKitWidgets WebKit
 )

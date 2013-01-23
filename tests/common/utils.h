@@ -35,8 +35,6 @@ inline QString getVariable(const char *name)
 }
 
 #define VREEN_TEST_PREPARE() \
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8")); \
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8")); \
     qApp->setApplicationName("test"); \
     qApp->setOrganizationName("vreen"); \
 
