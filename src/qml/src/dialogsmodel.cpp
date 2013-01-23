@@ -33,6 +33,8 @@ namespace  {
 
 int contactId(const Vreen::Message &message)
 {
+    if (message.chatId())
+        return message.chatId();
     return message.isIncoming() ? message.fromId()
                                 : message.toId();
 }
@@ -101,8 +103,8 @@ void DialogsModel::doInsertMessage(int index, const Vreen::Message &message)
         auto old = at(i);
         if (contactId(message) == contactId(old)) {
             if (old.id() < message.id())
-                //doRemoveMessage(i);
-                doReplaceMessage(i, message);
+                doRemoveMessage(i);
+                //doReplaceMessage(i, message);
             break;
         }
     }

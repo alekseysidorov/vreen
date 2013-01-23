@@ -88,7 +88,7 @@ void ChatModel::setMessageSession(Vreen::MessageSession *session)
 void ChatModel::doInsertMessage(int index, const Vreen::Message &message)
 {
     Vreen::MessageListModel::doInsertMessage(index, message);
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    //qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
 void ChatModel::getHistory(int count, int offset)
