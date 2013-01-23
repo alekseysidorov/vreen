@@ -28,6 +28,7 @@
 #include "client.h"
 #include "longpoll.h"
 #include <groupchatsession.h>
+#include <QCoreApplication>
 
 ChatModel::ChatModel(QObject *parent) :
     Vreen::MessageListModel(parent)
@@ -82,6 +83,12 @@ void ChatModel::setMessageSession(Vreen::MessageSession *session)
 
     m_session = session;
     emit titleChanged(session->title());
+}
+
+void ChatModel::doInsertMessage(int index, const Vreen::Message &message)
+{
+    Vreen::MessageListModel::doInsertMessage(index, message);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
 void ChatModel::getHistory(int count, int offset)

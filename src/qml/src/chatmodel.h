@@ -40,6 +40,8 @@ public:
     explicit ChatModel(QObject *parent = 0);
     QString title() const;
     void setMessageSession(Vreen::MessageSession *session);
+protected:
+    void doInsertMessage(int index, const Vreen::Message &message);
 public slots:
     void setContact(Vreen::Contact *contact);
     void setChatId(int chatId);

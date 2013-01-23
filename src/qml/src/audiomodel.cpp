@@ -61,7 +61,7 @@ Vreen::Reply *AudioModel::getAudio(int id, int count, int offset)
                 this, SLOT(onResultReady()));
         return reply;
     }
-    return nullptr;
+    return 0;
 }
 
 Vreen::Reply *AudioModel::searchAudio(const QString& query, int count, int offset, bool autoComplete, Vreen::AudioProvider::SortOrder sort, bool withLyrics)
@@ -72,7 +72,7 @@ Vreen::Reply *AudioModel::searchAudio(const QString& query, int count, int offse
                 this, SLOT(onResultReady()));
         return reply;
     }
-    return nullptr;
+    return 0;
 }
 
 void AudioModel::onResultReady()

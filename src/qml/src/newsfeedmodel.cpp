@@ -130,7 +130,7 @@ int NewsFeedModel::count() const
 Vreen::Reply *NewsFeedModel::getNews(int filters, quint8 count, int offset)
 {
     if (m_newsFeed.isNull())
-        return nullptr;
+        return 0;
 
     auto reply = m_newsFeed.data()->getNews(Vreen::NewsFeed::Filters(filters), count, offset);
     connect(reply, SIGNAL(resultReady(QVariant)), SIGNAL(requestFinished()));

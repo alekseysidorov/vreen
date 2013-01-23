@@ -72,7 +72,7 @@ void DialogsModel::onDialogsReceived(const QVariant &dialogs)
 
     foreach (auto message, messageList) {
         addMessage(message);
-        //qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     }
 }
 

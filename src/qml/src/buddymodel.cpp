@@ -141,25 +141,16 @@ int BuddyModel::findContact(int id) const
     return -1;
 }
 
-//static bool buddyLessThan(const Vreen::Buddy *a, const Vreen::Buddy *b)
-//{
-////    if (a->status() == b->status()) {
-////        return QString::compare(a->name(), b->name(), Qt::CaseInsensitive) < 0;
-////    } else
-//    return a->status() < b->status();
-//}
-
 void BuddyModel::addFriend(Vreen::Buddy *contact)
 {
     if (!checkContact(contact))
         return;
     int index = m_buddyList.count();
-    //auto index = Vreen::lowerBound(m_buddyList, contact, buddyLessThan) + 1;
 
     beginInsertRows(QModelIndex(), index, index);
     m_buddyList.insert(index, contact);
     endInsertRows();
-    //qApp->processEvents();
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
 void BuddyModel::removeFriend(int id)
