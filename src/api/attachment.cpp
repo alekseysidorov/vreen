@@ -231,3 +231,4 @@ bool Attachment::isFetched() const
 
 } // namespace Vreen
 
+#include "moc_attachment.cpp"
