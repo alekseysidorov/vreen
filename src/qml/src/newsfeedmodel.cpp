@@ -262,7 +262,7 @@ void NewsFeedModel::insertNews(int index, const Vreen::NewsItem &item)
     beginInsertRows(QModelIndex(), index, index);
     m_newsList.insert(index, item);
     endInsertRows();
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    //qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
 void NewsFeedModel::replaceNews(int i, const Vreen::NewsItem &news)

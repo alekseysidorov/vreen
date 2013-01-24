@@ -165,11 +165,13 @@ void CommentsModel::clear()
     endRemoveRows();
 }
 
-void CommentsModel::getComments(int offset, int count)
+Vreen::Reply *CommentsModel::getComments(int count, int offset)
 {
     if (m_session.data() && m_postId) {
         auto reply = m_session.data()->getComments(offset, count);
         connect(reply, SIGNAL(resultReady(QVariant)), SIGNAL(requestFinished()));
+        return reply;
     }
+    return 0;
 }
 

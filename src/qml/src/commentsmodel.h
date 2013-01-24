@@ -60,7 +60,7 @@ signals:
 
 public slots:
     void clear();
-    void getComments(int offset = 0, int count = 100);
+    Vreen::Reply *getComments(int count = 100, int offset = 0);
 private slots:
     void addComment(const QVariantMap &data);
     void deleteComment(int id);

@@ -108,13 +108,14 @@ int WallModel::count() const
     return m_posts.count();
 }
 
-void WallModel::getLastPosts(int count, Vreen::WallSession::Filter filter)
+Vreen::Reply *WallModel::getPosts(int count, int offset, Vreen::WallSession::Filter filter)
 {
-    if (m_session.isNull())
+    if (m_session.isNull()) {
         qWarning("WallModel: contact is null! Please set a contact!");
-    else {
-    auto reply = m_session.data()->getPosts(filter, count, 0, false);
-    connect(reply, SIGNAL(resultReady(QVariant)), SIGNAL(requestFinished()));
+        return 0;
+    } else {
+        auto reply = m_session.data()->getPosts(filter, count, offset, false);
+        return reply;
     }
 }
 
@@ -141,7 +142,6 @@ void WallModel::clear()
     beginRemoveRows(QModelIndex(), 0, m_posts.count());
     m_posts.clear();
     endRemoveRows();
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
 int WallModel::findPost(int id)
@@ -170,7 +170,7 @@ void WallModel::addPost(const Vreen::WallPost &post)
     beginInsertRows(QModelIndex(), last, last);
     m_posts.insert(it, post);
     endInsertRows();
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    //qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
 void WallModel::replacePost(int i, const Vreen::WallPost &post)

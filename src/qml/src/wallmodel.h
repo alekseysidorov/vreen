@@ -54,14 +54,13 @@ public:
     virtual int rowCount(const QModelIndex &) const;
     int count() const;
 public slots:
-    void getLastPosts(int count = 25, Vreen::WallSession::Filter filter = Vreen::WallSession::All);
+    Vreen::Reply *getPosts(int count = 25, int offset = 0, Vreen::WallSession::Filter filter = Vreen::WallSession::All);
     void addLike(int postId, bool retweet = false, const QString &message = QString());
     void deleteLike(int postId);
     void clear();
     int findPost(int id);
 signals:
     void contactChanged(Vreen::Contact* arg);
-    void requestFinished();
 private slots:
     void addPost(const Vreen::WallPost &post);
     void replacePost(int index, const Vreen::WallPost &post);
