@@ -49,10 +49,12 @@ public:
     void _q_posts_received(const QVariant &response)
     {
         auto list = response.toMap().value("wall").toList();
-        list.takeFirst();
-        foreach (auto item, list) {
-            auto post = WallPost::fromData(item, contact->client());
-            emit q_func()->postAdded(post);
+        if (!list.isEmpty()) {
+            list.takeFirst();
+            foreach (auto item, list) {
+                auto post = WallPost::fromData(item, contact->client());
+                emit q_func()->postAdded(post);
+            }
         }
     }
 

@@ -39,8 +39,10 @@ Product {
 
     Group {
         qbs.installDir: "include/vreen/" + version + "/vreen/private"
-        fileTags: ["install"]
+        //qbs.install: true
+        fileTags: 'install'
         overrideTags: false
+
         files: [
             "api/*_p.h",
             "api/draft/*_p.h",
@@ -49,8 +51,10 @@ Product {
     }    
     Group {
         qbs.installDir: "include/vreen"
-        fileTags: ["install"]
+        //qbs.install: true
+        fileTags: 'install'
         overrideTags: false
+
         files: [
             "api/*[^_][a-z].h",
         ]
