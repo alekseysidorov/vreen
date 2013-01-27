@@ -66,7 +66,7 @@ void NewsFeedModel::setClient(QObject *obj)
         return;
 
     auto newsFeed = new Vreen::NewsFeed(client);
-    connect(newsFeed, SIGNAL(newsAdded(Vreen::NewsItem)), SLOT(onNewsAdded(Vreen::NewsItem)));
+    connect(newsFeed, SIGNAL(newsRecieved(Vreen::NewsItemList)), SLOT(onNewsRecieved(Vreen::NewsItemList)));
 
     m_newsFeed = newsFeed;
 }
@@ -194,13 +194,14 @@ static bool newsItemMoreThan(const Vreen::NewsItem &a, const Vreen::NewsItem &b)
     return a.date() > b.date();
 }
 
-void NewsFeedModel::onNewsAdded(const Vreen::NewsItem &item)
+void NewsFeedModel::onNewsRecieved(const Vreen::NewsItemList &items)
 {
-    if (findNews(item.postId()) != -1)
-        return;
-
-    auto index = Vreen::lowerBound(m_newsList, item, newsItemMoreThan);
-    insertNews(index, item);
+    for (auto item : items) {
+        if (findNews(item.postId()) == -1) {
+            auto index = Vreen::lowerBound(m_newsList, item, newsItemMoreThan);
+            insertNews(index, item);
+        }
+    }
 }
 
 void NewsFeedModel::onAddLike(const QVariant &response)
@@ -262,7 +263,6 @@ void NewsFeedModel::insertNews(int index, const Vreen::NewsItem &item)
     beginInsertRows(QModelIndex(), index, index);
     m_newsList.insert(index, item);
     endInsertRows();
-    //qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
 void NewsFeedModel::replaceNews(int i, const Vreen::NewsItem &news)

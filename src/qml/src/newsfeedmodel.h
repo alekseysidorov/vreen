@@ -77,7 +77,7 @@ protected:
     void replaceNews(int index, const Vreen::NewsItem &data);
     inline Vreen::Contact *findContact(int id) const;
 private slots:
-    void onNewsAdded(const Vreen::NewsItem &data);
+    void onNewsRecieved(const Vreen::NewsItemList &data);
     void onAddLike(const QVariant &response);
     void onDeleteLike(const QVariant &response);
 private:

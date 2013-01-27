@@ -99,7 +99,6 @@ public:
 					break;
 				}
 			}
-			emit q->newsAdded(newsItem);
 			news.append(newsItem);
 		}
 		emit q->newsRecieved(news);
