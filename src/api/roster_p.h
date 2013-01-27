@@ -41,6 +41,7 @@ public:
         q_ptr(q), client(client), owner(0)
     {
         updaterTimer.setInterval(5000);
+        updaterTimer.setSingleShot(true);
         updaterTimer.connect(&updaterTimer, SIGNAL(timeout()),
                              q, SLOT(_q_updater_handle()));
     }

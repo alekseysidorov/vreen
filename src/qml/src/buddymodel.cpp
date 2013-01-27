@@ -150,7 +150,7 @@ void BuddyModel::addFriend(Vreen::Buddy *contact)
     beginInsertRows(QModelIndex(), index, index);
     m_buddyList.insert(index, contact);
     endInsertRows();
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    //qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
 void BuddyModel::removeFriend(int id)
