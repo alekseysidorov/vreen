@@ -28,7 +28,7 @@ add_qml_module(vreenplugin
     SOURCE_FILES ${EXTRA_SRC}
     LIBRARIES vreen ${VREEN_PLUGIN_LIBS}
     DEFINES ${VREEN_PLUGIN_DEFINES}
-    INCLUDES ../api ${CMAKE_BINARY_DIR}/include ${CMAKE_BINARY_DIR}/include/vreen/${CMAKE_VREEN_VERSION_STRING}/
+    INCLUDES ../api ${VREEN_INCLUDE_DIR} ${VREEN_INCLUDE_DIR}/${CMAKE_VREEN_VERSION_STRING}/
     IMPORTS_DIR ${VREEN_IMPORTS_DIR}
     QT Core Network Gui Widgets ${_extra_qt}
 )

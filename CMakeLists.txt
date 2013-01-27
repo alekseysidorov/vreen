@@ -42,13 +42,3 @@ if(VREEN_WITH_TESTS)
     enable_testing()
     add_subdirectory(tests)
 endif()
-
-if(NOT UNINSTALL_TARGET)
-    configure_file(
-	"${CMAKE_SOURCE_DIR}/cmake_uninstall.cmake.in"
-	"${CMAKE_BINARY_DIR}/cmake_uninstall.cmake"
-	IMMEDIATE @ONLY)
-    add_custom_target(uninstall
-	"${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake")
-    set(UNINSTALL_TARGET true CACHE TYPE INTERNAL)
-endif()
