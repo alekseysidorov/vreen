@@ -250,7 +250,15 @@ void RosterPrivate::addBuddy(Buddy *buddy)
         //q->update(ids, QStringList() << VK_COMMON_FIELDS); //TODO move!
     }
     buddyHash.insert(buddy->id(), buddy);
-	emit q->buddyAdded(buddy);
+    emit q->buddyAdded(buddy);
+}
+
+void RosterPrivate::appendToUpdaterQueue(Buddy *contact)
+{
+    if (!updaterQueue.contains(contact->id()))
+        updaterQueue.append(contact->id());
+    if (!updaterTimer.isActive())
+        updaterTimer.start();
 }
 
 QVariant RosterPrivate::handleGetRequests(const QVariant &response)
@@ -317,7 +325,14 @@ void RosterPrivate::_q_online_changed(bool set)
 {
     if (!set)
         foreach(auto buddy, buddyHash)
-			buddy->setOnline(false);
+            buddy->setOnline(false);
+}
+
+void RosterPrivate::_q_updater_handle()
+{
+    Q_Q(Roster);
+    q->update(updaterQueue);
+    updaterQueue.clear();
 }
 
 

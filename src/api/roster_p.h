@@ -39,17 +39,61 @@ class RosterPrivate
 public:
     RosterPrivate(Roster *q, Client *client) :
         q_ptr(q), client(client), owner(0)
-    {}
+    {
+        updaterTimer.setInterval(5000);
+        updaterTimer.connect(&updaterTimer, SIGNAL(timeout()),
+                             q, SLOT(_q_updater_handle()));
+    }
+
     Roster *q_ptr;
     Client *client;
     BuddyHash buddyHash;
     Buddy *owner;
     QStringList tags;
 
+    //TODO i want to use Qt5 slots
+    //class Updater {
+    //public:
+    //    typedef std::function<void (Client *client, const IdList &idList, const QVariant &query)> Handler;
+
+    //    Updater(Client *client, const QVariantMap &query, const Handler &handler) :
+    //        client(client),
+    //        query(query),
+    //        handler(handler)
+    //    {
+    //        timer.setInterval(5000);
+    //        timer.setSingleShot(true);
+    //        QObject::connect(&timer, &timeout, this, &handle);
+    //    }
+    //    inline void handle() {
+    //        if (queue.count()) {
+    //            handler(client.data(), queue, query);
+    //            queue.clear();
+    //        }
+    //    }
+    //    inline void append(const IdList &items) {
+    //        queue.append(items);
+    //        if (!timer.isActive()) {
+    //            timer.start();
+    //        }
+    //    }
+    //protected:
+    //    QPointer<Client> client;
+    //    QVariantMap query;
+    //    IdList queue;
+    //    QTimer timer;
+    //    Handler handler;
+    //} updater;
+
+    //updater
+    QTimer updaterTimer;
+    IdList updaterQueue;
+
     void getTags();
     void getOnline();
     void getFriends(const QVariantMap &args = QVariantMap());
     void addBuddy(Buddy *contact);
+    void appendToUpdaterQueue(Buddy *contact);
 
 	static QVariant handleGetRequests(const QVariant &response);
 
@@ -57,6 +101,7 @@ public:
     void _q_friends_received(const QVariant &response);
     void _q_status_changed(int userId, Vreen::Contact::Status status);
     void _q_online_changed(bool);
+    void _q_updater_handle();
 };
 
 } //namespace Vreen

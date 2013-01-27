@@ -162,8 +162,8 @@ public:
     bool isFriend() const;
     void setIsFriend(bool set);
 public slots:
-    void update(const QStringList &fields = QStringList()
-            << VK_ALL_FIELDS);
+    void update(const QStringList &fields);
+    void update();
     SendMessageReply *sendMessage(const QString &body, const QString &subject = QString());
 	Reply *addToFriends(const QString &reason = QString());
 	Reply *removeFromFriends();

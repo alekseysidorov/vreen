@@ -95,13 +95,14 @@ protected:
     QScopedPointer<RosterPrivate> d_ptr;
 
     //friend class Contact;
-    //friend class Buddy;
+    friend class Buddy;
     //friend class Group;
 
     Q_PRIVATE_SLOT(d_func(), void _q_tags_received(const QVariant &response))
     Q_PRIVATE_SLOT(d_func(), void _q_friends_received(const QVariant &response))
     Q_PRIVATE_SLOT(d_func(), void _q_status_changed(int userId, Vreen::Contact::Status status))
     Q_PRIVATE_SLOT(d_func(), void _q_online_changed(bool))
+    Q_PRIVATE_SLOT(d_func(), void _q_updater_handle())
 };
 
 } // namespace Vreen

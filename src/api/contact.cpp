@@ -24,7 +24,7 @@
 ****************************************************************************/
 #include "contact_p.h"
 #include "message.h"
-#include "roster.h"
+#include "roster_p.h"
 
 namespace Vreen {
 
@@ -191,6 +191,8 @@ void Buddy::setIsFriend(bool set)
 /*!
  * \brief Buddy::update
  * \param fields - some fields need to update.
+ * \note This request will be called immediately.
+ * \sa update
  * api reference \link http://vk.com/developers.php?oid=-1&p=users.get
  */
 void Buddy::update(const QStringList &fields)
@@ -198,6 +200,18 @@ void Buddy::update(const QStringList &fields)
     IdList ids;
     ids.append(id());
     d_func()->client->roster()->update(ids, fields);
+}
+
+/*!
+ * \brief Buddy::update
+ * Add contact to update queue and it will be updated as soon as posible in near future.
+ * Use this method if you know that it takes more than one update
+ * \sa update(fields)
+ */
+void Buddy::update()
+{
+    Q_D(Buddy);
+    d->client->roster()->d_func()->appendToUpdaterQueue(this);
 }
 
 SendMessageReply *Buddy::sendMessage(const QString &body, const QString &subject)
