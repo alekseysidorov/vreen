@@ -4,10 +4,7 @@ import qbs.fileinfo 1.0 as FileInfo
 Product {
     name: "vreen"
 
-    property string versionMajor:  0
-    property string versionMinor: 9
-    property string versionRelease: 5
-    property string version: versionMajor + '.' + versionMinor + '.' + versionRelease
+    property string headersDestination: "vreen"
 
     destination: vreen.core.libDestination
     type: ["dynamiclibrary", "installed_content"]
@@ -63,9 +60,9 @@ Product {
         Depends { name: "vreen.core" }
 
         cpp.includePaths: [
-            product.buildDirectory + "/GeneratedFiles/vreen/include",
-            product.buildDirectory + "/GeneratedFiles/vreen/include/vreen",
-            product.buildDirectory + "/GeneratedFiles/vreen/include/vreen/" +  "0.9.5" //hack
+            product.buildDirectory + "/GeneratedFiles/include",
+            product.buildDirectory + "/GeneratedFiles/include/vreen",
+            product.buildDirectory + "/GeneratedFiles/include/vreen/" +  vreen.core.version
         ]
         cpp.rpaths: product.buildDirectory + "/" + vreen.core.libDestination
     }
@@ -76,58 +73,16 @@ Product {
             "api/draft/*_p.h",
             "api/draft/*.h"
         ]
-        fileTags: ["hpp", "privdevheader"]
+        fileTags: ["devheader"]
         overrideTags: false
+        qbs.installDir: "include/vreen/" + vreen.core.version + "/vreen/private"
     }
 
     Group {
         files: "api/*.h"
         excludeFiles: "api/*_p.h"
-        fileTags: ["hpp", "devheader"]
+        fileTags: ["devheader"]
         overrideTags: false
-    }
-
-    Rule {
-        inputs: [ "devheader" ]
-        Artifact {
-            fileTags: [ "hpp" ]
-            fileName: "GeneratedFiles/vreen/include/vreen/" + input.fileName
-        }
-
-        prepare: {
-            var cmd = new JavaScriptCommand();
-            cmd.sourceCode = function() {
-                var inputFile = new TextFile(input.fileName, TextFile.ReadOnly);
-                var file = new TextFile(output.fileName, TextFile.WriteOnly);
-                file.truncate();
-                file.write("#include \"" + input.fileName + "\"\n");
-                file.close();
-            }
-            cmd.description = "generating " + FileInfo.fileName(output.fileName);
-            cmd.highlight = "filegen";
-            return cmd;
-        }
-    }
-
-    Rule {
-        inputs: [ "privdevheader" ]
-        Artifact {
-            fileTags: [ "hpp" ]
-            fileName: "GeneratedFiles/vreen/include/vreen/private/" + input.fileName
-        }
-
-        prepare: {
-            var cmd = new JavaScriptCommand();
-            cmd.sourceCode = function() {
-                var inputFile = new TextFile(input.fileName, TextFile.ReadOnly);
-                var file = new TextFile(output.fileName, TextFile.WriteOnly);
-                file.truncate();
-                file.write("#include \"" + input.fileName + "\"\n");
-                file.close();
-            }
-            cmd.description = "generating " + FileInfo.fileName(output.fileName);
-            cmd.highlight = "filegen";
-            return cmd;
-        }
+        qbs.installDir: "include/vreen"
     }
 }

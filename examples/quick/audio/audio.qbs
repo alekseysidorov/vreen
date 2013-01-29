@@ -7,7 +7,7 @@ QuickExample {
 
     Group {
         fileTags: "install"
-        qbs.installPrefix: destination
+        qbs.installDir: destination
         files: "qml"
     }
 }

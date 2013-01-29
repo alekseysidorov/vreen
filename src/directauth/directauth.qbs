@@ -21,7 +21,7 @@ Product {
 
     Depends { name: "cpp" }
     Depends { name: "qt"; submodules: ['core', 'network', 'webkit'] }
-    Depends { name: "vreen"; }
+    Depends { name: "vreen" }
 
     files: [
         "*.cpp",
@@ -39,28 +39,6 @@ Product {
         files: "*.h"
         fileTags: ["hpp", "devheader"]
         overrideTags: false
-    }
-
-    Rule {
-        inputs: [ "devheader" ]
-        Artifact {
-            fileTags: [ "hpp" ]
-            fileName: "GeneratedFiles/vreen/include/vreen/auth/" + input.fileName
-        }
-
-        prepare: {
-            var cmd = new JavaScriptCommand();
-            cmd.sourceCode = function() {
-                var inputFile = new TextFile(input.fileName, TextFile.ReadOnly);
-                var file = new TextFile(output.fileName, TextFile.WriteOnly);
-                file.truncate();
-                file.write("#include \"" + input.fileName + "\"\n");
-                file.close();
-            }
-            cmd.description = "generating " + FileInfo.fileName(output.fileName);
-            cmd.highlight = "filegen";
-            return cmd;
-        }
     }
 }
 

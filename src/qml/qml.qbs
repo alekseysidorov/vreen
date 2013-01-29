@@ -7,7 +7,11 @@ Product {
     property string uri: "com.vk.api"
     property bool system: false
 
-    destination: vreen.core.qmlDestination + "/" + uri.replace(/\./g, "/");
+    function toPath(uri) {
+        return uri.replace(/\./g, "/")
+    }
+
+    destination: vreen.core.qmlDestination + "/" + toPath(uri);
 
     cpp.includePaths: [
         "src"
@@ -46,7 +50,8 @@ Product {
 
     Group {
         qbs.installDir: destination
-        fileTags: ["install", "qml"]
+        vreen.core.qmlDestination: destination
+        fileTags: ["qml"]
         files: [
             "qmldir/PhotoModel.qml",    "qmldir/qmldir"
         ]
