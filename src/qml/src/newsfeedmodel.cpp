@@ -66,7 +66,7 @@ void NewsFeedModel::setClient(QObject *obj)
         return;
 
     auto newsFeed = new Vreen::NewsFeed(client);
-    connect(newsFeed, SIGNAL(newsRecieved(Vreen::NewsItemList)), SLOT(onNewsRecieved(Vreen::NewsItemList)));
+    connect(newsFeed, SIGNAL(newsReceived(Vreen::NewsItemList)), SLOT(onNewsRecieved(Vreen::NewsItemList)));
 
     m_newsFeed = newsFeed;
 }
