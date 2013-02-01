@@ -46,6 +46,7 @@ DialogsModel::DialogsModel(QObject *parent) :
     m_unreadCount(0)
 {
     setSortOrder(Qt::DescendingOrder);
+    connect(this, SIGNAL(clientChanged(Vreen::Client*)), SLOT(onClientChanged(Vreen::Client*)));
 }
 void DialogsModel::setUnreadCount(int count)
 {
@@ -53,7 +54,7 @@ void DialogsModel::setUnreadCount(int count)
     emit unreadCountChanged(count);
 }
 
-Vreen::Reply *DialogsModel::getDialogs(int offset, int count, int previewLength)
+Vreen::Reply *DialogsModel::getDialogs(int count, int offset, int previewLength)
 {
     if (!client()) {
         qWarning("Dialog model must have a client!");
@@ -75,6 +76,13 @@ void DialogsModel::onDialogsReceived(const QVariant &dialogs)
     foreach (auto message, messageList) {
         addMessage(message);
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    }
+}
+
+void DialogsModel::onClientChanged(Vreen::Client *client)
+{
+    if (client) {
+        connect(client->longPoll(), SIGNAL(messageAdded(Vreen::Message)), SLOT(addMessage(Vreen::Message)));
     }
 }
 

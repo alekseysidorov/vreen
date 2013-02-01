@@ -196,7 +196,7 @@ static bool newsItemMoreThan(const Vreen::NewsItem &a, const Vreen::NewsItem &b)
 
 void NewsFeedModel::onNewsRecieved(const Vreen::NewsItemList &items)
 {
-    for (auto item : items) {
+    foreach (auto item, items) {
         if (findNews(item.postId()) == -1) {
             auto index = Vreen::lowerBound(m_newsList, item, newsItemMoreThan);
             insertNews(index, item);

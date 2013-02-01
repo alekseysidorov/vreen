@@ -155,8 +155,9 @@ void MessageListModel::setClient(Client *client)
             auto longPoll = d->client.data()->longPoll();
             connect(longPoll, SIGNAL(messageFlagsReplaced(int, int, int)), SLOT(replaceMessageFlags(int, int, int)));
             connect(longPoll, SIGNAL(messageFlagsReseted(int,int,int)), SLOT(resetMessageFlags(int,int)));
-            connect(longPoll, SIGNAL(messageAdded(Vreen::Message)), SLOT(addMessage(Vreen::Message)));
         }
+        if (client)
+            client->disconnect(this);
     }
 }
 

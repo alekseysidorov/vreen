@@ -39,9 +39,8 @@ public:
     void setUnreadCount(int count);
     int unreadCount() const;
 public slots:
-    Vreen::Reply *getDialogs(int offset = 0, int count = 25, int previewLength = -1);
+    Vreen::Reply *getDialogs(int count = 25, int offset = 0, int previewLength = -1);
 signals:
-    void clientChanged(QObject*);
     void unreadCountChanged(int count);
 protected:
     virtual void doReplaceMessage(int index, const::Vreen::Message &message);
@@ -49,6 +48,7 @@ protected:
     virtual void doRemoveMessage(int index);
 private slots:
     void onDialogsReceived(const QVariant &dialogs);
+    void onClientChanged(Vreen::Client *client);
 private:
     int m_unreadCount;
 };
