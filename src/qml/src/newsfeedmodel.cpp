@@ -191,6 +191,7 @@ void NewsFeedModel::truncate(int count)
     }
 }
 
+void NewsFeedModel::onNewsReceived(const Vreen::NewsItemList &items)
 {
     foreach (auto item, items) {
         if (findNews(item.postId()) == -1) {
