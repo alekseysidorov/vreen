@@ -33,7 +33,7 @@
 
 namespace {
 
-QDateTime news_item_comparator(const Vreen::NewsItem &item)
+inline QDateTime news_item_comparator(const Vreen::NewsItem &item)
 {
     return item.date();
 }
@@ -73,7 +73,7 @@ void NewsFeedModel::setClient(QObject *obj)
         return;
 
     auto newsFeed = new Vreen::NewsFeed(client);
-    connect(newsFeed, SIGNAL(newsRecieved(Vreen::NewsItemList)), SLOT(onNewsRecieved(Vreen::NewsItemList)));
+    connect(newsFeed, SIGNAL(newsReceived(Vreen::NewsItemList)), SLOT(onNewsReceived(Vreen::NewsItemList)));
 
     m_newsFeed = newsFeed;
 }
@@ -191,7 +191,6 @@ void NewsFeedModel::truncate(int count)
     }
 }
 
-void NewsFeedModel::onNewsRecieved(const Vreen::NewsItemList &items)
 {
     foreach (auto item, items) {
         if (findNews(item.postId()) == -1) {
