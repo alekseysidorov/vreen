@@ -26,6 +26,7 @@
 #define UTILS_H
 #include "vk_global.h"
 #include <QStringList>
+#include <tr1/functional>
 
 #include <QDebug>
 
@@ -90,12 +91,10 @@ Q_INLINE_TEMPLATE size_t strCount(const char *(&)[N])
     return N;
 }
 
-template <typename Container>
-struct Comparator
+template <typename Container, typename Item, typename Method>
+struct ComparatorBase
 {
-    typedef int (Container::*Method)();
-
-    Comparator(Method method, Qt::SortOrder order = Qt::AscendingOrder) :
+    ComparatorBase(Method method, Qt::SortOrder order = Qt::AscendingOrder) :
         method(method),
         sortOrder(order)
     {
@@ -103,17 +102,17 @@ struct Comparator
     }
     inline bool operator()(const Container &a, const Container &b) const
     {
-        return operator ()(a.*method(), b.*method());
+        return operator()(method(a), method(b));
     }
     inline bool operator()(const Container &a, int id) const
     {
-        return operator ()(a.*method(), id);
+        return operator()(method(a), id);
     }
-    inline bool operator()(int id, const Container &b) const
+    inline bool operator()(Item id, const Container &b) const
     {
-        return operator ()(id, b.*method());
+        return operator()(id, method(b));
     }
-    inline bool operator ()(int a, int b) const
+    inline bool operator()(Item a, Item b) const
     {
         return sortOrder == Qt::AscendingOrder ? a < b
                                                : a > b;
@@ -123,34 +122,57 @@ struct Comparator
     Qt::SortOrder sortOrder;
 };
 
-template <typename T>
-struct IdComparator
+template <typename Container, typename Item>
+struct Comparator : public ComparatorBase<Container, Item, Item (*)(const Container &)>
+{
+    typedef Item (*Method)(const Container &);
+    Comparator(Method method, Qt::SortOrder order = Qt::AscendingOrder) :
+        ComparatorBase<Container, Item, Item (*)(const Container &)>(method, order)
+    {
+
+    }
+};
+
+template <typename Container>
+struct IdComparator : public Comparator<Container, int>
 {
     IdComparator(Qt::SortOrder order = Qt::AscendingOrder) :
-        sortOrder(order)
+        Comparator<Container, int>(id_, order)
     {
 
     }
-    inline bool operator() (const T &a, const T &b) const
-    {
-        return operator ()(a.id(), b.id());
-    }
-    inline bool operator() (const T &a, int id) const
-    {
-        return operator ()(a.id(), id);
-    }
-    inline bool operator() (int id, const T &b) const
-    {
-        return operator ()(id, b.id());
-    }
-    inline bool operator ()(int a, int b) const
-    {
-        return sortOrder == Qt::AscendingOrder ? a < b
-                                               : a > b;
-    }
-
-    Qt::SortOrder sortOrder;
+private:
+    inline static int id_(const Container &a) { return a.id(); }
 };
+
+//template <typename T>
+//struct IdComparator
+//{
+//    IdComparator(Qt::SortOrder order = Qt::AscendingOrder) :
+//        sortOrder(order)
+//    {
+
+//    }
+//    inline bool operator() (const T &a, const T &b) const
+//    {
+//        return operator ()(a.id(), b.id());
+//    }
+//    inline bool operator() (const T &a, int id) const
+//    {
+//        return operator ()(a.id(), id);
+//    }
+//    inline bool operator() (int id, const T &b) const
+//    {
+//        return operator ()(id, b.id());
+//    }
+//    inline bool operator ()(int a, int b) const
+//    {
+//        return sortOrder == Qt::AscendingOrder ? a < b
+//                                               : a > b;
+//    }
+
+//    Qt::SortOrder sortOrder;
+//};
 
 } //namespace Vreen
 

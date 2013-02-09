@@ -27,6 +27,7 @@
 
 #include <QAbstractListModel>
 #include <newsfeed.h>
+#include <utils.h>
 #include <QPointer>
 
 namespace Vreen {
@@ -43,16 +44,14 @@ public:
     enum Roles {
         TypeRole = Qt::UserRole,
         PostIdRole,
-        SourceRole,
+        FromRole,
         DateRole,
         BodyRole,
         AttachmentsRole,
         LikesRole,
         RepostsRole,
         CommentsRole,
-        OwnerRole,
-        LikesCount,
-        CommentsCount
+        OwnerRole
     };
 
     explicit NewsFeedModel(QObject *parent = 0);
@@ -84,7 +83,7 @@ private:
     QPointer<Vreen::Client> m_client;
     QPointer<Vreen::NewsFeed> m_newsFeed;
     Vreen::NewsItemList m_newsList;
-    Qt::SortOrder m_sortOrder;
+    Vreen::Comparator<Vreen::NewsItem, QDateTime> m_newsItemComparator;
 };
 
 #endif // NEWSFEEDMODEL_H
