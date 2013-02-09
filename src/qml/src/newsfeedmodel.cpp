@@ -31,14 +31,23 @@
 #include <QDateTime>
 #include <QNetworkReply>
 
+namespace {
+
+inline QDateTime news_item_comparator(const Vreen::NewsItem &item)
+{
+    return item.date();
+}
+
+} //namespace
+
 NewsFeedModel::NewsFeedModel(QObject *parent) :
     QAbstractListModel(parent),
-    m_sortOrder(Qt::DescendingOrder)
+    m_newsItemComparator(news_item_comparator, Qt::DescendingOrder)
 {
     auto roles = roleNames();
     roles[TypeRole] = "type";
     roles[PostIdRole] = "postId";
-    roles[SourceRole] = "source";
+    roles[FromRole] = "from";
     roles[DateRole] = "date";
     roles[BodyRole] = "body";
     roles[AttachmentsRole] = "attachments";
@@ -46,8 +55,6 @@ NewsFeedModel::NewsFeedModel(QObject *parent) :
     roles[RepostsRole] = "reposts";
     roles[CommentsRole] = "comments";
     roles[OwnerRole] = "owner";
-    roles[LikesCount] = "likesCount";
-    roles[CommentsCount] = "commentsCount";
     setRoleNames(roles);
 }
 
@@ -82,7 +89,7 @@ QVariant NewsFeedModel::data(const QModelIndex &index, int role) const
     case PostIdRole:
         return news.postId();
         break;
-    case SourceRole: {
+    case FromRole: {
         int source = news.sourceId();
         return qVariantFromValue(findContact(source));
     }
@@ -106,11 +113,6 @@ QVariant NewsFeedModel::data(const QModelIndex &index, int role) const
         }
         return QVariant();
     }
-    case LikesCount: {
-        return news.likes().value("count").toInt();
-    }
-    case CommentsCount:
-        return news.property("comments").toMap().value("count").toInt();
     default:
         break;
     }
@@ -189,16 +191,11 @@ void NewsFeedModel::truncate(int count)
     }
 }
 
-static bool newsItemMoreThan(const Vreen::NewsItem &a, const Vreen::NewsItem &b)
-{
-    return a.date() > b.date();
-}
-
 void NewsFeedModel::onNewsReceived(const Vreen::NewsItemList &items)
 {
     foreach (auto item, items) {
         if (findNews(item.postId()) == -1) {
-            auto index = Vreen::lowerBound(m_newsList, item, newsItemMoreThan);
+            auto index = Vreen::lowerBound(m_newsList, item, m_newsItemComparator);
             insertNews(index, item);
         }
     }
