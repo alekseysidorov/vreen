@@ -110,10 +110,13 @@ void DialogsModel::doInsertMessage(int index, const Vreen::Message &message)
     for (int i = 0; i != count(); i++) {
         auto old = at(i);
         if (contactId(message) == contactId(old)) {
-            if (old.id() < message.id())
-                doRemoveMessage(i);
-                //doReplaceMessage(i, message);
-            break;
+            if (old.id() < message.id()) {
+                auto oldIndex = findMessage(old.id());
+                doReplaceMessage(oldIndex, message);
+                if (oldIndex != index)
+                    moveMessage(oldIndex, index);
+            }
+            return;
         }
     }
 

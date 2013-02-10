@@ -76,6 +76,7 @@ protected:
     virtual void doReplaceMessage(int index, const::Vreen::Message &message);
     virtual void doInsertMessage(int index, const::Vreen::Message &message);
     virtual void doRemoveMessage(int index);
+    void moveMessage(int sourceIndex, int destinationIndex);
     virtual void sort(int column, Qt::SortOrder order);
 protected slots:
     void replaceMessageFlags(int id, int mask, int userId = 0);

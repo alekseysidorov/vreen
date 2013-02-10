@@ -26,6 +26,7 @@
 #include "contact.h"
 #include "longpoll.h"
 #include "utils.h"
+#include "utils_p.h"
 #include "client.h"
 #include <QCoreApplication>
 #include <QDateTime>
@@ -102,7 +103,7 @@ QVariant MessageListModel::data(const QModelIndex &index, int role) const
         return message.subject();
         break;
     case BodyRole:
-        return message.body();
+        return fromHtmlEntities(message.body());
     case FromRole:
         return QVariant::fromValue(d->client->contact(message.fromId()));
     case ToRole:
@@ -231,6 +232,15 @@ void MessageListModel::doRemoveMessage(int index)
     beginRemoveRows(QModelIndex(), index, index);
     d->messageList.removeAt(index);
     endRemoveRows();
+}
+
+void MessageListModel::moveMessage(int sourceIndex, int destinationIndex)
+{
+    Q_D(MessageListModel);
+    beginMoveRows(QModelIndex(), sourceIndex, sourceIndex,
+                  QModelIndex(), destinationIndex);
+    d->messageList.move(sourceIndex, destinationIndex);
+    endMoveRows();
 }
 
 void MessageListModel::sort(int column, Qt::SortOrder order)

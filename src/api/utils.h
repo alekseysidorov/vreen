@@ -26,7 +26,6 @@
 #define UTILS_H
 #include "vk_global.h"
 #include <QStringList>
-#include <tr1/functional>
 
 #include <QDebug>
 
@@ -91,7 +90,7 @@ Q_INLINE_TEMPLATE size_t strCount(const char *(&)[N])
     return N;
 }
 
-template <typename Container, typename Item, typename Method>
+template <typename Item, typename Value, typename Method>
 struct ComparatorBase
 {
     ComparatorBase(Method method, Qt::SortOrder order = Qt::AscendingOrder) :
@@ -100,19 +99,19 @@ struct ComparatorBase
     {
 
     }
-    inline bool operator()(const Container &a, const Container &b) const
+    inline bool operator()(const Item &a, const Item &b) const
     {
         return operator()(method(a), method(b));
     }
-    inline bool operator()(const Container &a, int id) const
+    inline bool operator()(const Item &a, int id) const
     {
         return operator()(method(a), id);
     }
-    inline bool operator()(Item id, const Container &b) const
+    inline bool operator()(Value id, const Item &b) const
     {
         return operator()(id, method(b));
     }
-    inline bool operator()(Item a, Item b) const
+    inline bool operator()(Value a, Value b) const
     {
         return sortOrder == Qt::AscendingOrder ? a < b
                                                : a > b;
@@ -122,16 +121,26 @@ struct ComparatorBase
     Qt::SortOrder sortOrder;
 };
 
-template <typename Container, typename Item>
-struct Comparator : public ComparatorBase<Container, Item, Item (*)(const Container &)>
+template <typename Item, typename Value>
+struct Comparator : public ComparatorBase<Item, Value, Value (*)(const Item &)>
 {
-    typedef Item (*Method)(const Container &);
+    typedef Value (*Method)(const Item &);
     Comparator(Method method, Qt::SortOrder order = Qt::AscendingOrder) :
-        ComparatorBase<Container, Item, Item (*)(const Container &)>(method, order)
+        ComparatorBase<Item, Value, Value (*)(const Item &)>(method, order)
     {
 
     }
 };
+
+//template <typename Container, typename Method>
+//struct Comparator2 : public ComparatorBase<Container, decltype(Method()), Method>
+//{
+//    Comparator2(Method method, Qt::SortOrder order = Qt::AscendingOrder) :
+//        ComparatorBase<Container, Item, Item (*)(const Container &)>(method, order)
+//    {
+
+//    }
+//};
 
 template <typename Container>
 struct IdComparator : public Comparator<Container, int>
