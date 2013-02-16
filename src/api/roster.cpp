@@ -301,13 +301,13 @@ void RosterPrivate::_q_friends_received(const QVariant &response)
         auto buddy = buddyHash.value(id);
         if (!buddy) {
             buddy = new Buddy(id, client);
-            Contact::fillContact(buddy, map);
+            Contact::fill(buddy, map);
             buddy->setIsFriend(isFriend);
             buddyHash[id] = buddy;
             emit q->buddyAdded(buddy);
         } else {
             buddy->setIsFriend(isFriend);
-            Contact::fillContact(buddy, map);
+            Contact::fill(buddy, map);
             emit q->buddyUpdated(buddy);
         }
     }

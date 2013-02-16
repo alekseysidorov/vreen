@@ -33,49 +33,57 @@ namespace Vreen {
 class WallPostData : public QSharedData
 {
 public:
-    WallPostData(Client *client) : QSharedData(),
-        client(client),
+    WallPostData() : QSharedData(),
         id(0),
-        fromId(-1),
-        toId(-1)
+        fromId(0),
+        toId(0),
+        ownerId(0),
+        signerId(0)
     {}
     WallPostData(const WallPostData &o) : QSharedData(o),
-        client(o.client),
         id(o.id),
         body(o.body),
         date(o.date),
         fromId(o.fromId),
         toId(o.toId),
+        ownerId(o.ownerId),
+        signerId(o.signerId),
+        copyText(o.copyText),
         likes(o.likes),
         reposts(o.reposts),
         attachmentHash(o.attachmentHash),
         data(o.data)
     {}
 
-    Client *client;
     int id;
     QString body;
     QDateTime date;
     int fromId;
     int toId;
+    int ownerId;
+    int signerId;
+    QString copyText;
     QVariantMap likes;
     QVariantMap reposts;
     Attachment::Hash attachmentHash;
     QVariantMap data;
 };
 
-WallPost::WallPost(Client *client) :
-    d(new WallPostData(client))
+WallPost::WallPost() :
+    d(new WallPostData())
 {
 }
 
-WallPost::WallPost(QVariantMap data, Client *client) :
-    d(new WallPostData(client))
+WallPost::WallPost(QVariantMap data) :
+    d(new WallPostData())
 {
     d->id = data.take("id").toInt();
     d->body = data.take("text").toString();
     d->fromId = data.take("from_id").toInt();
     d->toId = data.take("to_id").toInt();
+    d->ownerId = data.take("copy_owner_id").toInt();
+    d->signerId = data.take("signer_id").toInt();
+    d->copyText = data.take("copy_text").toString();
     d->date = QDateTime::fromTime_t(data.take("date").toUInt());
     d->likes = data.take("likes").toMap();
     d->reposts = data.take("reposts").toMap();
@@ -96,11 +104,6 @@ WallPost &WallPost::operator=(const WallPost &other)
 
 WallPost::~WallPost()
 {
-}
-
-Client *WallPost::client() const
-{
-    return d->client;
 }
 
 void WallPost::setId(int id)
@@ -143,6 +146,16 @@ int WallPost::toId() const
     return d->toId;
 }
 
+int WallPost::ownerId() const
+{
+    return d->ownerId;
+}
+
+void WallPost::setOwnerId(int ownerId)
+{
+    d->ownerId = ownerId;
+}
+
 void WallPost::setDate(const QDateTime &date)
 {
     d->date = date;
@@ -151,6 +164,26 @@ void WallPost::setDate(const QDateTime &date)
 QDateTime WallPost::date() const
 {
     return d->date;
+}
+
+int WallPost::signerId() const
+{
+    return d->signerId;
+}
+
+void WallPost::setSignerId(int signerId)
+{
+    d->signerId = signerId;
+}
+
+QString WallPost::copyText() const
+{
+    return d->copyText;
+}
+
+void WallPost::setCopyText(const QString &copyText)
+{
+    d->copyText = copyText;
 }
 
 Attachment::Hash WallPost::attachments() const
@@ -178,19 +211,9 @@ void WallPost::setLikes(const QVariantMap &likes)
     d->likes = likes;
 }
 
-Contact *WallPost::from()
+WallPost WallPost::fromData(const QVariant data)
 {
-    return d->client->roster()->buddy(d->fromId);
-}
-
-Contact *WallPost::to()
-{
-    return d->client->roster()->buddy(d->toId);
-}
-
-WallPost WallPost::fromData(const QVariant data, Client *client)
-{
-    return WallPost(data.toMap(), client);
+    return WallPost(data.toMap());
 }
 
 QVariant WallPost::property(const QString &name, const QVariant &def) const

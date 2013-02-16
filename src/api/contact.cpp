@@ -26,6 +26,7 @@
 #include "contact_p.h"
 #include "message.h"
 #include "roster_p.h"
+#include "groupmanager_p.h"
 
 namespace Vreen {
 
@@ -72,7 +73,7 @@ void Contact::setPhotoSource(const QString &source, Contact::PhotoSize size)
     emit photoSourceChanged(source, size);
 }
 
-void Contact::fillContact(Contact *contact, const QVariantMap &data)
+void Contact::fill(Contact *contact, const QVariantMap &data)
 {
     auto it = data.constBegin();
     for (; it != data.constEnd(); it++) {
@@ -268,7 +269,13 @@ QString Group::name() const
 void Group::setName(const QString &name)
 {
     d_func()->name = name;
-	emit nameChanged(name);
+    emit nameChanged(name);
+}
+
+void Group::update()
+{
+    Q_D(Group);
+    d->client->groupManager()->d_func()->appendToUpdaterQueue(this);
 }
 
 void BuddyPrivate::_q_friends_add_finished(const QVariant &response)

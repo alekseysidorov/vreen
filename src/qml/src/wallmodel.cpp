@@ -30,6 +30,15 @@
 #include <QDebug>
 #include <QNetworkReply>
 
+namespace  {
+
+QVariant get(Vreen::Client *client, int id)
+{
+    return QVariant::fromValue(client->contact(id));
+}
+
+} //namespace
+
 WallModel::WallModel(QObject *parent) :
     QAbstractListModel(parent)
 {
@@ -37,6 +46,9 @@ WallModel::WallModel(QObject *parent) :
     roles[IdRole] = "postId";
     roles[BodyRole] = "body";
     roles[FromRole] = "from";
+    roles[OwnerRole] = "owner";
+    roles[SignerRole] = "signer";
+    roles[CopyTextRole] = "copyText";
     roles[ToRole] = "to";
     roles[DateRole] = "date";
     roles[AttachmentsRole] = "attachments";
@@ -77,11 +89,17 @@ QVariant WallModel::data(const QModelIndex &index, int role) const
     case IdRole:
         return post.id();
     case FromRole:
-        return qVariantFromValue(post.from());
+        return get(client(), post.fromId());
     case ToRole:
-        return qVariantFromValue(post.to());
+        return get(client(), post.toId());
+    case OwnerRole:
+        return get(client(), post.ownerId());
+    case SignerRole:
+        return get(client(), post.signerId());
     case BodyRole:
         return post.body();
+    case CopyTextRole:
+        return post.copyText();
     case DateRole:
         return post.date();
     case AttachmentsRole:
@@ -170,7 +188,6 @@ void WallModel::addPost(const Vreen::WallPost &post)
     beginInsertRows(QModelIndex(), last, last);
     m_posts.insert(it, post);
     endInsertRows();
-    //qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
 void WallModel::replacePost(int i, const Vreen::WallPost &post)
@@ -219,9 +236,3 @@ void WallModel::onPostLikeDeleted(int postId, int count)
 
     }
 }
-
-Vreen::Roster *WallModel::roster() const
-{
-    return m_contact.data()->client()->roster();
-}
-

@@ -56,6 +56,18 @@ namespace Vreen {
     << QLatin1String("nickname") \
     << QLatin1String("wall_comments") \
 
+#define VK_GROUP_FIELDS QLatin1String("city") \
+    << "country" \
+    << "place" \
+    << "description" \
+    << "wiki_page" \
+    << "members_count" \
+    << "counters" \
+    << "start_date" \
+    << "end_date" \
+    << "can_post" \
+    << "activity"
+
 #define VK_ALL_FIELDS VK_COMMON_FIELDS \
     << VK_EXTENDED_FIELDS
 
@@ -111,7 +123,7 @@ public:
     Client *client() const;
     Q_INVOKABLE QString photoSource(PhotoSize size = PhotoSizeSmall) const;
     void setPhotoSource(const QString &source, PhotoSize size = PhotoSizeSmall);    
-    static void fillContact(Contact *contact, const QVariantMap &data);
+    static void fill(Contact *contact, const QVariantMap &data);
 signals:
     void nameChanged(const QString &name);
     void photoSourceChanged(const QString &source, Vreen::Contact::PhotoSize);
@@ -196,6 +208,8 @@ class VK_SHARED_EXPORT Group : public Contact
 public:
     virtual QString name() const;
     void setName(const QString &name);
+public slots:
+    void update();
 protected:
     Group(int id, Client *client);
 

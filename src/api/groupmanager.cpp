@@ -22,22 +22,13 @@
 ** $VREEN_END_LICENSE$
 **
 ****************************************************************************/
-#include "groupmanager.h"
 #include "client.h"
 #include "contact.h"
+#include "utils_p.h"
+#include <QTimer>
+#include "groupmanager_p.h"
 
 namespace Vreen {
-
-class GroupManager;
-class GroupManagerPrivate
-{
-    Q_DECLARE_PUBLIC(GroupManager)
-public:
-    GroupManagerPrivate(GroupManager *q, Client *client) : q_ptr(q), client(client) {}
-    GroupManager *q_ptr;
-    Client *client;
-    QHash<int, Group*> groupHash;
-};
 
 GroupManager::GroupManager(Client *client) :
     QObject(client),
@@ -70,5 +61,52 @@ Group *GroupManager::group(int gid) const
     return d_func()->groupHash.value(gid);
 }
 
+Reply *GroupManager::update(const IdList &ids, const QStringList &fields)
+{
+    Q_D(GroupManager);
+    QVariantMap args;
+    args.insert("gids", join(ids));
+    args.insert("fields", fields.join(","));
+    auto reply = d->client->request("groups.getById", args);
+    reply->connect(reply, SIGNAL(resultReady(const QVariant&)),
+                   this, SLOT(_q_update_finished(const QVariant&)));
+    return reply;
+}
+
+Reply *GroupManager::update(const GroupList &groups, const QStringList &fields)
+{
+    IdList ids;
+    foreach (auto group, groups)
+        ids.append(group->id());
+    return update(ids, fields);
+}
+
+void GroupManagerPrivate::_q_update_finished(const QVariant &response)
+{
+    Q_Q(GroupManager);
+    auto list = response.toList();
+    foreach (auto data, list) {
+        auto map = data.toMap();
+        int id = -map.value("gid").toInt();
+        Contact::fill(q->group(id), map);
+    }
+}
+
+void GroupManagerPrivate::_q_updater_handle()
+{
+    Q_Q(GroupManager);
+    q->update(updaterQueue);
+    updaterQueue.clear();
+}
+
+void GroupManagerPrivate::appendToUpdaterQueue(Group *contact)
+{
+    if (!updaterQueue.contains(-contact->id()))
+        updaterQueue.append(-contact->id());
+    if (!updaterTimer.isActive())
+        updaterTimer.start();
+}
+
 } // namespace Vreen
 
+#include "moc_groupmanager.cpp"

@@ -57,11 +57,11 @@ public:
             if (uid > 0) {
                 auto roster = client->roster();
                 auto buddy = roster->buddy(uid);
-                Contact::fillContact(buddy, map);
+                Contact::fill(buddy, map);
             } else {
                 auto manager = client->groupManager();
                 auto group = manager->group(-uid);
-                Contact::fillContact(group, map);
+                Contact::fill(group, map);
             }
         }
     }
@@ -73,7 +73,7 @@ public:
             auto manager = client->groupManager();
             int gid = -map.value("gid").toInt();
             auto contact = manager->group(gid);
-            Contact::fillContact(contact, map);
+            Contact::fill(contact, map);
         }
     }
 

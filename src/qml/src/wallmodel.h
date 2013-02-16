@@ -39,6 +39,9 @@ public:
         IdRole = Qt::UserRole,
         FromRole,
         ToRole,
+        OwnerRole,
+        SignerRole,
+        CopyTextRole,
         DateRole,
         BodyRole,
         CommentsRole,
@@ -67,7 +70,8 @@ private slots:
     void onPostLikeAdded(int id, int likes, int reposts, bool isRetweeted);
     void onPostLikeDeleted(int postId, int count);
 private:
-    Vreen::Roster *roster() const;
+    inline Vreen::Roster *roster() const { return client()->roster(); }
+    inline Vreen::Client *client() const { return m_contact->client(); }
     QPointer<Vreen::Contact> m_contact;
     QPointer<Vreen::WallSession> m_session;
     Vreen::WallPostList m_posts;

@@ -52,7 +52,7 @@ public:
         if (!list.isEmpty()) {
             list.takeFirst();
             foreach (auto item, list) {
-                auto post = WallPost::fromData(item, contact->client());
+                auto post = WallPost::fromData(item);
                 emit q_func()->postAdded(post);
             }
         }

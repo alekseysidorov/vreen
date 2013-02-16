@@ -200,12 +200,12 @@ Buddy *Client::me()
 Contact *Client::contact(int id) const
 {
     Contact *contact = 0;
-    if (id >= 0) {
+    if (id > 0) {
         if (roster())
             contact = roster()->buddy(id);
         if (!contact && groupManager())
             contact = groupManager()->group(id);
-    } else if (groupManager())
+    } else if (id < 0 && groupManager())
         contact = groupManager()->group(id);
     return contact;
 }

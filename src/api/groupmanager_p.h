@@ -22,45 +22,42 @@
 ** $VREEN_END_LICENSE$
 **
 ****************************************************************************/
-#ifndef VK_GROUPMANAGER_H
-#define VK_GROUPMANAGER_H
 
+#ifndef GROUPMANAGER_P_H
+#define GROUPMANAGER_P_H
+
+#include "groupmanager.h"
+#include "client.h"
 #include "contact.h"
-#include <QObject>
+#include <QTimer>
 
 namespace Vreen {
 
-class Client;
-class Group;
-class GroupManagerPrivate;
-
-class VK_SHARED_EXPORT GroupManager : public QObject
+class GroupManager;
+class GroupManagerPrivate
 {
-    Q_OBJECT
-    Q_DECLARE_PRIVATE(GroupManager)
+    Q_DECLARE_PUBLIC(GroupManager)
 public:
-    explicit GroupManager(Client *client);
-    virtual ~GroupManager();
-    Client *client() const;
-    Group *group(int gid) const;
-    Group *group(int gid);
-public slots:
-    Reply *update(const IdList &ids, const QStringList &fields = QStringList() << VK_GROUP_FIELDS);
-    Reply *update(const GroupList &groups, const QStringList &fields = QStringList() << VK_GROUP_FIELDS);
-signals:
-    void groupCreated(Group *group);
-protected:
-    QScopedPointer<GroupManagerPrivate> d_ptr;
-private:
+    GroupManagerPrivate(GroupManager *q, Client *client) : q_ptr(q), client(client)
+    {
+        updaterTimer.setInterval(5000);
+        updaterTimer.setSingleShot(true);
+        updaterTimer.connect(&updaterTimer, SIGNAL(timeout()),
+                             q, SLOT(_q_updater_handle()));
+    }
+    GroupManager *q_ptr;
+    Client *client;
+    QHash<int, Group*> groupHash;
 
-    Q_PRIVATE_SLOT(d_func(), void _q_update_finished(const QVariant &response))
-    Q_PRIVATE_SLOT(d_func(), void _q_updater_handle())
+    //updater
+    QTimer updaterTimer;
+    IdList updaterQueue;
 
-    friend class Group;
-    friend class GroupPrivate;
+    void _q_update_finished(const QVariant &response);
+    void _q_updater_handle();
+    void appendToUpdaterQueue(Group *contact);
 };
 
-} // namespace Vreen
+} //namespace Vreen
 
-#endif // VK_GROUPMANAGER_H
-
+#endif // GROUPMANAGER_P_H

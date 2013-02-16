@@ -39,12 +39,11 @@ class Contact;
 class VK_SHARED_EXPORT WallPost
 {
 public:  
-    WallPost(Client *client = 0);
+    WallPost();
     WallPost(const WallPost &);
     WallPost &operator=(const WallPost &);
     ~WallPost();
 
-    Client *client() const;
     void setId(int id);
     int id() const;
     void setBody(const QString &body);
@@ -53,8 +52,14 @@ public:
     int fromId() const;
     void setToId(int id);
     int toId() const;
+    int ownerId() const;
+    void setOwnerId(int ownerId);
     void setDate(const QDateTime &date);
     QDateTime date() const;
+    int signerId() const;
+    void setSignerId(int signerId);
+    QString copyText() const;
+    void setCopyText(const QString &copyText);
     Attachment::Hash attachments() const;
     Attachment::List attachments(Attachment::Type type) const;
     void setAttachments(const Attachment::List &attachmentList);
@@ -63,10 +68,7 @@ public:
     QVariantMap reposts() const;
     void setReposts(const QVariantMap &reposts);
 
-    Contact *from();
-    Contact *to();
-
-    static WallPost fromData(const QVariant data, Client *client);
+    static WallPost fromData(const QVariant data);
 
     QVariant property(const QString &name, const QVariant &def = QVariant()) const;
     template<typename T>
@@ -76,7 +78,7 @@ public:
     void setProperty(const QString &name, const QVariant &value);
     QStringList dynamicPropertyNames() const;
 protected:
-    WallPost(QVariantMap data, Client *client);
+    WallPost(QVariantMap data);
 private:
     QSharedDataPointer<WallPostData> d;
 };
