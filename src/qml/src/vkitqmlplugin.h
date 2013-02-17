@@ -40,6 +40,7 @@
 #include <newsfeed.h>
 #include <connection.h>
 #include <reply.h>
+#include <messagesession.h>
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <qqmlextensionplugin.h>
@@ -81,6 +82,7 @@ static inline void registerVreenTypes(const char *uri)
     qmlRegisterUncreatableType<Vreen::NewsItem>("com.vk.api", 1, 0, "NewsItem", QObject::tr("NewsItem enums"));
     qmlRegisterUncreatableType<Vreen::NewsFeed>("com.vk.api", 1, 0, "NewsFeed", QObject::tr("NewsFeed enums"));
     qmlRegisterUncreatableType<Vreen::MessageListModel>("com.vk.api", 1, 0, "MessageListModel", QObject::tr("Cannot use this class directly"));
+    qmlRegisterUncreatableType<Vreen::MessageSession>("com.vk.api", 1, 0, "MessageSession", QObject::tr("Cannot use this class directly"));
 }
 
 #endif // VKITQMLPLUGIN_H

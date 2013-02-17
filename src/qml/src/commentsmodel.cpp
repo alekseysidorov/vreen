@@ -67,6 +67,7 @@ void CommentsModel::setContact(Vreen::Contact *contact)
 
     m_contact = contact;
     m_session = session;
+    clear();
     emit contactChanged(contact);
 }
 
@@ -122,6 +123,7 @@ void CommentsModel::setPostId(int postId)
 {
     if (m_postId != postId) {
         m_postId = postId;
+        clear();
         emit postChangedId(postId);
         if (m_session.data())
             m_session.data()->setPostId(postId);

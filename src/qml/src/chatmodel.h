@@ -30,27 +30,32 @@
 
 namespace Vreen {
 class MessageSession;
+class Reply;
 } //namespace Vreen
 
 class ChatModel : public Vreen::MessageListModel
 {
     Q_OBJECT
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
+    Q_PROPERTY(Vreen::MessageSession* session READ messageSession NOTIFY messageSessionChanged)
 public:
     explicit ChatModel(QObject *parent = 0);
     QString title() const;
     void setMessageSession(Vreen::MessageSession *session);
+    Vreen::MessageSession *messageSession() const;
 protected:
     void doInsertMessage(int index, const Vreen::Message &message);
 public slots:
     void setContact(Vreen::Contact *contact);
     void setChatId(int chatId);
-    void getHistory(int count = 16, int offset = 0);
-    void markAsRead(int mid, bool set = true);
+    Vreen::Reply *getHistory(int count = 16, int offset = 0);
+    Vreen::Reply *markAsRead(int mid, bool set = true);
+    Vreen::Reply *sendMessage(const QString &message, const QString &subject = QString());
 signals:
     void contactChanged(Vreen::Contact*);
     void titleChanged(const QString &title);
     void requestFinished();
+    void messageSessionChanged(const Vreen::MessageSession *);
 private slots:
     void messageReadStateChanged(int id, bool set);
 private:

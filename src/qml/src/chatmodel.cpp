@@ -83,6 +83,12 @@ void ChatModel::setMessageSession(Vreen::MessageSession *session)
 
     m_session = session;
     emit titleChanged(session->title());
+    emit messageSessionChanged(m_session.data());
+}
+
+Vreen::MessageSession *ChatModel::messageSession() const
+{
+    return m_session.data();
 }
 
 void ChatModel::doInsertMessage(int index, const Vreen::Message &message)
@@ -91,21 +97,31 @@ void ChatModel::doInsertMessage(int index, const Vreen::Message &message)
     //qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
-void ChatModel::getHistory(int count, int offset)
+Vreen::Reply *ChatModel::getHistory(int count, int offset)
 {
     if (!m_session.isNull()) {
         auto reply = m_session.data()->getHistory(count, offset);
         connect(reply, SIGNAL(resultReady(QVariant)), SIGNAL(requestFinished()));
+        return reply;
     }
+    return 0;
 }
 
-void ChatModel::markAsRead(int mid, bool set)
+Vreen::Reply *ChatModel::markAsRead(int mid, bool set)
 {
-       if (!m_session.isNull()) {
-           Vreen::IdList ids;
-           ids.append(mid);
-           m_session.data()->markMessagesAsRead(ids, set);
-       }
+    if (!m_session.isNull()) {
+        Vreen::IdList ids;
+        ids.append(mid);
+        return m_session.data()->markMessagesAsRead(ids, set);
+    }
+    return 0;
+}
+
+Vreen::Reply *ChatModel::sendMessage(const QString &body, const QString &subject)
+{
+    if (m_session)
+        return m_session->sendMessage(body, subject);
+    return 0;
 }
 
 void ChatModel::messageReadStateChanged(int id, bool set)
