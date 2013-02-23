@@ -27,6 +27,7 @@
 #include <QDateTime>
 #include "roster.h"
 #include "client.h"
+#include "utils_p.h"
 
 namespace Vreen {
 
@@ -78,12 +79,12 @@ WallPost::WallPost(QVariantMap data) :
     d(new WallPostData())
 {
     d->id = data.take("id").toInt();
-    d->body = data.take("text").toString();
+    d->body = fromHtmlEntities(data.take("text").toString());
     d->fromId = data.take("from_id").toInt();
     d->toId = data.take("to_id").toInt();
     d->ownerId = data.take("copy_owner_id").toInt();
     d->signerId = data.take("signer_id").toInt();
-    d->copyText = data.take("copy_text").toString();
+    d->copyText = fromHtmlEntities(data.take("copy_text").toString());
     d->date = QDateTime::fromTime_t(data.take("date").toUInt());
     d->likes = data.take("likes").toMap();
     d->reposts = data.take("reposts").toMap();
