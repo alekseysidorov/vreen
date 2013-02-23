@@ -24,6 +24,7 @@
 ****************************************************************************/
 #include "newsitem.h"
 #include "utils.h"
+#include "utils_p.h"
 #include <QSharedData>
 #include <QStringList>
 #include <QDateTime>
@@ -34,11 +35,15 @@ class NewsItemData : public QSharedData {
 public:
     NewsItemData() : QSharedData() {}
     NewsItemData(const NewsItemData &o) : QSharedData(o),
+        body(o.body),
         data(o.data),
         likes(o.likes),
         reposts(o.reposts),
         attachmentHash(o.attachmentHash)
     {}
+
+    QString body;
+
     QVariantMap data;
     QVariantMap likes;
     QVariantMap reposts;
@@ -48,7 +53,8 @@ public:
 QDataStream &operator <<(QDataStream &out, const NewsItem &item)
 {
     auto &d = item.d;
-    return out << d->data
+    return out << d->body
+               << d->data
                << d->likes
                << d->reposts
                << d->attachmentHash.values();
@@ -58,10 +64,11 @@ QDataStream &operator >>(QDataStream &out, NewsItem &item)
 {
     auto &d = item.d;
     Attachment::List list;
-    out >> d->data
-               >> d->likes
-               >> d->reposts
-               >> list;
+    out >> d->body
+        >> d->data
+        >> d->likes
+        >> d->reposts
+        >> list;
     d->attachmentHash = Attachment::toHash(list);
     return out;
 }
@@ -114,16 +121,12 @@ NewsItem NewsItem::fromData(const QVariant &data)
 void NewsItem::setData(const QVariantMap &data)
 {
     d->data = data;
+    d->body = fromHtmlEntities(d->data.take("text").toString());
     d->likes = d->data.take("likes").toMap();
     d->reposts = d->data.take("reposts").toMap();
     auto attachmentList = Attachment::fromVariantList(d->data.take("attachments").toList());
     setAttachments(attachmentList);
 
-}
-
-QVariantMap NewsItem::data() const
-{
-    return d->data;
 }
 
 Attachment::Hash NewsItem::attachments() const
@@ -173,12 +176,12 @@ void NewsItem::setSourceId(int sourceId)
 
 QString NewsItem::body() const
 {
-    return d->data.value("text").toString();
+    return d->body;
 }
 
 void NewsItem::setBody(const QString &body)
 {
-    d->data.insert("body", body);
+    d->body = body;
 }
 
 QDateTime NewsItem::date() const

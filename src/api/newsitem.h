@@ -54,8 +54,6 @@ public:
 
     static NewsItem fromData(const QVariant &data);
 
-    void setData(const QVariantMap &data);
-    QVariantMap data() const;
     Attachment::Hash attachments() const;
     Attachment::List attachments(Attachment::Type type) const;
     void setAttachments(const Attachment::List &attachmentList);
@@ -85,6 +83,7 @@ public:
     VK_SHARED_EXPORT friend QDataStream &operator >>(QDataStream &out, Vreen::NewsItem &item);
 protected:
     NewsItem(const QVariantMap &data);
+    void setData(const QVariantMap &data);
 private:
     QSharedDataPointer<NewsItemData> d;
 };
