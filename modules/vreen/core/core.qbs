@@ -38,7 +38,7 @@ Module {
         inputs: [ "devheader" ]
         Artifact {
             fileTags: [ "hpp",  "installed_content" ]
-            fileName: "GeneratedFiles/" + input.modules.qbs.installDir + "/" + input.fileName
+            fileName: "GeneratedFiles/" + input.moduleProperty("qbs", "installDir") + "/" + input.fileName
         }
 
         prepare: {
@@ -60,7 +60,7 @@ Module {
         inputs: [ "qml" ]
         Artifact {
             fileTags: [ "installed_content" ]
-            fileName: input.modules.qbs.installDir + "/" + input.fileName
+            fileName: input.moduleProperty("qbs", "installDir") + "/" + input.fileName
         }
 
         prepare: {
