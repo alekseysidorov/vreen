@@ -2,7 +2,7 @@ import qbs.base 1.0
 import qbs.fileinfo 1.0 as FileInfo
 
 Product {
-    type: ["staticlibrary", "installed_content"]
+    type: ["staticlibrary"]
     name: "vreenoauth"
     destination: "lib"
 
@@ -40,6 +40,7 @@ Product {
         fileTags: ["hpp", "devheader"]
         overrideTags: false
         qbs.installDir: "include/vreen/auth"
+        qbs.install: true
     }
 }
 

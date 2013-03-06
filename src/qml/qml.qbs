@@ -2,7 +2,7 @@ import qbs.base 1.0
 
 Product {
     name: "vreenplugin"
-    type: ["dynamiclibrary", "installed_content"]
+    type: ["dynamiclibrary"]
 
     property string uri: "com.vk.api"
     property bool system: false
@@ -50,6 +50,7 @@ Product {
 
     Group {
         qbs.installDir: destination
+        qbs.install: true
         vreen.core.qmlDestination: destination
         fileTags: ["qml"]
         files: [
@@ -63,5 +64,10 @@ Product {
     Group {
         condition: qt.core.versionMajor === 5
         files: "vreenplugin_qt5.cpp"
+    }
+    Group {
+        fileTagsFilter: product.type
+        qbs.install: true
+        qbs.installDir: product.destination
     }
 }

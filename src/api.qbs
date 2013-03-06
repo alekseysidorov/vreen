@@ -76,6 +76,7 @@ Product {
         fileTags: ["devheader"]
         overrideTags: false
         qbs.installDir: "include/vreen/" + vreen.core.version + "/vreen/private"
+        qbs.install: true
     }
 
     Group {
@@ -84,5 +85,6 @@ Product {
         fileTags: ["devheader"]
         overrideTags: false
         qbs.installDir: "include/vreen"
+        qbs.install: true
     }
 }
