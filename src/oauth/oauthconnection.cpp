@@ -336,6 +336,7 @@ void OAuthConnectionPrivate::clear()
     accessToken.clear();
     expiresIn = 0;
     uid = 0;
+    saveAuthData();
 }
 
 void OAuthConnectionPrivate::handleAuthRequest(QWebPage *page)

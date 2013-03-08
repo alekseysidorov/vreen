@@ -418,8 +418,8 @@ void ClientPrivate::_q_error_received(int code)
     auto error = static_cast<Client::Error>(code);
     emit q->error(error);
     if (error == Client::ErrorAuthorizationFailed) {
-        connection.data()->disconnectFromHost();
-        connection.data()->clear();
+        connection->disconnectFromHost();
+        connection->clear();
     }
 }
 
