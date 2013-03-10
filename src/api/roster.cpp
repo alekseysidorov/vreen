@@ -237,6 +237,7 @@ void RosterPrivate::getFriends(const QVariantMap &args)
     Q_Q(Roster);
     auto reply = client->request("friends.get", args);
     reply->setProperty("friend", true);
+    reply->setProperty("sync", true);
     reply->connect(reply, SIGNAL(resultReady(const QVariant&)),
                    q, SLOT(_q_friends_received(const QVariant&)));
 }
@@ -294,6 +295,7 @@ void RosterPrivate::_q_friends_received(const QVariant &response)
 {
     Q_Q(Roster);
     bool isFriend = q->sender()->property("friend").toBool();
+    bool isSync = q->sender()->property("sync").toBool();
     auto list = response.toList();
     foreach (auto data, list) {
         auto map = data.toMap();
@@ -304,11 +306,13 @@ void RosterPrivate::_q_friends_received(const QVariant &response)
             Contact::fill(buddy, map);
             buddy->setIsFriend(isFriend);
             buddyHash[id] = buddy;
-            emit q->buddyAdded(buddy);
+            if (!isSync)
+                emit q->buddyAdded(buddy);
         } else {
             buddy->setIsFriend(isFriend);
             Contact::fill(buddy, map);
-            emit q->buddyUpdated(buddy);
+            if (!isSync)
+                emit q->buddyUpdated(buddy);
         }
     }
     emit q->syncFinished(true);

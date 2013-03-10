@@ -114,7 +114,7 @@ struct ComparatorBase
     inline bool operator()(Value a, Value b) const
     {
         return sortOrder == Qt::AscendingOrder ? a < b
-                                               : a > b;
+                                               : b < a;
     }
 
     const Method method;

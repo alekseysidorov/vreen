@@ -27,6 +27,7 @@
 
 #include <QAbstractListModel>
 #include <roster.h>
+#include <utils.h>
 #include <QPointer>
 
 class BuddyModel : public QAbstractListModel
@@ -44,6 +45,27 @@ public:
         PhotoRole
     };
 
+    struct CompareType
+    {
+        QString name;
+        int status;
+        inline friend bool operator <(const BuddyModel::CompareType &a, const BuddyModel::CompareType &b)
+        {
+            int less = a.name.compare(b.name);
+            if (less)
+                return less > 0;
+            return a.status < b.status;
+        }
+        inline static CompareType comparator(Vreen::Buddy * const& buddy)
+        {
+            BuddyModel::CompareType type = {
+                buddy->name(),
+                buddy->status()
+            };
+            return type;
+        }
+    };
+
     explicit BuddyModel(QObject *parent = 0);
     
     void setRoster(Vreen::Roster *roster);
@@ -59,17 +81,20 @@ public slots:
 signals:
     void rosterChanged(Vreen::Roster*);
     void filterByNameChanged(const QString &filter);
-    void requestFinished();
 private slots:
-    void addFriend(Vreen::Buddy *);
+    void addBuddy(Vreen::Buddy *);
     void removeFriend(int id);
+    void onSyncFinished();
 protected:
     bool checkContact(Vreen::Buddy *);
+    void setBuddies(const Vreen::BuddyList &list);
 private:
     QPointer<Vreen::Roster> m_roster;
     Vreen::BuddyList m_buddyList;
-    bool m_showGroups;
     QString m_filterByName;
+    bool m_friendsOnly;
+
+    Vreen::Comparator<Vreen::Buddy*, CompareType> m_buddyComparator;
 };
 
 #endif // CONTACTSMODEL_H

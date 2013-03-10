@@ -31,7 +31,8 @@
 
 BuddyModel::BuddyModel(QObject *parent) :
     QAbstractListModel(parent),
-    m_showGroups(false)
+    m_friendsOnly(true),
+    m_buddyComparator(BuddyModel::CompareType::comparator, Qt::AscendingOrder)
 {
     auto roles = roleNames();
     roles[ContactRole] = "contact";
@@ -48,12 +49,19 @@ void BuddyModel::setRoster(Vreen::Roster *roster)
         m_roster.data()->disconnect(this);
     m_roster = roster;
 
-    foreach (auto buddy, m_roster.data()->buddies())
-        addFriend(buddy);
-
-	connect(roster, SIGNAL(buddyAdded(Vreen::Buddy*)), SLOT(addFriend(Vreen::Buddy*)));
+    setBuddies(roster->buddies());
+    connect(roster, SIGNAL(buddyAdded(Vreen::Buddy*)), SLOT(addBuddy(Vreen::Buddy*)));
 	connect(roster, SIGNAL(buddyRemoved(int)), SLOT(removeFriend(int)));
+    connect(roster, SIGNAL(syncFinished(bool)), SLOT(onSyncFinished()));
     emit rosterChanged(roster);
+}
+
+void BuddyModel::setBuddies(const Vreen::BuddyList &list)
+{
+    clear();
+    beginInsertRows(QModelIndex(), 0, list.count());
+    m_buddyList = list;
+    endInsertRows();
 }
 
 Vreen::Roster *BuddyModel::roster() const
@@ -116,10 +124,14 @@ void BuddyModel::setFilterByName(const QString &filter)
     m_filterByName = filter;
     emit filterByNameChanged(filter);
 
-    //TODO write more fast algorythm
-    clear();
-    foreach (auto buddy, m_roster.data()->findChildren<Vreen::Buddy*>())
-        addFriend(buddy);
+    Vreen::BuddyList list;
+    foreach (auto buddy, m_roster->buddies()) {
+        if (checkContact(buddy)) {
+            auto it = qLowerBound(list.begin(), list.end(), buddy, m_buddyComparator);
+            list.insert(it, buddy);
+        }
+    }
+    setBuddies(list);
 }
 
 QString BuddyModel::filterByName()
@@ -141,16 +153,15 @@ int BuddyModel::findContact(int id) const
     return -1;
 }
 
-void BuddyModel::addFriend(Vreen::Buddy *contact)
+void BuddyModel::addBuddy(Vreen::Buddy *contact)
 {
     if (!checkContact(contact))
         return;
-    int index = m_buddyList.count();
+    int index = Vreen::lowerBound(m_buddyList, contact, m_buddyComparator);
 
     beginInsertRows(QModelIndex(), index, index);
     m_buddyList.insert(index, contact);
     endInsertRows();
-    //qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
 void BuddyModel::removeFriend(int id)
@@ -163,12 +174,16 @@ void BuddyModel::removeFriend(int id)
     endRemoveRows();
 }
 
+void BuddyModel::onSyncFinished()
+{
+    setBuddies(m_roster->buddies());
+}
+
 bool BuddyModel::checkContact(Vreen::Buddy *contact)
 {
-    if (!contact->isFriend())
+    if (m_friendsOnly && !contact->isFriend())
         return false;
     if (!m_filterByName.isEmpty())
         return contact->name().contains(m_filterByName, Qt::CaseInsensitive);
     return true;
 }
-
