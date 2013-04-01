@@ -2,6 +2,7 @@ import qbs.base 1.0
 import qbs.fileinfo as FileInfo
 
 Module {
+    property string binDestination: 'bin'
     property string libDestination: {
         if (qbs.targetOS === 'windows')
             return "bin";

@@ -12,6 +12,7 @@ Product {
     cpp.includePaths: [
         "src"
     ]
+    cpp.rpaths: ["$ORIGIN/../../../lib"]
 
     files: [
         "src/audiomodel.cpp",       "src/buddymodel.h",
