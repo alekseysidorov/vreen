@@ -17,7 +17,7 @@ Module {
     property string version: versionMajor + '.' + versionMinor + '.' + versionRelease
 
     Depends { name: "cpp" }
-    Depends { name: "qt.core"}
+    Depends { name: "Qt.core"}
 
     Properties {
         condition: qbs.toolchain != 'msvc'

@@ -26,7 +26,7 @@ Product {
     ]
 
     Properties {
-        condition: qt.core.versionMajor === 5
+        condition: Qt.core.versionMajor === 5
         cpp.defines: outer.concat("QT_DISABLE_DEPRECATED_BEFORE=0")
     }
 
