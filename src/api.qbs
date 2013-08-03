@@ -1,5 +1,4 @@
 import qbs.base 1.0
-import qbs.fileinfo as FileInfo
 
 Product {
     name: "vreen"
@@ -35,7 +34,7 @@ Product {
     Depends { name: "k8json" }
     Depends { name: "vreen.core" }
 
-    ProductModule {
+    Export {
         Depends { name: "cpp" }
         Depends { name: "Qt"; submodules: ["core", "network", "gui"] }
         Depends { name: "vreen.core" }

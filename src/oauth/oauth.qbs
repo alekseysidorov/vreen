@@ -1,5 +1,4 @@
 import qbs.base 1.0
-import qbs.fileinfo as FileInfo
 
 Product {
     type: ["staticlibrary"]
@@ -22,7 +21,7 @@ Product {
         cpp.defines: base.concat("QT_DISABLE_DEPRECATED_BEFORE=0")
     }
 
-    ProductModule {
+    Export {
         Depends { name: "cpp" }
         Depends { name: "Qt.webkit"}
         Depends { name: "Qt.webkitwidgets"}
