@@ -3,7 +3,7 @@ import qbs.base 1.0
 Product {
     type: ["staticlibrary"]
     name: "vreenoauth"
-    destination: "lib"
+    destinationDirectory: "lib"
 
     //cpp.warningLevel: "all"
 
