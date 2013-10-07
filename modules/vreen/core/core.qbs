@@ -19,17 +19,15 @@ Module {
     Depends { name: "cpp" }
     Depends { name: "Qt.core"}
 
-    Properties {
-        condition: qbs.toolchain != 'msvc'
-        cpp.cxxFlags: base.concat([ "-std=c++11" ])
-    }
-    Properties {
-        condition: qbs.targetOS == "mac"
-        cpp.cxxFlags: base.concat([ "-stdlib=libc++" ])
-    }
-
     setupRunEnvironment: {
         putenv('QML2_IMPORT_PATH', product.buildDirectory + "/" + qmlDestination);
+    }
+
+    cpp.cxxFlags: {
+        var flags = base.concat("-std=c++11");
+        if (qbs.toolchain.contains("clang"))
+            flags = flags.concat("-stdlib=libc++");
+        return flags;
     }
 
     Rule {
