@@ -1,12 +1,14 @@
 import qbs.base 1.0
-import qbs.fileinfo as FileInfo
 
 Product {
     name: "vreen"
 
-    property string headersDestination: "vreen"
+    property string versionMajor: vreen.core.versionMajor
+    property string versionMinor: vreen.core.versionMinor
+    property string versionRelease: vreen.core.versionRelease
+    //property string version: versionMajor + '.' + versionMinor + '.' + versionRelease
 
-    destination: vreen.core.libDestination
+    destinationDirectory: vreen.core.libDestination
     type: ["dynamiclibrary", "installed_content"]
 
     //cpp.warningLevel: "all"
@@ -19,7 +21,8 @@ Product {
         "K8JSON_INCLUDE_GENERATOR",
         "K8JSON_INCLUDE_COMPLEX_GENERATOR"
     ]
-    cpp.visibility: "hidden"
+    cpp.positionIndependentCode: true
+    cpp.visibility: ["hidden"]
 
     files: [
         "api/*.cpp",
@@ -35,7 +38,7 @@ Product {
     Depends { name: "k8json" }
     Depends { name: "vreen.core" }
 
-    ProductModule {
+    Export {
         Depends { name: "cpp" }
         Depends { name: "Qt"; submodules: ["core", "network", "gui"] }
         Depends { name: "vreen.core" }
@@ -49,6 +52,8 @@ Product {
     }
 
     Group {
+        name: "Private Headers"
+
         files: [
             "api/*_p.h",
             "api/draft/*_p.h",
@@ -61,6 +66,8 @@ Product {
     }
 
     Group {
+        name: "Public Headers"
+
         files: "api/*.h"
         excludeFiles: "api/*_p.h"
         fileTags: ["devheader"]

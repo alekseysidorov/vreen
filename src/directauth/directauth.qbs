@@ -1,5 +1,4 @@
 import qbs.base 1.0
-import qbs.fileinfo as FileInfo
 
 Product {
     condition: false
@@ -10,7 +9,7 @@ Product {
 
     type: ["staticlibrary", "installed_content"]
     name: "vreendirectauth"
-    destination: "lib"
+    destinationDirectory: "lib"
 
     cpp.defines: [
         "VREEN_DIRECTAUTH_CLIENT_ID=\"" + clientId + "\"",

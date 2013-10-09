@@ -56,33 +56,33 @@
 
 static inline void registerVreenTypes(const char *uri)
 {
-    Q_ASSERT(uri == QLatin1String("com.vk.api"));
+    Q_ASSERT(uri == QLatin1String("Vreen.Base")); // @uri Vreen.Base
 
-    qmlRegisterType<Client>("com.vk.api", 1, 0, "Client");
-    qmlRegisterType<BuddyModel>("com.vk.api", 1, 0, "BuddyModel");
-    qmlRegisterType<DialogsModel>("com.vk.api", 1, 0, "DialogsModel");
-    qmlRegisterType<ChatModel>("com.vk.api", 1, 0, "ChatModel");
-    qmlRegisterType<WallModel>("com.vk.api", 1, 0, "WallModel");
-    qmlRegisterType<NewsFeedModel>("com.vk.api", 1, 0, "NewsFeedModel");
-    qmlRegisterType<CommentsModel>("com.vk.api", 1, 0, "CommentsModel");
-    qmlRegisterType<AudioModel>("com.vk.api", 1, 0, "AudioModel");
+    qmlRegisterType<Client>(uri, 2, 0, "Client");
+    qmlRegisterType<BuddyModel>(uri, 2, 0, "BuddyModel");
+    qmlRegisterType<DialogsModel>(uri, 2, 0, "DialogsModel");
+    qmlRegisterType<ChatModel>(uri, 2, 0, "ChatModel");
+    qmlRegisterType<WallModel>(uri, 2, 0, "WallModel");
+    qmlRegisterType<NewsFeedModel>(uri, 2, 0, "NewsFeedModel");
+    qmlRegisterType<CommentsModel>(uri, 2, 0, "CommentsModel");
+    qmlRegisterType<AudioModel>(uri, 2, 0, "AudioModel");
 #ifdef VREEN_WITH_OAUTH
-    qmlRegisterType<Vreen::OAuthConnection>("com.vk.api", 1, 0, "OAuthConnection");
+    qmlRegisterType<Vreen::OAuthConnection>(uri, 2, 0, "OAuthConnection");
 #endif
 
-    qmlRegisterUncreatableType<Vreen::Reply>("com.vk.api", 1, 0, "Reply", QObject::tr("Don't use reply directly"));
-    qmlRegisterUncreatableType<Vreen::Client>("com.vk.api", 1, 0, "ClientBase", QObject::tr("Use SimpleClient instead"));
-    qmlRegisterUncreatableType<Vreen::Roster>("com.vk.api", 1, 0, "Roster", QObject::tr("Use client.roster instead"));
-    qmlRegisterUncreatableType<Vreen::Connection>("com.vk.api", 1, 0, "Connection", QObject::tr("Use client.connection instead"));
-    qmlRegisterUncreatableType<Vreen::Contact>("com.vk.api", 1, 0, "Contact", QObject::tr("Use client.contact(id)"));
-    qmlRegisterUncreatableType<Vreen::Buddy>("com.vk.api", 1, 0, "Buddy", QObject::tr("User roster.buddy(id)"));
-    qmlRegisterUncreatableType<Vreen::Message>("com.vk.api", 1, 0, "Message", QObject::tr("Only flags"));
-    qmlRegisterUncreatableType<Vreen::LongPoll>("com.vk.api", 1, 0, "LongPoll", QObject::tr("Use client.longPoll instead"));
-    qmlRegisterUncreatableType<Vreen::Attachment>("com.vk.api", 1, 0, "Attachment", QObject::tr("Attachment enums"));
-    qmlRegisterUncreatableType<Vreen::NewsItem>("com.vk.api", 1, 0, "NewsItem", QObject::tr("NewsItem enums"));
-    qmlRegisterUncreatableType<Vreen::NewsFeed>("com.vk.api", 1, 0, "NewsFeed", QObject::tr("NewsFeed enums"));
-    qmlRegisterUncreatableType<Vreen::MessageListModel>("com.vk.api", 1, 0, "MessageListModel", QObject::tr("Cannot use this class directly"));
-    qmlRegisterUncreatableType<Vreen::MessageSession>("com.vk.api", 1, 0, "MessageSession", QObject::tr("Cannot use this class directly"));
+    qmlRegisterUncreatableType<Vreen::Reply>(uri, 2, 0, "Reply", QObject::tr("Don't use reply directly"));
+    qmlRegisterUncreatableType<Vreen::Client>(uri, 2, 0, "ClientBase", QObject::tr("Use SimpleClient instead"));
+    qmlRegisterUncreatableType<Vreen::Roster>(uri, 2, 0, "Roster", QObject::tr("Use client.roster instead"));
+    qmlRegisterUncreatableType<Vreen::Connection>(uri, 2, 0, "Connection", QObject::tr("Use client.connection instead"));
+    qmlRegisterUncreatableType<Vreen::Contact>(uri, 2, 0, "Contact", QObject::tr("Use client.contact(id)"));
+    qmlRegisterUncreatableType<Vreen::Buddy>(uri, 2, 0, "Buddy", QObject::tr("User roster.buddy(id)"));
+    qmlRegisterUncreatableType<Vreen::Message>(uri, 2, 0, "Message", QObject::tr("Only flags"));
+    qmlRegisterUncreatableType<Vreen::LongPoll>(uri, 2, 0, "LongPoll", QObject::tr("Use client.longPoll instead"));
+    qmlRegisterUncreatableType<Vreen::Attachment>(uri, 2, 0, "Attachment", QObject::tr("Attachment enums"));
+    qmlRegisterUncreatableType<Vreen::NewsItem>(uri, 2, 0, "NewsItem", QObject::tr("NewsItem enums"));
+    qmlRegisterUncreatableType<Vreen::NewsFeed>(uri, 2, 0, "NewsFeed", QObject::tr("NewsFeed enums"));
+    qmlRegisterUncreatableType<Vreen::MessageListModel>(uri, 2, 0, "MessageListModel", QObject::tr("Cannot use this class directly"));
+    qmlRegisterUncreatableType<Vreen::MessageSession>(uri, 2, 0, "MessageSession", QObject::tr("Cannot use this class directly"));
 }
 
 #endif // VKITQMLPLUGIN_H

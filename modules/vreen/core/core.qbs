@@ -1,5 +1,7 @@
 import qbs.base 1.0
-import qbs.fileinfo as FileInfo
+import qbs.FileInfo
+import qbs.TextFile
+import qbs.File
 
 Module {
     property string binDestination: 'bin'
@@ -11,10 +13,9 @@ Module {
     }
     property string qmlDestination: "bin"
 
-    property string versionMajor:  0
-    property string versionMinor: 9
-    property string versionRelease: 5
-    property string version: versionMajor + '.' + versionMinor + '.' + versionRelease
+    property string versionMajor:  1
+    property string versionMinor: 8
+    property string versionRelease: 0
 
     Depends { name: "cpp" }
     Depends { name: "Qt.core"}
