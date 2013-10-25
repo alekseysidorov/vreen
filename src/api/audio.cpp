@@ -62,6 +62,24 @@ public:
         }
         return QVariant::fromValue(items);
     }
+
+    static QVariant handleAudioAlbum(const QVariant &response) {
+        AudioAlbumItemList items;
+        auto list = response.toList();
+        int count = 0;
+        if (list.count() && list.first().canConvert<int>())
+            count = list.takeFirst().toInt();
+
+        foreach (auto item, list) {
+            auto map = item.toMap();
+            AudioAlbumItem audio;
+            audio.setId(map.value("album_id").toInt());
+            audio.setOwnerId(map.value("owner_id").toInt());
+            audio.setTitle(fromHtmlEntities(map.value("title").toString()));
+            items.append(audio);
+        }
+        return QVariant::fromValue(items);
+    }
 };
 
 AudioProvider::AudioProvider(Client *client) :
@@ -117,6 +135,18 @@ AudioItemListReply *AudioProvider::searchAudio(const QString& query, int count, 
     args.insert("offset", offset);
 
     auto reply = d->client->request<AudioItemListReply>("audio.search", args, AudioProviderPrivate::handleAudio);
+    return reply;
+}
+
+AudioAlbumItemListReply *AudioProvider::getAlbums(int ownerId, int count, int offset)
+{
+    Q_D(AudioProvider);
+    QVariantMap args;
+    args.insert("owner_id", ownerId);
+    args.insert("count", count);
+    args.insert("offset", offset);
+
+    auto reply = d->client->request<AudioAlbumItemListReply>("audio.getAlbums", args, AudioProviderPrivate::handleAudioAlbum);
     return reply;
 }
 

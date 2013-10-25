@@ -168,5 +168,71 @@ void AudioItem::setAlbumId(int albumId)
     data->albumId = albumId;
 }
 
+class AudioAlbumItemData : public QSharedData {
+public:
+    AudioAlbumItemData() :
+        id(0),
+        ownerId(0)
+    {}
+    AudioAlbumItemData(AudioAlbumItemData &o) : QSharedData(),
+        id(o.id),
+        ownerId(o.ownerId),
+        title(o.title)
+    {}
+    int id;
+    int ownerId;
+    QString title;
+};
+
+AudioAlbumItem::AudioAlbumItem() : data(new AudioAlbumItemData)
+{
+}
+
+AudioAlbumItem::AudioAlbumItem(const AudioAlbumItem &rhs) : data(rhs.data)
+{
+}
+
+AudioAlbumItem &AudioAlbumItem::operator=(const AudioAlbumItem &rhs)
+{
+    if (this != &rhs)
+        data.operator=(rhs.data);
+    return *this;
+}
+
+AudioAlbumItem::~AudioAlbumItem()
+{
+
+}
+
+int AudioAlbumItem::ownerId() const
+{
+    return data->ownerId;
+}
+
+void AudioAlbumItem::setOwnerId(int ownerId)
+{
+    data->ownerId = ownerId;
+}
+
+int AudioAlbumItem::id() const
+{
+    return data->id;
+}
+
+void AudioAlbumItem::setId(int id)
+{
+    data->id = id;
+}
+
+QString AudioAlbumItem::title() const
+{
+    return data->title;
+}
+
+void AudioAlbumItem::setTitle(const QString &title)
+{
+    data->title = title;
+}
+
 } // namespace Vreen
 

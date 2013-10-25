@@ -65,6 +65,26 @@ private:
 };
 typedef QList<AudioItem> AudioItemList;
 
+class AudioAlbumItemData;
+class VK_SHARED_EXPORT AudioAlbumItem
+{
+public:
+    AudioAlbumItem();
+    AudioAlbumItem(const AudioAlbumItem &other);
+    AudioAlbumItem &operator=(const AudioAlbumItem &other);
+    ~AudioAlbumItem();
+
+    int id() const;
+    void setId(int id);
+    int ownerId() const;
+    void setOwnerId(int ownerId);
+    QString title() const;
+    void setTitle(const QString &title);
+private:
+    QSharedDataPointer<AudioAlbumItemData> data;
+};
+typedef QList<AudioAlbumItem> AudioAlbumItemList;
+
 template<>
 AudioItem Attachment::to(const Attachment &data);
 
@@ -72,6 +92,8 @@ AudioItem Attachment::to(const Attachment &data);
 
 Q_DECLARE_METATYPE(Vreen::AudioItem)
 Q_DECLARE_METATYPE(Vreen::AudioItemList)
+Q_DECLARE_METATYPE(Vreen::AudioAlbumItem)
+Q_DECLARE_METATYPE(Vreen::AudioAlbumItemList)
 
 #endif // VK_AUDIOITEM_H
 

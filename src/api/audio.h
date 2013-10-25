@@ -34,6 +34,7 @@ namespace Vreen {
 
 class Client;
 typedef ReplyBase<AudioItemList> AudioItemListReply;
+typedef ReplyBase<AudioAlbumItemList> AudioAlbumItemListReply;
 
 class AudioProviderPrivate;
 class VK_SHARED_EXPORT AudioProvider : public QObject
@@ -53,6 +54,7 @@ public:
     virtual ~AudioProvider();
     AudioItemListReply *getContactAudio(int uid = 0, int count = 50, int offset = 0);
     AudioItemListReply *searchAudio(const QString& query, int count = 50, int offset = 0, bool autoComplete = true, Vreen::AudioProvider::SortOrder sort = SortByPopularity, bool withLyrics = false);
+    AudioAlbumItemListReply *getAlbums(int ownerId, int count = 50, int offset = 0);
 protected:
     QScopedPointer<AudioProviderPrivate> d_ptr;
 };

@@ -1,6 +1,11 @@
 import qbs.base 1.0
 
 Project {   
+    property string vreen_bin_path
+    property string vreen_qml_path
+    property string vreen_lib_path
+    property string vreen_libexec_path
+
     moduleSearchPaths: [ "qbs/modules", "modules" ]
 
     references: [
