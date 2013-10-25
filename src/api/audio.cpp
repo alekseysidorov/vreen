@@ -67,9 +67,9 @@ public:
     static QVariant handleAudioAlbum(const QVariant &response) {
         AudioAlbumItemList items;
         auto list = response.toList();
-        int count = 0;
+
         if (list.count() && list.first().canConvert<int>())
-            count = list.takeFirst().toInt();
+            list.removeFirst();
 
         foreach (auto item, list) {
             auto map = item.toMap();
