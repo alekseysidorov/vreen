@@ -7,7 +7,7 @@ Product {
     property string uri: "Vreen.Base"
     property bool system: false
 
-    destinationDirectory: vreen.core.qmlDestination + "/" + uri.replace(/\./g, "/");
+    destinationDirectory: project.vreen_qml_path + "/" + uri.replace(/\./g, "/");
 
     cpp.includePaths: [
         "src"

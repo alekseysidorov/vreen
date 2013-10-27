@@ -4,14 +4,9 @@ import qbs.TextFile
 import qbs.File
 
 Module {
-    property string binDestination: 'bin'
-    property string libDestination: {
-        if (qbs.targetOS === 'windows')
-            return "bin";
-        else
-            return "lib";
-    }
-    property string qmlDestination: "bin"
+    property string binDestination: project.bin_path
+    property string libDestination: project.lib_path
+    property string qmlDestination: project.qml_path
 
     property string versionMajor:  1
     property string versionMinor: 8

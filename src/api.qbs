@@ -3,12 +3,12 @@ import qbs.base 1.0
 Product {
     name: "vreen"
 
-    property string versionMajor: vreen.core.versionMajor
-    property string versionMinor: vreen.core.versionMinor
-    property string versionRelease: vreen.core.versionRelease
+    property string versionMajor: project.vreen_version_major
+    property string versionMinor: project.vreen_version_minor
+    property string versionRelease: project.vreen_version_path
     //property string version: versionMajor + '.' + versionMinor + '.' + versionRelease
 
-    destinationDirectory: vreen.core.libDestination
+    destinationDirectory: project.vreen_lib_destination
     type: ["dynamiclibrary", "installed_content"]
 
     //cpp.warningLevel: "all"
