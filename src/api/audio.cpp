@@ -67,9 +67,9 @@ public:
     static QVariant handleAudioAlbum(const QVariant &response) {
         AudioAlbumItemList items;
         auto list = response.toList();
-        int count = 0;
+
         if (list.count() && list.first().canConvert<int>())
-            count = list.takeFirst().toInt();
+            list.removeFirst();
 
         foreach (auto item, list) {
             auto map = item.toMap();
@@ -101,12 +101,14 @@ AudioProvider::~AudioProvider()
  * \param offset
  * \return reply
  */
-AudioItemListReply *AudioProvider::getContactAudio(int uid, int count, int offset)
+AudioItemListReply *AudioProvider::getContactAudio(int uid, int count, int offset, int album_id)
 {
     Q_D(AudioProvider);
     QVariantMap args;
     if (uid)
         args.insert(uid > 0 ? "uid" : "gid", qAbs(uid));
+    if (album_id > 0)
+        args.insert("album_id", album_id);
     args.insert("count", count);
     args.insert("offset", offset);
 
