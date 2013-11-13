@@ -9,7 +9,7 @@ Product {
 
     type: ["staticlibrary", "installed_content"]
     name: "vreendirectauth"
-    destinationDirectory: "lib"
+    destinationDirectory: vreen_lib_path
 
     cpp.defines: [
         "VREEN_DIRECTAUTH_CLIENT_ID=\"" + clientId + "\"",
