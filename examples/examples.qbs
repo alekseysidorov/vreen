@@ -1,7 +1,7 @@
 import qbs.base 1.0
 
 Project {
-    moduleSearchPaths: "qbs/modules"
+    qbsSearchPaths: "qbs"
 
     references: [
         "quick/dialogs/dialogs.qbs",

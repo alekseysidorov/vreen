@@ -15,8 +15,6 @@ Project {
         vreen_libexec_path: "bin"
     }
 
-    moduleSearchPaths: [ "modules" ]
-
     references: [
         "src/3rdparty/k8json/k8json.qbs",
         "src/api.qbs",
