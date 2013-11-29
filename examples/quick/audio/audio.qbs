@@ -3,11 +3,11 @@ import "../QuickExample.qbs" as QuickExample
 
 QuickExample {
     type: "application"
-    destination: "examples/audio"
+    destinationDirectory: "examples/audio"
 
     Group {
         fileTags: "install"
-        qbs.installDir: destination
+        qbs.installDir: destinationDirectory
         files: "qml"
     }
 }
