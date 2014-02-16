@@ -26,6 +26,7 @@
 #include <QStringBuilder>
 #include <QTextDocument>
 #include <QUrl>
+#include <QtGlobal>
 
 //#define MAX_ENTITY 258
 //extern const struct QTextHtmlEntity { const char *name; quint16 code; } entities[MAX_ENTITY];
@@ -66,7 +67,11 @@ QString fromHtmlEntities(const QString &source)
 
 QString toHtmlEntities(const QString &source)
 {
+#if QT_VERSION>=0x5
+    return source.toHtmlEscaped();
+#else
     return Qt::escape(source);
+#endif
 }
 
 } //namespace Vreen
