@@ -4,9 +4,9 @@ import qbs.TextFile
 import qbs.File
 
 Module {
-    property string binDestination: project.bin_path
-    property string libDestination: project.lib_path
-    property string qmlDestination: project.qml_path
+    property string binDestination: project.vreen_bin_path
+    property string libDestination: project.vreen_lib_path
+    property string qmlDestination: project.vreen_qml_path
 
     property string versionMajor:  1
     property string versionMinor: 8
