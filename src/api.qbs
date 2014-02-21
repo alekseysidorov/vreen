@@ -77,7 +77,7 @@ Product {
     }
 
     Group {
-        fileTagsFilter: 'dynamiclibrary'
+        fileTagsFilter: ['dynamiclibrary', 'dynamiclibrary_symlink']
         qbs.install: true
         qbs.installDir: vreen.core.libDestination
     }
