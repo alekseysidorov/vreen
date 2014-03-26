@@ -23,7 +23,7 @@
 **
 ****************************************************************************/
 #include "newsfeedmodel.h"
-#include <QApplication>
+#include <QCoreApplication>
 #include <roster.h>
 #include <client.h>
 #include <utils.h>

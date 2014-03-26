@@ -32,7 +32,6 @@ Product {
     Depends { name: "Qt.network" }        
     Depends { name: "Qt.declarative"; condition: Qt.core.versionMajor === 4 }
     Depends { name: "Qt.quick"; condition: Qt.core.versionMajor === 5 }
-    Depends { name: "Qt.widgets"; condition: Qt.core.versionMajor === 5 }
     Depends { name: "vreen"}
     Depends { name: "vreenoauth" }
     Depends { name: "vreen.core" }
