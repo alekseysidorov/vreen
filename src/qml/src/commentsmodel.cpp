@@ -27,7 +27,7 @@
 #include <roster.h>
 #include <client.h>
 #include <QDateTime>
-#include <QApplication>
+#include <QCoreApplication>
 #include <QNetworkReply>
 
 #include <QDebug>

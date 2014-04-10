@@ -25,7 +25,7 @@
 #include "buddymodel.h"
 #include <contact.h>
 #include <utils.h>
-#include <QApplication>
+#include <QCoreApplication>
 
 #include <QDebug>
 

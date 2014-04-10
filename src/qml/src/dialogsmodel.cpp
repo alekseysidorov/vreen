@@ -27,7 +27,7 @@
 #include <longpoll.h>
 #include <roster.h>
 #include <QDebug>
-#include <QApplication>
+#include <QCoreApplication>
 
 namespace  {
 

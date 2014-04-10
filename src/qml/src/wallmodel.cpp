@@ -23,7 +23,7 @@
 **
 ****************************************************************************/
 #include "wallmodel.h"
-#include <QApplication>
+#include <QCoreApplication>
 #include <roster.h>
 #include <wallpost.h>
 #include <QDateTime>

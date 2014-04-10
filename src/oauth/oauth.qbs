@@ -8,7 +8,7 @@ Product {
     //cpp.warningLevel: "all"
 
     Depends { name: "cpp" }
-    Depends { name: "Qt"; submodules: ['core', 'network', 'widgets', 'webkit', 'webkitwidgets'] }
+    Depends { name: "Qt"; submodules: ['core', 'network', 'webkitwidgets'] }
     Depends { name: "vreen" }
     Depends { name: "vreen.core" }
 
