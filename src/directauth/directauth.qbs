@@ -23,8 +23,7 @@ Product {
     Depends { name: "vreen" }
 
     files: [
-        "*.cpp",
-        "*.h"
+        "*.cpp"
     ]
 
 //    Group {

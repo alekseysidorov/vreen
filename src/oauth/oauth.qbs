@@ -25,7 +25,10 @@ Product {
         Depends { name: "cpp" }
         Depends { name: "Qt.webkit"}
         Depends { name: "Qt.webkitwidgets"}
-        
+
+        cpp.includePaths: [
+            product.buildDirectory + "/GeneratedFiles/include"
+        ]
         cpp.defines: base.concat("VREEN_WITH_OAUTH")
     }
 
