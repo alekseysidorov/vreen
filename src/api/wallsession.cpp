@@ -29,6 +29,10 @@
 #include "client_p.h"
 #include <QNetworkReply>
 
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+#include <QUrlQuery.h>
+#endif
+
 namespace Vreen {
 
 static const char *filters[] = {
@@ -63,8 +67,14 @@ public:
         //FIXME error handler
         auto reply = sender_cast<Reply*>(q_func()->sender());
         auto url = reply->networkReply()->url();
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+		QUrlQuery query(url);
+		int id = query.queryItemValue("post_id").toInt();
+		int retweet = query.queryItemValue("repost").toInt();
+#else
         int id = url.queryItemValue("post_id").toInt();
-        int retweet = url.queryItemValue("repost").toInt();
+		int retweet = url.queryItemValue("repost").toInt();
+#endif
         auto map = response.toMap();
 
         emit q_func()->postLikeAdded(id,
@@ -77,7 +87,12 @@ public:
     {
         auto reply = sender_cast<Reply*>(q_func()->sender());
         auto url = reply->networkReply()->url();
-        int id = url.queryItemValue("post_id").toInt();
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+		QUrlQuery query(url);
+		int id = query.queryItemValue("post_id").toInt();
+#else
+		int id = url.queryItemValue("post_id").toInt();
+#endif
         int likesCount = response.toMap().value("likes").toInt();
 
         emit q_func()->postLikeDeleted(id, likesCount);

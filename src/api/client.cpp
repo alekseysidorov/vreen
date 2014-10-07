@@ -31,6 +31,10 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+#include <QUrlQuery.h>
+#endif
+
 namespace Vreen {
 
 Client::Client(QObject *parent) :
@@ -345,7 +349,12 @@ void ClientPrivate::_q_activity_update_finished(const QVariant &response)
     Q_Q(Client);
     auto reply = sender_cast<Reply*>(q->sender());
     if (response.toInt() == 1) {
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+		QUrlQuery query(reply->networkReply()->url());
+		activity = query.queryItemValue("text");
+#else
         activity = reply->networkReply()->url().queryItemValue("text");
+#endif
         emit q->activityChanged(activity);
     }
 }

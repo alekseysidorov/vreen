@@ -53,6 +53,8 @@ MessageListModel::MessageListModel(QObject *parent) :
     QAbstractListModel(parent),
     d_ptr(new MessageListModelPrivate(this))
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+#else
     auto roles = roleNames();
     roles[SubjectRole] = "subject";
     roles[BodyRole] = "body";
@@ -65,6 +67,7 @@ MessageListModel::MessageListModel(QObject *parent) :
     roles[AttachmentRole] = "attachments";
     roles[ChatIdRole] = "chatId";
     setRoleNames(roles);
+#endif
 }
 
 MessageListModel::~MessageListModel()
@@ -279,6 +282,24 @@ void MessageListModel::resetMessageFlags(int id, int mask, int userId)
     message.setFlags(flags);
     doReplaceMessage(index, message);
 }
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+QHash<int, QByteArray> MessageListModel::roleNames() const
+{
+	QHash<int, QByteArray> roles;
+	roles[SubjectRole] = "subject";
+	roles[BodyRole] = "body";
+	roles[FromRole] = "from";
+	roles[ToRole] = "to";
+	roles[ReadStateRole] = "unread";
+	roles[DirectionRole] = "incoming";
+	roles[DateRole] = "date";
+	roles[IdRole] = "mid";
+	roles[AttachmentRole] = "attachments";
+	roles[ChatIdRole] = "chatId";
+	return roles;
+}
+#endif
 
 } //namespace Vreen
 

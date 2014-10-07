@@ -50,8 +50,12 @@ public:
     }
     QString cacheDir() const
     {
-        auto dir = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
-        return dir + QLatin1String("/vk/");
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+		auto dir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);     
+#else
+		auto dir = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+#endif
+		return dir + QLatin1String("/vk/");
     }
 };
 
