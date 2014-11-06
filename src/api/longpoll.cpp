@@ -29,6 +29,9 @@
 #include "contact.h"
 #include <QDateTime>
 #include <QDebug>
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+#   include <QUrlQuery>
+#endif
 
 namespace Vreen {
 
@@ -103,7 +106,13 @@ void LongPoll::requestData(const QByteArray &timeStamp)
     }
     if (d->isRunning) {
         QUrl url = d->dataUrl;
-        url.addQueryItem("ts", timeStamp);
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+		QUrlQuery urlQuery(url);
+		urlQuery.addQueryItem("ts", timeStamp);
+		url.setQuery(urlQuery);
+#else
+		url.addQueryItem("ts", timeStamp);
+#endif
         auto reply = d->client->request(url);
         connect(reply, SIGNAL(resultReady(QVariant)), this, SLOT(_q_on_data_recieved(QVariant)));
         d->dataRequestReply = reply;

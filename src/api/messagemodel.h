@@ -78,6 +78,9 @@ protected:
     virtual void doRemoveMessage(int index);
     void moveMessage(int sourceIndex, int destinationIndex);
     virtual void sort(int column, Qt::SortOrder order);
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+	virtual QHash<int, QByteArray> roleNames() const;
+#endif
 protected slots:
     void replaceMessageFlags(int id, int mask, int userId = 0);
     void resetMessageFlags(int id, int mask, int userId = 0);

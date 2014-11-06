@@ -236,6 +236,8 @@ public:
 AudioModel::AudioModel(QObject *parent) : AbstractListModel(parent),
     d_ptr(new AudioModelPrivate(this))
 {  
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+#else
     auto roles = roleNames();
     roles[IdRole] = "aid";
     roles[TitleRole] = "title";
@@ -246,6 +248,7 @@ AudioModel::AudioModel(QObject *parent) : AbstractListModel(parent),
     roles[LyricsIdRole] = "lyricsId";
     roles[OwnerIdRole] = "ownerId";
     setRoleNames(roles);
+#endif
 }
 
 AudioModel::~AudioModel()
@@ -398,6 +401,22 @@ int AudioModel::findAudio(int id) const
             return id;
     return -1;
 }
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+QHash<int, QByteArray> AudioModel::roleNames() const
+{
+	QHash<int, QByteArray> roles;
+	roles[IdRole] = "aid";
+	roles[TitleRole] = "title";
+	roles[ArtistRole] = "artist";
+	roles[UrlRole] = "url";
+	roles[DurationRole] = "duration";
+	roles[AlbumIdRole] = "albumId";
+	roles[LyricsIdRole] = "lyricsId";
+	roles[OwnerIdRole] = "ownerId";
+	return roles;
+}
+#endif
 
 } // namespace Vreen
 

@@ -52,8 +52,13 @@ qrc_*.cpp
 *.sln
 *.suo
 *.vcproj
+*.vcxproj
+*.vcxproj.filters
 *vcproj.*.*.user
 *.ncb
+*.*sdf
+Debug
+Release
 
 # MinGW generated files
 *.Debug
