@@ -1,4 +1,4 @@
-import qbs.base 1.0
+import qbs.base
 
 Product {
     name: "vreen"
@@ -27,11 +27,6 @@ Product {
     files: [
         "api/*.cpp",
     ]
-
-    Properties {
-        condition: Qt.core.versionMajor === 5
-        cpp.defines: outer.concat("QT_DISABLE_DEPRECATED_BEFORE=0")
-    }
 
     Depends { name: "cpp" }
     Depends { name: "Qt"; submodules: ["core", "network", "gui"] }

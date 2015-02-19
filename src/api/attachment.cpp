@@ -23,6 +23,7 @@
 **
 ****************************************************************************/
 #include "attachment.h"
+#include <QDataStream>
 #include <QSharedData>
 #include <QStringList>
 

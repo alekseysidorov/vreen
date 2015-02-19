@@ -29,9 +29,7 @@
 #include "client_p.h"
 #include <QNetworkReply>
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-#include <QUrlQuery.h>
-#endif
+#include <QUrlQuery>
 
 namespace Vreen {
 

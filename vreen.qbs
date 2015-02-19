@@ -1,4 +1,4 @@
-import qbs.base 1.0
+import qbs.base
 
 Project {   
     property string vreen_bin_path: "bin"
