@@ -1,6 +1,6 @@
 [submodule "src/3rdparty/k8json"]
 	path = src/3rdparty/k8json
-	url = https://gitorious.org/k8jsonqt/qutim-developers-k8json.git
+	url = git://github.com/euroelessar/k8json.git
 [submodule "cmake"]
 	path = cmake
 	url = git://github.com/gorthauer/cmake-utils.git
