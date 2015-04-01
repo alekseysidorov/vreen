@@ -1,9 +1,6 @@
 [submodule "src/3rdparty/k8json"]
 	path = src/3rdparty/k8json
 	url = git://github.com/euroelessar/k8json.git
-[submodule "cmake"]
-	path = cmake
-	url = git://github.com/gorthauer/cmake-utils.git
 [submodule "qbs"]
 	path = qbs
 	url = git://github.com/qutIM/qbs-labs.git
