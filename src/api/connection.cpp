@@ -24,7 +24,11 @@
 ****************************************************************************/
 #include "connection_p.h"
 
+#include <QUrlQuery>
+
 namespace Vreen {
+
+const static QUrl apiUrl("https://api.vk.com/method/");
 
 Connection::Connection(QObject *parent) :
     QNetworkAccessManager(parent),
@@ -50,17 +54,17 @@ QNetworkReply *Connection::get(QNetworkRequest request)
 
 QNetworkReply *Connection::get(const QString &method, const QVariantMap &args)
 {
-	return QNetworkAccessManager::get(makeRequest(method, args));
+    return QNetworkAccessManager::get(makeRequest(method, args));
 }
 
 QNetworkReply *Connection::put(const QString &method, QIODevice *data, const QVariantMap &args)
 {
-	return QNetworkAccessManager::put(makeRequest(method, args), data);
+    return QNetworkAccessManager::put(makeRequest(method, args), data);
 }
 
 QNetworkReply *Connection::put(const QString &method, const QByteArray &data, const QVariantMap &args)
 {
-	 return QNetworkAccessManager::put(makeRequest(method, args), data);
+    return QNetworkAccessManager::put(makeRequest(method, args), data);
 }
 
 /*!
@@ -79,6 +83,23 @@ void Connection::setConnectionOption(Connection::ConnectionOption option, const 
 QVariant Connection::connectionOption(Connection::ConnectionOption option) const
 {
     return d_func()->options[option];
+}
+
+QNetworkRequest Connection::makeRequest(const QString &method, const QVariantMap &args)
+{
+    QUrl url = apiUrl;
+    url.setPath(url.path() + QStringLiteral("/") + method);
+    {
+        QUrlQuery query;
+        QVariantMap::const_iterator it = args.cbegin();
+        for (; it != args.cend(); it++)
+            query.addQueryItem(QUrl::toPercentEncoding(it.key()),
+                               QUrl::toPercentEncoding(it.value().toString()));
+        url.setQuery(query);
+    }
+    QNetworkRequest request(url);
+    decorateRequest(request);
+    return request;
 }
 
 void Connection::decorateRequest(QNetworkRequest &)

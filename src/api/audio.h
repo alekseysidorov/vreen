@@ -105,9 +105,7 @@ protected:
     void replaceAudio(int index, const AudioItem &item);
     void setAudio(const AudioItemList &items);
     virtual void sort(int column, Qt::SortOrder order);
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-	virtual QHash<int, QByteArray> roleNames() const;
-#endif
+    virtual QHash<int, QByteArray> roleNames() const;
 private:
     QScopedPointer<AudioModelPrivate> d_ptr;
 };

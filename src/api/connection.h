@@ -68,7 +68,7 @@ signals:
     void connectionStateChanged(Vreen::Client::State connectionState);
     void error(Vreen::Client::Error);
 protected:
-	virtual QNetworkRequest makeRequest(const QString &method, const QVariantMap &args = QVariantMap()) = 0;
+    virtual QNetworkRequest makeRequest(const QString &method, const QVariantMap &args = QVariantMap());
     virtual void decorateRequest(QNetworkRequest &);
     QScopedPointer<ConnectionPrivate> d_ptr;
 };

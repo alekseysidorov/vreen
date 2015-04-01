@@ -26,6 +26,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QCoreApplication>
+#include <QQmlEngine>
 
 namespace  {
 
@@ -58,6 +59,9 @@ QString adjustPath(const QString &source)
 DeclarativeView::DeclarativeView(QWindow *parent) :
     QQuickView(parent)
 {
+    QQmlEngine *e = engine();
+    e->addImportPath("../../bin");
+
     //auto client = new Vreen::Client(this);
     //auto con = new Vreen::OAuthConnection(1865463, client); //qutIM id
     //con->setConnectionOption(Vreen::Connection::ShowAuthDialog, true);

@@ -27,9 +27,9 @@
 #include <QWebFrame>
 #include <QPointer>
 #include <QDateTime>
-#include <QStringBuilder>
 #include <QNetworkRequest>
 #include <QTextDocument>
+#include <QUrlQuery>
 
 #include <json.h>
 #include <vreen/private/connection_p.h>
@@ -45,7 +45,6 @@
 namespace Vreen {
 
 const static QUrl authUrl("http://api.vk.com/oauth/authorize");
-const static QUrl apiUrl("https://api.vk.com/method/");
 const static char *scopeNames[] = { "notify", "friends", "photos", "audio", 
     "video", "docs", "notes", "pages", "status", "offers", "questions", "wall", 
     "groups", "messages", "notifications", "stats", "ads", "offline" };
@@ -98,7 +97,7 @@ public:
     QString password;
 
     //response
-    QByteArray accessToken;
+    QString accessToken;
     int uid;
     time_t expiresIn;
 
@@ -152,29 +151,13 @@ void OAuthConnection::disconnectFromHost()
     d->setConnectionState(Client::StateOffline);
 }
 
-QNetworkRequest OAuthConnection::makeRequest(const QString &method, const QVariantMap &args)
-{
-    Q_D(OAuthConnection);
-
-    //TODO test expiresIn
-    QUrl url = apiUrl;
-    url.setPath(url.path() % QLatin1Literal("/") % method);
-    QVariantMap::const_iterator it = args.constBegin();
-    for (; it != args.constEnd(); it++)
-        url.addEncodedQueryItem(QUrl::toPercentEncoding(it.key()),
-                                QUrl::toPercentEncoding(it.value().toString()));
-        //url.addQueryItem(it.key(), toHtmlEscaped(it.value().toString()));
-    url.addEncodedQueryItem("access_token", d->accessToken);
-
-    QNetworkRequest request(url);
-    return request;
-}
-
 void OAuthConnection::decorateRequest(QNetworkRequest &request)
 {
     Q_D(OAuthConnection);
     auto url = request.url();
-    url.addEncodedQueryItem("access_token", d->accessToken);
+    QUrlQuery query(url);
+    query.addQueryItem("access_token", d->accessToken);
+    url.setQuery(query);
     request.setUrl(url);
 }
 
@@ -193,7 +176,7 @@ void OAuthConnection::clear()
     d_func()->clear();
 }
 
-QByteArray OAuthConnection::accessToken() const
+QString OAuthConnection::accessToken() const
 {
     return d_func()->accessToken;
 }
@@ -268,17 +251,19 @@ void OAuthConnectionPrivate::requestToken()
         q->connect(webPage->mainFrame(), SIGNAL(loadFinished(bool)), SLOT(_q_loadFinished(bool)));
     }
     QUrl url = authUrl;
-    url.addQueryItem(QLatin1String("client_id"), QByteArray::number(clientId));
-    url.addQueryItem(QLatin1String("scope"), flagsToStrList(scope, scopeNames).join(","));
-    url.addQueryItem(QLatin1String("redirect_uri"), redirectUri);
+    QUrlQuery query;
+    query.addQueryItem(QLatin1String("client_id"), QByteArray::number(clientId));
+    query.addQueryItem(QLatin1String("scope"), flagsToStrList(scope, scopeNames).join(","));
+    query.addQueryItem(QLatin1String("redirect_uri"), redirectUri);
     const char *type[] = {
         "page",
         "popup",
         "touch",
         "wap"
     };
-    url.addQueryItem(QLatin1String("display"), type[displayType]);
-    url.addQueryItem(QLatin1String("response_type"), responseType);
+    query.addQueryItem(QLatin1String("display"), type[displayType]);
+    query.addQueryItem(QLatin1String("response_type"), responseType);
+    url.setQuery(query);
     webPage->mainFrame()->load(url);
 }
 
@@ -296,9 +281,12 @@ void OAuthConnectionPrivate::_q_loadFinished(bool ok)
     Q_Q(OAuthConnection);
     QUrl url = webPage->mainFrame()->url();
     QVariantMap response = Vreen::JSON::parse(webPage->mainFrame()->toPlainText().toUtf8()).toMap();
-    if (ok && response.value("error").isNull()) {
-        url = QUrl("http://foo.bar?" + url.fragment()); //evil hack for parse fragment as query items
-        if (!url.hasEncodedQueryItem("access_token")) {
+    if (ok && response.value("error").isNull()) {        
+        QUrlQuery query(url.fragment());
+
+        qDebug() << url << query.queryItems();
+
+        if (!query.hasQueryItem("access_token")) {
             if (!webPage->view()) {
                 QWebFrame *frame = webPage->mainFrame();
 
@@ -311,11 +299,11 @@ void OAuthConnectionPrivate::_q_loadFinished(bool ok)
                 handleAuthRequest(webPage.data());
             }
         } else {
-            accessToken = url.encodedQueryItemValue("access_token");
-            expiresIn = url.encodedQueryItemValue("expires_in").toUInt();
+            accessToken = query.queryItemValue("access_token");
+            expiresIn = query.queryItemValue("expires_in").toUInt();
             if (expiresIn)
                 expiresIn += QDateTime::currentDateTime().toTime_t(); //not infinity token
-            uid = url.encodedQueryItemValue("user_id").toInt();
+            uid = query.queryItemValue("user_id").toInt();
             emit q->accessTokenChanged(accessToken, expiresIn);
 
             setConnectionState(Client::StateOnline);

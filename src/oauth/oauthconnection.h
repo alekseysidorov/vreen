@@ -83,7 +83,7 @@ public:
     int uid() const;
     void clear();
 
-    QByteArray accessToken() const;
+    QString accessToken() const;
     time_t expiresIn() const;
     void setAccessToken(const QByteArray &token, time_t expiresIn = 0);
     void setUid(int uid);
@@ -95,11 +95,10 @@ public:
     void setScopes(Scopes scopes);
 signals:
     void authConfirmRequested(QWebPage *page);
-    void accessTokenChanged(const QByteArray &token, time_t expiresIn);
+    void accessTokenChanged(const QString &token, time_t expiresIn);
     void clientIdChanged(int clientId);
     void scopesChanged(Vreen::OAuthConnection::Scopes scopes);
 protected:
-	QNetworkRequest makeRequest(const QString &method, const QVariantMap &args = QVariantMap());
     void decorateRequest(QNetworkRequest &);
 private:
     Q_PRIVATE_SLOT(d_func(), void _q_loadFinished(bool))

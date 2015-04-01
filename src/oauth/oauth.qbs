@@ -16,11 +16,6 @@ Product {
         "*.cpp"
     ]
 
-    Properties {
-        condition: Qt.core.versionMajor === 5
-        cpp.defines: base.concat("QT_DISABLE_DEPRECATED_BEFORE=0")
-    }
-
     Export {
         Depends { name: "cpp" }
         Depends { name: "Qt.webkit"}

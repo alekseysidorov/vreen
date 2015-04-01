@@ -22,17 +22,27 @@
 ** $VREEN_END_LICENSE$
 **
 ****************************************************************************/
-#include <QGuiApplication>
+#include <QApplication>
 #include "declarativeview.h"
+#include <QDebug>
+#include <QQmlError>
+
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication a(argc, argv);
+    QApplication a(argc, argv);
     a.setApplicationName("example");
     a.setOrganizationName("vreen");
     a.setOrganizationDomain("https://github.com/gorthauer/vreen");
 
     DeclarativeView view;
+    if (!view.errors().empty()) {
+        foreach (const QQmlError &e, view.errors())
+            std::cerr << e.toString().toUtf8().data() << std::endl;
+        return -1;
+    }
+
     view.showNormal();
     return a.exec();
 }
