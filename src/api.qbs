@@ -28,6 +28,8 @@ Product {
         "api/*.cpp",
     ]
 
+    qbsSearchPaths: "../"
+
     Depends { name: "cpp" }
     Depends { name: "Qt"; submodules: ["core", "network", "gui"] }
     Depends { name: "k8json" }
@@ -41,7 +43,7 @@ Product {
         cpp.includePaths: [
             product.buildDirectory + "/GeneratedFiles/include",
             product.buildDirectory + "/GeneratedFiles/include/vreen",
-            product.buildDirectory + "/GeneratedFiles/include/vreen/" +  vreen.core.version
+            product.buildDirectory + "/GeneratedFiles/include/vreen/" + vreen.core.version
         ]
         cpp.rpaths: product.buildDirectory + "/" + vreen.core.libDestination
     }

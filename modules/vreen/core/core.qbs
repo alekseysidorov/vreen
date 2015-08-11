@@ -11,6 +11,7 @@ Module {
     property string versionMajor:  1
     property string versionMinor: 8
     property string versionRelease: 0
+    property string version: versionMajor + '.' + versionMinor + '.' + versionRelease
 
     Depends { name: "cpp" }
     Depends { name: "Qt.core"}
