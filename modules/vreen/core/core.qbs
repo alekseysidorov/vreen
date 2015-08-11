@@ -8,11 +8,6 @@ Module {
     property string libDestination: project.vreen_lib_path
     property string qmlDestination: project.vreen_qml_path
 
-    property string versionMajor:  1
-    property string versionMinor: 8
-    property string versionRelease: 0
-    property string version: versionMajor + '.' + versionMinor + '.' + versionRelease
-
     Depends { name: "cpp" }
     Depends { name: "Qt.core"}
 

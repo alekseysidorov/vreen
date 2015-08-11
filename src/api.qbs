@@ -6,7 +6,7 @@ Product {
     property string versionMajor: vreen_version_major
     property string versionMinor: vreen_version_minor
     property string versionRelease: vreen_version_path
-    //property string version: versionMajor + '.' + versionMinor + '.' + versionRelease
+    property string version: versionMajor + '.' + versionMinor + '.' + versionRelease
 
     destinationDirectory: vreen_libexec_path
     type: ["dynamiclibrary", "installed_content"]
@@ -38,14 +38,13 @@ Product {
     Export {
         Depends { name: "cpp" }
         Depends { name: "Qt"; submodules: ["core", "network", "gui"] }
-        Depends { name: "vreen.core" }
 
         cpp.includePaths: [
             product.buildDirectory + "/GeneratedFiles/include",
             product.buildDirectory + "/GeneratedFiles/include/vreen",
-            product.buildDirectory + "/GeneratedFiles/include/vreen/" + vreen.core.version
+            product.buildDirectory + "/GeneratedFiles/include/vreen/" + product.version
         ]
-        cpp.rpaths: product.buildDirectory + "/" + vreen.core.libDestination
+        cpp.rpaths: product.buildDirectory + "/" + project.vreen_lib_path
     }
 
     Group {
@@ -58,7 +57,7 @@ Product {
         ]
         fileTags: ["devheader"]
         overrideTags: false
-        qbs.installDir: "include/vreen/" + vreen.core.version + "/vreen/private"
+        qbs.installDir: "include/vreen/" + product.version + "/vreen/private"
         qbs.install: true
     }
 
@@ -76,6 +75,6 @@ Product {
     Group {
         fileTagsFilter: ['dynamiclibrary', 'dynamiclibrary_symlink']
         qbs.install: true
-        qbs.installDir: vreen.core.libDestination
+        qbs.installDir: project.vreen_lib_path
     }
 }
