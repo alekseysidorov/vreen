@@ -32,7 +32,6 @@ Product {
 
     Depends { name: "cpp" }
     Depends { name: "Qt"; submodules: ["core", "network", "gui"] }
-    Depends { name: "k8json" }
     Depends { name: "vreen.core" }
 
     Export {

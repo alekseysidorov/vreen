@@ -2,7 +2,7 @@
 **
 ** Vreen - vk.com API Qt bindings
 **
-** Copyright © 2012 Aleksey Sidorov <gorthauer87@ya.ru>
+** Copyright © 2012-2015 Aleksey Sidorov <gorthauer87@ya.ru>
 **
 *****************************************************************************
 **
@@ -23,7 +23,7 @@
 **
 ****************************************************************************/
 #include "json.h"
-#include <k8json/k8json.h>
+#include <QJsonDocument>
 
 namespace Vreen {
 
@@ -36,10 +36,10 @@ namespace JSON {
  */
 QVariant parse(const QByteArray &data)
 {
-    QVariant res;
-    int len = data.size();
-    K8JSON::parseRecord(res, reinterpret_cast<const uchar *>(data.constData()), &len);
-    return res;
+    QJsonParseError error;
+
+    auto document = QJsonDocument::fromJson(data, &error);
+    return document.toVariant();
 }
 
 /*!
@@ -50,9 +50,10 @@ QVariant parse(const QByteArray &data)
 */
 QByteArray generate(const QVariant &data, int indent)
 {
-    QByteArray res;
-    K8JSON::generate(res, data, indent);
-    return res;
+    Q_UNUSED(indent);
+
+    auto document = QJsonDocument::fromVariant(data);
+    return document.toJson(QJsonDocument::Indented);
 }
 
 } //namespace JSON
