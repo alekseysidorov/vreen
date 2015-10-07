@@ -168,7 +168,7 @@ Rectangle {
         onOnlineChanged: {
             if (client.online) {
                 client.roster.sync();
-                dialogsModel.getDialogs(0, 10, 160);
+                dialogsModel.getDialogs(10, 0, 160);
             }
         }
     }

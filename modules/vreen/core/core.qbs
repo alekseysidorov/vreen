@@ -15,12 +15,7 @@ Module {
         putenv('QML2_IMPORT_PATH', product.buildDirectory + "/" + qmlDestination);
     }
 
-    cpp.cxxFlags: {
-        var flags = base.concat("-std=c++11");
-        if (qbs.toolchain.contains("clang"))
-            flags = flags.concat("-stdlib=libc++");
-        return flags;
-    }
+    cpp.cxxLanguageVersion: "c++14"
 
     Rule {
         inputs: [ "devheader" ]

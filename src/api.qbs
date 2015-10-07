@@ -18,8 +18,6 @@ Product {
     ]
     cpp.defines: [
         "VK_LIBRARY",
-        "K8JSON_INCLUDE_GENERATOR",
-        "K8JSON_INCLUDE_COMPLEX_GENERATOR"
     ]
     cpp.positionIndependentCode: true
     cpp.visibility: ["hidden"]
