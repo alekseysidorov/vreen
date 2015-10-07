@@ -62,13 +62,6 @@ DeclarativeView::DeclarativeView(QWindow *parent) :
     QQmlEngine *e = engine();
     e->addImportPath("../../bin");
 
-    //auto client = new Vreen::Client(this);
-    //auto con = new Vreen::OAuthConnection(1865463, client); //qutIM id
-    //con->setConnectionOption(Vreen::Connection::ShowAuthDialog, true);
-    //con->setDisplayType(Vreen::OAuthConnection::Popup);
-    //client->setConnection(con);
-    //rootContext()->setContextProperty("client", client);
-
     setSource(QUrl(adjustPath("qml/main.qml")));
     setResizeMode(SizeRootObjectToView);
 }

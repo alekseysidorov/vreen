@@ -15,6 +15,7 @@ Product {
     cpp.includePaths: [appViewerPath]
 
     Group {
+        name: "declarativeView"
         prefix: appViewerPath
         files: [
             "declarativeview.h",
