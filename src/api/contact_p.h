@@ -104,13 +104,15 @@ public:
     QVariantList tagIdList;
     QString activity;
     bool isFriend;
+    QString homePhone;
+    QString mobilePhone;
 
     QVariantList lists() const { return QVariantList(); }
     void setLists(const QVariantList &list)
     {
         Q_Q(Buddy);
         tagIdList.clear();
-        foreach (auto value, list)
+        for (const auto &value : list)
             tagIdList.append(value);
         emit q->tagsChanged(q->tags());
     }
@@ -120,6 +122,22 @@ public:
         if (activity != now) {
             activity = now;
             emit q_func()->activityChanged(now);
+        }
+    }
+    QString getHomePhone() const { return homePhone; }
+    void setHomePhone(const QString &now)
+    {
+        if (homePhone != now) {
+            homePhone = now;
+            emit q_func()->homePhoneChanged(now);
+        }
+    }
+    QString getMobilePhone() const { return mobilePhone; }
+    void setMobilePhone(const QString &now)
+    {
+        if (mobilePhone != now) {
+            mobilePhone = now;
+            emit q_func()->mobilePhoneChanged(now);
         }
     }
 

@@ -192,6 +192,16 @@ void Buddy::setIsFriend(bool set)
     }
 }
 
+QString Buddy::mobilePhone() const
+{
+    return d_func()->mobilePhone;
+}
+
+QString Buddy::homePhone() const
+{
+    return d_func()->homePhone;
+}
+
 /*!
  * \brief Buddy::update
  * \param fields - some fields need to update.
@@ -288,6 +298,7 @@ void BuddyPrivate::_q_friends_add_finished(const QVariant &response)
 		break;
 	case 2:
 		q->setIsFriend(true);
+        break;
 	case 4:
 		//TODO
 		break;
@@ -306,6 +317,7 @@ void BuddyPrivate::_q_friends_delete_finished(const QVariant &response)
 		break;
 	case 2:
 		//TODO
+        break;
 	default:
 		break;
 	}

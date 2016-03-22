@@ -151,6 +151,8 @@ class VK_SHARED_EXPORT Buddy : public Contact
     Q_PROPERTY(QString activity READ activity NOTIFY activityChanged)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(bool isFriend READ isFriend NOTIFY isFriendChanged)
+    Q_PROPERTY(QString mobilePhone READ mobilePhone NOTIFY mobilePhoneChanged)
+    Q_PROPERTY(QString homePhone READ homePhone NOTIFY homePhoneChanged)
 
     //private properties
     Q_PROPERTY(QString _q_first_name READ firstName WRITE setFirstName DESIGNABLE false)
@@ -158,6 +160,8 @@ class VK_SHARED_EXPORT Buddy : public Contact
     Q_PROPERTY(bool _q_online READ isOnline WRITE setOnline DESIGNABLE false STORED false)
     Q_PRIVATE_PROPERTY(d_func(), QVariantList _q_lists READ lists WRITE setLists DESIGNABLE false)
     Q_PRIVATE_PROPERTY(d_func(), QString _q_activity READ getActivity WRITE setActivity DESIGNABLE false)
+    Q_PRIVATE_PROPERTY(d_func(), QString _q_home_phone READ getHomePhone WRITE setHomePhone DESIGNABLE false)
+    Q_PRIVATE_PROPERTY(d_func(), QString _q_mobile_phone READ getMobilePhone WRITE setMobilePhone DESIGNABLE false)
 public:
     //TODO name case support maybe needed
     QString firstName() const;
@@ -173,6 +177,8 @@ public:
     void setStatus(Status status);
     bool isFriend() const;
     void setIsFriend(bool set);
+    QString mobilePhone() const;
+    QString homePhone() const;
 public slots:
     void update(const QStringList &fields);
     void update();
@@ -187,6 +193,8 @@ signals:
     void activityChanged(const QString &activity);
     void statusChanged(Vreen::Contact::Status);
     void isFriendChanged(bool isFriend);
+    void mobilePhoneChanged(const QString &mobilePhone);
+    void homePhoneChanged(const QString &homePhone);
 protected:
     Buddy(int id, Client *client);
 
