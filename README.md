@@ -272,3 +272,5 @@ See [dialogs](examples/quick/dialogs/) example for details
 
 * Use system browser to receive auth token instead webkit page
 * Use more modern C++ features for simplify api
+* Add cmake support
+* Add qmake project file for Android

@@ -84,6 +84,7 @@ Product {
             "AUTHORS",
             "COPYING",
             "ChangeLog",
+            "LICENSE.md",
             "README.md",
         ]
     }
