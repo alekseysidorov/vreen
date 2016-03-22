@@ -24,6 +24,7 @@
 ****************************************************************************/
 #ifndef PHONEFETCHER_H
 #define PHONEFETCHER_H
+
 #include <vreen/client.h>
 #include <vreen/auth/oauthconnection.h>
 

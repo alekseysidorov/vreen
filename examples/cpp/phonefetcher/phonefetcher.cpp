@@ -35,8 +35,8 @@ PhoneFetcher::PhoneFetcher(QObject *parent) :
     auth->setConnectionOption(Vreen::Connection::KeepAuthData, true);
     setConnection(auth);
 
-    connect(this, SIGNAL(onlineStateChanged(bool)), SLOT(onOnlineChanged(bool)));
-    connect(roster(), SIGNAL(syncFinished(bool)), SLOT(onSynced(bool)));
+    connect(this, &PhoneFetcher::onlineStateChanged, this, &PhoneFetcher::onOnlineChanged);
+    connect(roster(), &Vreen::Roster::syncFinished, this, &PhoneFetcher::onSynced);
 }
 
 void PhoneFetcher::fetch()
@@ -47,9 +47,12 @@ void PhoneFetcher::fetch()
 void PhoneFetcher::onOnlineChanged(bool online)
 {
     if (online) {
-        roster()->sync(QStringList() << QLatin1String("first_name")
-                       << QLatin1String("last_name")
-                       << QLatin1String("contacts"));
+        auto fields = {
+            QStringLiteral("first_name"),
+            QStringLiteral("last_name"),
+            QStringLiteral("contacts")
+        };
+        roster()->sync(fields);
     }
 }
 
@@ -57,12 +60,10 @@ void PhoneFetcher::onSynced(bool success)
 {
     if (success) {
         qDebug() << tr("-- %1 contacts recieved").arg(roster()->buddies().count());
-        foreach (auto buddy, roster()->buddies()) {
-            QString homeNumber = buddy->property("_q_home_phone").toString();
-            QString mobileNumber = buddy->property("_q_mobile_phone").toString();
+        for (const auto &buddy : roster()->buddies()) {
             qDebug() << tr("name: %1, home: %2, mobile: %3").arg(buddy->name())
-                        .arg(homeNumber.isEmpty() ? tr("unknown") : homeNumber)
-                        .arg(mobileNumber.isEmpty() ? tr("unknown") : mobileNumber);
+                        .arg(buddy->homePhone().isEmpty() ? tr("unknown") : buddy->homePhone())
+                        .arg(buddy->mobilePhone().isEmpty() ? tr("unknown") : buddy->mobilePhone());
         }
     }
     qApp->quit();

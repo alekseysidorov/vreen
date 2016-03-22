@@ -5,7 +5,8 @@ Project {
 
     references: [
         "quick/dialogs/dialogs.qbs",
-        "quick/audio/audio.qbs"
+        "quick/audio/audio.qbs",
+        "cpp/phonefetcher/phonefetcher.qbs"
     ]
 }
 

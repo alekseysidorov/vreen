@@ -42,6 +42,7 @@ Product {
             product.buildDirectory + "/GeneratedFiles/include/vreen/" + product.version
         ]
         cpp.rpaths: product.buildDirectory + "/" + project.vreen_lib_path
+        cpp.cxxLanguageVersion: "c++11"
     }
 
     Group {
@@ -73,5 +74,17 @@ Product {
         fileTagsFilter: ['dynamiclibrary', 'dynamiclibrary_symlink']
         qbs.install: true
         qbs.installDir: project.vreen_lib_path
+    }
+
+    Group {
+        name: "Other files"
+
+        prefix: "../"
+        files: [
+            "AUTHORS",
+            "COPYING",
+            "ChangeLog",
+            "README.md",
+        ]
     }
 }
