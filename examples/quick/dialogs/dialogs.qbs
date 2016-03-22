@@ -3,11 +3,4 @@ import "../QuickExample.qbs" as QuickExample
 
 QuickExample {
     destinationDirectory: "examples/dialogs"
-
-    Group {
-        fileTags: "install"
-        qbs.install: true
-        qbs.installDir: destinationDirectory
-        files: "qml"
-    }
 }

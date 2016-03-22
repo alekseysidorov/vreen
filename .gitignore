@@ -3,6 +3,8 @@
 
 qt-*
 build
+release*
+debug*
 callgrind.out.*
 pcviewer.cfg
 *~

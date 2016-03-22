@@ -6,9 +6,11 @@ Project {
     property string vreen_lib_path: "lib"
     property string vreen_libexec_path: "lib"
 
-    property string vreen_version_major:  1
-    property string vreen_version_minor: 9
+    property string vreen_version_major:  2
+    property string vreen_version_minor: 0
     property string vreen_version_path: 0
+
+    property bool with_examples: true
 
     Properties {
         condition: qbs.targetOS.contains("windows")

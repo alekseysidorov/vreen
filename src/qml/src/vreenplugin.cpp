@@ -24,9 +24,10 @@
 ****************************************************************************/
 #include "vkitqmlplugin.h"
 
-class VKitQmlPlugin : public QDeclarativeExtensionPlugin
+class VKitQmlPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 public:
     void registerTypes(const char *uri)
     {
@@ -34,7 +35,5 @@ public:
     }
 };
 
-Q_EXPORT_PLUGIN2(vkitplugin, VKitQmlPlugin)
-
-#include "vreenplugin_qt4.moc"
+#include "vreenplugin.moc"
 

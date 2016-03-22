@@ -9,8 +9,8 @@ Product {
 
     Depends { name: "cpp" }
     Depends { name: "Qt"; submodules: ['core', 'network', 'webkitwidgets'] }
+    Depends { name: "vreencore" }
     Depends { name: "vreen" }
-    Depends { name: "vreen.core" }
 
     files: [
         "*.cpp"

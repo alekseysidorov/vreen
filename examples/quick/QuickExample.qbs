@@ -3,8 +3,6 @@ import qbs.base 1.0
 Product {
     property string appViewerPath: "../common/"
 
-    condition: Qt.core.versionMajor === 5
-
     type: ["application", "installed_content"]
 
     Depends { name: "Qt.core" }
@@ -25,9 +23,16 @@ Product {
     }
 
     Group {
-        name: "qml_files"
-        prefix: "**/"
-        files: ["*.qml"]
+        name: "qml files"
+        prefix: "qml/**"
+        files: "*"
+    }
+
+    Group {
+        name: "Install files"
+        files: "qml"
+        qbs.install: true
+        qbs.installDir: destinationDirectory
     }
 
     Group {

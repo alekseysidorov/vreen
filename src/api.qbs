@@ -30,7 +30,7 @@ Product {
 
     Depends { name: "cpp" }
     Depends { name: "Qt"; submodules: ["core", "network", "gui"] }
-    Depends { name: "vreen.core" }
+    Depends { name: "vreencore" }
 
     Export {
         Depends { name: "cpp" }

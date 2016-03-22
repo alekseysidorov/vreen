@@ -38,24 +38,4 @@ Module {
             return cmd;
         }
     }
-
-    Rule {
-        inputs: [ "qml" ]
-        Artifact {
-            fileTags: [ "installed_content" ]
-            filePath: input.moduleProperty("qbs", "installDir") + "/" + input.fileName
-        }
-
-        prepare: {
-            var cmd = new JavaScriptCommand();
-            cmd.sourceCode = function() {
-                File.remove(output.filePath);
-                if (!File.copy(input.filePath, output.filePath))
-                    throw "Cannot install '" + input.filePath + "' as '" + output.filePath + "'";
-            }
-            cmd.description = "copying " + FileInfo.fileName(output.filePath);
-            cmd.highlight = "linker";
-            return cmd;
-        }
-    }
 }
