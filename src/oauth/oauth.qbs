@@ -32,6 +32,7 @@ Product {
         fileTags: ["hpp", "devheader"]
         overrideTags: false
         qbs.installDir: "include/vreen/auth"
+        qbs.installSourceBase: "."
         qbs.install: true
     }
 }

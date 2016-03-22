@@ -23,16 +23,13 @@ Product {
     }
 
     Group {
-        name: "qml files"
+        name: "Qml files"
         prefix: "qml/**"
         files: "*"
-    }
 
-    Group {
-        name: "Install files"
-        files: "qml"
         qbs.install: true
-        qbs.installDir: destinationDirectory
+        qbs.installDir: destinationDirectory + "/qml"
+        qbs.installSourceBase: "qml"
     }
 
     Group {
