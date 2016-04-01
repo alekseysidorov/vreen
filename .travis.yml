@@ -22,9 +22,8 @@ before_install:
 - export QBS_SETTINGS_DIR=$HOME/config
 
 before_script:
-- export QMAKE=(which qmake)
-- echo $QMAKE
-- qbs-setup-toolchains --detect
+- qmake -query
+- qbs-setup-toolchains /usr/local/opt/qt5/bin/qmake qt5
 - qbs-setup-qt $QMAKE qt5
 # - qbs-config profiles.qt5.baseProfile clang
 - qbs-config defaultProfile qt5
