@@ -22,7 +22,8 @@ before_install:
 
 before_script:
 - qbs-setup-toolchains --detect
-- qbs-config profiles.qt5.baseProfile clang
+- qbs-setup-qt $(which qmake) qt5
+# - qbs-config profiles.qt5.baseProfile clang
 - qbs-config defaultProfile qt5
 
 script: qbs install
