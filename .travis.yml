@@ -6,11 +6,17 @@ compiler:
 os:
 - linux
 
+addons:
+  apt:
+    packages:
+      - qbs
+      - qtdeclarative5-dev 
+      - qtbase5-dev
+
 before_install:
 - echo $CC
 - echo $CXX
 - export QBS_SETTINGS_DIR=$HOME/config
-- if [ $TRAVIS_OS_NAME == linux ]; then sudo apt update; sudo apt install qbs qtdeclarative5-dev; fi
 
 before_script:
 - qbs-setup-toolchains --detect
