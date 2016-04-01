@@ -17,6 +17,7 @@ before_install:
 #- export PATH="$PATH:/$HOME/.linuxbrew/bin"
 - brew update
 - brew install qt5
+- brew link --force qt5
 - brew install qbs
 - export QBS_SETTINGS_DIR=$HOME/config
 
