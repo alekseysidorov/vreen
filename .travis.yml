@@ -6,14 +6,15 @@ compiler:
 os:
 - linux
 
+ruby: 2.2.0
+
 before_install:
 - echo $CC
 - echo $CXX
-- sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
-- sudo apt-get update -qq
-- sudo apt-get install qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev libsqlite3-dev
-- sudo apt-get install qt5-default qttools5-dev-tools
-- sudo apt-get install qbs
+- ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/linuxbrew/go/install)"
+- brew update
+- brew install qt5
+- brew install qbs
 - export QBS_SETTINGS_DIR=$HOME/config
 
 before_script:
