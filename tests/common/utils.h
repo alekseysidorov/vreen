@@ -25,7 +25,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 #include "client.h"
-#include "oauthconnection.h"
+#include <vreen/auth/oauthconnection.h>
 #include <QTest>
 #include <QCoreApplication>
 

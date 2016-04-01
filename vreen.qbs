@@ -11,6 +11,7 @@ Project {
     property string vreen_version_path: 0
 
     property bool with_examples: true
+    property bool with_tests: true
 
     Properties {
         condition: qbs.targetOS.contains("windows")
@@ -22,6 +23,7 @@ Project {
         "src/qml/qml.qbs",
         "src/oauth/oauth.qbs",
         "src/directauth/directauth.qbs",
-        "examples/examples.qbs"
+        "examples/examples.qbs",
+        "tests/tests.qbs"
     ]
 }
