@@ -11,7 +11,7 @@ ruby: 2.2.0
 before_install:
 - echo $CC
 - echo $CXX
-- ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/linuxbrew/go/install)"
+- yes | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/linuxbrew/go/install)"
 - export PATH="$PATH:/$HOME/.linuxbrew/bin"
 - brew update
 - brew install qt5
