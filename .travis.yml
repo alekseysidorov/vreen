@@ -25,7 +25,7 @@ before_script:
 - qmake -query
 - qbs-setup-toolchains --detect
 - qbs-setup-qt /usr/local/opt/qt5/bin/qmake qt5
-- qbs-config profiles.qt5.baseProfile clang
+- qbs-config profiles.qt5.baseProfile $CC
 - qbs-config defaultProfile qt5
 
 script: qbs install project.with_webkit:false
