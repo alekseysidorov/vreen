@@ -2,6 +2,8 @@
 
 Vreen is extensible Qt-based asynchronious vk.com api library.
 
+[![Build Status](https://travis-ci.org/alekseysidorov/vreen.svg?branch=master)](https://travis-ci.org/alekseysidorov/vreen)
+
 ## Dependencies
 
 * C++11 compliant compiler
