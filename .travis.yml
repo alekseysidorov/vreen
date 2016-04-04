@@ -14,7 +14,7 @@ before_install:
 - echo $CXX
 - if [ "$TRAVIS_OS_NAME" == linux ]; then yes | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/linuxbrew/go/install)"; fi
 - if [ "$TRAVIS_OS_NAME" == linux ]; then export PATH="$PATH:/$HOME/.linuxbrew/bin"; fi
-- if [ "$TRAVIS_OS_NAME" == linux ]; then sudo apt-get install "^libxcb.*" libx11-xcb-dev libglu1-mesa-dev libxrender-dev; fi
+- if [ "$TRAVIS_OS_NAME" == linux ]; then sudo apt-get -y install "^libxcb.*" libx11-xcb-dev libglu1-mesa-dev libxrender-dev; fi
 - brew update
 - brew install qt5
 - brew link --force qt5
