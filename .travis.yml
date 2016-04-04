@@ -1,19 +1,20 @@
 language: cpp
 sudo: required
-dist: wily
 compiler:
 - clang
+- gcc
 os:
 - osx
-#- linux
+- linux
+  dist: trusty
 
 ruby: 2.2.0
 
 before_install:
 - echo $CC
 - echo $CXX
-#- yes | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/linuxbrew/go/install)"
-#- export PATH="$PATH:/$HOME/.linuxbrew/bin"
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then yes | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/linuxbrew/go/install)"; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export PATH="$PATH:/$HOME/.linuxbrew/bin"; fi
 - brew update
 - brew install qt5
 - brew link --force qt5
