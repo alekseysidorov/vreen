@@ -94,7 +94,7 @@ public:
     Scopes scopes() const;
     void setScopes(Scopes scopes);
 signals:
-    void authConfirmRequested(QWebPage *page);
+    void authConfirmRequested(QObject *page);
     void accessTokenChanged(const QString &token, time_t expiresIn);
     void clientIdChanged(int clientId);
     void scopesChanged(Vreen::OAuthConnection::Scopes scopes);

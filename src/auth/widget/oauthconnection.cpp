@@ -23,21 +23,28 @@
 **
 ****************************************************************************/
 #include "oauthconnection.h"
-#include <QWebPage>
-#include <QWebFrame>
 #include <QPointer>
 #include <QDateTime>
 #include <QNetworkRequest>
 #include <QTextDocument>
 #include <QUrlQuery>
 
+#ifdef VREEN_WITH_WEBENGINE
+#   include <QtWebEngine>
+#   include <QtWebEngineWidgets>
+#else
+#   include <QWebPage>
+#   include <QWebFrame>
+#   include <QWebElement>
+#   include <QWebView>
+#endif
+
 #include <json.h>
 #include <vreen/private/connection_p.h>
 #include <vreen/utils.h>
 
 #include <QDebug>
-#include <QWebElement>
-#include <QWebView>
+
 #include <QCoreApplication>
 
 #include <QSettings>
@@ -82,8 +89,14 @@ public:
         expiresIn(0)
     {
     }
+
+#ifdef VREEN_WITH_WEBENGINE
+    QPointer<QWebEngineView> webEngineView;
+#else
     QPointer<QWebPage> webPage;
     QPointer<QWebView> webView;
+#endif
+
     Client::State connectionState;
 
     //OAuth settings
@@ -105,7 +118,11 @@ public:
     void setConnectionState(Client::State state);
     void _q_loadFinished(bool);
     void clear();
+#ifdef VREEN_WITH_WEBENGINE
+    void handleAuthRequest(QWebEngineView *page);
+#else
     void handleAuthRequest(QWebPage *page);
+#endif
     void saveAuthData();
     void loadAuthData();
 };
@@ -114,6 +131,9 @@ public:
 OAuthConnection::OAuthConnection(int appId, QObject *parent) :
     Connection(new OAuthConnectionPrivate(this, appId), parent)
 {
+#ifdef VREEN_WITH_WEBENGINE
+    QtWebEngine::initialize();
+#endif
 }
 
 OAuthConnection::OAuthConnection(QObject *parent) :
@@ -245,11 +265,20 @@ void OAuthConnection::setScopes(OAuthConnection::Scopes scopes)
 void OAuthConnectionPrivate::requestToken()
 {
     Q_Q(OAuthConnection);
+
+#ifdef VREEN_WITH_WEBENGINE
+    if (!webEngineView) {
+        webEngineView = new QWebEngineView();
+        q->connect(webEngineView, SIGNAL(loadFinished(bool)), SLOT(_q_loadFinished(bool)));
+    }
+#else
     if (!webPage) {
         webPage = new QWebPage(q);
         webPage->setNetworkAccessManager(q);
         q->connect(webPage->mainFrame(), SIGNAL(loadFinished(bool)), SLOT(_q_loadFinished(bool)));
     }
+#endif
+
     QUrl url = authUrl;
     QUrlQuery query;
     query.addQueryItem(QLatin1String("client_id"), QByteArray::number(clientId));
@@ -264,7 +293,12 @@ void OAuthConnectionPrivate::requestToken()
     query.addQueryItem(QLatin1String("display"), type[displayType]);
     query.addQueryItem(QLatin1String("response_type"), responseType);
     url.setQuery(query);
+
+#ifdef VREEN_WITH_WEBENGINE
+    webEngineView->load(url);
+#else
     webPage->mainFrame()->load(url);
+#endif
 }
 
 void OAuthConnectionPrivate::setConnectionState(Client::State state)
@@ -279,6 +313,39 @@ void OAuthConnectionPrivate::setConnectionState(Client::State state)
 void OAuthConnectionPrivate::_q_loadFinished(bool ok)
 {
     Q_Q(OAuthConnection);
+
+#ifdef VREEN_WITH_WEBENGINE
+    QUrl url = webEngineView->url();
+    webEngineView->page()->toPlainText([this, ok, url, q](const QString &result) {
+        QVariantMap response = Vreen::JSON::parse(result.toUtf8()).toMap();
+        if (ok && response.value("error").isNull()) {
+            QUrlQuery query(url.fragment());
+
+            qDebug() << url << query.queryItems();
+
+            if (!query.hasQueryItem("access_token")) {
+                handleAuthRequest(webEngineView.data());
+            } else {
+                accessToken = query.queryItemValue("access_token");
+                expiresIn = query.queryItemValue("expires_in").toUInt();
+                if (expiresIn)
+                    expiresIn += QDateTime::currentDateTime().toTime_t(); //not infinity token
+                uid = query.queryItemValue("user_id").toInt();
+                emit q->accessTokenChanged(accessToken, expiresIn);
+
+                setConnectionState(Client::StateOnline);
+                webEngineView->deleteLater();
+                if (options.value(Connection::KeepAuthData).toBool())
+                    saveAuthData();
+            }
+        } else {
+            setConnectionState(Client::StateOffline);
+            emit q->error(Client::ErrorAuthorizationFailed);
+            webEngineView->deleteLater();
+            clear();
+        }
+    });
+#else
     QUrl url = webPage->mainFrame()->url();
     QVariantMap response = Vreen::JSON::parse(webPage->mainFrame()->toPlainText().toUtf8()).toMap();
     if (ok && response.value("error").isNull()) {        
@@ -317,6 +384,7 @@ void OAuthConnectionPrivate::_q_loadFinished(bool ok)
         webPage->deleteLater();
         clear();
     }
+#endif
 }
 
 void OAuthConnectionPrivate::clear()
@@ -327,10 +395,19 @@ void OAuthConnectionPrivate::clear()
     saveAuthData();
 }
 
+#ifdef VREEN_WITH_WEBENGINE
+void OAuthConnectionPrivate::handleAuthRequest(QWebEngineView *page)
+#else
 void OAuthConnectionPrivate::handleAuthRequest(QWebPage *page)
+#endif
 {
     Q_Q(OAuthConnection);
     if (options.value(Connection::ShowAuthDialog).toBool()) {
+#ifdef VREEN_WITH_WEBENGINE
+        webEngineView->setWindowModality(Qt::ApplicationModal);
+        webEngineView->setAttribute(Qt::WA_DeleteOnClose, true);
+        webEngineView->show();
+#else
         if (!webView) {
             webView = new QWebView;
             webView->setWindowModality(Qt::ApplicationModal);
@@ -339,6 +416,7 @@ void OAuthConnectionPrivate::handleAuthRequest(QWebPage *page)
             webView->setPage(page);
         }
         webView->showNormal();
+#endif
     } else
         emit q->authConfirmRequested(page);
 }

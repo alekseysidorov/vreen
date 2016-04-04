@@ -16,22 +16,14 @@ Product {
         "VREEN_DIRECTAUTH_CLIENT_SECRET=\"" + clientSecret + "\"",
         "VREEN_DIRECTAUTH_CLIENT_NAME=\"" + clientName + "\""
     ]
-    //cpp.warningLevel: "all"
 
     Depends { name: "cpp" }
-    Depends { name: "Qt"; submodules: ['core', 'network', 'webkit'] }
+    Depends { name: "Qt"; submodules: ['core', 'network'] }
     Depends { name: "vreen" }
 
     files: [
         "*.cpp"
     ]
-
-//    Group {
-//        qbs.installDir: "include/vreen/auth"
-//        overrideTags: false
-//        fileTags: ["install"]
-//        files: ["*.h"]
-//    }
 
     Group {
         files: "*.h"

@@ -12,6 +12,7 @@ Project {
 
     property bool with_examples: true
     property bool with_tests: true
+    property bool with_webkit: true
 
     Properties {
         condition: qbs.targetOS.contains("windows")
@@ -21,8 +22,7 @@ Project {
     references: [
         "src/api.qbs",
         "src/qml/qml.qbs",
-        "src/oauth/oauth.qbs",
-        "src/directauth/directauth.qbs",
+        "src/auth/auth.qbs",
         "examples/examples.qbs",
         "tests/tests.qbs"
     ]

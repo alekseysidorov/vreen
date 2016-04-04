@@ -14,8 +14,7 @@ Module {
     setupRunEnvironment: {
         putenv('QML2_IMPORT_PATH', product.buildDirectory + "/" + qmlDestination);
     }
-
-    cpp.cxxLanguageVersion: "c++11"
+    cpp.cxxLanguageVersion: "c++14"
 
     Rule {
         inputs: [ "devheader" ]

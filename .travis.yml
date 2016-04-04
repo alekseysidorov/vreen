@@ -27,7 +27,7 @@ before_script:
 # - qbs-config profiles.qt5.baseProfile clang
 - qbs-config defaultProfile qt5
 
-script: qbs install
+script: qbs install project.with_webkit:false
 
 branches:
   only:
