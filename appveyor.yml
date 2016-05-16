@@ -8,3 +8,7 @@ build_script:
   - qbs-setup-toolchains --detect
   - qbs-setup-qt C:\Qt\5.6\msvc2015_64\bin\qmake.exe qt5
   - qbs install
+
+cache:
+  - C:\ProgramData\chocolatey\bin -> appveyor.yml
+  - C:\ProgramData\chocolatey\lib -> appveyor.yml
