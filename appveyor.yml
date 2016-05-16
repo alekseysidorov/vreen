@@ -5,8 +5,6 @@ install:
   - set PATH=%PATH%;%QTDIR%\bin;
   - cinst qbs
 build_script:
-  - C:\Qt\5.6\msvc2015_64\bin\qmake.exe -query
   - qbs-setup-toolchains --detect
   - qbs-setup-qt C:\Qt\5.6\msvc2015_64\bin\qmake.exe qt5
-  - qbs profiles.qt5.baseProfile msvc2015
   - qbs install
