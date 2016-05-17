@@ -36,7 +36,7 @@ build_script:
   - qbs-setup-toolchains --detect
   - qbs-setup-qt %QTDIR%\bin\qmake.exe qt5
   - qbs config defaultProfile qt5
-  - qbs install
+  - qbs install project.with_webkit:false
 
 cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
