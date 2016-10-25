@@ -86,6 +86,8 @@ Product {
             "ChangeLog",
             "LICENSE.md",
             "README.md",
+            "appveyor.yml",
+            ".travis.yml"
         ]
     }
 }
