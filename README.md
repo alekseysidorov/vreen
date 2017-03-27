@@ -9,12 +9,15 @@ Vreen is extensible Qt-based asynchronious vk.com api library.
 * C++11 compliant compiler
 * qbs 1.4 - http://doc.qt.io/qbs/
 * Qt 5.2.0 - http://qt.io
+* Cmake 3.0 - http://cmake.org
 
 ## Compiling
 
 ```bash
     $ qbs install --clean-install-root --install-root $LOCAL_PREFIX release
 ```
+
+As alternative you can use cmake build system.
 
 ## Usage
 
