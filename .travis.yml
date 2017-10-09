@@ -3,21 +3,14 @@ sudo: required
 dist: trusty
 compiler:
 - clang
-- gcc
 os:
-- linux
 - osx
 
 ruby: 2.2.0
 
 before_install:
-- echo $CC
-- echo $CXX
-- if [ "$TRAVIS_OS_NAME" == linux ]; then yes | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"; fi
-- if [ "$TRAVIS_OS_NAME" == linux ]; then export PATH="$PATH:/$HOME/.linuxbrew/bin"; fi
-- if [ "$TRAVIS_OS_NAME" == linux ]; then sudo apt-get -y install "^libxcb.*" libx11-xcb-dev libglu1-mesa-dev libxrender-dev libxml-parser-perl; fi
 - brew update
-- travis_wait 120 brew install qt5
+- brew install qt5
 - brew link --force qt5
 - brew install qbs
 - export QBS_SETTINGS_DIR=$HOME/config
