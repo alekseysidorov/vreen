@@ -1,43 +1,39 @@
-os: Visual Studio 2015
+clone_depth: 5
 
 environment:
   matrix:
-  # MSVC x86
-  - name: win32
-    platform: amd64_x86
-    qt: 5.6\msvc2015
-    suffix: msvc2015
+    - GENERATOR : "Visual Studio 14 2015 Win64"
+      QTDIR: C:\Qt\5.6.3\msvc2015_64
+      PLATFORM: x64
+    - GENERATOR : "Visual Studio 14 2015"
+      QTDIR: C:\Qt\5.6.3\msvc2015
+      PLATFORM: Win32
 
-  # MSVC x64
-  - name: win64
-    platform: amd64
-    qt: 5.6\msvc2015_64
-    suffix: msvc2015
+image: Visual Studio 2015
 
-  # MinGW
-  - name: win32
-    platform: mingw
-    qt: 5.6\mingw49_32
-    suffix: mingw
-
-init:
-  - if %platform%==mingw set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
-  - if %platform%==mingw set PATH=C:\Qt\Tools\mingw492_32\bin;%PATH%
-  - set PATH=C:\Qt\%qt%\bin;%PATH%
-  - set QTDIR=C:\Qt\%qt%
-  - if not %platform%==mingw call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" %platform%
-  - if not %platform%==mingw (set makefiles="NMake Makefiles") else (set makefiles="MinGW Makefiles")
-  - if %APPVEYOR_REPO_TAG%==true (set nogitinfo=ON) else (set nogitinfo=OFF)
+configuration:
+  - Release
 
 install:
-  - cinst qbs
+  - set PATH=%QTDIR%\bin;%PATH%
+  - set Qt5_DIR=%QTDIR%\lib\cmake\Qt5
+  - set PATH=C:\MinGW\bin;C:\MinGW\msys\1.0;%PATH%
+  - set PATH=%PATH:C:\Program Files\Git\usr\bin=% # trick to remove sh.exe
+
+before_build:
+  - mkdir build
+  - cd build
+  - mkdir bin
+  - set OUTPUT_DIR=%cd%\bin
+  - cmake "-G%GENERATOR%"
+    -DCMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG="%OUTPUT_DIR%"
+    -DCMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE="%OUTPUT_DIR%"
+    -DCMAKE_CXX_FLAGS_INIT="%CMAKE_CXX_FLAGS_INIT%"
+    ..
+
 
 build_script:
-  - qbs-setup-toolchains --detect
-  - qbs-setup-qt %QTDIR%\bin\qmake.exe qt5
-  - qbs config defaultProfile qt5
-  - qbs install project.with_webkit:false
+  - cmake --build .
 
-cache:
-  - C:\ProgramData\chocolatey\bin -> appveyor.yml
-  - C:\ProgramData\chocolatey\lib -> appveyor.yml
+test_script:
+  - ctest --output-on-failure -C Debug

@@ -6,24 +6,16 @@ compiler:
 os:
 - osx
 
-ruby: 2.2.0
-
 before_install:
 - brew update
-- brew install qt5
-- brew link --force qt5
-- brew install qbs
-- export QBS_SETTINGS_DIR=$HOME/config
+- brew install qt5 
 
 before_script:
-- qmake -query
-- qbs-setup-toolchains --detect
-- qbs-setup-qt /usr/local/opt/qt5/bin/qmake qt5
-- qbs-config profiles.qt5.baseProfile $CC
-- qbs-config defaultProfile qt5
+- cmake .
 
 script: 
-- qbs install project.with_webkit:false
+- cmake --build .
+- ctest --output-on-failure -C Debug
 
 branches:
   only:
